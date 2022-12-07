@@ -21,12 +21,9 @@ To install the project, please do as follows;
 - Clone the project from my GitHub
 - Extract the project to your desired location
 - Load it in Visual Studio
-> Add the following nuget packages:
-- [CommunityToolkit.MVVM](https://www.nuget.org/packages/CommunityToolkit.Mvvm/)
-- [LiteDB nuget package](https://www.nuget.org/packages/LiteDB/)
-- [Uranium UI Kit](https://www.nuget.org/packages/UraniumUI/)
-- [Quest PDF Nuget Package](https://www.nuget.org/packages/QuestPDF/)
-- [itext7 Nuget Package](https://www.nuget.org/packages/itext7/)
+- Open the Package Manager Console (View -> Other Windows -> Package Manager Console)
+- Type 'dotnet restore' without the ' '  then press Enter. 
+- Wait for it to restore all required packages, then Run.
 
 > Then,
 - Ensure you have an Android Virtual Device for emulation testing.
