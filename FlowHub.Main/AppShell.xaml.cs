@@ -1,4 +1,4 @@
-﻿namespace FlowHub.Main;
+namespace FlowHub.Main;
 
 public partial class AppShell : Shell
 {

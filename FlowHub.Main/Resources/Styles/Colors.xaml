@@ -4,7 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-    <Color x:Key="Primary">#512BD4</Color>
+    <Color x:Key="Primary">darkslateblue</Color>
     <Color x:Key="Secondary">#DFD8F7</Color>
     <Color x:Key="Tertiary">#2B0B98</Color>
     <Color x:Key="White">White</Color>
@@ -16,7 +16,7 @@
     <Color x:Key="Gray500">#6E6E6E</Color>
     <Color x:Key="Gray600">#404040</Color>
     <Color x:Key="Gray900">#212121</Color>
-    <Color x:Key="Gray950">#141414</Color>
+    <Color x:Key="Gray950">DarkSlateBlue</Color>
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
     <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>
     <SolidColorBrush x:Key="TertiaryBrush" Color="{StaticResource Tertiary}"/>
@@ -41,4 +41,21 @@
     <Color x:Key="Blue200Accent">#72ACF1</Color>
     <Color x:Key="Blue300Accent">#A7CBF6</Color>
 
+    <!--Additional Colors inspired from Uranium UI material color palette-->
+
+    <Color x:Key="SecondaryContainer">#E8DEF8</Color>
+    <Color x:Key="SecondaryContainerDark">#4A4458</Color>
+    <Color x:Key="Surface">#FFFBFE</Color>
+    <Color x:Key="SurfaceDark">#1C1B1F</Color>
+
+    <!-- Color Paletter 'Power' from Twitter -->
+
+    <Color x:Key="BackGroundDark">#201F24</Color>
+    <Color x:Key="BackGroundLight">#F2F0F4</Color>
+    <Color x:Key="DataGridColorDark">#263238</Color>
+    <Color x:Key="PositiveActionBtnDark">#6B69D6</Color>
+    <Color x:Key="NegativeActionBtnDark">#A3FF0000</Color>
+    <Color x:Key="WhiteColor">#FFFFFF</Color>
+    <Color x:Key="SaveBtnColor">darkslateblue</Color>
+    <Color x:Key="UtilityBtn">#0078D7</Color>
 </ResourceDictionary>

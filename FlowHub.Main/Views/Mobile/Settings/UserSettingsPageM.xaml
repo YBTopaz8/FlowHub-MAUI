@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
+             xmlns:viewModel="clr-namespace:FlowHub.Main.ViewModels.Settings"
+             x:Class="FlowHub.Main.Views.Mobile.Settings.UserSettingsPageM"
+             x:DataType="viewModel:UserSettingsVM"
+             Title="Settings">
+    <VerticalStackLayout Margin="0" Spacing="5">
+        <Grid Margin="0,10,0,0">
+            <ImageButton Source="{AppThemeBinding Dark=logouticon.png, Light=logout_icon_light.png}" HorizontalOptions="End" HeightRequest="20" Command="{Binding LogOutUserCommand}"/>
+        </Grid>
+        <Border BackgroundColor="Transparent" StrokeThickness="0">
+            <VerticalStackLayout Spacing="8" Margin="12,0,12,0">
+                <Grid>
+                    <Label Text="User Name"/>
+                    <Label Text="{Binding UserName}" HorizontalOptions="End"/>
+                </Grid>
+                <Grid>
+                    <Label Text="User Email"/>
+                    <Label Text="{Binding UserEmail}" HorizontalOptions="End"/>
+                </Grid>
+                <Grid>
+                    <Label Text="User Country"/>
+                    <Label Text="{Binding UserCountry}" HorizontalOptions="End"/>
+                </Grid>
+                <Grid>
+                    <Label Text="User Currency"/>
+                    <Label Text="{Binding UserCurrency}" HorizontalOptions="End"/>
+                </Grid>
+                <Grid>
+                    <Label Text="Pocket Money"/>
+                    <Label HorizontalTextAlignment="End">
+                        <Label.Text>
+                            <MultiBinding StringFormat="{} {0:n2} {1}">
+                                <Binding Path="PocketMoney"/>
+                                <Binding Path="UserCurrency"/>
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+    </VerticalStackLayout>
+</ContentPage>

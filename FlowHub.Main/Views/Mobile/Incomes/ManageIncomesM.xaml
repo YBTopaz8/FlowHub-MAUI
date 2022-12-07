@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage x:Class="FlowHub.Main.Views.Mobile.Incomes.ManageIncomesM"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"   
+             xmlns:materialAttach="clr-namespace:UraniumUI.Material.Attachments;assembly=UraniumUI.Material"    
+             xmlns:local="clr-namespace:FlowHub.Main.Views.Mobile.Incomes"
+             xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
+             xmlns:viewModel="clr-namespace:FlowHub.Main.ViewModels.Incomes"
+             x:DataType="viewModel:ManageIncomesVM"
+             x:Name="page">
+    
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="filter_btn.png" Command="{Binding ShowFilterPopUpPageCommand}"/>
+    </ContentPage.ToolbarItems>
+    <toolkit:DockLayout>
+        <Label toolkit:DockLayout.DockPosition="Top" FontSize="21" HorizontalOptions="Center">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer NumberOfTapsRequired="2" Tapped="TapGestureRecognizer_Tapped"/>
+            </Label.GestureRecognizers>
+            <Label.Text>
+                <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
+                    <Binding Path="UserPockerMoney"/>
+                    <Binding Path="UserCurrency"/>
+                </MultiBinding>
+            </Label.Text>
+        </Label>
+        <Grid toolkit:DockLayout.DockPosition="Top" HeightRequest="50" Margin="10,5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20*"/>
+                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="50*"/>
+            </Grid.ColumnDefinitions>
+            <VerticalStackLayout Grid.Column="0">
+                <ImageButton Source="{AppThemeBinding Dark=save_to_pdf_btn.png, Light=save_to_pdf_btn_light.png}" Clicked="ExportToPDFImageButton_Clicked"/>
+                <ProgressBar IsVisible="false" x:Name="PrintProgressBarIndic" ProgressColor="DarkSlateBlue" WidthRequest="50"/>
+            </VerticalStackLayout>
+
+            <HorizontalStackLayout Grid.Column="2" HorizontalOptions="End">
+                <ImageButton Source="{AppThemeBinding Dark=add_btn_48.png, Light=add_btn_48_light.png}" Command="{Binding GoToAddIncomePageCommand}"/>
+            </HorizontalStackLayout>
+        </Grid>
+        <Label toolkit:DockLayout.DockPosition="Bottom" Margin="5" HorizontalOptions="Center">
+            <Label.Text>
+                <MultiBinding StringFormat="{} {2} Flow In(s) worth {0:n2} {1}">
+                    <Binding Path="TotalAmount"/>
+                    <Binding Path="UserCurrency"/>
+                    <Binding Path="TotalIncomes"/>
+                </MultiBinding>
+            </Label.Text>
+        </Label>
+        <CollectionView ItemsSource="{Binding IncomesList}" EmptyView="No Flow Ins Available...">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:IncomeModel">
+                    <ScrollView>
+                        <VerticalStackLayout HorizontalOptions="Center" Margin="0,5,0,0">
+                            <SwipeView>
+                                <SwipeView.LeftItems>
+                                    <SwipeItem Text="Edit" IconImageSource="edit_exp.png" BackgroundColor="#201C1B1F"
+                                        Command="{Binding Source={x:Reference page},
+                                            Path=BindingContext.GoToEditIncomePageCommand}"
+                                               CommandParameter="{Binding .}"/>
+                                </SwipeView.LeftItems>
+
+                                <SwipeView.RightItems>
+                                    <SwipeItem Text="Delete" IconImageSource="del.png" BackgroundColor="#00FF0000"
+                                        Command="{Binding Source={x:Reference page},
+                                            Path=BindingContext.DeleteIncomeBtnCommand}"
+                                               CommandParameter="{Binding .}"/>
+                                </SwipeView.RightItems>
+
+                                <Border Padding="10" HeightRequest="83" HorizontalOptions="Center" WidthRequest="350"
+                                         BackgroundColor="{AppThemeBinding Dark=#29343E, Light=white}"
+                                        Stroke="darkslateblue"
+                                        StrokeThickness="2"
+                                        StrokeShape="RoundRectangle 10">
+
+                                    <VerticalStackLayout >
+                                        <Label HorizontalOptions="Center" Text="{Binding DateReceived, StringFormat='{0:MMMM dd, yyyy}'}"/>
+
+                                        <VerticalStackLayout>
+                                            <Label Text="{Binding Reason, StringFormat='Reason: {0}'}"/>
+                                            <Label>
+                                                <Label.Text>
+                                                    <MultiBinding StringFormat="{} Amount: {0:n2} {1}">
+                                                        <Binding Path="AmountReceived"/>
+                                                        <Binding Path="Currency"/>
+                                                    </MultiBinding>
+                                                </Label.Text>
+                                            </Label>
+                                        </VerticalStackLayout>
+                                    </VerticalStackLayout>
+                                </Border>
+
+                            </SwipeView>
+                        </VerticalStackLayout>
+                    </ScrollView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+
+    </toolkit:DockLayout>
+
+
+</ContentPage>

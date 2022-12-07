@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlowHub.Main.Views.Desktop.Expenditures.UpSertExpenditurePageD"
+              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
+             xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Expenditures"
+             x:DataType="viewModels:UpSertExpenditureVM"                         
+             >
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Label">
+                <Setter Property="FontSize" Value="28"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+            </Style>
+            <Style TargetType="DatePicker">
+                <Setter Property="FontSize" Value="20"/>
+            </Style>
+            <Style TargetType="Entry">
+                <Setter Property="FontSize" Value="18"/>
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <VerticalStackLayout>
+
+        <Label Text="{Binding PageTitle}" HorizontalOptions="Start" Margin="20,10,0,0" 
+                   FontSize="23" TextColor="White"  />
+
+        <Border HorizontalOptions="Center" WidthRequest="450"
+                Margin="10" Padding="10" BackgroundColor="{AppThemeBinding Dark=#29343E, Light=white}"
+                Stroke="DarkSlateBlue"
+                StrokeThickness="2"
+                StrokeShape="RoundRectangle 10">
+            <Border.Shadow>
+                <Shadow Offset="15,55"
+                        Opacity="0.4"/>
+            </Border.Shadow>
+            <VerticalStackLayout>
+                <Label Text="Expenditure Form" HorizontalOptions="Center" Margin="0,0,0,10"/>
+
+                <Label Text="Date Spent"/>
+                <DatePicker MinimumDate="01/01/2022"
+                            MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
+                            Date="{Binding SingleExpenditureDetails.DateSpent}"/>
+                <BoxView HeightRequest="0.5" Color="DarkSlateBlue" />
+
+                <Label Text="Reason" Margin="0,15,0,0"/>
+                <Entry Text="{Binding SingleExpenditureDetails.Reason}"/>
+
+                <Label Text="Amount Spent" Margin="0,15,0,0"/>
+                <Entry Keyboard="Numeric" Text="{Binding SingleExpenditureDetails.AmountSpent}"/>
+                <BoxView HeightRequest="0.8" Color="DarkSlateBlue"/>
+
+
+                <HorizontalStackLayout HorizontalOptions="Center" Margin="0,15,0,0" Spacing="15">
+                    <Button Command="{Binding UpSertExpenditureCommand}"
+                            Text="Save Expenditure" BackgroundColor="{StaticResource SaveBtnColor}" TextColor="White" 
+                            FontSize="20" FontAttributes="Bold"/>
+
+                    <Button Command="{Binding CancelBtnCommand}"
+                            Text="Cancel" BackgroundColor="{StaticResource NegativeActionBtnDark}" TextColor="White"
+                            FontSize="16" />
+
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Border>
+
+    </VerticalStackLayout>
+</ContentPage>

@@ -30,24 +30,28 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android33.0|AnyCPU'">
-	  <ApplicationId>com.yvanbrunel.flowhub.main</ApplicationId>
-	  <ApplicationDisplayVersion>1.0.3</ApplicationDisplayVersion>
+	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
+	  <ApplicationDisplayVersion>1.2.2</ApplicationDisplayVersion>
+	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android33.0|AnyCPU'">
-	  <ApplicationId>com.yvanbrunel.flowhub.main</ApplicationId>
-	  <ApplicationDisplayVersion>1.0.3</ApplicationDisplayVersion>
+	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
+	  <ApplicationDisplayVersion>1.2.2</ApplicationDisplayVersion>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
+	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-windows10.0.19041.0|AnyCPU'">
-	  <ApplicationId>com.yvanbrunel.flowhub.main</ApplicationId>
-	  <ApplicationDisplayVersion>1.0.3</ApplicationDisplayVersion>
+	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
+	  <ApplicationDisplayVersion>1.2.2</ApplicationDisplayVersion>
+	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-windows10.0.19041.0|AnyCPU'">
-	  <ApplicationId>com.yvanbrunel.flowhub.main</ApplicationId>
-	  <ApplicationDisplayVersion>1.0.3</ApplicationDisplayVersion>
+	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
+	  <ApplicationDisplayVersion>1.2.2</ApplicationDisplayVersion>
+	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -69,6 +73,43 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\add_btn_48.svg" />
+	  <None Remove="Resources\Images\add_btn_48_light.svg" />
+	  <None Remove="Resources\Images\at_sign_email.svg" />
+	  <None Remove="Resources\Images\cancel_btn48.svg" />
+	  <None Remove="Resources\Images\card_wallet.svg" />
+	  <None Remove="Resources\Images\clear_filters48.svg" />
+	  <None Remove="Resources\Images\clear_filters_48px.svg" />
+	  <None Remove="Resources\Images\clear_search48.svg" />
+	  <None Remove="Resources\Images\clear_search48px.svg" />
+	  <None Remove="Resources\Images\del.svg" />
+	  <None Remove="Resources\Images\delete_btn1_48.svg" />
+	  <None Remove="Resources\Images\delete_btn2_48.svg" />
+	  <None Remove="Resources\Images\del_exp.svg" />
+	  <None Remove="Resources\Images\edit.svg" />
+	  <None Remove="Resources\Images\edit_btn_48.svg" />
+	  <None Remove="Resources\Images\edit_exp.svg" />
+	  <None Remove="Resources\Images\error_icon.svg" />
+	  <None Remove="Resources\Images\filterBtn_light.svg" />
+	  <None Remove="Resources\Images\filter_btn.svg" />
+	  <None Remove="Resources\Images\homepage.svg" />
+	  <None Remove="Resources\Images\initiate_money_transfer.svg" />
+	  <None Remove="Resources\Images\logouticon.svg" />
+	  <None Remove="Resources\Images\logout_icon_light.svg" />
+	  <None Remove="Resources\Images\ok.svg" />
+	  <None Remove="Resources\Images\options_btn48px.svg" />
+	  <None Remove="Resources\Images\password.svg" />
+	  <None Remove="Resources\Images\request_money.svg" />
+	  <None Remove="Resources\Images\save_btn48.svg" />
+	  <None Remove="Resources\Images\save_to_pdf_btn.svg" />
+	  <None Remove="Resources\Images\save_to_pdf_btn_light.svg" />
+	  <None Remove="Resources\Images\search_property.svg" />
+	  <None Remove="Resources\Images\settings_tab_48.svg" />
+	  <None Remove="Resources\Images\user.svg" />
+	  <None Remove="Resources\Images\view_btn_48.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="3.0.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
 		<PackageReference Include="HarfBuzzSharp" Version="2.8.2.3" />
@@ -76,11 +117,111 @@
 		<PackageReference Include="itext7" Version="7.2.4" />
 		<PackageReference Include="LiteDB.Async" Version="0.1.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-		<PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.2" />
 		<PackageReference Include="QuestPDF" Version="2022.11.0" />
 		<PackageReference Include="SkiaSharp" Version="2.88.3" />
 		<PackageReference Include="UraniumUI.Material" Version="2.1.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\FlowHub.DataAccess\FlowHub.DataAccess.csproj" />
+	  <ProjectReference Include="..\FlowHub.Models\FlowHub.Models.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="AppShell.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="AppShellMobile.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="PopUpPages\FilterOptionsPopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="PopUpPages\InputPopUpPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="PopUpPages\LoadingActivityIndicatorPopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="PopUpPages\AcceptCancelPopUpAlert.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="PopUpPages\ErrorNotificationPopUpAlert.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Desktop\Expenditures\ManageExpendituresD.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Desktop\Expenditures\UpSertExpenditurePageD.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Desktop\HomePageD.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Desktop\LoginD.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Mobile\Expenditures\ManageExpendituresM.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Mobile\Expenditures\UpSertExpenditurePageM.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Mobile\HomePageM.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Mobile\Incomes\ManageIncomesM.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Mobile\Incomes\UpSertIncomePageM.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Mobile\LoginM.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Mobile\Settings\ApplicationSettingsPageM.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Mobile\Settings\UserSettingsPageM.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Views\Desktop\Settings\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Platforms\Windows\NavigationsMethods\HomePageNavs.cs">
+	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
+	  </Compile>
+	  <Compile Update="Platforms\Windows\NavigationsMethods\LoginNavs.cs">
+	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
+	  </Compile>
+	  <Compile Update="Platforms\Windows\NavigationsMethods\ManageExpendituresNavs.cs">
+	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
+	  </Compile>
+	  <Compile Update="Platforms\Windows\NavigationsMethods\ManageIncomesNavs.cs">
+	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
+	  </Compile>
+	  <Compile Update="Platforms\Windows\NavigationsMethods\MonthlyExpendituresNavs.cs">
+	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
+	  </Compile>
+	  <Compile Update="Platforms\Windows\PDFClasses\PrintDetailsMonthlyExpenditure.cs">
+	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
+	  </Compile>
+	  <Compile Update="Platforms\Windows\PDFClasses\PrintExpenditures.cs">
+	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
+	  </Compile>
+	  <Compile Update="PopUpPages\LoadingActivityIndicatorPopUp.xaml.cs">
+	    <DependentUpon>LoadingActivityIndicatorPopUp.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Mobile\Incomes\ManageIncomesM.xaml.cs">
+	    <DependentUpon>ManageIncomesM.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Mobile\Incomes\UpSertIncomePageM.xaml.cs">
+	    <DependentUpon>UpSertIncomePageM.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 </Project>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mct:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+             x:Class="FlowHub.Main.PopUpPages.ErrorNotificationPopUpAlert"
+             CanBeDismissedByTappingOutsideOfPopup="False"
+             Size="330,150"
+           Color="Transparent">
+    
+    <Border 
+        Stroke="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=White}"
+        StrokeThickness="0"
+        StrokeShape="RoundRectangle 8">
+
+        <VerticalStackLayout BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=White}" Spacing="20" Padding="15">
+            <VerticalStackLayout.Resources>
+                <ResourceDictionary>
+                    <Style TargetType="Label">
+                        <Setter Property="TextColor" Value="{AppThemeBinding Dark=white, Light=black}"/>
+                    </Style>
+                    <Style TargetType="Button">
+                        <Setter Property="BackgroundColor" Value="Transparent"/>
+                    </Style>
+                </ResourceDictionary>
+            </VerticalStackLayout.Resources>
+
+            <HorizontalStackLayout Spacing="10">
+                <Label FontSize="20" TextColor="{AppThemeBinding Dark=white, Light=black}"
+                Text="Error Alert"
+                VerticalOptions="Start" 
+                HorizontalOptions="Start" />
+                <Image HeightRequest="25" Source="error_icon.png"/>
+            </HorizontalStackLayout>            
+
+            <Label x:Name="DisplayErrorText" FontSize="18"/>
+
+            <HorizontalStackLayout HorizontalOptions="EndAndExpand" Spacing="5">
+                <Button Text="OK"
+                        Clicked="OnOKButtonClicked"/>
+                
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </Border>
+</mct:Popup>

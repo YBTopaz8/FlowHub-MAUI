@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlowHub.Main.AppShellMobile"
+             xmlns:local="clr-namespace:FlowHub.Main"
+             xmlns:views="clr-namespace:FlowHub.Main.Views.Mobile"
+             xmlns:viewsExp="clr-namespace:FlowHub.Main.Views.Mobile.Expenditures"
+             xmlns:viewsInc="clr-namespace:FlowHub.Main.Views.Mobile.Incomes"
+             xmlns:viewsSettings="clr-namespace:FlowHub.Main.Views.Mobile.Settings"
+             CurrentItem ="{x:Reference login}"
+             >
+    <TabBar>
+        <Tab Title="Home"
+             Icon="homepage.png">
+            <ShellContent
+            ContentTemplate="{DataTemplate views:HomePageM}"
+            Route="HomePageM"/>
+        </Tab>
+
+        <ShellContent Title="Flow Outs" 
+            ContentTemplate="{DataTemplate viewsExp:ManageExpendituresM}"
+                       Icon="initiate_money_transfer.png"/>
+
+        <ShellContent Title="Flow Ins"
+            ContentTemplate="{DataTemplate viewsInc:ManageIncomesM}"
+                      Icon="request_money.png"/>
+
+        <Tab Title="Settings"
+             Icon="settings_tab_48.png">
+            <ShellContent
+                Title="User Settings"
+                ContentTemplate="{DataTemplate viewsSettings:UserSettingsPageM}"
+               />
+
+            <ShellContent
+                Title="App Settings"
+                ContentTemplate="{DataTemplate viewsSettings:ApplicationSettingsPageM}"
+            />
+        </Tab>
+
+    </TabBar>
+
+    <ShellContent Title="Login Page" x:Name="login"
+                  ContentTemplate="{DataTemplate views:LoginM}"
+                  Route="LoginM"/>
+
+
+
+
+</Shell>

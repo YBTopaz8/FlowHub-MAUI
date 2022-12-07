@@ -1,14 +1,57 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<Shell
-    x:Class="FlowHub.Main.AppShell"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:FlowHub.Main"
-    Shell.FlyoutBehavior="Disabled">
+<?xml version="1.0" encoding="utf-8" ?>
+<Shell 
+        xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        x:Class="FlowHub.Main.AppShell"
+        xmlns:views="clr-namespace:FlowHub.Main.Views.Desktop"
+        xmlns:local="clr-namespace:FlowHub.Main"
+        xmlns:viewsExpenditures="clr-namespace:FlowHub.Main.Views.Desktop.Expenditures"
+        Shell.NavBarIsVisible="False"
+        Shell.FlyoutBehavior="Disabled"
+        CurrentItem ="{x:Reference login}">
+    
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems"  
+                Route="FileTab">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        <Tab Title="Home" Shell.TabBarIsVisible="True"
+             Route="Home">
+            <ShellContent Title="Home Page"
+                ContentTemplate="{DataTemplate views:HomePageD}"        
+                Route="HomePage"/>
 
+            <ShellContent Title="Log Out"/>
+            <ShellContent Title="Exit"/>
+        </Tab>
+
+        <Tab Title="Expenditures" >
+            <ShellContent Title="Manage Expenditures"    
+                ContentTemplate="{DataTemplate viewsExpenditures:ManageExpendituresD}"
+                Route="ManageExpenditures"/>
+        </Tab>
+
+        <Tab Title="Incomes">
+            <ShellContent Title="Manage Incomes"    
+               
+                />
+        </Tab>
+        <Tab Title="Planning">
+            <ShellContent Title="Monthly Plannings"/>
+
+            <ShellContent Title="Project Plannings"
+               />
+
+        </Tab>
+        <Tab Title="Settings" >
+
+            <ShellContent  Title="User Settings" 
+                
+                Route="UserSettings"/>
+
+            <ShellContent  Title="Application Settings"        
+                Route="AppSettings"/>
+        </Tab>
+    </FlyoutItem>
+    <ShellContent Title="Login Page"  x:Name="login" 
+                    ContentTemplate="{DataTemplate views:LoginD}"
+                    Route="LoginD"/>
 </Shell>

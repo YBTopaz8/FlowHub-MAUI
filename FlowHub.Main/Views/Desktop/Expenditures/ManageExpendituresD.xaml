@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlowHub.Main.Views.Desktop.Expenditures.ManageExpendituresD"
+             xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"             
+             xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
+             xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Expenditures"
+             x:DataType="viewModels:ManageExpendituresVM"
+             x:Name="page"
+             Title="Manage Expenditures">
+
+    <ScrollView>
+        <VerticalStackLayout>
+
+            <Label FontSize="21" HorizontalOptions="Center">
+                <Label.Text>
+                    <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
+                        <Binding Path="UserPockerMoney"/>
+                        <Binding Path="UserCurrency"/>
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+            <HorizontalStackLayout HorizontalOptions="Center">
+                <Label Text="Initial Syncing..." IsVisible="{Binding IsBusy}" />
+                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
+            </HorizontalStackLayout>
+            <Grid HorizontalOptions="CenterAndExpand" Margin="0,0,0,10" MaximumWidthRequest="1440" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <HorizontalStackLayout HorizontalOptions="Center" >
+                    <Label Text="Filters" FontSize="23" Margin="0,10,10,0"/>
+                </HorizontalStackLayout>
+
+                <VerticalStackLayout Grid.Row="1" Grid.Column="0" WidthRequest="210" >
+
+                    <material:RadioButtonGroupView Spacing="16" Margin="8">
+                        <material:RadioButtonGroupView.Resources>
+                            <ResourceDictionary>
+                                <Style TargetType="material:RadioButton">
+                                    <Setter Property="TextFontSize" Value="16"/>
+                                </Style>
+                            </ResourceDictionary>
+                        </material:RadioButtonGroupView.Resources>
+
+                        <material:RadioButton Text="View All" HeightRequest="20" ClickCommand="{Binding FilterGetAllExpCommand}"/>
+                        <material:RadioButton  Text="View For Today" HeightRequest="20" ClickCommand="{Binding FilterGetExpOfTodayCommand}"/>
+                        <material:RadioButton x:Name="FilterCurrentMonth"  Text="View For This Month" HeightRequest="20" ClickCommand="{Binding FilterGetExpListOfCurrentMonthCommand}"/>
+                    </material:RadioButtonGroupView>
+
+                    <HorizontalStackLayout HorizontalOptions="Center" HeightRequest="45" >
+                        <ImageButton Source="clear_filters48.png"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="1" Grid.Row="0" >
+
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="2" Grid.Row="0" HorizontalOptions="EndAndExpand" >
+                    <ImageButton Source="add_btn_48.png" 
+                            BackgroundColor="Transparent"
+                            Command="{Binding GoToAddExpenditurePageCommand}"
+                            ToolTipProperties.Text="Add New Income"/>
+                </HorizontalStackLayout>
+                <ScrollView MinimumHeightRequest="360" MaximumHeightRequest="700" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">
+                    <material:DataGrid ItemsSource="{Binding ExpendituresList}" UseAutoColumns="False"   
+                                MaximumWidthRequest="1440" Padding="10" 
+                                HorizontalOptions="Center">
+                        <material:DataGrid.EmptyView>
+                            <VerticalStackLayout Margin="40,20" MinimumWidthRequest="400">
+                                <Image WidthRequest="70"
+                                HeightRequest="60"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                Source="search_property.png"/>
+                                <Label Text="No Flow Out Available..." FontSize="21" HorizontalOptions="Center" Margin="30"/>
+                            </VerticalStackLayout>
+                        </material:DataGrid.EmptyView>
+
+                        <material:DataGrid.Columns>
+
+                            <material:DataGridColumn PropertyName="DateSpent" Title="Date Spent">
+                                <material:DataGridColumn.CellItemTemplate>
+                                    <DataTemplate>
+                                        <Label Text="{Binding Value, StringFormat='{0:dd MMMM, yyyy}'}" Margin="0,20,0,0" HorizontalOptions="Center"/>
+                                    </DataTemplate>
+                                </material:DataGridColumn.CellItemTemplate>
+                            </material:DataGridColumn>
+
+                            <material:DataGridColumn PropertyName="AmountSpent" Title="Amount Spent">
+                                <material:DataGridColumn.CellItemTemplate>
+                                    <DataTemplate>
+                                        <Label Margin="0,20,0,0" HorizontalOptions="Center">
+                                            <Label.Text>
+                                                <MultiBinding StringFormat="{} {0:n2}">
+                                                    <Binding Path="Value"/>
+                                                </MultiBinding>
+                                            </Label.Text>
+                                        </Label>
+                                    </DataTemplate>
+                                </material:DataGridColumn.CellItemTemplate>
+                            </material:DataGridColumn>
+
+                            <material:DataGridColumn PropertyName="Reason" Title="Reason"/>
+
+                            <material:DataGridColumn Title="Actions" >
+                                <material:DataGridColumn.CellItemTemplate>
+                                    <DataTemplate>
+                                        <HorizontalStackLayout Spacing="10">
+                                            <Border ></Border>
+                                            <ImageButton BackgroundColor="Transparent"
+                                                HeightRequest="43"
+                                                Source="edit.png" 
+                                                Command="{Binding Source={x:Reference page}, Path=BindingContext.GoToEditExpenditurePageCommand}"
+							                    CommandParameter="{Binding Data}"
+                                                ToolTipProperties.Text="Click to Edit"/>
+
+                                            <ImageButton BackgroundColor="#263238"
+                                                Source="delete_btn1_48.png"
+                                                HeightRequest="43"                                                 
+                                                Command="{Binding Source={x:Reference page}, Path=BindingContext.DeleteExpenditureBtnCommand}"
+							                    CommandParameter="{Binding Data}"
+                                                 
+                                                ToolTipProperties.Text="Click to Delete"/>
+
+                                        </HorizontalStackLayout>
+                                    </DataTemplate>
+                                </material:DataGridColumn.CellItemTemplate>
+                            </material:DataGridColumn>
+                        </material:DataGrid.Columns>
+
+                    </material:DataGrid>
+                </ScrollView>
+                <ImageButton Margin="10"  Grid.Column="3" Grid.Row="1" Source="save_to_pdf_btn.png"                            
+                            ToolTipProperties.Text="Click to Save to PDF" Command="{Binding PrintExpendituresBtnCommand}"/>
+
+                <Grid ColumnSpacing="1" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="2" HorizontalOptions="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <VerticalStackLayout>
+                        <HorizontalStackLayout HorizontalOptions="Center" Grid.ColumnSpan="4" Grid.Row="0">
+                            <Label FontSize="19">
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{} {2} Flow Outs worth {0:n2} {1}">
+                                        <Binding Path="TotalAmount"/>
+                                        <Binding Path="UserCurrency"/>
+                                        <Binding Path="TotalExpenditures"/>
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                        </HorizontalStackLayout>
+
+                    </VerticalStackLayout>
+                </Grid>
+            </Grid>
+
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

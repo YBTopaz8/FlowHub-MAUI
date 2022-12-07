@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlowHub.Main.Views.Desktop.HomePageD"
+             xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
+             xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels"
+             Shell.TabBarIsVisible="True"
+             x:DataType="viewModels:HomePageVM"
+             BackgroundColor="{StaticResource BackGroundDark}">
+
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="True"/>
+    </Shell.BackButtonBehavior>
+
+    <VerticalStackLayout HorizontalOptions="FillAndExpand">
+
+        <StackLayout HorizontalOptions="Center">
+            <Label Text="{Binding Username, StringFormat='Welcome {0}'}" FontSize="29"/>
+        </StackLayout>
+        <StackLayout HorizontalOptions="Center">
+            <Label FontSize="22">
+                <Label.Text>
+                    <MultiBinding StringFormat="{} Your Pocket Allowance is {0:n2} {1}">
+                        <Binding Path="PocketMoney"/>
+                        <Binding Path="UserCurrency"/>
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+
+        </StackLayout>
+        <Grid Margin="60,20,0,0" ColumnSpacing="50" HorizontalOptions="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Begin Section for Expenditure display-->
+            <Border Grid.Column="0"
+                    Grid.Row="0"
+                Margin="1"
+                Padding="5"
+                Stroke="DarkSlateBlue"
+                StrokeThickness="2"
+                StrokeShape="RoundRectangle 8">
+                <VerticalStackLayout Spacing="10" Margin="6">
+                    <Label Text="Latest Flow Out"
+                            FontSize="25"
+                            HorizontalOptions="Center"
+                           Margin="90,0,0,0"
+                            WidthRequest="300"/>
+                    <BoxView
+                        Color="DarkSlateBlue"
+                        HeightRequest="2"
+                        HorizontalOptions="Fill"/>
+                    <HorizontalStackLayout>
+                        <Label Text="Reason: "
+                           FontSize="18"
+                            HorizontalOptions="Start"
+                            />
+                        <Label Text="{Binding ExpendituresDetails.Reason} "
+                           FontSize="18"
+                            HorizontalOptions="Start"
+                           Margin="10,0,0,0"
+                            />
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout>
+                        <Label Text="Amount Spent:"
+                           FontSize="18"
+                            HorizontalOptions="Start"
+                            />
+                        <Label Text="{Binding ExpendituresDetails.AmountSpent} "
+                           FontSize="18"
+                            HorizontalOptions="Start"
+                           Margin="10,0,0,0"
+                            />
+                        <Label Text="TND"
+                           FontSize="18"
+                            HorizontalOptions="Start"
+                           Margin="5,0,0,0"
+                            />
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Margin="0,0,0,15">
+                        <Label Text="Date Spent:"
+                           FontSize="18"
+                            HorizontalOptions="Start"
+                            />
+                        <Label Text="{Binding ExpendituresDetails.DateSpent, StringFormat='{0:dd MMMM, yyyy}'}"
+                           FontSize="18"
+                            HorizontalOptions="Start"
+                           Margin="10,0,0,0"
+                            />
+                    </HorizontalStackLayout>
+
+                </VerticalStackLayout>
+
+            </Border>
+            <!-- End Section for Expenditure display-->
+
+            <!-- Begin Section for income display-->
+            <Border
+                Grid.Column="1"
+                Grid.Row="0"
+                Margin="1"
+                Padding="5"
+                Stroke="DarkSlateBlue"
+                StrokeThickness="2"
+                StrokeShape="RoundRectangle 8">
+                <VerticalStackLayout Spacing="10" Margin="6">
+                    <Label Text="Latest Flow In"
+                            FontSize="25"
+                            HorizontalOptions="Center"
+                           Margin="90,0,0,0"
+                           Padding="10,0,0,0"
+                            WidthRequest="300"/>
+                    <BoxView
+                        Color="DarkSlateBlue"
+                        HeightRequest="2"
+                        HorizontalOptions="Fill"/>
+                    <Label Text="Reason: "
+                           FontSize="18"
+                            HorizontalOptions="Start"
+                            WidthRequest="300"/>
+
+
+                    <Label Text="Amount Received:"
+                           FontSize="18"
+                            HorizontalOptions="StartAndExpand"
+                            WidthRequest="300"/>
+                    <Label Text="Date Received:"
+                           FontSize="18"
+                            HorizontalOptions="StartAndExpand"
+                            WidthRequest="300"/>
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- End Section for income display-->
+            <Border
+                Grid.Row="1"
+                StrokeThickness="0"
+                Margin="0,10,0,0">
+                <ImageButton Source="add_btn_48.png" 
+                             BackgroundColor="Transparent"
+                             Command="{Binding GoToAddExpenditurePageCommand}"
+                             ToolTipProperties.Text="Add New Expenditure"/>
+
+            </Border>
+            <Border
+                Grid.Column="1"
+                Grid.Row="1"
+                StrokeThickness="0"
+                Margin="0,10,0,0">
+                <ImageButton Source="add_btn_48.png" 
+                             BackgroundColor="Transparent"
+                             Command="{Binding GoToAddExpenditurePageCommand}"
+                             ToolTipProperties.Text="Add New Income"/>
+            </Border>
+        </Grid>
+
+    </VerticalStackLayout>
+</ContentPage>

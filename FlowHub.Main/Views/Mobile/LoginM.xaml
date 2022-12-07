@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlowHub.Main.Views.Mobile.LoginM"
+             xmlns:viewModel="clr-namespace:FlowHub.Main.ViewModels"
+             xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
+             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
+             xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui" 
+             xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+             Shell.FlyoutBehavior="Disabled"
+             Shell.NavBarIsVisible="False"
+             x:DataType="viewModel:LoginVM"
+             >
+    <ScrollView>
+        <VerticalStackLayout Spacing="10">
+
+            <!--Section for Registration begins below-->
+            <VerticalStackLayout x:Name="RegisterForm" IsVisible="false" Spacing="20" Margin="25" >
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Sign Up." FontSize="26" FontAttributes="Bold"/>
+                    <Label Text="Track Your Cash Flow With Ease" FontSize="19" Margin="0,0,0,60" FontAttributes="Bold"/>
+                </VerticalStackLayout>
+
+                <input:FormView SubmitCommand="{Binding GoToHomePageFromRegisterCommand}" Spacing="20">
+                    <material:TextField Title="User Name" Text="{Binding CurrentUser.Username}" Icon="user.png">
+                        <validation:RequiredValidation/>
+                    </material:TextField>
+
+                    <material:TextField Title="Email" Text="{Binding CurrentUser.Email}" Icon="at_sign_email.png">
+                        <material:TextField.Validations>
+                            <validation:RequiredValidation/>
+                        </material:TextField.Validations>
+                    </material:TextField>
+
+                    <material:TextField Title="Password" Text="{Binding CurrentUser.Password}" IsPassword="True" Icon="password.png">
+                        <validation:RequiredValidation/>
+                    </material:TextField>
+
+                    <material:TextField Title="Pocket Allowance" Text="{Binding PocketMoney}" Icon="card_wallet.png" Keyboard="Numeric">
+                        <material:TextField.Validations>
+                            <validation:MinValueValidation MinValue="1"/>
+                            <validation:RequiredValidation/>
+                        </material:TextField.Validations>
+                    </material:TextField>
+
+                    <Picker Title="Select your Country" ItemsSource="{Binding CountryNamesList}" x:Name="CountryPicker" SelectedIndexChanged="Picker_SelectedIndexChanged"/>
+                    <Label Text="Input Field is required!" TextColor="Red" IsVisible="{Binding ErrorMessagePicker}"/>
+
+                    <Button Text="Register Account" input:FormView.IsSubmitButton="True"/>
+
+                </input:FormView>
+                <Label Text="Already have an Account? Sign In" HorizontalTextAlignment="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="SwitchToLoginPageTapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </VerticalStackLayout>
+
+            <!--Section for Login begins below-->
+            <VerticalStackLayout x:Name="LoginForm" IsVisible="true" Spacing="20" Margin="25">
+                <VerticalStackLayout>
+                    <Label Text="Hello." FontSize="Title" FontAttributes="Bold"/>
+                    <Label Text="Welcome to FlowHub" FontSize="Title" Margin="0,0,0,60" FontAttributes="Bold"/>
+                </VerticalStackLayout>
+
+                <input:FormView SubmitCommand="{Binding GoToHomePageFromLoginCommand}"   Margin="0,20" Spacing="20">
+                    <Label Text="User does not exist!" TextColor="Red" FontAttributes="Bold" FontSize="19" IsVisible="{Binding ErrorMessage}" />
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
+
+                    <material:TextField Title="Email" Text="{Binding CurrentUser.Email}" Icon="at_sign_email.png">
+                        <material:TextField.Validations>
+                            <validation:RequiredValidation/>
+                        </material:TextField.Validations>
+                    </material:TextField>
+
+                    <material:TextField Title="Password" Text="{Binding CurrentUser.Password}" Icon="password.png" IsPassword="True">
+                        <material:TextField.Validations>
+                            <validation:RequiredValidation/>
+                        </material:TextField.Validations>
+                    </material:TextField>
+                    <Button Text="Login" input:FormView.IsSubmitButton="True"/>
+                    <Label Text="New to FlowHub? Sign Up" HorizontalTextAlignment="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="SwitchToRegisterPageTapped"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </input:FormView>
+            </VerticalStackLayout>
+
+            <!--Section for QUICK Login begins below-->
+            <VerticalStackLayout x:Name="QuickLogin" IsVisible="false" Spacing="15" VerticalOptions="Center" Margin="0,200,0,0">
+                <Label x:Name="WelcomeLabel" Text="{Binding Username ,StringFormat='Welcome Back, {0}'}" FontSize="Title" HorizontalOptions="Center"/>
+                <Button Text="Quick Login" Command="{Binding QuickLoginCommand}" Margin="70,70,70,0" />
+
+                <VerticalStackLayout IsVisible="{Binding ShowLoginMessage}" HorizontalOptions="Center">
+                    <Label Text="An Error Occurred" TextColor="Red"/>
+                    <Label Text="Please Tap here to Authenticate Yourself">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="SwitchToLoginPageTapped"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

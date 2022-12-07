@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlowHub.Main", "FlowHub.Main\FlowHub.Main.csproj", "{B24F69FF-2FA3-452E-BB92-23AC5ADB6496}"
+	ProjectSection(ProjectDependencies) = postProject
+		{11D27C00-4EEB-4A33-A5EE-9207EDD53190} = {11D27C00-4EEB-4A33-A5EE-9207EDD53190}
+		{2DAE4FA3-F7FB-463B-B074-511746628C6C} = {2DAE4FA3-F7FB-463B-B074-511746628C6C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowHub.Models", "FlowHub.Models\FlowHub.Models.csproj", "{11D27C00-4EEB-4A33-A5EE-9207EDD53190}"
 EndProject

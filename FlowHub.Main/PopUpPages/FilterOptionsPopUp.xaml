@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mct:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"   
+             xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+             CanBeDismissedByTappingOutsideOfPopup="False"
+             Size="340,188"
+             Color="Transparent"
+             x:Class="FlowHub.Main.PopUpPages.FilterOptionsPopUp">
+    <Border Margin="10"
+        Stroke="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=White}"
+        StrokeThickness="0"
+        StrokeShape="RoundRectangle 8">
+
+        <VerticalStackLayout BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=White}" Spacing="7" Padding="9">
+            <VerticalStackLayout.Resources>
+                <ResourceDictionary>
+                    <Style TargetType="Label">
+                        <Setter Property="TextColor" Value="{AppThemeBinding Dark=white, Light=black}"/>
+                    </Style>
+                    <Style TargetType="Button">
+                        <Setter Property="BackgroundColor" Value="Transparent"/>
+                    </Style>
+                </ResourceDictionary>
+            </VerticalStackLayout.Resources>
+
+            <Label FontSize="20" TextColor="{AppThemeBinding Dark=white, Light=black}"
+            Text="Choose A Filter Option"
+            VerticalOptions="Start" 
+            HorizontalOptions="Center"/>
+            <BoxView HeightRequest="1"/>
+            
+            <Label Text="View All" x:Name="Filter_All" >
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Filter_All_Tapped"/>
+                </Label.GestureRecognizers>
+            </Label>
+            
+            <Label Text="View For Today" x:Name="Filter_Today" >
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Filter_Today_Tapped"/>
+                </Label.GestureRecognizers>
+            </Label>
+            
+            <Label Text="View For Current Month" x:Name="Filter_Curr_Month">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Filter_Curr_Month_Tapped"/>
+                </Label.GestureRecognizers>
+            </Label>
+
+            <BoxView HeightRequest="1"/>
+            <HorizontalStackLayout HorizontalOptions="EndAndExpand">
+                <Button Text="Cancel" 
+                        Clicked="OnCancelButtonClicked"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </Border>
+</mct:Popup>
