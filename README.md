@@ -6,17 +6,12 @@ Ideal for anyone who likes to keep track of their Financial Flow.
 ## Requirements
 This project is build on .NET CORE 7, .NET MAUI and LiteDB as its DataBase using QuestPDF and iText 7 for PDF Generation.
 
-To install and use THIS project, you would need;
+The Requirement to run use THIS project, you would need;
 - A Computer running Windows 10 at least.
 - An Android Device running Android 5 at least (API 21).
 - Visual Studio 2019, 2022 or latest (It was built on VS 2022) with MAUI support.
-- [LiteDB nuget package](https://www.nuget.org/packages/LiteDB).
-- [Quest PDF Nuget Package](https://www.nuget.org/packages/QuestPDF/), [GitHub](https://github.com/QuestPDF/QuestPDF)
-- [itext7 Nuget Package](https://www.nuget.org/packages/itext7/)
 
 ## Installation
-(Normally, cloning the repo will include all nuget packages used but in case it doesn't)
-
 To install the project, please do as follows;
 - Clone the project from my GitHub
 - Extract the project to your desired location
