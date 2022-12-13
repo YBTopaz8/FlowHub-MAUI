@@ -23,7 +23,7 @@ To install the project, please do as follows;
 - Load it in Visual Studio
 - Open the Package Manager Console (View -> Other Windows -> Package Manager Console)
 - Type 'dotnet restore' without the ' '  then press Enter. 
-- Wait for it to restore all required packages, then Run.
+- Wait for it to restore all required packages
 
 > Then,
 - Ensure you have an Android Virtual Device for emulation testing.
@@ -32,21 +32,22 @@ Build and run your app and that's it!
 
 ## Currently Existing Features
 
-- Cross platform with between Android devices and Windows Devices.
+- An official Android Version
 - Expenditures Management (CRUD operations)
-- Report Printing for Expenditures
-- Monthly Expenditures Management (CRUD Operations)
-
+- Income Management (CRUD Operations)
+- Report Printing for Expenditures : on mobile Only for now
+- Monthly Expenditures Management (CRUD Operations): on mobile Only for now- 
+- Login feature and Account Management.
 > More Coming Soon...
 
 ## Roadmap (Upcoming features)
-
-- An official Android Version (Coming Very Soon...)
+- Normal Planned Expenditures
 - Income, Debt Management.
-- Login feature and Account Management.
 - Application Customisation
-- True Cross-Platform interaction with One DB
+- True Cross-Platform interaction with One DB 
 - Localization for Multilanguage and Multi Currency support.
+- Statistics, Charts and Graphs
+- Cross platform with between Android devices and Windows Devices. (With Cross Sync)
 
 > Those are just the surfaces..
 
