@@ -2,40 +2,42 @@
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FlowHub.Main.AppShellMobile"
+             xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
              xmlns:local="clr-namespace:FlowHub.Main"
              xmlns:views="clr-namespace:FlowHub.Main.Views.Mobile"
              xmlns:viewsExp="clr-namespace:FlowHub.Main.Views.Mobile.Expenditures"
              xmlns:viewsInc="clr-namespace:FlowHub.Main.Views.Mobile.Incomes"
              xmlns:viewsSettings="clr-namespace:FlowHub.Main.Views.Mobile.Settings"
+             xmlns:viewsPlannedExp="clr-namespace:FlowHub.Main.Views.Mobile.Expenditures.PlannedExpenditures.MonthlyPlannedExp"
+             xmlns:viewsStats="clr-namespace:FlowHub.Main.Views.Mobile.Statistics"
              CurrentItem ="{x:Reference login}"
+             
              >
     <TabBar>
-        <Tab Title="Home"
-             Icon="homepage.png">
-            <ShellContent
+        <ShellContent Title="Home" Icon="homepage.png"
             ContentTemplate="{DataTemplate views:HomePageM}"
             Route="HomePageM"/>
-        </Tab>
 
-        <ShellContent Title="Flow Outs" 
-            ContentTemplate="{DataTemplate viewsExp:ManageExpendituresM}"
-                       Icon="initiate_money_transfer.png"/>
+        <ShellContent Title="Flow Outs" Icon="initiate_money_transfer.png"
+                ContentTemplate="{DataTemplate viewsExp:ManageExpendituresM}"/>
 
-        <ShellContent Title="Flow Ins"
-            ContentTemplate="{DataTemplate viewsInc:ManageIncomesM}"
-                      Icon="request_money.png"/>
 
-        <Tab Title="Settings"
+        <ShellContent Title="Flow Ins" Icon="request_money.png"
+            ContentTemplate="{DataTemplate viewsInc:ManageIncomesM}"/>
+
+        <ShellContent Title="Statistics" Icon="graph.png"
+            ContentTemplate="{DataTemplate viewsStats:StatisticsPageM}"/>
+
+        <ShellContent Title="Monthly Planned" Icon="plus_one_month.png"
+                ContentTemplate="{DataTemplate viewsPlannedExp:ManageMonthlyPlannedExpendituresPageM}"/>
+        <Tab Title="Settings" IsEnabled="false"
              Icon="settings_tab_48.png">
-            <ShellContent
-                Title="User Settings"
-                ContentTemplate="{DataTemplate viewsSettings:UserSettingsPageM}"
-               />
+            <ShellContent Title="User Settings"
+                ContentTemplate="{DataTemplate viewsSettings:UserSettingsPageM}"/>
 
             <ShellContent
                 Title="App Settings"
-                ContentTemplate="{DataTemplate viewsSettings:ApplicationSettingsPageM}"
-            />
+                ContentTemplate="{DataTemplate viewsSettings:ApplicationSettingsPageM}"/>
         </Tab>
 
     </TabBar>

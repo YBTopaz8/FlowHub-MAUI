@@ -11,112 +11,129 @@ public class ExpendituresRepository : IExpendituresRepository
 
     public List<ExpendituresModel> OnlineExpList { get; set; }
     public List<ExpendituresModel> ExpList { get; set; }
+    public List<ExpendituresModel> OfflineExpendituresList { get; set; }    
 
     ILiteCollectionAsync<ExpendituresModel> AllExpenditures;
 
     private readonly IDataAccessRepo dataAccessRepo;
     private readonly IUsersRepository usersRepo;
-    private readonly IOnlineCredentialsRepository onlineCredentials;
 
-    private const string expendituresDataCollectionName = "Expenditures";
-    private UsersModel userOffline = new();
-    private UsersModel userOnline = new();
+    private const string expendituresDataCollectionName = "Expenditures";   
 
-    List<ExpendituresModel> InsertExpList = new();
-    List<ExpendituresModel> UpdateExpList = new();
-    List<ExpendituresModel> DeleteExpList = new();
-    readonly string InsertJSONFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "InsertExpData.json");
-    readonly string UpdateJSONFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "UpdateExpData.json");
-    readonly string DeleteJSONFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "DeleteExpData.json");
-
-    public ExpendituresRepository(IDataAccessRepo dataAccess, IUsersRepository userRepo, IOnlineCredentialsRepository onlineCredentialsRepo)
+    public ExpendituresRepository(IDataAccessRepo dataAccess, IUsersRepository userRepo)
     {
         dataAccessRepo = dataAccess;
         usersRepo = userRepo;
-        onlineCredentials = onlineCredentialsRepo;
     }
 
     void OpenDB()
     {
         db = dataAccessRepo.GetDb();
-        AllExpenditures = db.GetCollection<ExpendituresModel>(expendituresDataCollectionName);
-        userOffline ??= usersRepo.OfflineUser; //offline user will be filled when LoginDVM will be called
+        AllExpenditures = db.GetCollection<ExpendituresModel>(expendituresDataCollectionName);     
     }
 
 
     public async Task<List<ExpendituresModel>> GetAllExpendituresAsync()
     {        
         OpenDB();
-        ExpList = await AllExpenditures.Query().ToListAsync();
+        OfflineExpendituresList = await AllExpenditures.Query().ToListAsync();
         db.Dispose();
-        return ExpList;
+        return OfflineExpendituresList;
     }
 
     /*--------- SECTION FOR OFFLINE CRUD OPERATIONS----------*/
     public async Task<bool> AddExpenditureAsync(ExpendituresModel expenditure)
     {
         expenditure.PlatformModel = DeviceInfo.Current.Model;
-        OpenDB();
-         if (await AllExpenditures.InsertAsync(expenditure) is not null)
-         {
-            await AllExpenditures.EnsureIndexAsync(x => x.Id);
-            db.Dispose();
-            return true;
-         }        
-        else
+        
+        try
         {
-            Debug.WriteLine("Error while inserting Expenditure");        
+            OpenDB();
+            if (await AllExpenditures.InsertAsync(expenditure) is not null)
+            {
+                await AllExpenditures.EnsureIndexAsync(x => x.Id);
+                db.Dispose();
+                return true;
+            }        
+            else
+            {
+                Debug.WriteLine("Error while inserting Expenditure");        
+            }
+            return true;
         }
-        return true;
+        catch (Exception ex)
+        {
+            db.Dispose();
+            Debug.WriteLine(ex.Message);
+            return false;
+        }
     }
 
     public async Task<bool> UpdateExpenditureAsync(ExpendituresModel expenditure)
     {
         expenditure.PlatformModel = DeviceInfo.Current.Model;
-        OpenDB();
-        if (await AllExpenditures.UpdateAsync(expenditure))
+        try
         {
-            db.Dispose();            
-            return true;
+            OpenDB();
+            if (await AllExpenditures.UpdateAsync(expenditure))
+            {
+                db.Dispose();
+                return true;
+            }
+            else
+            {
+                Debug.WriteLine("Failed to update Expenditure");
+                db.Dispose();
+                return false;
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Debug.WriteLine("Failed to update Expenditure");
             db.Dispose();
+            Debug.WriteLine(ex.Message);
             return false;
-        }
+        }        
     }
 
     public async Task<bool> DeleteExpenditureAsync(ExpendituresModel expenditure)
     {
-        OpenDB();
-        if (await AllExpenditures.DeleteAsync(expenditure.Id))
+        try
+        {
+            OpenDB();
+            if (await AllExpenditures.DeleteAsync(expenditure.Id))
+            {
+                db.Dispose();
+                return true;
+            }
+            else
+            {
+                Debug.WriteLine("Failed to delete Expenditure");
+                db.Dispose();
+                return false;
+            }
+        }
+        catch (Exception ex)
         {
             db.Dispose();
-            return true;
+            Debug.WriteLine(ex.Message);
+            return false;
         }
-        else
-        {
-            Debug.WriteLine("Failed to delete Expenditure");
-            db.Dispose();
-            throw new Exception("Failed to Delete Expenditure");
-
-        }
+        
     }
 
     /*--------- SECTION FOR ONLINE CRUD OPERATIONS OF SINGLE DOCUMENTS----------*/
-    async Task AddExpenditureOnlineAsync(ExpendituresModel expenditure)
-    {
-       // await onlineExpendituresCollection.InsertOneAsync(expenditure);
-    }
-    async Task UpdateExpenditureOnlineAsync(ExpendituresModel exp)
-    {
-     //   await onlineExpendituresCollection.ReplaceOneAsync(x => x.Id == exp.Id, exp);
-    }
-    async Task DeleteExpenditureOnlineAsync(ExpendituresModel exp)
-    {
-      //  await onlineExpendituresCollection.DeleteOneAsync(x => x.Id == exp.Id);
-    }
+    //async Task AddExpenditureOnlineAsync(ExpendituresModel expenditure)
+    //{
+    //   // await onlineExpendituresCollection.InsertOneAsync(expenditure);
+    //}
+    //async Task UpdateExpenditureOnlineAsync(ExpendituresModel exp)
+    //{
+    // //   await onlineExpendituresCollection.ReplaceOneAsync(x => x.Id == exp.Id, exp);
+    //}
+    //async Task DeleteExpenditureOnlineAsync(ExpendituresModel exp)
+    //{
+    //  //  await onlineExpendituresCollection.DeleteOneAsync(x => x.Id == exp.Id);
+    //}
 
 
     /*--------- SECTION FOR OFFLINE TO ONLINE SYNC OPERATIONS----------*/

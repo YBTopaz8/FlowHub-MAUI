@@ -26,7 +26,7 @@
                 </MultiBinding>
             </Label.Text>
         </Label>
-        <Grid toolkit:DockLayout.DockPosition="Top" HeightRequest="50" Margin="10,5">
+        <Grid toolkit:DockLayout.DockPosition="Top" HeightRequest="30" Margin="10,3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
@@ -46,15 +46,21 @@
                 <ImageButton Source="{AppThemeBinding Dark=add_btn_48.png, Light=add_btn_48_light.png}" Command="{Binding GoToAddIncomePageCommand}"/>
             </HorizontalStackLayout>
         </Grid>
-        <Label toolkit:DockLayout.DockPosition="Bottom" Margin="5" HorizontalOptions="Center">
-            <Label.Text>
-                <MultiBinding StringFormat="{} {2} Flow In(s) worth {0:n2} {1}">
-                    <Binding Path="TotalAmount"/>
-                    <Binding Path="UserCurrency"/>
-                    <Binding Path="TotalIncomes"/>
-                </MultiBinding>
-            </Label.Text>
-        </Label>
+
+        <Label toolkit:DockLayout.DockPosition="Top" Text="{Binding IncTitle}" FontSize="20" Margin="5" FontAttributes="Bold" HorizontalOptions="Center"/>
+        <HorizontalStackLayout toolkit:DockLayout.DockPosition="Bottom" HeightRequest="34" HorizontalOptions="CenterAndExpand">
+            <Label FontSize="17" Margin="5">
+                <Label.Text>
+                    <MultiBinding StringFormat="{} {2} Flow In(s) worth {0:n2} {1}">
+                        <Binding Path="TotalAmount"/>
+                        <Binding Path="UserCurrency"/>
+                        <Binding Path="TotalIncomes"/>
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+
+        </HorizontalStackLayout>
+       
         <CollectionView ItemsSource="{Binding IncomesList}" EmptyView="No Flow Ins Available...">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:IncomeModel">

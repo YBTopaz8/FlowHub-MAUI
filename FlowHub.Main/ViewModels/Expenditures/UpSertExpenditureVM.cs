@@ -11,8 +11,8 @@ using FlowHub.Main.PopUpPages;
 
 namespace FlowHub.Main.ViewModels.Expenditures;
 
-[QueryProperty(nameof(PageTitle), nameof(PageTitle))]
 [QueryProperty(nameof(SingleExpenditureDetails), "SingleExpenditureDetails")]
+[QueryProperty(nameof(PageTitle), nameof(PageTitle))]
 [QueryProperty(nameof(ActiveUser), "ActiveUser")]
 public partial class UpSertExpenditureVM : ObservableObject
 {
@@ -51,7 +51,6 @@ public partial class UpSertExpenditureVM : ObservableObject
 
         ToastDuration duration = ToastDuration.Short;
         double fontSize = 14;
-
 
         //var response= await AppShell.Current.DisplayAlert("Save Confirmation", "Do You want to save?", "Yes", "Cancel");
         bool response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You Want To Save?"));
@@ -109,7 +108,7 @@ public partial class UpSertExpenditureVM : ObservableObject
         }
         else
         {
-            SingleExpenditureDetails.DateSpent = SingleExpenditureDetails.DateSpent.AddHours(1); //for some reason, mongodb stores with one hour difference
+            
             SingleExpenditureDetails.Id = Guid.NewGuid().ToString();
             
             SingleExpenditureDetails.UserId = ActiveUser.Id;

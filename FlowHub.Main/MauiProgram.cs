@@ -4,16 +4,19 @@ using FlowHub.DataAccess.IRepositories;
 using FlowHub.DataAccess.Repositories;
 using FlowHub.Main.ViewModels;
 using FlowHub.Main.ViewModels.Expenditures;
+using FlowHub.Main.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
 using FlowHub.Main.ViewModels.Incomes;
 using FlowHub.Main.ViewModels.Settings;
 using FlowHub.Main.Views.Desktop;
 using FlowHub.Main.Views.Desktop.Expenditures;
 using FlowHub.Main.Views.Mobile;
 using FlowHub.Main.Views.Mobile.Expenditures;
+using FlowHub.Main.Views.Mobile.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
 using FlowHub.Main.Views.Mobile.Incomes;
 using FlowHub.Main.Views.Mobile.Settings;
+using FlowHub.Main.Views.Mobile.Statistics;
 using InputKit.Handlers;
-using Microsoft.Extensions.Logging;
+using SkiaSharp.Views.Maui.Controls.Hosting;
 using UraniumUI;
 
 namespace FlowHub.Main;
@@ -24,6 +27,7 @@ public static class MauiProgram
 	{
 		var builder = MauiApp.CreateBuilder();
 		builder
+            .UseSkiaSharp(true)
 			.UseMauiApp<App>()
 			.ConfigureFonts(fonts =>
 			{
@@ -45,6 +49,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<ISettingsServiceRepository, SettingsServiceRepository>();
         builder.Services.AddSingleton<IUsersRepository, UserRepository>();
         builder.Services.AddSingleton<IOnlineCredentialsRepository, OnlineCredentialsRepository>();
+        builder.Services.AddSingleton<IPlannedExpendituresRepository, PlannedExpendituresRepository>();
 
 /*--------------------ADDING VIEWMODELS----------------------------------------------------------------------------------------*/
 
@@ -61,7 +66,11 @@ public static class MauiProgram
         builder.Services.AddSingleton<ManageIncomesVM>();
         builder.Services.AddSingleton<UserSettingsVM>();
 
-/*------------------------REGISTERING DESKTOP VIEWS ----------------------------------------------------------------------------*/
+        /*-- Section for Planned Expenditures --*/
+        builder.Services.AddSingleton<ManageMonthlyMonthlyPlannedExpendituresVM>();
+        builder.Services.AddSingleton<DetailsOfMonthlyPlannedExpVM>();
+        builder.Services.AddSingleton<UpSertMonthlyPlannedExpVM>();
+        /*------------------------REGISTERING DESKTOP VIEWS ----------------------------------------------------------------------------*/
 
         /*-- Section for HomePage AND Login --*/
         builder.Services.AddSingleton<HomePageD>();
@@ -71,6 +80,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<UpSertExpenditurePageD>();
         builder.Services.AddSingleton<ManageExpendituresD>();
 
+        
 
 /*-------------------------------REGISTERING MOBILE VIEWS ---------------------------------------------------------------*/
 
@@ -90,7 +100,14 @@ public static class MauiProgram
         builder.Services.AddSingleton<UserSettingsPageM>();
         builder.Services.AddSingleton<ApplicationSettingsPageM>();
 
-/*--------------------------------------------------------------------------------------------------------------------------------*/
+        /*-- Section for Monthly Planned Expenditures --*/
+        builder.Services.AddSingleton<ManageMonthlyPlannedExpendituresPageM>();
+        builder.Services.AddSingleton<DetailsOfMonthlyPlannedExpPageM>();
+        builder.Services.AddSingleton<UpSertMonthlyPlannedExpPageM>();
+
+        /* -- Section For Statistics --*/
+        builder.Services.AddSingleton<StatisticsPageM>();
+        /*--------------------------------------------------------------------------------------------------------------------------------*/
         return builder.Build();
 	}
 }

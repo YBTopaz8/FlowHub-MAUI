@@ -44,6 +44,7 @@ public class UserRepository : IUsersRepository
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
+
             return null;
         }
        

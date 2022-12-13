@@ -2,19 +2,19 @@
 <ContentPage x:Class="FlowHub.Main.Views.Mobile.Expenditures.ManageExpendituresM"
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:FlowHub.Main.Views.Mobile.Expenditures"
-             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"   
-             xmlns:materialAttach="clr-namespace:UraniumUI.Material.Attachments;assembly=UraniumUI.Material"          
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:FlowHub.Main.Views.Mobile.Expenditures"  
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Expenditures"
-             x:DataType="viewModels:ManageExpendituresVM"
+             x:DataType="viewModels:ManageExpendituresVM"             
              x:Name="page"
              >
     <ContentPage.ToolbarItems>
         <ToolbarItem IconImageSource="filter_btn.png" Command="{Binding ShowFilterPopUpPageCommand}"/>
     </ContentPage.ToolbarItems>
-    <VerticalStackLayout >
-        <Label FontSize="21" HorizontalOptions="Center">
+
+    <toolkit:DockLayout>
+        <Label toolkit:DockLayout.DockPosition="Top" FontSize="20" HorizontalOptions="Center">
             <Label.Text>
                 <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
                     <Binding Path="UserPocketMoney"/>
@@ -22,7 +22,8 @@
                 </MultiBinding>
             </Label.Text>
         </Label>
-        <Grid Margin="10,5,10,8" >
+
+        <Grid toolkit:DockLayout.DockPosition="Top" HeightRequest="30" Margin="10,3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
@@ -42,20 +43,27 @@
             <HorizontalStackLayout Grid.Column="2" HorizontalOptions="End" BackgroundColor="Transparent">
                 <ImageButton Source="{AppThemeBinding Dark=add_btn_48.png, Light=add_btn_48_light.png}" Command="{Binding GoToAddExpenditurePageCommand}"/>
             </HorizontalStackLayout>
-            
-            
         </Grid>
-        <HorizontalStackLayout HorizontalOptions="Center">
+
+        <HorizontalStackLayout toolkit:DockLayout.DockPosition="Top" HorizontalOptions="Center">
             <Label Text="Syncing..." IsVisible="{Binding IsBusy}" Margin="0,0,0,0" FontSize="13" />
             <ActivityIndicator IsRunning="{Binding IsBusy}" HeightRequest="20" IsVisible="{Binding IsBusy}"/>
         </HorizontalStackLayout>
 
-        <!--<ActivityIndicator x:Name="PrintingActivIndic" Grid.Column="1" Color="DarkSlateBlue"/>-->
-        
-        
-        <Label Text="{Binding ExpTitle}" FontSize="20" Margin="0,0,0,10" FontAttributes="Bold" HorizontalOptions="Center"/>
+        <Label toolkit:DockLayout.DockPosition="Top" Text="{Binding ExpTitle}" FontSize="20" Margin="5" FontAttributes="Bold" HorizontalOptions="Center"/>
 
-        <CollectionView ItemsSource="{Binding ExpendituresList}" MaximumHeightRequest="730" EmptyView="No Flow Outs Available..." >
+        <HorizontalStackLayout toolkit:DockLayout.DockPosition="Bottom" HeightRequest="34" HorizontalOptions="CenterAndExpand">
+            <Label FontSize="17" Margin="5">
+                <Label.Text>
+                    <MultiBinding StringFormat="{} {2} Flow Out(s) worth {0:n2} {1}">
+                        <Binding Path="TotalAmount"/>
+                        <Binding Path="UserCurrency"/>
+                        <Binding Path="TotalExpenditures"/>
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+        </HorizontalStackLayout>
+        <CollectionView ItemsSource="{Binding ExpendituresList}" EmptyView="No Flow Outs Available..." >
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:ExpendituresModel">
@@ -66,7 +74,7 @@
                                     <SwipeItem Command="{Binding Source={x:Reference page}, 
                                             Path=BindingContext.GoToEditExpenditurePageCommand}"  
                                                    CommandParameter="{Binding .}" 
-                                            Text="Edit" IconImageSource="edit_exp.png" BackgroundColor="#201C1B1F"/>
+                                            IconImageSource="edit_exp.png" BackgroundColor="#201C1B1F"/>
                                 </SwipeView.LeftItems>
 
                                 <SwipeView.RightItems>
@@ -82,10 +90,11 @@
                                         StrokeThickness="2"
                                         StrokeShape="RoundRectangle 10">
 
-                                    <VerticalStackLayout >
+                                    <VerticalStackLayout>
                                         <Label HorizontalOptions="Center" Text="{Binding DateSpent, StringFormat='{0:MMMM dd, yyyy}'}"/>
                                         <VerticalStackLayout>
-                                            <Label Text="{Binding Reason, StringFormat='Reason: {0}'}"/>
+                                            <Label Margin="3,0" Text="{Binding Reason, StringFormat='Reason: {0}'}"/>
+                                            
                                             <Label>
                                                 <Label.Text>
                                                     <MultiBinding StringFormat="{} Amount: {0:n2} {1}">
@@ -105,20 +114,7 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        <HorizontalStackLayout Margin="0,15,0,0" HorizontalOptions="Center" Grid.ColumnSpan="4" Grid.Row="0">
-            <Label FontSize="17">
-                <Label.Text>
-                    <MultiBinding StringFormat="{} {2} Flow Out(s) worth {0:n2} {1}">
-                        <Binding Path="TotalAmount"/>
-                        <Binding Path="UserCurrency"/>
-                        <Binding Path="TotalExpenditures"/>
-                    </MultiBinding>
-                </Label.Text>
-            </Label>
-        </HorizontalStackLayout>
+       
+    </toolkit:DockLayout>
 
-        <Button Text="Sync" Command="{Binding SyncExpTestCommand}" IsVisible="false"/>
-    </VerticalStackLayout>
-
-    
 </ContentPage>

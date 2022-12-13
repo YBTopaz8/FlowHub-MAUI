@@ -68,7 +68,7 @@
                             />
                     <Label Text="{Binding ExpendituresDetails.DateSpent, StringFormat='{0:dd MMMM, yyyy}'}"
                            FontSize="18"
-                            HorizontalOptions="Start"
+                           HorizontalOptions="Start"
                            Margin="10,0,0,0"
                             />
                 </HorizontalStackLayout>

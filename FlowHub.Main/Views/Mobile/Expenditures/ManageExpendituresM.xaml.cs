@@ -15,6 +15,7 @@ public partial class ManageExpendituresM : ContentPage
     {
         base.OnAppearing();
         viewModel.PageloadedCommand.Execute(null);
+        
     }
 
     private async void ExportToPDFImageButton_Clicked(object sender, EventArgs e)

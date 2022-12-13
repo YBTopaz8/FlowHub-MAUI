@@ -21,6 +21,9 @@ public class PrintDetailsMonthlyExpenditure
         });
     }
 
-
+    public Task SaveListDetailMonthlyPlanned(List<ExpendituresModel> expList, string userCurrency, string printDisplayCurrency, string userName, string monthYear)
+    {
+        throw new NotImplementedException();
+    }
 
 }

@@ -45,8 +45,6 @@ public partial class ManageIncomesVM : ObservableObject
     [ObservableProperty]
     private string incTitle;
 
-    [ObservableProperty]
-    private string testt;
 
     private UsersModel ActiveUser = new();
 
@@ -57,7 +55,6 @@ public partial class ManageIncomesVM : ObservableObject
         ActiveUser = user;
         UserPockerMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
-        Testt = "Fil";
         await incomeService.GetAllIncomesAsync();
         FilterGetIncOfCurrentMonth();
     }
@@ -287,15 +284,15 @@ public partial class ManageIncomesVM : ObservableObject
     public async void ShowFilterPopUpPage()
     {
         var filterOption = (string)await Shell.Current.ShowPopupAsync(new FilterOptionsPopUp());
-        if (filterOption.Equals("FAll"))
+        if (filterOption.Equals("Filter_All"))
         {
             FilterGetAllIncomes();
         }
-        else if (filterOption.Equals("FToday"))
+        else if (filterOption.Equals("Filter_Today"))
         {
             FilterGetIncOfToday();
         }
-        else if (filterOption.Equals("FCurrMonth"))
+        else if (filterOption.Equals("Filter_CurrMonth"))
         {
             FilterGetIncOfCurrentMonth();
         }

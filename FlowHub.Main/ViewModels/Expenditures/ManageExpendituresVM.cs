@@ -10,7 +10,6 @@ using FlowHub.Main.Platforms.NavigationMethods;
 using FlowHub.Main.PDF_Classes;
 using CommunityToolkit.Maui.Views;
 using FlowHub.Main.PopUpPages;
-using UraniumUI.Extensions;
 
 
 //This is the view model for the page that shows ALL expenditures
@@ -51,34 +50,43 @@ public partial class ManageExpendituresVM : ObservableObject
     [ObservableProperty]
     private bool activ=false;
 
+    [ObservableProperty]
+    private string borderColor = "Red";
+
+    private List<ExpendituresModel> tempList = new();
+
+
     [RelayCommand]
-    public void Pageloaded()
-    {        
-                
+    public async void Pageloaded()
+    {
+
         var user = userService.OfflineUser;
-        ActiveUser = user;        
+        ActiveUser = user;
 
         UserPocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
+        tempList = await expendituresService.GetAllExpendituresAsync();
 
         FilterGetExpOfToday();
-    }
 
+        
+    }
+        
 
     [RelayCommand]
     //THIS Function Shows all Expenditures for the current month
-    public async void FilterGetExpListOfCurrentMonth()
+    public void FilterGetExpListOfCurrentMonth()
     {
         try
         {
             IsBusy = true;
             double tot = 0;
 
-            var expList = await expendituresService.GetAllExpendituresAsync();
+            //var expList = //await expendituresService.GetAllExpendituresAsync();
 
-            var ExpOfCurrentMonth = expList
-                .FindAll(x => x.DateSpent.Month == DateTime.Today.Month)
-                .ToList();
+            List<ExpendituresModel> ExpOfCurrentMonth = tempList
+                                    .FindAll(x => x.DateSpent.Month == DateTime.Today.Month)
+                                    .ToList();
            
             if (ExpOfCurrentMonth?.Count > 0)
             {
@@ -111,23 +119,27 @@ public partial class ManageExpendituresVM : ObservableObject
 
     [RelayCommand]
     //Function to show very single expenditure from DB
-    public async void FilterGetAllExp()
+    public void FilterGetAllExp()
     {
         try
         {
             IsBusy= true;
             double tot = 0;
-            var expList = await expendituresService.GetAllExpendituresAsync();
+            //List<ExpendituresModel> expList = await expendituresService.GetAllExpendituresAsync();
 
+            List<ExpendituresModel> expList = tempList.OrderByDescending(x => x.DateSpent).ToList();
+            
             if (expList?.Count > 0)
             {
                 IsBusy = false;
                 ExpendituresList.Clear();
-                foreach (var exp in expList)
+                foreach (ExpendituresModel exp in expList)
                 {
                     ExpendituresList.Add(exp);
                     tot += exp.AmountSpent;
                 }
+
+               
                 Debug.WriteLine(ExpendituresList.Count);
                 TotalAmount = tot;
                 TotalExpenditures = ExpendituresList.Count;
@@ -150,18 +162,18 @@ public partial class ManageExpendituresVM : ObservableObject
 
     [RelayCommand]
     //the Function below can be used to find exps for CURRENT DAY
-    public async void FilterGetExpOfToday()
+    public void FilterGetExpOfToday()
     {
         try
         {
             IsBusy = true;
             double tot = 0;
-            var expList = await expendituresService.GetAllExpendituresAsync();
+            //var expList = tempList;//await expendituresService.GetAllExpendituresAsync();
 
-            var ExpOfToday = expList
+            List<ExpendituresModel> ExpOfToday = tempList
                 .FindAll(x => x.DateSpent.Day == DateTime.Today.Day)
-               .ToList();
-
+                .OrderByDescending(x => x.DateSpent)
+                .ToList();
             if (ExpOfToday?.Count > 0)
             {
                 IsBusy = false;
@@ -178,7 +190,7 @@ public partial class ManageExpendituresVM : ObservableObject
             }
             else
             {
-                IsBusy= false;
+                IsBusy = false;
                 ExpendituresList.Clear();
                 TotalAmount = 0;
                 TotalExpenditures = 0;
@@ -191,15 +203,16 @@ public partial class ManageExpendituresVM : ObservableObject
             Debug.WriteLine($"Exception MESSAGE: {ex.Message}");
             
         }
+        
     }
 
     [RelayCommand]
-    public void GoToAddExpenditurePage()
+    public async void GoToAddExpenditurePage()
     {
         if (ActiveUser is null)
         {
             Debug.WriteLine("Can't go");
-            Shell.Current.DisplayAlert("Wait", "Please wait", "Ok");
+           await Shell.Current.DisplayAlert("Wait", "Please wait", "Ok");
         }
         else
         {

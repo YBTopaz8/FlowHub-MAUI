@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlowHub.Main.Views.Mobile.Expenditures.PlannedExpenditures.MonthlyPlannedExp.UpSertMonthlyPlannedExpPageM"
+             xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
+             xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+             xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
+             xmlns:viewModel="clr-namespace:FlowHub.Main.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlannedExp"
+             x:DataType="viewModel:UpSertMonthlyPlannedExpVM"
+             Title="{Binding PageTitle}">
+    <VerticalStackLayout Margin="15">
+        <input:FormView Spacing="25" SubmitCommand="{Binding UpSertMonthlyPlannedCommand}">
+            
+            <material:TextField Title="Description" Text="{Binding SingleExpenditureDetails.Reason}">
+                <validation:RequiredValidation/>
+            </material:TextField>
+
+            <material:TextField Title="Amount" Text="{Binding SingleExpenditureDetails.AmountSpent}" Keyboard="Numeric">
+                <validation:RequiredValidation/>
+            </material:TextField>
+
+            <material:CheckBox Text="Include in Report" Margin="5,0" IsChecked="{Binding SingleExpenditureDetails.IncludeInReport}"/>
+            <!--My CheckBox Control To Show/Hide Comments on Check-->
+            <material:CheckBox Text="Add Comment ?" 
+                           x:Name="CommentCheck" Margin="5,0" CheckChanged="CommentCheck_CheckChanged"/>
+            
+            <!--TextField Control that is Shown or Hidden depending on my CheckBox Control-->
+            <material:TextField Title="Comments" x:Name="Comments" Text="{Binding SingleExpenditureDetails.Comment}" 
+                            IsVisible="{Binding IsChecked, Source={x:Reference CommentCheck}}" />
+
+            <HorizontalStackLayout HorizontalOptions="Center" Margin="0,0,0,0" Spacing="15">
+                <Button input:FormView.IsSubmitButton="True"
+                                Text="Save Flow Out" BackgroundColor="DarkSlateBlue" TextColor="White" 
+                                FontSize="20" FontAttributes="Bold"/>
+                <Button 
+                                Text="Cancel" BackgroundColor="#A3FF0000" TextColor="White"
+                                FontSize="16" />
+            </HorizontalStackLayout>
+        </input:FormView>
+           
+    </VerticalStackLayout>
+</ContentPage>

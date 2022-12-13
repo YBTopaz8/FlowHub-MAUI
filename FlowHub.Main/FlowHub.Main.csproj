@@ -25,32 +25,32 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
-		<AssemblyVersion>1.0.3.5</AssemblyVersion>
-		<FileVersion>1.0.3.5</FileVersion>
+		<AssemblyVersion>1.1.0.5</AssemblyVersion>
+		<FileVersion>1.1.0.5</FileVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android33.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
-	  <ApplicationDisplayVersion>1.2.2</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android33.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
-	  <ApplicationDisplayVersion>1.2.2</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
-	  <ApplicationDisplayVersion>1.2.2</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
-	  <ApplicationDisplayVersion>1.2.2</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
@@ -90,8 +90,10 @@
 	  <None Remove="Resources\Images\edit_btn_48.svg" />
 	  <None Remove="Resources\Images\edit_exp.svg" />
 	  <None Remove="Resources\Images\error_icon.svg" />
+	  <None Remove="Resources\Images\eye.svg" />
 	  <None Remove="Resources\Images\filterBtn_light.svg" />
 	  <None Remove="Resources\Images\filter_btn.svg" />
+	  <None Remove="Resources\Images\graph.svg" />
 	  <None Remove="Resources\Images\homepage.svg" />
 	  <None Remove="Resources\Images\initiate_money_transfer.svg" />
 	  <None Remove="Resources\Images\logouticon.svg" />
@@ -99,6 +101,7 @@
 	  <None Remove="Resources\Images\ok.svg" />
 	  <None Remove="Resources\Images\options_btn48px.svg" />
 	  <None Remove="Resources\Images\password.svg" />
+	  <None Remove="Resources\Images\plus_one_month.svg" />
 	  <None Remove="Resources\Images\request_money.svg" />
 	  <None Remove="Resources\Images\save_btn48.svg" />
 	  <None Remove="Resources\Images\save_to_pdf_btn.svg" />
@@ -110,16 +113,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Maui" Version="3.0.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="3.1.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
 		<PackageReference Include="HarfBuzzSharp" Version="2.8.2.3" />
-		<PackageReference Include="InputKit.Maui" Version="4.2.0" />
+		<PackageReference Include="InputKit.Maui" Version="4.2.1" />
 		<PackageReference Include="itext7" Version="7.2.4" />
 		<PackageReference Include="LiteDB.Async" Version="0.1.1" />
+		<PackageReference Include="LiveChartsCore.SkiaSharpView.Maui" Version="2.0.0-beta.603" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="QuestPDF" Version="2022.11.0" />
 		<PackageReference Include="SkiaSharp" Version="2.88.3" />
-		<PackageReference Include="UraniumUI.Material" Version="2.1.0" />
+		<PackageReference Include="UraniumUI.Material" Version="2.1.2" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -135,6 +139,12 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="PopUpPages\FilterOptionsPopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="PopUpPages\InputCurrencyForPrintPopUpPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="PopUpPages\InputMonthAndYearPopUp.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="PopUpPages\InputPopUpPage.xaml">
@@ -164,6 +174,15 @@
 	  <MauiXaml Update="Views\Mobile\Expenditures\ManageExpendituresM.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Mobile\Expenditures\PlannedExpenditures\MonthlyPlannedExp\DetailsOfMonthlyPlannedExpPageM.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Mobile\Expenditures\PlannedExpenditures\MonthlyPlannedExp\ManageMonthlyPlannedExpendituresPageM.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Mobile\Expenditures\PlannedExpenditures\MonthlyPlannedExp\UpSertMonthlyPlannedExpPageM.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Mobile\Expenditures\UpSertExpenditurePageM.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -183,6 +202,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Mobile\Settings\UserSettingsPageM.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Mobile\Statistics\StatisticsPageM.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
@@ -205,6 +227,9 @@
 	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
 	  </Compile>
 	  <Compile Update="Platforms\Windows\NavigationsMethods\MonthlyExpendituresNavs.cs">
+	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
+	  </Compile>
+	  <Compile Update="Platforms\Windows\NavigationsMethods\MonthlyPlannedExpNavs.cs">
 	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
 	  </Compile>
 	  <Compile Update="Platforms\Windows\PDFClasses\PrintDetailsMonthlyExpenditure.cs">

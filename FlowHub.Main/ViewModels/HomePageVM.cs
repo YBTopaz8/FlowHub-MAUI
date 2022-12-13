@@ -68,11 +68,11 @@ public partial class HomePageVM : ObservableObject
     }
     
     [RelayCommand]
-    public async void GetTotal()
+    public void GetTotal()
     {
         try
         {
-            var expList = await _expendituresService.GetAllExpendituresAsync();
+            var expList = _expendituresService.OfflineExpendituresList;
             TotalExp = expList.Count;
             Debug.WriteLine(TotalExp);
             
@@ -88,7 +88,7 @@ public partial class HomePageVM : ObservableObject
     {
         var navParam = new Dictionary<string, object>
         {
-            { "SingleExpenditureDetails", new ExpendituresModel { DateSpent = DateTime.Now } },
+            { "SingleExpenditureDetails", new ExpendituresModel { DateSpent = DateTime.UtcNow } },
             { "PageTitle", new string("Add New Expenditure") },
             { "ActiveUser", ActiveUser }
         };

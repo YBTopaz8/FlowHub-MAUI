@@ -16,13 +16,6 @@ public class ExchangeRateAPI
         return JsonObject;
     }
 
-    public class API_Obj
-    {
-        public string success { get; set; }
-        public DateTime date { get; set; }
-        public ConversionRate rates { get; set; }
-
-    }
 
     public class ConvertedRate
     {
@@ -33,10 +26,17 @@ public class ExchangeRateAPI
 
     public class ConversionRate
     {
+        public double AUD { get; set; }
+        public double BRL { get; set; }
         public double CAD { get; set; }
+        public double CNY { get; set; }
         public double EUR { get; set; }
+        public double GBP { get; set; }
+        public double KES { get; set; }
+        public double NGN { get; set; }
         public double TND { get; set; }
         public double USD { get; set; }
+        public double XOF { get; set; }
         public double XAF { get; set; }
         public double ZAR { get; set; }
     }

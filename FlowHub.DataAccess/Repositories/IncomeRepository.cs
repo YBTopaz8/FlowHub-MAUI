@@ -41,7 +41,7 @@ public class IncomeRepository : IIncomeRepository
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
-            return null;
+            return Enumerable.Empty<IncomeModel>().ToList();
         }
     }
  /*--------- SECTION FOR OFFLINE CRUD OPERATIONS----------*/

@@ -2,19 +2,19 @@
 
 namespace FlowHub.Models;
 
-public class ExpendituresModel
+public class PlannedExpendituresModel
 {
-
     [BsonId]
     public string Id { get; set; }
-    public DateTime DateSpent { get; set; }
-    public double AmountSpent { get; set; }
-    public string? Reason { get; set; }
-    public bool IncludeInReport { get; set; } = true;
+    public string MonthYear { get; set; }
+    public double TotalAmount { get; set; }  
+    public string? Comment { get; set; }
+    public int NumberOfExpenditures { get; set; }
+    public bool IsMonthlyPlanned { get; set; }
     public DateTime AddedDateTime { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedDateTime { get; set; } = DateTime.UtcNow;
-    public string? Comment { get; set; }
     public string Currency { get; set; }
     public string? PlatformModel { get; set; }
     public string UserId { get; set; }
+    public List<ExpendituresModel>? Expenditures { get; set; }
 }

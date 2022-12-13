@@ -37,7 +37,7 @@
                 </material:TextField.Validations>
             </material:TextField>
 
-            <material:TextField Title="Reason" Text="{Binding SingleExpenditureDetails.Reason}">
+            <material:TextField Title="Reason" Text="{Binding SingleExpenditureDetails.Reason}">                
                 <material:TextField.Validations>
                     <validation:RequiredValidation/>
                 </material:TextField.Validations>

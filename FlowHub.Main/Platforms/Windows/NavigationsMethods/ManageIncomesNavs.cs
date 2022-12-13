@@ -3,11 +3,11 @@ namespace FlowHub.Main.Platforms.NavigationMethods;
 
 public class ManageIncomesNavs
 {
-    public async void FromManageIncToUpsertIncome(Dictionary<string, object> navParams)
+    public void FromManageIncToUpsertIncome(Dictionary<string, object> navParams)
     {
        // await Shell.Current.GoToAsync(nameof(UpSertIncomesM), true, navParams);
     }
-    public async void FromUpsertIncToManageIncome(Dictionary<string, object> navParams)
+    public void FromUpsertIncToManageIncome(Dictionary<string, object> navParams)
     {
        // await Shell.Current.GoToAsync(nameof(ManageIncomesM), true, navParams);
     }
