@@ -1,3 +1,4 @@
+https://wakatime.com/badge/github/YBTopaz8/FlowHub-MAUI.svg
 # FLowHub (A Savings Tracker) Cross Platform MAUI App
 
 An Application used to manage Savings, Expenditures, Incomes, Debts, Financial plannings etc.
