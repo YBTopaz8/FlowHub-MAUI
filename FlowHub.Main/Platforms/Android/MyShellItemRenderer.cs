@@ -111,7 +111,7 @@ public class MyShellItemRenderer : ShellItemRenderer
                                 if (result?.Value != null)
                                 {
                                     var color = Colors.Black.MultiplyAlpha(0.6f).ToPlatform();
-                                    result.Value.SetTint(color);
+                                    result.Value.SetTint(tintColor: color);
                                 }
                             });
 

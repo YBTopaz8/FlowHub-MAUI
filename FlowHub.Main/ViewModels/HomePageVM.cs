@@ -84,15 +84,24 @@ public partial class HomePageVM : ObservableObject
         }
     }
     [RelayCommand]
-    public void GoToAddExpenditurePage()
+    public async void GoToAddExpenditurePage()
     {
-        var navParam = new Dictionary<string, object>
+        if (ActiveUser is null)
         {
-            { "SingleExpenditureDetails", new ExpendituresModel { DateSpent = DateTime.UtcNow } },
-            { "PageTitle", new string("Add New Expenditure") },
-            { "ActiveUser", ActiveUser }
-        };
-        NavFunction.FromHomePageToUpsertExpenditure(navParam);
+            Debug.WriteLine("Can't go");
+            await Shell.Current.DisplayAlert("Wait", "Cannot go", "Ok");
+        }
+        else
+        {
+            Dictionary<string, object> navParam = new()
+            {
+                { "SingleExpenditureDetails", new ExpendituresModel { DateSpent = DateTime.Now } },
+                { "PageTitle", new string("Add New Expenditure") },
+                { "ShowAddSecondExpCheckBox", true },
+                { "ActiveUser", ActiveUser }
+            };
+            NavFunction.FromHomePageToUpsertExpenditure(navParam);
+        }
     }
         
 

@@ -40,23 +40,21 @@
                         <VerticalStackLayout HorizontalOptions="Center"> <!--This will help keep the whole view centered-->
                             <SwipeView Margin="20,0">
                                 <SwipeView.LeftItems>
-                                    <SwipeItem  IconImageSource="{AppThemeBinding Dark=view_d.png, Light=view_l.png}" Text="View" BackgroundColor="Transparent"
-                                                Command="{Binding Source={x:Reference page},
-                                                          Path=BindingContext.GoToViewMonthlyPlannedExpCommand}"
-                                                CommandParameter="{Binding .}"/>
+                                    <SwipeItem Command="{Binding Source={x:Reference page},
+                                                    Path=BindingContext.GoToViewMonthlyPlannedExpCommand}"
+                                                CommandParameter="{Binding .}"
+                                               IconImageSource="{AppThemeBinding Dark=view_d.png, Light=view_l.png}" 
+                                               BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
                                 </SwipeView.LeftItems>
                                 <SwipeView.RightItems>
-                                    <SwipeItem IconImageSource="{AppThemeBinding Dark=delete_d.png, Light=delete_l.png}" Text="Delete" BackgroundColor="Transparent"
-                                               Command="{Binding Source={x:Reference page},
+                                    <SwipeItem Command="{Binding Source={x:Reference page},
                                                          Path=BindingContext.DeleteMonthlyPlannedExpCommand}"
-                                               CommandParameter="{Binding .}"/>
+                                               CommandParameter="{Binding .}"
+                                               IconImageSource="{AppThemeBinding Dark=delete_d.png, Light=delete_l.png}" 
+                                               BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
                                 </SwipeView.RightItems>
                                 <VerticalStackLayout HorizontalOptions="Center" Margin="0,0,0,2" >
-                                    <Border Padding="10,5" MinimumWidthRequest="320" MaximumWidthRequest="400"
-                                            BackgroundColor="{AppThemeBinding Dark=#29343E, Light=white}"
-                                            Stroke="DarkSlateBlue"
-                                            StrokeThickness="2"
-                                            StrokeShape="RoundRectangle 10">
+                                    <Border Padding="10,5" MinimumWidthRequest="320" MaximumWidthRequest="400">
                                         <VerticalStackLayout>
                                             <Label Text="{Binding MonthYear, StringFormat='Month and Year : {0}'}"/>
                                             <Label>

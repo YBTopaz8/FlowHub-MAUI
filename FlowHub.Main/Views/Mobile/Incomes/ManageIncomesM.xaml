@@ -12,10 +12,10 @@
              x:Name="page">
     
     <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="filter_btn.png" Command="{Binding ShowFilterPopUpPageCommand}"/>
+        <ToolbarItem IconImageSource="{AppThemeBinding Dark=filter_d.png, Light= filter_l.png}" Command="{Binding ShowFilterPopUpPageCommand}"/>
     </ContentPage.ToolbarItems>
     <toolkit:DockLayout>
-        <Label toolkit:DockLayout.DockPosition="Top" FontSize="21" HorizontalOptions="Center">
+        <Label toolkit:DockLayout.DockPosition="Top" FontSize="21" FontAttributes="Bold" HorizontalOptions="Center">
             <Label.GestureRecognizers>
                 <TapGestureRecognizer NumberOfTapsRequired="2" Tapped="TapGestureRecognizer_Tapped"/>
             </Label.GestureRecognizers>
@@ -37,19 +37,22 @@
                 <ColumnDefinition Width="100*"/>
                 <ColumnDefinition Width="50*"/>
             </Grid.ColumnDefinitions>
+            
             <VerticalStackLayout Grid.Column="0">
-                <ImageButton Source="{AppThemeBinding Dark=save_to_pdf_d.png, Light=save_to_pdf_btn_l.png}" Clicked="ExportToPDFImageButton_Clicked"/>
+                <ImageButton Source="{AppThemeBinding Dark=save_to_pdf_d.png, Light=save_to_pdf_l.png}"  Clicked="ExportToPDFImageButton_Clicked"/>
                 <ProgressBar IsVisible="false" x:Name="PrintProgressBarIndic" ProgressColor="DarkSlateBlue" WidthRequest="50"/>
             </VerticalStackLayout>
 
             <HorizontalStackLayout Grid.Column="2" HorizontalOptions="End">
-                <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding GoToAddIncomePageCommand}"/>
+                <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding GoToAddIncomePageCommand}" IsVisible="false"/>
             </HorizontalStackLayout>
         </Grid>
 
         <Label toolkit:DockLayout.DockPosition="Top" Text="{Binding IncTitle}" FontSize="20" Margin="5" FontAttributes="Bold" HorizontalOptions="Center"/>
-        <HorizontalStackLayout toolkit:DockLayout.DockPosition="Bottom" HeightRequest="34" HorizontalOptions="CenterAndExpand">
-            <Label FontSize="17" Margin="5">
+
+        <Grid toolkit:DockLayout.DockPosition="Bottom" HeightRequest="65" Margin="10,10">
+            
+            <Label FontSize="17" Grid.ColumnSpan="2" HorizontalOptions="Center" VerticalOptions="End" Margin="5">
                 <Label.Text>
                     <MultiBinding StringFormat="{} {2} Flow In(s) worth {0:n2} {1}">
                         <Binding Path="TotalAmount"/>
@@ -59,7 +62,9 @@
                 </Label.Text>
             </Label>
 
-        </HorizontalStackLayout>
+            <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding GoToAddIncomePageCommand}"
+                         VerticalOptions="Start" HorizontalOptions="End" Margin="0,0,10,0" Grid.Column="1"/>
+        </Grid>
        
         <CollectionView ItemsSource="{Binding IncomesList}" EmptyView="No Flow Ins Available...">
             <CollectionView.ItemTemplate>
@@ -68,24 +73,23 @@
                         <VerticalStackLayout HorizontalOptions="Center" Margin="0,5,0,0">
                             <SwipeView>
                                 <SwipeView.LeftItems>
-                                    <SwipeItem Text="Edit" IconImageSource="edit_exp.png" BackgroundColor="#201C1B1F"
-                                        Command="{Binding Source={x:Reference page},
+                                    <SwipeItem Command="{Binding Source={x:Reference page},
                                             Path=BindingContext.GoToEditIncomePageCommand}"
-                                               CommandParameter="{Binding .}"/>
+                                               CommandParameter="{Binding .}"
+                                            IconImageSource="{AppThemeBinding Dark= edit_d.png, Light= edit_l.png}" 
+                                               BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
                                 </SwipeView.LeftItems>
 
                                 <SwipeView.RightItems>
-                                    <SwipeItem Text="Delete" IconImageSource="del.png" BackgroundColor="#00FF0000"
-                                        Command="{Binding Source={x:Reference page},
+                                    <SwipeItem Command="{Binding Source={x:Reference page},
                                             Path=BindingContext.DeleteIncomeBtnCommand}"
-                                               CommandParameter="{Binding .}"/>
+                                               CommandParameter="{Binding .}"
+                                             IconImageSource="{AppThemeBinding Dark= delete_d.png, Light = delete_l.png}" 
+                                               BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
                                 </SwipeView.RightItems>
 
-                                <Border Padding="10" HeightRequest="83" HorizontalOptions="Center" WidthRequest="350"
-                                         BackgroundColor="{AppThemeBinding Dark=#29343E, Light=white}"
-                                        Stroke="darkslateblue"
-                                        StrokeThickness="2"
-                                        StrokeShape="RoundRectangle 10">
+                                <Border Padding="10" HeightRequest="83" HorizontalOptions="Center" 
+                                        MinimumWidthRequest="370" MaximumWidthRequest="400">
 
                                     <VerticalStackLayout >
                                         <Label HorizontalOptions="Center" Text="{Binding DateReceived, StringFormat='{0:MMMM dd, yyyy}'}"/>

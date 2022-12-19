@@ -29,13 +29,10 @@
             <material:TextField Title="Comments" x:Name="Comments" Text="{Binding SingleExpenditureDetails.Comment}" 
                             IsVisible="{Binding IsChecked, Source={x:Reference CommentCheck}}" />
 
-            <HorizontalStackLayout HorizontalOptions="Center" Margin="0,0,0,0" Spacing="15">
-                <Button input:FormView.IsSubmitButton="True"
-                                Text="Save Flow Out" BackgroundColor="DarkSlateBlue" TextColor="White" 
-                                FontSize="20" FontAttributes="Bold"/>
-                <Button 
-                                Text="Cancel" BackgroundColor="#A3FF0000" TextColor="White"
-                                FontSize="16" />
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="15">
+                <ImageButton input:FormView.IsSubmitButton="True"
+                                Source="{AppThemeBinding Dark=save_icon_d.png, Light=save_icon_l.png}"/>
+                <ImageButton IsVisible="false" Source="{AppThemeBinding Dark=cancel_icon_d.png, Light=cancel_icon_l.png}"/>
             </HorizontalStackLayout>
         </input:FormView>
            

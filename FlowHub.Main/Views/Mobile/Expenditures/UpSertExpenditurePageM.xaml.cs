@@ -24,14 +24,16 @@ public partial class UpSertExpenditurePageM : ContentPage
 
     private void AddSecondFlowOut_CheckChanged(object sender, EventArgs e)
     {
+        viewModel.SecondExp = new Models.ExpendituresModel();
+        viewModel.ThirdExp = new Models.ExpendituresModel();
         if (!AddSecondFlowOut.IsChecked)
         {
-            viewModel.SecondExp = new Models.ExpendituresModel();
-            viewModel.ThirdExp = new Models.ExpendituresModel();
+            AddThirdFlowOut.IsChecked = false;
         }
     }
     private void AddThirdFlowOut_CheckChanged(object sender, EventArgs e)
     {
+
         viewModel.ThirdExp = new Models.ExpendituresModel();
     }
 

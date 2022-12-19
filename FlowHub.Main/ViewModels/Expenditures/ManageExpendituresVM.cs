@@ -59,8 +59,7 @@ public partial class ManageExpendituresVM : ObservableObject
     [RelayCommand]
     public async void Pageloaded()
     {
-
-        var user = userService.OfflineUser;
+        UsersModel user = userService.OfflineUser;
         ActiveUser = user;
 
         UserPocketMoney = ActiveUser.PocketMoney;
@@ -218,11 +217,11 @@ public partial class ManageExpendituresVM : ObservableObject
         if (ActiveUser is null)
         {
             Debug.WriteLine("Can't go");
-           await Shell.Current.DisplayAlert("Wait", "Please wait", "Ok");
+           await Shell.Current.DisplayAlert("Wait", "Cannot go", "Ok");
         }
         else
         {
-            var navParam = new Dictionary<string, object>
+            Dictionary<string, object> navParam = new()
             {
                 { "SingleExpenditureDetails", new ExpendituresModel { DateSpent = DateTime.Now } },
                 { "PageTitle", new string("Add New Expenditure") },

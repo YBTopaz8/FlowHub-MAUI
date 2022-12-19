@@ -10,5 +10,6 @@
         <Label toolkit:DockLayout.DockPosition="Left" Text="Left" WidthRequest="80" />
         <Label toolkit:DockLayout.DockPosition="Right" Text="Right" WidthRequest="90" />
         <Label Text="Center" />-->
+        <Label Text="Yvan"/>
     </toolkit:DockLayout>
 </ContentPage>

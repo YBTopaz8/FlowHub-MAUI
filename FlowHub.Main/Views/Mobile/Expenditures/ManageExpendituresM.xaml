@@ -15,7 +15,7 @@
     </ContentPage.ToolbarItems>
 
     <toolkit:DockLayout>
-        <Label toolkit:DockLayout.DockPosition="Top" FontSize="20" HorizontalOptions="Center">
+        <Label toolkit:DockLayout.DockPosition="Top" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center">
             <Label.Text>
                 <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
                     <Binding Path="UserPocketMoney"/>
@@ -33,7 +33,7 @@
             </Grid.RowDefinitions>
             <VerticalStackLayout Grid.Column="0">
                 <ImageButton Clicked="ExportToPDFImageButton_Clicked"
-                    Source="{AppThemeBinding Dark=save_to_pdf_d.png, Light=save_to_pdf_btn_l.png}" />
+                    Source="{AppThemeBinding Dark=save_to_pdf_d.png, Light=save_to_pdf_l.png}" />
                 <ProgressBar IsVisible="false" x:Name="PrintProgressBarIndic" ProgressColor="DarkSlateBlue" WidthRequest="50"/>
             </VerticalStackLayout >
 
@@ -74,24 +74,24 @@
                         <VerticalStackLayout HorizontalOptions="Center">
                             <SwipeView >
                                 <SwipeView.LeftItems>
+                                    
                                     <SwipeItem Command="{Binding Source={x:Reference page}, 
                                             Path=BindingContext.GoToEditExpenditurePageCommand}"  
                                                    CommandParameter="{Binding .}" 
-                                            IconImageSource="{AppThemeBinding Dark= edit_d.png, Light= edit_l.png}" BackgroundColor="Transparent"/>
+                                            IconImageSource="{AppThemeBinding Dark= edit_d.png, Light= edit_l.png}" 
+                                               BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
                                 </SwipeView.LeftItems>
 
                                 <SwipeView.RightItems>
                                     <SwipeItem Command="{Binding Source={x:Reference page}, 
                                             Path=BindingContext.DeleteExpenditureBtnCommand}"  
                                                    CommandParameter="{Binding .}"  
-                                            IconImageSource="{AppThemeBinding Dark= delete_d.png, Light = delete_l.png}" BackgroundColor="Transparent"/>
+                                            IconImageSource="{AppThemeBinding Dark= delete_d.png, Light = delete_l.png}" 
+                                               BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
                                 </SwipeView.RightItems>
 
-                                <Border Padding="10" HeightRequest="83" HorizontalOptions="Center" MinimumWidthRequest="340" MaximumWidthRequest="400"
-                                         BackgroundColor="{AppThemeBinding Dark=#29343E, Light=white}"
-                                        Stroke="darkslateblue"
-                                        StrokeThickness="2"
-                                        StrokeShape="RoundRectangle 10">
+                                <Border Padding="10" HeightRequest="83" HorizontalOptions="Center" 
+                                        MinimumWidthRequest="370" MaximumWidthRequest="400">
 
                                     <VerticalStackLayout>
                                         <Label HorizontalOptions="Center" Text="{Binding DateSpent, StringFormat='{0:MMMM dd, yyyy}'}"/>

@@ -32,6 +32,7 @@
             <Label x:Name="DisplayAlertText"  FontSize="18"/>
 
             <HorizontalStackLayout HorizontalOptions="EndAndExpand" Spacing="5">
+                
                 <Button Text="Yes"
                         Clicked="OnYesButtonClicked"/>
                 <Button Text="Cancel"

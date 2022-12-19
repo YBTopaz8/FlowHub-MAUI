@@ -16,67 +16,44 @@
             </Label.Text>
         </Label>
         <!-- Begin Section for Expenditure display-->
-        <Border Grid.Column="0"
-                    Grid.Row="0"
+        <Border 
                 Margin="10"
                 Padding="5"
-                BackgroundColor="Transparent"
-                Stroke="DarkSlateBlue"
-                StrokeThickness="2"
-                StrokeShape="RoundRectangle 8">
+                StrokeShape="RoundRectangle 10">
             <VerticalStackLayout Spacing="10" Margin="6">
                 <Label Text="Latest Flow Out"
                             FontSize="25"
                             HorizontalOptions="Center"
-                           Margin="90,0,0,0"
+                            Margin="90,0,0,0"
                             WidthRequest="300"/>
                 <BoxView
                         Color="DarkSlateBlue"
                         HeightRequest="2"
                         HorizontalOptions="Fill"/>
                 <HorizontalStackLayout>
-                    <Label Text="Reason: "
-                           FontSize="18"
-                            HorizontalOptions="Start"
-                            />
-                    <Label Text="{Binding ExpendituresDetails.Reason} "
-                           FontSize="18"
-                            HorizontalOptions="Start"
-                           Margin="10,0,0,0"
-                            />
+                    <Label Text="{Binding ExpendituresDetails.Reason, StringFormat='Reason : {0}'}" FontSize="18"/>
+                    
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
-                    <Label Text="Amount Spent:"
-                           FontSize="18"
-                            HorizontalOptions="Start"
-                            />
-                    <Label Text="{Binding ExpendituresDetails.AmountSpent} "
-                           FontSize="18"
-                            HorizontalOptions="Start"
-                           Margin="10,0,0,0"
-                            />
-                    <Label Text="TND"
-                           FontSize="18"
-                            HorizontalOptions="Start"
-                           Margin="5,0,0,0"
-                            />
+                    <Label FontSize="18">
+                        <Label.Text>
+                            <MultiBinding StringFormat="{}Amount Spent : {0} {1}">
+                                <Binding Path="ExpendituresDetails.AmountSpent"/>
+                                <Binding Path="UserCurrency"/>
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout Margin="0,0,0,15">
-                    <Label Text="Date Spent:"
-                           FontSize="18"
-                            HorizontalOptions="Start"
-                            />
-                    <Label Text="{Binding ExpendituresDetails.DateSpent, StringFormat='{0:dd MMMM, yyyy}'}"
-                           FontSize="18"
-                           HorizontalOptions="Start"
-                           Margin="10,0,0,0"
-                            />
+                    <Label Text="{Binding ExpendituresDetails.DateSpent, StringFormat='Date Spent {0:dd MMMM, yyyy}'}" 
+                           FontSize="18"/>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
 
         </Border>
-        <VerticalStackLayout IsVisible="false">
-            <ImageButton Source="add_btn_48.png" Command="{Binding GoToAddExpenditurePageCommand}"/>
+        <VerticalStackLayout IsVisible="true">
+            <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}"
+                         Command="{Binding GoToAddExpenditurePageCommand}"/>
         </VerticalStackLayout>
 
         <!-- End Section for Expenditure display-->

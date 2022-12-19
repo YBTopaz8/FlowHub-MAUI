@@ -43,12 +43,10 @@
 
             
             <HorizontalStackLayout HorizontalOptions="Center" Margin="0,0,0,0" Spacing="15">
-                <Button input:FormView.IsSubmitButton="True"
-                                Text="Save Flow In" BackgroundColor="DarkSlateBlue" TextColor="White" 
-                                FontSize="20" FontAttributes="Bold"/>
-                <Button Command="{Binding CancelBtnCommand}"
-                                Text="Cancel" BackgroundColor="#A3FF0000" TextColor="White"
-                                FontSize="16" />
+                <ImageButton input:FormView.IsSubmitButton="True"
+                                Source="{AppThemeBinding Dark=save_icon_d.png, Light=save_icon_l.png}"/>
+                <ImageButton Command="{Binding CancelBtnCommand}"
+                                Source="{AppThemeBinding Dark=cancel_icon_d.png, Light=cancel_icon_l.png}"/>
 
             </HorizontalStackLayout>
         </input:FormView>

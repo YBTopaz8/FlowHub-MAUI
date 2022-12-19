@@ -44,7 +44,7 @@
                     </material:TextField.Validations>
                 </material:TextField>
 
-                <material:CheckBox Text="Add Another Flow Out" x:Name="AddSecondFlowOut" CheckChanged="AddSecondFlowOut_CheckChanged"/>
+                <material:CheckBox Text="Add Another Flow Out" x:Name="AddSecondFlowOut" CheckChanged="AddSecondFlowOut_CheckChanged" />
             </VerticalStackLayout>
 
             <VerticalStackLayout x:Name="SecondForm" IsVisible="{Binding IsChecked, Source={x:Reference AddSecondFlowOut}}" Margin="0,10" Spacing="15">
@@ -115,13 +115,11 @@
             </VerticalStackLayout>
             
             <HorizontalStackLayout
-                HorizontalOptions="Center" Margin="0,5,0,10" Spacing="15">
-                <Button input:FormView.IsSubmitButton="True" x:Name="SaveExpBtn" Clicked="SaveExpBtn_Clicked"
-                                            Text="Save Flow Out" BackgroundColor="DarkSlateBlue" TextColor="White" 
-                                            FontSize="20" FontAttributes="Bold"/>
-                <Button Command="{Binding CancelBtnCommand}"
-                                            Text="Cancel" BackgroundColor="#A3FF0000" TextColor="White"
-                                            FontSize="16" />
+                HorizontalOptions="Center" Margin="0,25,0,10">
+                <ImageButton input:FormView.IsSubmitButton="True" x:Name="SaveExpBtn" Clicked="SaveExpBtn_Clicked"
+                                            Source="{AppThemeBinding Dark=save_icon_d.png, Light=save_icon_l.png}"/>
+                <ImageButton Command="{Binding CancelBtnCommand}" IsVisible="false"
+                                Source="{AppThemeBinding Dark=cancel_icon_d.png, Light=cancel_icon_l.png}" />
             </HorizontalStackLayout>
         </input:FormView>
     </ScrollView>
