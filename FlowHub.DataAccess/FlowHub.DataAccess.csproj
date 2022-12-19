@@ -23,7 +23,7 @@
 	</PropertyGroup>
 
   <PropertyGroup>
-    <PublishReadyToRun>True</PublishReadyToRun>
+    <PublishReadyToRun>False</PublishReadyToRun>
   </PropertyGroup>
   
 	<ItemGroup>
