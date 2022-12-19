@@ -4,18 +4,40 @@ namespace FlowHub.Main.Views.Mobile.Expenditures;
 
 public partial class UpSertExpenditurePageM : ContentPage
 {
-    private UpSertExpenditureVM viewModel;
+    private readonly UpSertExpenditureVM viewModel;
     public UpSertExpenditurePageM(UpSertExpenditureVM vm)
     {
         InitializeComponent();
         viewModel = vm;
         this.BindingContext = vm;
-   //     viewModel.PageLoadedCommand.Execute(null);
     }
     protected override void OnAppearing()
     {
         base.OnAppearing();
         viewModel.PageLoadedCommand.Execute(null);
+        AddSecondFlowOut.IsVisible= viewModel.ShowAddSecondExpCheckBox;
+        AddSecondFlowOut.IsChecked = false;
+        AddThirdFlowOut.IsChecked = false;
+        viewModel.SecondExp = new Models.ExpendituresModel();
+        viewModel.ThirdExp = new Models.ExpendituresModel();
+    }
+
+    private void AddSecondFlowOut_CheckChanged(object sender, EventArgs e)
+    {
+        if (!AddSecondFlowOut.IsChecked)
+        {
+            viewModel.SecondExp = new Models.ExpendituresModel();
+            viewModel.ThirdExp = new Models.ExpendituresModel();
+        }
+    }
+    private void AddThirdFlowOut_CheckChanged(object sender, EventArgs e)
+    {
+        viewModel.ThirdExp = new Models.ExpendituresModel();
+    }
+
+    private void SaveExpBtn_Clicked(object sender, EventArgs e)
+    {
+        viewModel.UpSertExpenditureCommand.Execute(null);
     }
 
 }

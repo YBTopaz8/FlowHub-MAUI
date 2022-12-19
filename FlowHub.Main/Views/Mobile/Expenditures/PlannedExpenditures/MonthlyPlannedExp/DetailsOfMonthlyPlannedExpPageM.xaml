@@ -22,13 +22,13 @@
             </Grid.ColumnDefinitions>
             <VerticalStackLayout Grid.Column="0">
                 <ImageButton
-                    Source="{AppThemeBinding Dark=save_to_pdf_btn.png, Light=save_to_pdf_btn_light.png}" x:Name="ExportToPDFImageButton" Clicked="ExportToPDFImageButton_Clicked"/>
+                    Source="{AppThemeBinding Dark=save_to_pdf_d.png, Light=save_to_pdf_btn_l.png}" x:Name="ExportToPDFImageButton" Clicked="ExportToPDFImageButton_Clicked"/>
                 <ProgressBar IsVisible="false" x:Name="PrintProgressBarIndic" ProgressColor="DarkSlateBlue" WidthRequest="50"/>
             </VerticalStackLayout >
 
             <HorizontalStackLayout Grid.Column="2" HorizontalOptions="End" BackgroundColor="Transparent">
                 <ImageButton Command="{Binding AddNewPlannedExpToMonthlyPCommand}"
-                    Source="{AppThemeBinding Dark=add_btn_48.png, Light=add_btn_48_light.png}" />
+                    Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" />
             </HorizontalStackLayout>
         </Grid>
         <VerticalStackLayout toolkit:DockLayout.DockPosition="Bottom" HeightRequest="30" HorizontalOptions="CenterAndExpand">
@@ -47,15 +47,17 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:ExpendituresModel">
                     <ScrollView>
-                        <VerticalStackLayout Margin="0,0,0,2">
+                        <VerticalStackLayout HorizontalOptions="Center">
                             <SwipeView Margin="20,0">
+                                <SwipeView.LeftItems>
+                                    <SwipeItem IconImageSource="{AppThemeBinding Dark= edit_d.png, Light= edit_l.png}" 
+                                               BackgroundColor="Transparent" Clicked="LeftSwipeEdit_Clicked"/>
+                                </SwipeView.LeftItems>
                                 <SwipeView.RightItems>
-                                    <SwipeItem IconImageSource="del.png" BackgroundColor="#201C1B1F" Clicked="RightSwipeDelete_Clicked"/>
+                                    <SwipeItem IconImageSource="{AppThemeBinding Dark= delete_d.png, Light = delete_l.png}" 
+                                               BackgroundColor="Transparent" Clicked="RightSwipeDelete_Clicked"/>
                                 </SwipeView.RightItems>
 
-                                <SwipeView.LeftItems>
-                                    <SwipeItem IconImageSource="edit_exp.png" BackgroundColor="#201C1B1F" Clicked="LeftSwipeEdit_Clicked"/>
-                                </SwipeView.LeftItems>
                                 <Border Padding="10" HeightRequest="105" HorizontalOptions="Center" MinimumWidthRequest="340" MaximumWidthRequest="400"
                                                  BackgroundColor="{AppThemeBinding Dark=#29343E, Light=white}"
                                                 Stroke="darkslateblue"

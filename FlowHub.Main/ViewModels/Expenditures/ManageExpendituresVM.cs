@@ -65,11 +65,8 @@ public partial class ManageExpendituresVM : ObservableObject
 
         UserPocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
-        tempList = await expendituresService.GetAllExpendituresAsync();
-
-        FilterGetExpOfToday();
-
-        
+        tempList = await expendituresService.GetAllExpendituresAsync(user.Id);
+        FilterGetExpOfToday();        
     }
         
 
@@ -81,11 +78,9 @@ public partial class ManageExpendituresVM : ObservableObject
         {
             IsBusy = true;
             double tot = 0;
-
-            //var expList = //await expendituresService.GetAllExpendituresAsync();
-
             List<ExpendituresModel> ExpOfCurrentMonth = tempList
                                     .FindAll(x => x.DateSpent.Month == DateTime.Today.Month)
+                                    .OrderByDescending(x => x.DateSpent)
                                     .ToList();
            
             if (ExpOfCurrentMonth?.Count > 0)
@@ -171,9 +166,20 @@ public partial class ManageExpendituresVM : ObservableObject
             //var expList = tempList;//await expendituresService.GetAllExpendituresAsync();
 
             List<ExpendituresModel> ExpOfToday = tempList
-                .FindAll(x => x.DateSpent.Day == DateTime.Today.Day)
+                .FindAll(x => x.DateSpent.Date == DateTime.Today.Date)
                 .OrderByDescending(x => x.DateSpent)
                 .ToList();
+            Debug.WriteLine("========================================");
+            var datt = DateTime.Today;
+            foreach (var item in tempList)
+            {
+                Debug.WriteLine(item.DateSpent.Date);
+                Debug.WriteLine(datt.Date);
+                if (item.DateSpent.Date == datt.Date)
+                {
+                    Debug.WriteLine("Equal");
+                }
+            }
             if (ExpOfToday?.Count > 0)
             {
                 IsBusy = false;
@@ -218,8 +224,9 @@ public partial class ManageExpendituresVM : ObservableObject
         {
             var navParam = new Dictionary<string, object>
             {
-                { "SingleExpenditureDetails", new ExpendituresModel { DateSpent = DateTime.UtcNow } },
+                { "SingleExpenditureDetails", new ExpendituresModel { DateSpent = DateTime.Now } },
                 { "PageTitle", new string("Add New Expenditure") },
+                { "ShowAddSecondExpCheckBox", true },
                 { "ActiveUser", ActiveUser }
             };
 
@@ -235,6 +242,7 @@ public partial class ManageExpendituresVM : ObservableObject
         {
             { "SingleExpenditureDetails", expenditure },
             { "PageTitle", new string("Edit Expenditure") },
+            { "ShowAddSecondExpCheckBox", false },
             { "ActiveUser", ActiveUser }
         };
 
@@ -254,15 +262,16 @@ public partial class ManageExpendituresVM : ObservableObject
         {
             var deleteResponse = await expendituresService.DeleteExpenditureAsync(expenditure); //delete the expenditure from db
                     
-            ExpendituresList.Remove(expenditure);
             if (deleteResponse)
             {
+                tempList.Remove(expenditure);
+                ExpendituresList.Remove(expenditure);
                 ActiveUser.PocketMoney += expenditure.AmountSpent;
                 UserPocketMoney += expenditure.AmountSpent;
                 await userService.UpdateUserAsync(ActiveUser);
 
                 await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
-                FilterGetExpListOfCurrentMonth(); //refresh the collectionview
+                //FilterGetExpListOfCurrentMonth(); //refresh the collectionview
             }
         }
     }

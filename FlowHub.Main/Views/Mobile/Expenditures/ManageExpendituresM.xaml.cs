@@ -1,4 +1,7 @@
-﻿using FlowHub.Main.ViewModels.Expenditures;
+﻿using CommunityToolkit.Maui.Views;
+using FlowHub.Main.PopUpPages;
+using FlowHub.Main.ViewModels.Expenditures;
+using System.Diagnostics;
 
 namespace FlowHub.Main.Views.Mobile.Expenditures;
 
@@ -20,14 +23,20 @@ public partial class ManageExpendituresM : ContentPage
 
     private async void ExportToPDFImageButton_Clicked(object sender, EventArgs e)
     {
-        PrintProgressBarIndic.IsVisible = true;
-        PrintProgressBarIndic.Progress = 0;
-        await PrintProgressBarIndic.ProgressTo(1, 1500, easing: Easing.Linear);
+        if (viewModel.ExpendituresList?.Count < 1)
+        {
+            await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Cannot Save an Empty List to PDF"));
+        }
+        else
+        {
+            PrintProgressBarIndic.IsVisible = true;
+            PrintProgressBarIndic.Progress = 0;
+            await PrintProgressBarIndic.ProgressTo(1, 1000, easing: Easing.Linear);
 
-        //PrintingActivIndic.IsVisible = true;
-        //PrintingActivIndic.IsRunning = true;
-        await viewModel.PrintExpendituresBtnCommand.ExecuteAsync(null);
-        // bool keepRunning = viewModel.Activ;  //viewModel.PrintExpendituresBtnCommand.ExecuteAsync(null);
-        PrintProgressBarIndic.IsVisible = false;
+            await viewModel.PrintExpendituresBtnCommand.ExecuteAsync(null);
+            PrintProgressBarIndic.IsVisible = false;
+
+        }
     }
+
 }

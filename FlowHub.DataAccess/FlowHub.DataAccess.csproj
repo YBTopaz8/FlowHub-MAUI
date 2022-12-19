@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net7.0;net7.0-android;</TargetFrameworks>
@@ -14,6 +14,18 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android|AnyCPU'">
+	  <PublishTrimmed>True</PublishTrimmed>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
+	  <PublishTrimmed>True</PublishTrimmed>
+	</PropertyGroup>
+
+  <PropertyGroup>
+    <PublishReadyToRun>True</PublishReadyToRun>
+  </PropertyGroup>
+  
 	<ItemGroup>
 	  <PackageReference Include="LiteDB.Async" Version="0.1.1" />
 	</ItemGroup>

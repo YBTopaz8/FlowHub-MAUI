@@ -22,21 +22,21 @@
                 </VerticalStackLayout>
 
                 <input:FormView SubmitCommand="{Binding GoToHomePageFromRegisterCommand}" Spacing="20">
-                    <material:TextField Title="User Name" Text="{Binding CurrentUser.Username}" Icon="user.png">
+                    <material:TextField Title="User Name" Text="{Binding CurrentUser.Username}" Icon="{AppThemeBinding Dark= user_icon_d.png, Light=user_icon_l.png}">
                         <validation:RequiredValidation/>
                     </material:TextField>
 
-                    <material:TextField Title="Email" Text="{Binding CurrentUser.Email}" Icon="at_sign_email.png">
+                    <material:TextField Title="Email" Text="{Binding CurrentUser.Email}" Icon="{AppThemeBinding Dark=email_icon_d.png, Light=email_icon_l.png}">
                         <material:TextField.Validations>
                             <validation:RequiredValidation/>
                         </material:TextField.Validations>
                     </material:TextField>
 
-                    <material:TextField Title="Password" Text="{Binding CurrentUser.Password}" IsPassword="True" Icon="password.png">
+                    <material:TextField Title="Password" Text="{Binding CurrentUser.Password}" IsPassword="True" Icon="{AppThemeBinding Dark= password_d.png, Light=password_l.png}">
                         <validation:RequiredValidation/>
                     </material:TextField>
 
-                    <material:TextField Title="Pocket Allowance" Text="{Binding PocketMoney}" Icon="card_wallet.png" Keyboard="Numeric">
+                    <material:TextField Title="Pocket Allowance" Text="{Binding PocketMoney}" Icon="{AppThemeBinding Dark=pocket_money_icon_d.png, Light=pocket_money_icon_l.png}" Keyboard="Numeric">
                         <material:TextField.Validations>
                             <validation:MinValueValidation MinValue="1"/>
                             <validation:RequiredValidation/>
@@ -67,18 +67,18 @@
                     <Label Text="User does not exist!" TextColor="Red" FontAttributes="Bold" FontSize="19" IsVisible="{Binding ErrorMessage}" />
                     <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
 
-                    <material:TextField Title="Email" Text="{Binding CurrentUser.Email}" Icon="at_sign_email.png">
+                    <material:TextField Title="Email" Text="{Binding CurrentUser.Email}" Icon="{AppThemeBinding Dark=email_icon_d.png, Light=email_icon_l.png}">
                         <material:TextField.Validations>
                             <validation:RequiredValidation/>
                         </material:TextField.Validations>
                     </material:TextField>
 
-                    <material:TextField Title="Password" Text="{Binding CurrentUser.Password}" Icon="password.png" IsPassword="True">
+                    <material:TextField Title="Password" Text="{Binding CurrentUser.Password}" Icon="{AppThemeBinding Dark= password_d.png, Light=password_l.png}" IsPassword="True">
                         <material:TextField.Validations>
                             <validation:RequiredValidation/>
                         </material:TextField.Validations>
                     </material:TextField>
-                    <Button Text="Login" input:FormView.IsSubmitButton="True"/>
+                    <Button Text="Login" x:Name="LoginButton" Clicked="LoginButton_Clicked" input:FormView.IsSubmitButton="True"/>
                     <Label Text="New to FlowHub? Sign Up" HorizontalTextAlignment="Center">
                         <Label.GestureRecognizers>
                             <TapGestureRecognizer Tapped="SwitchToRegisterPageTapped"/>
@@ -92,7 +92,7 @@
                 <Label x:Name="WelcomeLabel" Text="{Binding Username ,StringFormat='Welcome Back, {0}'}" FontSize="Title" HorizontalOptions="Center"/>
                 <Button Text="Quick Login" Command="{Binding QuickLoginCommand}" Margin="70,70,70,0" />
 
-                <VerticalStackLayout IsVisible="{Binding ShowLoginMessage}" HorizontalOptions="Center">
+                <VerticalStackLayout IsVisible="{Binding ShowQuickLoginErrorMessage}" HorizontalOptions="Center">
                     <Label Text="An Error Occurred" TextColor="Red"/>
                     <Label Text="Please Tap here to Authenticate Yourself">
                         <Label.GestureRecognizers>

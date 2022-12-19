@@ -25,32 +25,32 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
-		<AssemblyVersion>1.1.0.5</AssemblyVersion>
-		<FileVersion>1.1.0.5</FileVersion>
+		<AssemblyVersion>1.1.8.5</AssemblyVersion>
+		<FileVersion>1.1.8.5</FileVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android33.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
-	  <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.1.8</ApplicationDisplayVersion>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android33.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
-	  <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.1.8</ApplicationDisplayVersion>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
-	  <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.1.8</ApplicationDisplayVersion>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
-	  <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.1.8</ApplicationDisplayVersion>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
@@ -98,16 +98,16 @@
 	  <None Remove="Resources\Images\initiate_money_transfer.svg" />
 	  <None Remove="Resources\Images\logouticon.svg" />
 	  <None Remove="Resources\Images\logout_icon_light.svg" />
+	  <None Remove="Resources\Images\monthly_planned_icon_dark.svg" />
 	  <None Remove="Resources\Images\ok.svg" />
 	  <None Remove="Resources\Images\options_btn48px.svg" />
 	  <None Remove="Resources\Images\password.svg" />
-	  <None Remove="Resources\Images\plus_one_month.svg" />
 	  <None Remove="Resources\Images\request_money.svg" />
 	  <None Remove="Resources\Images\save_btn48.svg" />
 	  <None Remove="Resources\Images\save_to_pdf_btn.svg" />
 	  <None Remove="Resources\Images\save_to_pdf_btn_light.svg" />
 	  <None Remove="Resources\Images\search_property.svg" />
-	  <None Remove="Resources\Images\settings_tab_48.svg" />
+	  <None Remove="Resources\Images\settings_dark.svg" />
 	  <None Remove="Resources\Images\user.svg" />
 	  <None Remove="Resources\Images\view_btn_48.svg" />
 	</ItemGroup>
@@ -210,6 +210,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="Resources\Images\darkicons\" />
 	  <Folder Include="Views\Desktop\Settings\" />
 	</ItemGroup>
 

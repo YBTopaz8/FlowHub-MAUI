@@ -2,57 +2,127 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FlowHub.Main.Views.Mobile.Expenditures.UpSertExpenditurePageM"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
              xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
              xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Expenditures"             
-             x:DataType="viewModels:UpSertExpenditureVM"
-             
+             x:DataType="viewModels:UpSertExpenditureVM"             
              Title="{Binding PageTitle}">
-    <VerticalStackLayout Margin="15">
-        <input:FormView SubmitCommand="{Binding UpSertExpenditureCommand}" Spacing="25">
 
-            <VerticalStackLayout Margin="0,20,0,0">
+    <ScrollView Margin="10">
+        <input:FormView>
+            <VerticalStackLayout x:Name="FirstForm" Spacing="15">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="First Flow Out" HorizontalOptions="Center" />
+                    <BoxView HeightRequest="1" Margin="0,0,0,10"/>
+                    <material:DatePickerField Title="Date Spent" 
+                                                    MinimumDate="01/01/2022" 
+                                MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
+                                Date="{Binding SingleExpenditureDetails.DateSpent}">
+                        <material:DatePickerField.Validations>
+                            <validation:RequiredValidation/>
 
-                <material:DatePickerField Title="Date Spent" 
-                                      MinimumDate="01/01/2022" 
-                    MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
-                    Date="{Binding SingleExpenditureDetails.DateSpent}">
-                    <material:DatePickerField.Validations>
+                        </material:DatePickerField.Validations>
+                    </material:DatePickerField>
+
+                </VerticalStackLayout>
+
+                <material:TextField Title="Amount Spent" Text="{Binding SingleExpenditureDetails.AmountSpent}" Keyboard="Numeric">
+                    <material:TextField.Validations>
                         <validation:RequiredValidation/>
+                        <validation:MinValueValidation MinValue="1" Message="The Amount Spent cannot be less than 1"/>
+                        <validation:NumericValidation/>
+                    </material:TextField.Validations>
+                </material:TextField>
 
-                    </material:DatePickerField.Validations>
-                </material:DatePickerField>
+                <material:TextField Title="Reason" Text="{Binding SingleExpenditureDetails.Reason}">
+                    <material:TextField.Validations>
+                        <validation:RequiredValidation/>
+                    </material:TextField.Validations>
+                </material:TextField>
 
+                <material:CheckBox Text="Add Another Flow Out" x:Name="AddSecondFlowOut" CheckChanged="AddSecondFlowOut_CheckChanged"/>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout x:Name="SecondForm" IsVisible="{Binding IsChecked, Source={x:Reference AddSecondFlowOut}}" Margin="0,10" Spacing="15">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Second Flow Out" HorizontalOptions="Center" />
+                    <BoxView HeightRequest="1" Margin="0,0,0,10"/>
+                    <material:DatePickerField Title="Date Spent" IsVisible="false"
+                                                    MinimumDate="01/01/2022" 
+                                MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
+                                Date="{Binding SingleExpenditureDetails.DateSpent}">
+                        <material:DatePickerField.Validations>
+                            <validation:RequiredValidation/>
+
+                        </material:DatePickerField.Validations>
+                    </material:DatePickerField>
+
+                </VerticalStackLayout>
+
+                <material:TextField Title="Amount Spent" Text="{Binding SecondExp.AmountSpent}" Keyboard="Numeric">
+                    <material:TextField.Validations>
+                        <validation:RequiredValidation/>
+                        <validation:MinValueValidation MinValue="1" Message="The Amount Spent cannot be less than 1"/>
+                        <validation:NumericValidation/>
+                    </material:TextField.Validations>
+                </material:TextField>
+
+                <material:TextField Title="Reason" Text="{Binding SecondExp.Reason}">
+                    <material:TextField.Validations>
+                        <validation:RequiredValidation/>
+                    </material:TextField.Validations>
+                </material:TextField>
+
+                <material:CheckBox Text="Add Another Flow Out" x:Name="AddThirdFlowOut" CheckChanged="AddThirdFlowOut_CheckChanged"/>
 
             </VerticalStackLayout>
 
-            <material:TextField Title="Amount Spent" Text="{Binding SingleExpenditureDetails.AmountSpent}" Keyboard="Numeric">
-                <material:TextField.Validations>
-                    <validation:RequiredValidation/>
-                    <validation:MinValueValidation MinValue="1" Message="The Amount Spent cannot be less than 1"/>
-                    <validation:NumericValidation/>
-                </material:TextField.Validations>
-            </material:TextField>
+            <VerticalStackLayout x:Name="ThirdForm" IsVisible="{Binding IsChecked, Source={x:Reference AddThirdFlowOut}}" Spacing="15">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Third Flow Out" HorizontalOptions="Center" />
+                    <BoxView HeightRequest="1" Margin="0,0,0,10"/>
 
-            <material:TextField Title="Reason" Text="{Binding SingleExpenditureDetails.Reason}">                
-                <material:TextField.Validations>
-                    <validation:RequiredValidation/>
-                </material:TextField.Validations>
-            </material:TextField>
+                    <material:DatePickerField Title="Date Spent" IsVisible="false"
+                                                    MinimumDate="01/01/2022" 
+                                MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
+                                Date="{Binding SingleExpenditureDetails.DateSpent}">
+                        <material:DatePickerField.Validations>
+                            <validation:RequiredValidation/>
 
-            <HorizontalStackLayout HorizontalOptions="Center" Margin="0,0,0,0" Spacing="15">
-                <Button input:FormView.IsSubmitButton="True"
-                                Text="Save Flow Out" BackgroundColor="DarkSlateBlue" TextColor="White" 
-                                FontSize="20" FontAttributes="Bold"/>
+                        </material:DatePickerField.Validations>
+                    </material:DatePickerField>
+
+                </VerticalStackLayout>
+
+                <material:TextField Title="Amount Spent" Text="{Binding ThirdExp.AmountSpent}" Keyboard="Numeric">
+                    <material:TextField.Validations>
+                        <validation:RequiredValidation/>
+                        <validation:MinValueValidation MinValue="1" Message="The Amount Spent cannot be less than 1"/>
+                        <validation:NumericValidation/>
+                    </material:TextField.Validations>
+                </material:TextField>
+
+                <material:TextField Title="Reason" Text="{Binding ThirdExp.Reason}">
+                    <material:TextField.Validations>
+                        <validation:RequiredValidation/>
+                    </material:TextField.Validations>
+                </material:TextField>
+
+            </VerticalStackLayout>
+            
+            <HorizontalStackLayout
+                HorizontalOptions="Center" Margin="0,5,0,10" Spacing="15">
+                <Button input:FormView.IsSubmitButton="True" x:Name="SaveExpBtn" Clicked="SaveExpBtn_Clicked"
+                                            Text="Save Flow Out" BackgroundColor="DarkSlateBlue" TextColor="White" 
+                                            FontSize="20" FontAttributes="Bold"/>
                 <Button Command="{Binding CancelBtnCommand}"
-                                Text="Cancel" BackgroundColor="#A3FF0000" TextColor="White"
-                                FontSize="16" />
-
+                                            Text="Cancel" BackgroundColor="#A3FF0000" TextColor="White"
+                                            FontSize="16" />
             </HorizontalStackLayout>
-
         </input:FormView>
-    </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

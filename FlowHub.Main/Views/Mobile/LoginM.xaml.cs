@@ -10,11 +10,10 @@ public partial class LoginM : ContentPage
         InitializeComponent();
         viewModel = vm;
         this.BindingContext = vm;
-
-        viewModel.PageLoadedCommand.Execute(null);
     }
     protected override void OnAppearing()
     {
+        viewModel.PageLoadedCommand.Execute(null);
         base.OnAppearing();
         bool HasLoginRemembered = viewModel.HasLoginRemembered;
         bool isLoginFormVisible = viewModel.IsLoginFormVisible;
@@ -61,5 +60,12 @@ public partial class LoginM : ContentPage
         LoginForm.IsVisible = true;
         RegisterForm.IsVisible = false;
         QuickLogin.IsVisible = false;
+    }
+
+    private void LoginButton_Clicked(object sender, EventArgs e)
+    {
+        //LoginForm.IsVisible = viewModel.IsLoginFormVisible;
+        //RegisterForm.IsVisible = viewModel.IsRegisterFormVisible;
+        //QuickLogin.IsVisible = viewModel.IsQuickLoginVisible;
     }
 }

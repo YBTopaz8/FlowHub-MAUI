@@ -3,6 +3,7 @@
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
              xmlns:local="clr-namespace:FlowHub.Main.Views.Mobile.Expenditures"  
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Expenditures"
@@ -10,7 +11,7 @@
              x:Name="page"
              >
     <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="filter_btn.png" Command="{Binding ShowFilterPopUpPageCommand}"/>
+        <ToolbarItem IconImageSource="{AppThemeBinding Dark=filter_d.png, Light= filter_l.png}" Command="{Binding ShowFilterPopUpPageCommand}"/>
     </ContentPage.ToolbarItems>
 
     <toolkit:DockLayout>
@@ -23,25 +24,21 @@
             </Label.Text>
         </Label>
 
-        <Grid toolkit:DockLayout.DockPosition="Top" HeightRequest="30" Margin="10,3">
+        <Grid toolkit:DockLayout.DockPosition="Top" HeightRequest="30" Margin="10,3"
+              ColumnDefinitions="20*,100*,50*">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20*"/>
-                <ColumnDefinition Width="100*"/>
-                <ColumnDefinition Width="50*"/>
-            </Grid.ColumnDefinitions>
             <VerticalStackLayout Grid.Column="0">
                 <ImageButton Clicked="ExportToPDFImageButton_Clicked"
-                    Source="{AppThemeBinding Dark=save_to_pdf_btn.png, Light=save_to_pdf_btn_light.png}" />
+                    Source="{AppThemeBinding Dark=save_to_pdf_d.png, Light=save_to_pdf_btn_l.png}" />
                 <ProgressBar IsVisible="false" x:Name="PrintProgressBarIndic" ProgressColor="DarkSlateBlue" WidthRequest="50"/>
             </VerticalStackLayout >
 
-            <HorizontalStackLayout Grid.Column="2" HorizontalOptions="End" BackgroundColor="Transparent">
-                <ImageButton Source="{AppThemeBinding Dark=add_btn_48.png, Light=add_btn_48_light.png}" Command="{Binding GoToAddExpenditurePageCommand}"/>
+            <HorizontalStackLayout Grid.Column="2" HorizontalOptions="End" BackgroundColor="Transparent" IsVisible="false">
+                <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding GoToAddExpenditurePageCommand}"/>
             </HorizontalStackLayout>
         </Grid>
 
@@ -52,8 +49,12 @@
 
         <Label toolkit:DockLayout.DockPosition="Top" Text="{Binding ExpTitle}" FontSize="20" Margin="5" FontAttributes="Bold" HorizontalOptions="Center"/>
 
-        <HorizontalStackLayout toolkit:DockLayout.DockPosition="Bottom" HeightRequest="34" HorizontalOptions="CenterAndExpand">
-            <Label FontSize="17" Margin="5">
+        <Grid toolkit:DockLayout.DockPosition="Bottom" HeightRequest="65" Margin="10,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label FontSize="17" Margin="5" Grid.ColumnSpan="2" HorizontalOptions="Center" VerticalOptions="End">
                 <Label.Text>
                     <MultiBinding StringFormat="{} {2} Flow Out(s) worth {0:n2} {1}">
                         <Binding Path="TotalAmount"/>
@@ -62,26 +63,28 @@
                     </MultiBinding>
                 </Label.Text>
             </Label>
-        </HorizontalStackLayout>
-        <CollectionView ItemsSource="{Binding ExpendituresList}" EmptyView="No Flow Outs Available..." >
 
+            <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding GoToAddExpenditurePageCommand}"
+                         VerticalOptions="Start" HorizontalOptions="End" Margin="0,0,10,0" Grid.Column="1"/>
+        </Grid>
+        <CollectionView ItemsSource="{Binding ExpendituresList}" EmptyView="No Flow Outs Available...">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:ExpendituresModel">
-                    <ScrollView>
-                        <VerticalStackLayout  HorizontalOptions="Center" >
+                    <ScrollView Margin="1">
+                        <VerticalStackLayout HorizontalOptions="Center">
                             <SwipeView >
                                 <SwipeView.LeftItems>
                                     <SwipeItem Command="{Binding Source={x:Reference page}, 
                                             Path=BindingContext.GoToEditExpenditurePageCommand}"  
                                                    CommandParameter="{Binding .}" 
-                                            IconImageSource="edit_exp.png" BackgroundColor="#201C1B1F"/>
+                                            IconImageSource="{AppThemeBinding Dark= edit_d.png, Light= edit_l.png}" BackgroundColor="Transparent"/>
                                 </SwipeView.LeftItems>
 
                                 <SwipeView.RightItems>
                                     <SwipeItem Command="{Binding Source={x:Reference page}, 
                                             Path=BindingContext.DeleteExpenditureBtnCommand}"  
                                                    CommandParameter="{Binding .}"  
-                                            IconImageSource="del.png" Text="Delete" BackgroundColor="#00FF0000"/>
+                                            IconImageSource="{AppThemeBinding Dark= delete_d.png, Light = delete_l.png}" BackgroundColor="Transparent"/>
                                 </SwipeView.RightItems>
 
                                 <Border Padding="10" HeightRequest="83" HorizontalOptions="Center" MinimumWidthRequest="340" MaximumWidthRequest="400"

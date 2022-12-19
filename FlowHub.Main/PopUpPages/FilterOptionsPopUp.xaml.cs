@@ -8,7 +8,6 @@ public partial class FilterOptionsPopUp : Popup
 		InitializeComponent();
 	}
 
-
     void Filter_Today_Tapped(object sender, TappedEventArgs e) => Close("Filter_Today");
 
     void Filter_Curr_Month_Tapped(object sender, TappedEventArgs e) => Close("Filter_CurrMonth");

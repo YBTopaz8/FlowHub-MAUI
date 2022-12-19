@@ -14,24 +14,24 @@
              
              >
     <TabBar>
-        <ShellContent Title="Home" Icon="homepage.png"
+        <ShellContent Title="Home" Icon="{AppThemeBinding Dark=home_d.png, Light=home_l.png}"
             ContentTemplate="{DataTemplate views:HomePageM}"
             Route="HomePageM"/>
 
-        <ShellContent Title="Flow Outs" Icon="initiate_money_transfer.png"
+        <ShellContent Title="Flow Outs" Icon="{AppThemeBinding Dark= initiate_money_transfer_d.png,Light= initiate_money_transfer_d.png}"
                 ContentTemplate="{DataTemplate viewsExp:ManageExpendituresM}"/>
 
 
-        <ShellContent Title="Flow Ins" Icon="request_money.png"
+        <ShellContent Title="Flow Ins" Icon="{AppThemeBinding Dark=request_money_d.png, Light=request_money_l.png}"
             ContentTemplate="{DataTemplate viewsInc:ManageIncomesM}"/>
 
-        <ShellContent Title="Statistics" Icon="graph.png"
+        <ShellContent Title="Statistics" Icon="{AppThemeBinding Dark=graph_d.png, Light=graph_l.png}"
             ContentTemplate="{DataTemplate viewsStats:StatisticsPageM}"/>
 
-        <ShellContent Title="Monthly Planned" Icon="plus_one_month.png"
+        <ShellContent Title="Monthly Planned" Icon="{AppThemeBinding Dark=monthly_planned_icon_d.png, Light=monthly_planned_icon_l.png}"
                 ContentTemplate="{DataTemplate viewsPlannedExp:ManageMonthlyPlannedExpendituresPageM}"/>
-        <Tab Title="Settings" IsEnabled="false"
-             Icon="settings_tab_48.png">
+
+        <Tab Title="Settings" IsEnabled="false" Icon="{AppThemeBinding Dark=settings_d.png, Light=settings_l.png}">
             <ShellContent Title="User Settings"
                 ContentTemplate="{DataTemplate viewsSettings:UserSettingsPageM}"/>
 

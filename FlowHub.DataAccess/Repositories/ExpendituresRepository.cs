@@ -33,10 +33,10 @@ public class ExpendituresRepository : IExpendituresRepository
     }
 
 
-    public async Task<List<ExpendituresModel>> GetAllExpendituresAsync()
+    public async Task<List<ExpendituresModel>> GetAllExpendituresAsync(string userId)
     {        
         OpenDB();
-        OfflineExpendituresList = await AllExpenditures.Query().ToListAsync();
+        OfflineExpendituresList = await AllExpenditures.Query().Where(x => x.UserId == userId).ToListAsync();
         db.Dispose();
         return OfflineExpendituresList;
     }

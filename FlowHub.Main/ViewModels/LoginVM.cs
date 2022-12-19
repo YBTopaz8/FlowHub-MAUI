@@ -8,7 +8,6 @@ using FlowHub.Main.AdditionalResourcefulAPIClasses;
 
 namespace FlowHub.Main.ViewModels;
 
-
 public partial class LoginVM : ObservableObject
 {
     private readonly ISettingsServiceRepository settingsService;
@@ -35,7 +34,7 @@ public partial class LoginVM : ObservableObject
     public bool hasLoginRemembered = true;
 
     [ObservableProperty]
-    public UsersModel currentUser = new();
+    public UsersModel currentUser;
 
     private string userCurrency;
 
@@ -60,38 +59,45 @@ public partial class LoginVM : ObservableObject
     private bool isBusy=false;
 
     [ObservableProperty]
-    private bool showLoginMessage = false;
+    private bool showQuickLoginErrorMessage = false;
 
     readonly string LoginDetectFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "QuickLogin.text");
+
     [RelayCommand]
     public async void PageLoaded()
     {
+
         //deletedLoginDetectFile();
         //await userService.dropCollection();
 
-
-        HasLoginRemembered = QuickLoginDetectionFile();
-        CountryNamesList = countryAndCurrency.GetCountryNames();
-        //if (Connectivity.Current.NetworkAccess.Equals(NetworkAccess.Internet))
-        //{
-        //    await onlineService.GetOnlineConnectionAsync();
-        //}
-        if (await userService.CheckIfAnyUserExists())
+        if (IsQuickLoginDetectionFilePresent())
         {
             Username = await settingsService.GetPreference<string>("Username", null);
             userId = await settingsService.GetPreference<string>(nameof(CurrentUser.Id), null);
-            CurrentUser.Id= userId;
-            if (userId is null)
-            {
-                IsLoginFormVisible = true;
-                HasLoginRemembered = false;
-            }
-            IsLoginFormVisible = false;
+            IsQuickLoginVisible = true;
         }
         else
         {
-            await settingsService.ClearPreferences();
+            CurrentUser = new();
+         
             HasLoginRemembered = false;
+            CountryNamesList = countryAndCurrency.GetCountryNames();
+
+            if (await userService.CheckIfAnyUserExists())
+            {
+                CurrentUser.Id = userId;
+                if (userId is null)
+                {
+                    IsLoginFormVisible = true;
+                    HasLoginRemembered = false;
+                }
+                IsLoginFormVisible = false;
+            }
+            else
+            {
+                await settingsService.ClearPreferences();
+                HasLoginRemembered = false;
+            }
         }
     }
 
@@ -123,20 +129,12 @@ public partial class LoginVM : ObservableObject
                 await settingsService.SetPreference(nameof(CurrentUser.Id), CurrentUser.Id.ToString());
                 await settingsService.SetPreference("Username", CurrentUser.Username);
                 await settingsService.SetPreference(nameof(CurrentUser.UserCurrency), CurrentUser.UserCurrency);
-                if (HasLoginRemembered)
+                
+                if (!File.Exists(LoginDetectFile))
                 {
-                    if (!File.Exists(LoginDetectFile))
-                    {
-                        File.Create(LoginDetectFile).Close();
-                    }
+                    File.Create(LoginDetectFile).Close();
                 }
-                else
-                {
-                    if (File.Exists(LoginDetectFile))
-                    {
-                        File.Delete(LoginDetectFile);
-                    }
-                }
+                
                 IsQuickLoginVisible = false;
                 NavFunctions.GoToHomePage();
             }
@@ -151,7 +149,7 @@ public partial class LoginVM : ObservableObject
     public async void GoToHomePageFromLogin()
     {
         IsBusy = true;
-        var checkedUser = await userService.GetUserAsync(CurrentUser.Email, CurrentUser.Password);
+        var checkedUser = await userService.GetUserAsync(CurrentUser.Email.Trim(), CurrentUser.Password);
         if (checkedUser is null)
         {
             IsBusy = false;
@@ -160,20 +158,12 @@ public partial class LoginVM : ObservableObject
         else
         {
             IsBusy = false;
-            if (checkedUser.RememberLogin)
+            
+            if (!File.Exists(LoginDetectFile))
             {
-                if (!File.Exists(LoginDetectFile))
-                {
-                    File.Create(LoginDetectFile).Close();
-                }
-            }
-            else
-            {
-                if(File.Exists(LoginDetectFile))
-                {
-                    File.Delete(LoginDetectFile);
-                }
-            }
+                File.Create(LoginDetectFile).Close();
+            }            
+            
             CurrentUser = checkedUser;
 
             // await userService.AddUserAsync(CurrentUser, false);
@@ -184,7 +174,9 @@ public partial class LoginVM : ObservableObject
             IsQuickLoginVisible = true;
 
             NavFunctions.GoToHomePage();
+
         }
+
     }
 
     [RelayCommand]
@@ -193,17 +185,17 @@ public partial class LoginVM : ObservableObject
         if (File.Exists(LoginDetectFile))
         {
             IsQuickLoginVisible = false;
-            userService.OfflineUser = await userService.GetUserAsync(CurrentUser.Id); //initialized user to be used by the entire app            
+            userService.OfflineUser = await userService.GetUserAsync(userId); //initialized user to be used by the entire app            
                        
             NavFunctions.GoToHomePage();
         }
         else
         {
-            ShowLoginMessage = true;
+            ShowQuickLoginErrorMessage = true;
         }
     }
 
-    bool QuickLoginDetectionFile()
+    bool IsQuickLoginDetectionFilePresent()
     {
         if (File.Exists(LoginDetectFile))
         {

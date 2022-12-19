@@ -22,7 +22,7 @@
             </Grid.ColumnDefinitions>
 
             <HorizontalStackLayout Grid.Column="2" HorizontalOptions="End" BackgroundColor="Transparent">
-                <ImageButton Source="{AppThemeBinding Dark=add_btn_48.png, Light=add_btn_48_light.png}" Command="{Binding ShowInputMonthYearPopupPageCommand}" />
+                <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding ShowInputMonthYearPopupPageCommand}" />
             </HorizontalStackLayout>
            
         </Grid>
@@ -32,45 +32,48 @@
             <Label FontSize="17" Margin="5" Text="">                
             </Label>
         </HorizontalStackLayout>
+        
         <CollectionView ItemsSource="{Binding MonthlyPlannedExpList}" EmptyView="No Flow Outs Available...">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:PlannedExpendituresModel">
                     <ScrollView >
-                        <SwipeView Margin="20,0">
-                            <SwipeView.LeftItems>
-                                <SwipeItem  IconImageSource="eye.png" Text="View" BackgroundColor="#00FF0000"
-                                            Command="{Binding Source={x:Reference page},
-                                                      Path=BindingContext.GoToViewMonthlyPlannedExpCommand}"
-                                            CommandParameter="{Binding .}"/>
-                            </SwipeView.LeftItems>
-                            <SwipeView.RightItems>
-                                <SwipeItem IconImageSource="del.png" Text="Delete" BackgroundColor="#00FF0000"
-                                           Command="{Binding Source={x:Reference page},
-                                                     Path=BindingContext.DeleteMonthlyPlannedExpCommand}"
-                                           CommandParameter="{Binding .}"/>
-                            </SwipeView.RightItems>
-                            <VerticalStackLayout HorizontalOptions="Center" Margin="0,0,0,2" >
-                                <Border Padding="10,5" MinimumWidthRequest="320" MaximumWidthRequest="400"
-                                        BackgroundColor="{AppThemeBinding Dark=#29343E, Light=white}"
-                                        Stroke="DarkSlateBlue"
-                                        StrokeThickness="2"
-                                        StrokeShape="RoundRectangle 10">
-                                    <VerticalStackLayout>
-                                        <Label Text="{Binding MonthYear, StringFormat='Month and Year : {0}'}"/>
-                                        <Label>
-                                            <Label.Text>
-                                                <MultiBinding StringFormat="{}Total Amount {0:n3} {1}">
-                                                    <Binding Path="TotalAmount"/>
-                                                    <Binding Path="Currency"/>                                                    
-                                                </MultiBinding>
-                                            </Label.Text>
-                                        </Label>
-                                        <Label Text="{Binding NumberOfExpenditures, StringFormat='Number of Flow Outs : {0}'}"/>
-                                    </VerticalStackLayout>
+                        <VerticalStackLayout HorizontalOptions="Center"> <!--This will help keep the whole view centered-->
+                            <SwipeView Margin="20,0">
+                                <SwipeView.LeftItems>
+                                    <SwipeItem  IconImageSource="{AppThemeBinding Dark=view_d.png, Light=view_l.png}" Text="View" BackgroundColor="Transparent"
+                                                Command="{Binding Source={x:Reference page},
+                                                          Path=BindingContext.GoToViewMonthlyPlannedExpCommand}"
+                                                CommandParameter="{Binding .}"/>
+                                </SwipeView.LeftItems>
+                                <SwipeView.RightItems>
+                                    <SwipeItem IconImageSource="{AppThemeBinding Dark=delete_d.png, Light=delete_l.png}" Text="Delete" BackgroundColor="Transparent"
+                                               Command="{Binding Source={x:Reference page},
+                                                         Path=BindingContext.DeleteMonthlyPlannedExpCommand}"
+                                               CommandParameter="{Binding .}"/>
+                                </SwipeView.RightItems>
+                                <VerticalStackLayout HorizontalOptions="Center" Margin="0,0,0,2" >
+                                    <Border Padding="10,5" MinimumWidthRequest="320" MaximumWidthRequest="400"
+                                            BackgroundColor="{AppThemeBinding Dark=#29343E, Light=white}"
+                                            Stroke="DarkSlateBlue"
+                                            StrokeThickness="2"
+                                            StrokeShape="RoundRectangle 10">
+                                        <VerticalStackLayout>
+                                            <Label Text="{Binding MonthYear, StringFormat='Month and Year : {0}'}"/>
+                                            <Label>
+                                                <Label.Text>
+                                                    <MultiBinding StringFormat="{}Total Amount {0:n3} {1}">
+                                                        <Binding Path="TotalAmount"/>
+                                                        <Binding Path="Currency"/>
+                                                    </MultiBinding>
+                                                </Label.Text>
+                                            </Label>
+                                            <Label Text="{Binding NumberOfExpenditures, StringFormat='Number of Flow Outs : {0}'}"/>
+                                        </VerticalStackLayout>
 
-                                </Border>
-                            </VerticalStackLayout>
-                        </SwipeView>
+                                    </Border>
+                                </VerticalStackLayout>
+                            </SwipeView>
+                        </VerticalStackLayout>
                     </ScrollView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

@@ -38,12 +38,12 @@
                 <ColumnDefinition Width="50*"/>
             </Grid.ColumnDefinitions>
             <VerticalStackLayout Grid.Column="0">
-                <ImageButton Source="{AppThemeBinding Dark=save_to_pdf_btn.png, Light=save_to_pdf_btn_light.png}" Clicked="ExportToPDFImageButton_Clicked"/>
+                <ImageButton Source="{AppThemeBinding Dark=save_to_pdf_d.png, Light=save_to_pdf_btn_l.png}" Clicked="ExportToPDFImageButton_Clicked"/>
                 <ProgressBar IsVisible="false" x:Name="PrintProgressBarIndic" ProgressColor="DarkSlateBlue" WidthRequest="50"/>
             </VerticalStackLayout>
 
             <HorizontalStackLayout Grid.Column="2" HorizontalOptions="End">
-                <ImageButton Source="{AppThemeBinding Dark=add_btn_48.png, Light=add_btn_48_light.png}" Command="{Binding GoToAddIncomePageCommand}"/>
+                <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding GoToAddIncomePageCommand}"/>
             </HorizontalStackLayout>
         </Grid>
 

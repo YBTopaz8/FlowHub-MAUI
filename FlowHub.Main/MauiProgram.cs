@@ -37,6 +37,9 @@ public static class MauiProgram
 
         builder.ConfigureMauiHandlers(handlers =>
         {
+#if ANDROID
+            handlers.AddHandler(typeof(Shell), typeof(MyShellRenderer));
+#endif
             handlers.AddInputKitHandlers();
             handlers.AddUraniumUIHandlers();
         });
