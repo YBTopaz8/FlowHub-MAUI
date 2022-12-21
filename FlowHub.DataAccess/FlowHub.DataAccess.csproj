@@ -27,7 +27,8 @@
   </PropertyGroup>
   
 	<ItemGroup>
-	  <PackageReference Include="LiteDB.Async" Version="0.1.1" />
+	  <PackageReference Include="LiteDB.Async" Version="0.1.2" />
+	  <PackageReference Include="MongoDB.Driver" Version="2.18.0" />
 	</ItemGroup>
 
 	<ItemGroup>

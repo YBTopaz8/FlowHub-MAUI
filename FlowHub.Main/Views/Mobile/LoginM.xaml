@@ -90,7 +90,7 @@
             <!--Section for QUICK Login begins below-->
             <VerticalStackLayout x:Name="QuickLogin" IsVisible="false" Spacing="15" VerticalOptions="Center" Margin="0,200,0,0">
                 <Label x:Name="WelcomeLabel" Text="{Binding Username ,StringFormat='Welcome Back, {0}'}" FontSize="Title" HorizontalOptions="Center"/>
-                <Button Text="Quick Login" TextColor="White" Command="{Binding QuickLoginCommand}" Margin="70,70,70,0" />
+                <Button Text="Quick Login" TextColor="White" x:Name="QuickLoginBtn" Clicked="QuickLoginBtn_Clicked" Margin="70,70,70,0" />
 
                 <VerticalStackLayout IsVisible="{Binding ShowQuickLoginErrorMessage}" HorizontalOptions="Center">
                     <Label Text="An Error Occurred" TextColor="Red"/>

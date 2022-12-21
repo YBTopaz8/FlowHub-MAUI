@@ -1,13 +1,9 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MongoDB.Driver;
 
 namespace FlowHub.DataAccess.IRepositories;
 
 public interface IOnlineCredentialsRepository
 {
-    public string APIKey { get; set; }
+    public IMongoDatabase OnlineMongoDatabase { get; set; }
+    void GetOnlineConnection();
 }

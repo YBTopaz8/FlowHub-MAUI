@@ -1,8 +1,9 @@
+using System.Diagnostics;
 using FlowHub.Main.ViewModels.Settings;
 
 namespace FlowHub.Main.Views.Mobile.Settings;
 
-public partial class UserSettingsPageM : ContentPage
+public partial class UserSettingsPageM
 {
 	private readonly UserSettingsVM viewModel;
 	public UserSettingsPageM(UserSettingsVM vm)
@@ -16,5 +17,7 @@ public partial class UserSettingsPageM : ContentPage
     {
         base.OnAppearing();
 		viewModel.PageLoadedCommand.Execute(null);
+		
     }
+
 }

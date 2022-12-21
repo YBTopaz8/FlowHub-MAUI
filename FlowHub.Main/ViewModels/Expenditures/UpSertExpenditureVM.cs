@@ -8,7 +8,6 @@ using CommunityToolkit.Maui.Core;
 using FlowHub.Main.Platforms.NavigationMethods;
 using CommunityToolkit.Maui.Views;
 using FlowHub.Main.PopUpPages;
-using Microsoft.Maui;
 
 namespace FlowHub.Main.ViewModels.Expenditures;
 
@@ -31,17 +30,17 @@ public partial class UpSertExpenditureVM : ObservableObject
     private ExpendituresModel _SingleExpenditureDetails = new(){ DateSpent = DateTime.Now };
     
     [ObservableProperty]
-    public string pageTitle;
+    private string _pageTitle;
 
     [ObservableProperty]
-    private UsersModel activeUser;
+    private UsersModel _activeUser;
 
     [ObservableProperty]
-    bool showAddSecondExpCheckBox;
+    bool _showAddSecondExpCheckBox;
 
-    double InitialUserPocketMoney = 0;
-    double InitialExpenditureAmount= 0;
-    double FinalPocketMoney = 0;
+    private double _initialUserPocketMoney = 0;
+    private double _initialExpenditureAmount= 0;
+    private double _finalPocketMoney = 0;
 
     [ObservableProperty]
     public ExpendituresModel secondExp = new();
@@ -51,8 +50,8 @@ public partial class UpSertExpenditureVM : ObservableObject
     [RelayCommand]
     public void PageLoaded()
     {
-        InitialUserPocketMoney = ActiveUser.PocketMoney;
-        InitialExpenditureAmount = SingleExpenditureDetails.AmountSpent;
+        _initialUserPocketMoney = ActiveUser.PocketMoney;
+        _initialExpenditureAmount = SingleExpenditureDetails.AmountSpent;
         SecondExp = new();
         ThirdExp = new();
     }
@@ -60,7 +59,7 @@ public partial class UpSertExpenditureVM : ObservableObject
     [RelayCommand]
     public async void UpSertExpenditure()
     {
-        bool response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You Want To Save?"));
+        bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You Want To Save?")))!;
         if (response)
         {
             SingleExpenditureDetails.DateSpent = SingleExpenditureDetails.DateSpent.AddHours(1);
@@ -69,11 +68,10 @@ public partial class UpSertExpenditureVM : ObservableObject
 
             CancellationTokenSource cancellationTokenSource = new();
 
-            ToastDuration duration = ToastDuration.Short;
-            double fontSize = 14;
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             if (SingleExpenditureDetails.Id is not null)
             {
-                UpdateExpFxnAsync(duration, fontSize, cancellationTokenSource);
+                UpdateExpFxnAsync(ToastDuration.Short, 14, cancellationTokenSource);
             }
             else
             {
@@ -86,7 +84,7 @@ public partial class UpSertExpenditureVM : ObservableObject
                     }
                 }
                 string ToastNotifMessage = "Flow Out Added";
-                IToast toast = Toast.Make(ToastNotifMessage, duration, fontSize);
+                IToast toast = Toast.Make(ToastNotifMessage, ToastDuration.Short, 14);
                 await toast.Show(cancellationTokenSource.Token);
 
                 NavFunctions.ReturnOnce();
@@ -100,60 +98,71 @@ public partial class UpSertExpenditureVM : ObservableObject
 
     private async void UpdateExpFxnAsync(ToastDuration duration , double fontsize, CancellationTokenSource tokenSource)
     {
-        await _expenditureService.UpdateExpenditureAsync(SingleExpenditureDetails);
+        SingleExpenditureDetails.UpdatedDateTime = DateTime.UtcNow;
 
-        double difference = SingleExpenditureDetails.AmountSpent - InitialExpenditureAmount;
-        var finalPocketMoney = InitialUserPocketMoney - difference;
+        SingleExpenditureDetails.UpdateOnSync = true;
+        await _expenditureService.UpdateExpenditureAsync(SingleExpenditureDetails);
+        _expenditureService.OfflineExpendituresList.Contains(SingleExpenditureDetails);
+        double difference = SingleExpenditureDetails.AmountSpent - _initialExpenditureAmount;
+        var finalPocketMoney = _initialUserPocketMoney - difference;
         if (finalPocketMoney < 0)
         {
             await Shell.Current.DisplayAlert("Failed Operation", "Flow out amount is greater than your current balance", "Okay");
-            Debug.WriteLine("Failed Operation", "Flow out amount is greater than your current balance", "Okay");
+            Debug.WriteLine("Failed Operation", "Okay");
         }
         else
         {
             ActiveUser.PocketMoney = finalPocketMoney;
+            ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
             await userService.UpdateUserAsync(ActiveUser);
-            string ToastNotifMessage = "Expenditure Updated";
-            var toast = Toast.Make(ToastNotifMessage, duration, fontsize);
+            const string toastNotifMessage = "Expenditure Updated";
+            var toast = Toast.Make(toastNotifMessage, ToastDuration.Short, fontsize);
             await toast.Show(tokenSource.Token);
-
+            
+            
             NavFunctions.ReturnOnce();
         }
     }
 
-    private async Task<bool> AddExpFxnAsync(ExpendituresModel Expenditure)
+    private async Task<bool> AddExpFxnAsync(ExpendituresModel expenditure)
     {        
-        Expenditure.Currency = ActiveUser.UserCurrency;
-        if (Expenditure.AmountSpent > InitialUserPocketMoney)
+
+        expenditure.Currency = ActiveUser.UserCurrency;
+        if (expenditure.AmountSpent > _initialUserPocketMoney)
         {
-            await Shell.Current.DisplayAlert("Failed Operation", $"Your balance is not enough to add Flow Out {Expenditure.Reason}", "Okay");
+            await Shell.Current.DisplayAlert("Failed Operation", $"Your balance is not enough to add Flow Out {expenditure.Reason}", "Okay");
             return false;
         }
         else
         {
-            FinalPocketMoney = InitialUserPocketMoney - Expenditure.AmountSpent;
-            
-            if (FinalPocketMoney > 0)
-            {
-                Expenditure.Id = Guid.NewGuid().ToString();
-            
-                Expenditure.UserId = ActiveUser.Id;
-                await _expenditureService.AddExpenditureAsync(Expenditure);
+            _finalPocketMoney = _initialUserPocketMoney - expenditure.AmountSpent;
 
-                ActiveUser.PocketMoney = FinalPocketMoney;
-                await userService.UpdateUserAsync(ActiveUser);
-                InitialUserPocketMoney = FinalPocketMoney;
-                Debug.WriteLine($"Added Exp: {Expenditure.Reason} and Successfully, date {Expenditure.DateSpent}");
-                return true;
-            }
-            return false;   
+            if (_finalPocketMoney < 0) return false; //end the operation
+
+
+            expenditure.Id = Guid.NewGuid().ToString();
+            expenditure.AddedDateTime = DateTime.UtcNow;
+            
+            expenditure.UserId = userService.OfflineUser.UserIDOnline;
+
+            await _expenditureService.AddExpenditureAsync(expenditure);
+
+            _expenditureService.OfflineExpendituresList.Add(expenditure);
+
+            ActiveUser.PocketMoney = _finalPocketMoney;
+            ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
+            await userService.UpdateUserAsync(ActiveUser);
+            _initialUserPocketMoney = _finalPocketMoney;
+
+            Debug.WriteLine($"Added Exp: {expenditure.Reason} and Successfully, date {expenditure.DateSpent}");
+            return true;
         }
     }
 
     [RelayCommand]
     public async void CancelBtn()
     {
-        bool response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You Want To Cancel Action?"));
+        bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You Want To Cancel Action?")))!;
         if (response)
         {
             NavFunctions.ReturnOnce();

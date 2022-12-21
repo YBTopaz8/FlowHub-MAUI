@@ -84,7 +84,7 @@ public class UserRepository : IUsersRepository
         db.Dispose();
         if (OfflineUser is null)
         {
-            return null;
+            return OfflineUser;
         }
         else
         {

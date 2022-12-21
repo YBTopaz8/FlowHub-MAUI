@@ -2,8 +2,6 @@
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FlowHub.Main.AppShellMobile"
-             xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
-             xmlns:local="clr-namespace:FlowHub.Main"
              xmlns:views="clr-namespace:FlowHub.Main.Views.Mobile"
              xmlns:viewsExp="clr-namespace:FlowHub.Main.Views.Mobile.Expenditures"
              xmlns:viewsInc="clr-namespace:FlowHub.Main.Views.Mobile.Incomes"
@@ -31,22 +29,21 @@
         <ShellContent Title="Monthly Planned" Icon="{AppThemeBinding Dark=monthly_planned_icon_d.png, Light=monthly_planned_icon_l.png}"
                 ContentTemplate="{DataTemplate viewsPlannedExp:ManageMonthlyPlannedExpendituresPageM}"/>
 
-        <Tab Title="Settings" IsEnabled="false" Icon="{AppThemeBinding Dark=settings_d.png, Light=settings_l.png}">
+        <Tab Title="Settings" Icon="{AppThemeBinding Dark=settings_d.png, Light=settings_l.png}">
+
             <ShellContent Title="User Settings"
                 ContentTemplate="{DataTemplate viewsSettings:UserSettingsPageM}"/>
 
             <ShellContent
                 Title="App Settings"
                 ContentTemplate="{DataTemplate viewsSettings:ApplicationSettingsPageM}"/>
+        
         </Tab>
-
     </TabBar>
 
     <ShellContent Title="Login Page" x:Name="login"
                   ContentTemplate="{DataTemplate views:LoginM}"
                   Route="LoginM"/>
-
-
 
 
 </Shell>

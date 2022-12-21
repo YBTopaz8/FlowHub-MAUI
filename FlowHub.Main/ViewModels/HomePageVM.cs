@@ -51,7 +51,7 @@ public partial class HomePageVM : ObservableObject
         Username = ActiveUser.Username;
         PocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
-        var ListOfExp = await _expendituresService.GetAllExpendituresAsync(user.Id);
+        var ListOfExp = await _expendituresService.GetAllExpendituresAsync();
         if (ListOfExp.Count != 0)
         {
             ExpendituresDetails = ListOfExp.OrderByDescending(s => s.DateSpent).First();

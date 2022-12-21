@@ -1,15 +1,15 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FlowHub.DataAccess.IRepositories;
+using FlowHub.Main.PDF_Classes;
+using FlowHub.Main.Platforms.NavigationMethods;
+using FlowHub.Main.PopUpPages;
 using FlowHub.Models;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Core;
-using FlowHub.Main.Platforms.NavigationMethods;
-using FlowHub.Main.PDF_Classes;
-using CommunityToolkit.Maui.Views;
-using FlowHub.Main.PopUpPages;
 
 
 //This is the view model for the page that shows ALL expenditures
@@ -52,19 +52,17 @@ public partial class ManageExpendituresVM : ObservableObject
 
     [ObservableProperty]
     private string borderColor = "Red";
-
-    private List<ExpendituresModel> tempList = new();
-
+    
 
     [RelayCommand]
-    public async void Pageloaded()
+    public void Pageloaded()
     {
         UsersModel user = userService.OfflineUser;
         ActiveUser = user;
 
         UserPocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
-        tempList = await expendituresService.GetAllExpendituresAsync(user.Id);
+        expendituresService.GetAllExpendituresAsync();
         FilterGetExpOfToday();        
     }
         
@@ -73,20 +71,22 @@ public partial class ManageExpendituresVM : ObservableObject
     //THIS Function Shows all Expenditures for the current month
     public void FilterGetExpListOfCurrentMonth()
     {
+        // expendituresService.OfflineExpendituresList is ALREADY loaded since it was filled in the HomePageVM
+
         try
         {
             IsBusy = true;
             double tot = 0;
-            List<ExpendituresModel> ExpOfCurrentMonth = tempList
+            List<ExpendituresModel> expOfCurrentMonth = expendituresService.OfflineExpendituresList
                                     .FindAll(x => x.DateSpent.Month == DateTime.Today.Month)
                                     .OrderByDescending(x => x.DateSpent)
                                     .ToList();
            
-            if (ExpOfCurrentMonth?.Count > 0)
+            if (expOfCurrentMonth.Count > 0)
             {
                 IsBusy = false;
                 ExpendituresList.Clear();
-                foreach (var exp in ExpOfCurrentMonth)
+                foreach (var exp in expOfCurrentMonth)
                 {
                     ExpendituresList.Add(exp);
                     tot += exp.AmountSpent;
@@ -119,11 +119,10 @@ public partial class ManageExpendituresVM : ObservableObject
         {
             IsBusy= true;
             double tot = 0;
-            //List<ExpendituresModel> expList = await expendituresService.GetAllExpendituresAsync();
 
-            List<ExpendituresModel> expList = tempList.OrderByDescending(x => x.DateSpent).ToList();
+            List<ExpendituresModel> expList = expendituresService.OfflineExpendituresList.OrderByDescending(x => x.DateSpent).ToList();
             
-            if (expList?.Count > 0)
+            if (expList.Count > 0)
             {
                 IsBusy = false;
                 ExpendituresList.Clear();
@@ -156,41 +155,30 @@ public partial class ManageExpendituresVM : ObservableObject
 
     [RelayCommand]
     //the Function below can be used to find exps for CURRENT DAY
-    public void FilterGetExpOfToday()
+    public async void FilterGetExpOfToday()
     {
         try
         {
             IsBusy = true;
             double tot = 0;
-            //var expList = tempList;//await expendituresService.GetAllExpendituresAsync();
 
-            List<ExpendituresModel> ExpOfToday = tempList
+            List<ExpendituresModel> expOfToday = expendituresService.OfflineExpendituresList
                 .FindAll(x => x.DateSpent.Date == DateTime.Today.Date)
                 .OrderByDescending(x => x.DateSpent)
                 .ToList();
-            Debug.WriteLine("========================================");
-            var datt = DateTime.Today;
-            foreach (var item in tempList)
-            {
-                Debug.WriteLine(item.DateSpent.Date);
-                Debug.WriteLine(datt.Date);
-                if (item.DateSpent.Date == datt.Date)
-                {
-                    Debug.WriteLine("Equal");
-                }
-            }
-            if (ExpOfToday?.Count > 0)
+           
+            if (expOfToday.Count > 0)
             {
                 IsBusy = false;
                 ExpendituresList.Clear();
-                foreach (var exp in ExpOfToday)
+                foreach (var exp in expOfToday)
                 {
                     ExpendituresList.Add(exp);
                     tot += exp.AmountSpent;
                 }
                 Debug.WriteLine(ExpendituresList.Count);
                 TotalAmount = tot;
-                TotalExpenditures = ExpOfToday.Count;
+                TotalExpenditures = expOfToday.Count;
                 ExpTitle = "Today's Flow Out";
             }
             else
@@ -253,24 +241,25 @@ public partial class ManageExpendituresVM : ObservableObject
         CancellationTokenSource cancellationTokenSource = new();
         ToastDuration duration = ToastDuration.Short;
         double fontSize = 14;
-        string text = "Expenditure Deleted";
+        const string text = "Expenditure Deleted";
         var toast = Toast.Make(text, duration, fontSize);
 
-        bool response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You want to delete?"));
+        bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You want to delete?")))!;
         if (response)
         {
             var deleteResponse = await expendituresService.DeleteExpenditureAsync(expenditure); //delete the expenditure from db
                     
             if (deleteResponse)
             {
-                tempList.Remove(expenditure);
+                expendituresService.OfflineExpendituresList.Remove(expenditure);
                 ExpendituresList.Remove(expenditure);
+
                 ActiveUser.PocketMoney += expenditure.AmountSpent;
                 UserPocketMoney += expenditure.AmountSpent;
                 await userService.UpdateUserAsync(ActiveUser);
 
                 await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
-                //FilterGetExpListOfCurrentMonth(); //refresh the collectionview
+              
             }
         }
     }
@@ -293,28 +282,34 @@ public partial class ManageExpendituresVM : ObservableObject
     public async void ShowFilterPopUpPage()
     {
         var filterOption = (string)await Shell.Current.ShowPopupAsync(new FilterOptionsPopUp());
-        if (filterOption.Equals("Filter_All"))
+        switch (filterOption)
         {
-            FilterGetAllExp();
-        }
-        else if (filterOption.Equals("Filter_Today"))
-        {
-            FilterGetExpOfToday();
-        }
-        else if (filterOption.Equals("Filter_CurrMonth"))
-        {
-            FilterGetExpListOfCurrentMonth();
-        }
-        else
-        {
-            //nothing was chosen
+            case "Filter_All":
+                    FilterGetAllExp();
+                break;
+            case "Filter_Today":
+                FilterGetExpOfToday();
+                break;
+            case "Filter_CurrMonth":
+                FilterGetExpListOfCurrentMonth();
+                break;
         }
     }
-        [RelayCommand]
+
+    [RelayCommand]
     public async void SyncExpTest()
     {
+        await expendituresService.SynchronizeExpendituresAsync(ActiveUser.Email, ActiveUser.Password);
+        
+        Pageloaded();
         //  await expendituresService.GetAllExpFromOnlineAsync(ActiveUser.Id);
-        string newText= (string)await Shell.Current.ShowPopupAsync(new InputPopUpPage(isTextInput:true, optionalTitleText:"Enter New Name"));
-        //Debug.WriteLine(newText);
+        //string newText= (string)await Shell.Current.ShowPopupAsync(new InputPopUpPage(isTextInput:true, optionalTitleText:"Enter New Name"));
+        ////Debug.WriteLine(newText);
+    }
+
+    [RelayCommand]
+    public async void DropCollection()
+    {
+        await expendituresService.DropExpendituresCollection();
     }
 }

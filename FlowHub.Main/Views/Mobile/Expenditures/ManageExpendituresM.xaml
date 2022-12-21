@@ -3,12 +3,10 @@
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
-             xmlns:local="clr-namespace:FlowHub.Main.Views.Mobile.Expenditures"  
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Expenditures"
              x:DataType="viewModels:ManageExpendituresVM"             
-             x:Name="page"
+             x:Name="Page"
              >
     <ContentPage.ToolbarItems>
         <ToolbarItem IconImageSource="{AppThemeBinding Dark=filter_d.png, Light= filter_l.png}" Command="{Binding ShowFilterPopUpPageCommand}"/>
@@ -37,8 +35,8 @@
                 <ProgressBar IsVisible="false" x:Name="PrintProgressBarIndic" ProgressColor="DarkSlateBlue" WidthRequest="50"/>
             </VerticalStackLayout >
 
-            <HorizontalStackLayout Grid.Column="2" HorizontalOptions="End" BackgroundColor="Transparent" IsVisible="false">
-                <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding GoToAddExpenditurePageCommand}"/>
+            <HorizontalStackLayout Grid.Column="2" HorizontalOptions="End" BackgroundColor="Transparent" IsVisible="true">
+                <ImageButton Source="{AppThemeBinding Dark=sync_icon_d.png, Light=sync_icon_d.png}" Command="{Binding SyncExpTestCommand}"/>
             </HorizontalStackLayout>
         </Grid>
 
@@ -64,8 +62,11 @@
                 </Label.Text>
             </Label>
 
-            <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding GoToAddExpenditurePageCommand}"
+            <ImageButton IsVisible="True" Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding GoToAddExpenditurePageCommand}"
                          VerticalOptions="Start" HorizontalOptions="End" Margin="0,0,10,0" Grid.Column="1"/>
+
+            <ImageButton IsVisible="False" IsEnabled="False" Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding DropCollectionCommand}"
+                         VerticalOptions="Start" HorizontalOptions="Start" Margin="0,0,10,0" Grid.Column="1"/>
         </Grid>
         <CollectionView ItemsSource="{Binding ExpendituresList}" EmptyView="No Flow Outs Available...">
             <CollectionView.ItemTemplate>
@@ -75,7 +76,7 @@
                             <SwipeView >
                                 <SwipeView.LeftItems>
                                     
-                                    <SwipeItem Command="{Binding Source={x:Reference page}, 
+                                    <SwipeItem Command="{Binding Source={x:Reference Page}, 
                                             Path=BindingContext.GoToEditExpenditurePageCommand}"  
                                                    CommandParameter="{Binding .}" 
                                             IconImageSource="{AppThemeBinding Dark= edit_d.png, Light= edit_l.png}" 
@@ -83,7 +84,7 @@
                                 </SwipeView.LeftItems>
 
                                 <SwipeView.RightItems>
-                                    <SwipeItem Command="{Binding Source={x:Reference page}, 
+                                    <SwipeItem Command="{Binding Source={x:Reference Page}, 
                                             Path=BindingContext.DeleteExpenditureBtnCommand}"  
                                                    CommandParameter="{Binding .}"  
                                             IconImageSource="{AppThemeBinding Dark= delete_d.png, Light = delete_l.png}" 

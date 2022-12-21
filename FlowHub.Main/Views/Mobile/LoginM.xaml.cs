@@ -68,4 +68,10 @@ public partial class LoginM : ContentPage
         //RegisterForm.IsVisible = viewModel.IsRegisterFormVisible;
         //QuickLogin.IsVisible = viewModel.IsQuickLoginVisible;
     }
+
+    private void QuickLoginBtn_Clicked(object sender, EventArgs e)
+    {
+        QuickLoginBtn.IsEnabled = false;
+        viewModel.QuickLoginCommand.Execute(null);
+    }
 }

@@ -51,7 +51,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IDataAccessRepo, DataAccessRepo>();
         builder.Services.AddSingleton<ISettingsServiceRepository, SettingsServiceRepository>();
         builder.Services.AddSingleton<IUsersRepository, UserRepository>();
-        builder.Services.AddSingleton<IOnlineCredentialsRepository, OnlineCredentialsRepository>();
+        builder.Services.AddSingleton<IOnlineCredentialsRepository, OnlineDataAccessRepository>();
         builder.Services.AddSingleton<IPlannedExpendituresRepository, PlannedExpendituresRepository>();
 
 /*--------------------ADDING VIEWMODELS----------------------------------------------------------------------------------------*/

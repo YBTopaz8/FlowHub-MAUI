@@ -31,26 +31,26 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android33.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
-	  <ApplicationDisplayVersion>1.1.8</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.1.9</ApplicationDisplayVersion>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android33.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
-	  <ApplicationDisplayVersion>1.1.8</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.1.9</ApplicationDisplayVersion>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
-	  <ApplicationDisplayVersion>1.1.8</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.1.9</ApplicationDisplayVersion>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
-	  <ApplicationDisplayVersion>1.1.8</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.1.9</ApplicationDisplayVersion>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
@@ -118,10 +118,10 @@
 		<PackageReference Include="HarfBuzzSharp" Version="2.8.2.3" />
 		<PackageReference Include="InputKit.Maui" Version="4.2.1" />
 		<PackageReference Include="itext7" Version="7.2.4" />
-		<PackageReference Include="LiteDB.Async" Version="0.1.1" />
+		<PackageReference Include="LiteDB.Async" Version="0.1.2" />
 		<PackageReference Include="LiveChartsCore.SkiaSharpView.Maui" Version="2.0.0-beta.603" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
-		<PackageReference Include="QuestPDF" Version="2022.11.0" />
+		<PackageReference Include="QuestPDF" Version="2022.12.0" />
 		<PackageReference Include="SkiaSharp" Version="2.88.3" />
 		<PackageReference Include="UraniumUI.Material" Version="2.1.2" />
 	</ItemGroup>

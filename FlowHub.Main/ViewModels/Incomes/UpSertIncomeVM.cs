@@ -81,6 +81,7 @@ public partial class UpSertIncomeVM : ObservableObject
         else
         {
             ActiveUser.PocketMoney = FinalPocketMoney;
+            ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
             await userService.UpdateUserAsync(ActiveUser);
 
             string toastNotifMessage = "Flow In Update";
@@ -108,6 +109,7 @@ public partial class UpSertIncomeVM : ObservableObject
 
             double FinalPocketMoney = InitialUserPockerMoney + SingleIncomeDetails.AmountReceived;
             ActiveUser.PocketMoney = FinalPocketMoney;
+            ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
 
             await userService.UpdateUserAsync(ActiveUser);
 

@@ -16,5 +16,6 @@ public class ExpendituresModel
     public string? Comment { get; set; }
     public string Currency { get; set; }
     public string? PlatformModel { get; set; }
+    public bool UpdateOnSync { get; set; } = false;
     public string UserId { get; set; }
 }
