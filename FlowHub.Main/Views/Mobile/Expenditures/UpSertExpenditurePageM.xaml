@@ -30,13 +30,25 @@
 
                 </VerticalStackLayout>
 
-                <material:TextField Title="Amount Spent" Text="{Binding SingleExpenditureDetails.AmountSpent}" Keyboard="Numeric">
-                    <material:TextField.Validations>
-                        <validation:RequiredValidation/>
-                        <validation:MinValueValidation MinValue="1" Message="The Amount Spent cannot be less than 1"/>
-                        <validation:NumericValidation/>
-                    </material:TextField.Validations>
-                </material:TextField>
+                <Grid ColumnDefinitions="350,10*">
+                    
+                    <material:TextField Grid.Column="0" Title="Unit Price" Text="{Binding SingleExpenditureDetails.UnitPrice}" Keyboard="Numeric">
+                        <material:TextField.Validations>
+                            <validation:RequiredValidation/>
+                                <validation:MinValueValidation MinValue="0.1" Message="The Unit Price cannot be 0 or Less"/>
+                                <validation:NumericValidation/>
+                        </material:TextField.Validations>
+                    </material:TextField>
+
+                    <material:TextField Grid.Column="1" Keyboard="Numeric" Title="Quantity" Text="{Binding SingleExpenditureDetails.Quantity}">
+                        <material:TextField.Validations>
+                            <validation:RequiredValidation/>
+                            <validation:MinValueValidation MinValue="1" Message="The Quantity cannot be 0 or Less"/>
+                            <validation:NumericValidation/>
+                        </material:TextField.Validations>
+                    </material:TextField>
+
+                </Grid>
 
                 <material:TextField Title="Reason" Text="{Binding SingleExpenditureDetails.Reason}">
                     <material:TextField.Validations>
@@ -63,14 +75,24 @@
 
                 </VerticalStackLayout>
 
-                <material:TextField Title="Amount Spent" Text="{Binding SecondExp.AmountSpent}" Keyboard="Numeric">
+                <Grid ColumnDefinitions="350,10*">
+                <material:TextField Grid.Column="0" Title="Unit Price" Text="{Binding SecondExp.UnitPrice}" Keyboard="Numeric">
                     <material:TextField.Validations>
                         <validation:RequiredValidation/>
-                        <validation:MinValueValidation MinValue="1" Message="The Amount Spent cannot be less than 1"/>
+                        <validation:MinValueValidation MinValue="0.1" Message="The Unit Price cannot be 0 or Less"/>
+                        <validation:NumericValidation/>
+                    </material:TextField.Validations>
+                </material:TextField>
+                
+                <material:TextField Grid.Column="1" Title="Quantity" Text="{Binding SecondExp.Quantity}" Keyboard="Numeric">
+                    <material:TextField.Validations>
+                        <validation:RequiredValidation/>
+                        <validation:MinValueValidation MinValue="1" Message="The Quantity cannot be less than 1"/>
                         <validation:NumericValidation/>
                     </material:TextField.Validations>
                 </material:TextField>
 
+                </Grid>
                 <material:TextField Title="Reason" Text="{Binding SecondExp.Reason}">
                     <material:TextField.Validations>
                         <validation:RequiredValidation/>
@@ -98,14 +120,23 @@
 
                 </VerticalStackLayout>
 
-                <material:TextField Title="Amount Spent" Text="{Binding ThirdExp.AmountSpent}" Keyboard="Numeric">
-                    <material:TextField.Validations>
-                        <validation:RequiredValidation/>
-                        <validation:MinValueValidation MinValue="1" Message="The Amount Spent cannot be less than 1"/>
-                        <validation:NumericValidation/>
-                    </material:TextField.Validations>
-                </material:TextField>
-
+                <Grid ColumnDefinitions="350,10*">
+                    <material:TextField Grid.Column="0" Title="Unit Price" Text="{Binding ThirdExp.UnitPrice}" Keyboard="Numeric">
+                        <material:TextField.Validations>
+                            <validation:RequiredValidation/>
+                            <validation:MinValueValidation MinValue="0.1" Message="The Unit Price cannot be 0 or Less"/>
+                            <validation:NumericValidation/>
+                        </material:TextField.Validations>
+                    </material:TextField>
+                    <material:TextField Grid.Column="1" Title="Quantity" Text="{Binding ThirdExp.Quantity}" Keyboard="Numeric">
+                        <material:TextField.Validations>
+                            <validation:RequiredValidation/>
+                            <validation:MinValueValidation MinValue="1" Message="The Quantity cannot be less than 1"/>
+                            <validation:NumericValidation/>
+                        </material:TextField.Validations>
+                    </material:TextField>
+                    
+                </Grid>
                 <material:TextField Title="Reason" Text="{Binding ThirdExp.Reason}">
                     <material:TextField.Validations>
                         <validation:RequiredValidation/>

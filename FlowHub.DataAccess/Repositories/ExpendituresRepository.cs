@@ -22,8 +22,7 @@ public class ExpendituresRepository : IExpendituresRepository
 
     private const string expendituresDataCollectionName = "Expenditures";
 
-    private string pathToDeletedIDs =
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IDToBeDeleted.txt");
+    private readonly string pathToDeletedIDs = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IDToBeDeleted.txt");
 
     public ExpendituresRepository(IDataAccessRepo dataAccess, IUsersRepository userRepo, IOnlineCredentialsRepository onlineRepository)
     {
@@ -179,16 +178,24 @@ public class ExpendituresRepository : IExpendituresRepository
         OnlineExpendituresList = await DBOnline?.GetCollection<ExpendituresModel>(expendituresDataCollectionName)
             .Find(filter)
             .ToListAsync()!;
+        var tempExpList = await GetAllExpendituresAsync();
         
-        if (OfflineExpendituresList.Count == 0)
+        if (tempExpList.Count == 0)
         {
-            OfflineExpendituresList = OnlineExpendituresList;
-            foreach (var exp in OfflineExpendituresList)
+            //tempExpList = OnlineExpendituresList;
+            foreach (var exp in OnlineExpendituresList)
             {
                 exp.UserId = usersRepo.OfflineUser.UserIDOnline;
-                exp.Currency = usersRepo.OnlineUser.UserCurrency;
+
+                if (exp.Currency is null || exp.Currency == string.Empty || exp.Currency == "" )
+                {
+                    exp.Currency = usersRepo.OnlineUser.UserCurrency;
+                    await UpdateExpenditureOnlineAsync(exp);
+                }
+                
                 await AddExpenditureAsync(exp);
             }
+            await GetAllExpendituresAsync();
 
             await usersRepo.UpdateUserAsync(usersRepo.OfflineUser);
             return true;
@@ -201,11 +208,15 @@ public class ExpendituresRepository : IExpendituresRepository
                 foreach (var id in listOfDeletedIDs)
                 {
                     await DeleteExpenditureOnlineAsync(id);
+                    OnlineExpendituresList.RemoveAll(x => x.Id == id);
+                    
+                    //var expToBeDeleted = OnlineExpendituresList.SingleOrDefault(x => x.Id == id);
+                    //OnlineExpendituresList.Remove(expToBeDeleted);
                 }
                 await using (File.Create(pathToDeletedIDs));
             }
             
-            foreach (var expOffline in OfflineExpendituresList)
+            foreach (var expOffline in tempExpList)
             {
                 if (!OnlineExpendituresList.Exists(x => x.Id == expOffline.Id))
                 {
@@ -215,6 +226,7 @@ public class ExpendituresRepository : IExpendituresRepository
                 }
                 else
                 {
+
                     if (expOffline.UpdateOnSync && expOffline.PlatformModel == DeviceInfo.Current.Model)
                     {
                         
@@ -227,18 +239,25 @@ public class ExpendituresRepository : IExpendituresRepository
 
             foreach (var expOnline in OnlineExpendituresList)
             {
-                if (OfflineExpendituresList.Exists(x => x.Id == expOnline.Id) && expOnline.UpdateOnSync &&
+                if (tempExpList.Exists(x => x.Id == expOnline.Id) && expOnline.UpdateOnSync &&
                     expOnline.PlatformModel != DeviceInfo.Current.Model)
                 {
                     expOnline.PlatformModel = DeviceInfo.Current.Model;
                     await UpdateExpenditureAsync(expOnline);
                 }
-                else if (!OfflineExpendituresList.Exists(x => x.Id== expOnline.Id))
+                else if (!tempExpList.Exists(x => x.Id== expOnline.Id))
                 {
+
+                    if (expOnline.Currency is null || expOnline.Currency == string.Empty || expOnline.Currency == "")
+                    {
+                        expOnline.Currency = usersRepo.OnlineUser.UserCurrency;
+                        await UpdateExpenditureOnlineAsync(expOnline);
+                    }
                     await AddExpenditureAsync(expOnline);
                 }
             }
             
+            await GetAllExpendituresAsync();
             return true;
         }
         
@@ -271,42 +290,13 @@ public class ExpendituresRepository : IExpendituresRepository
     }
 
 
-    /*--------- SECTION FOR OFFLINE TO ONLINE SYNC OPERATIONS----------*/
-
-
-
-
-    /*---- SECTION FOR ONLINE TO OFFLINE SYNC OPERATIONS ----*/
-   
-
     public async Task DropExpendituresCollection()
     {
         OpenDB();
         await db.DropCollectionAsync(expendituresDataCollectionName);
         db.Dispose();
-        Debug.WriteLine("Collection dropped! ");
+        Debug.WriteLine("Expenditures Collection dropped!");
     }
 
-    //public async Task<List<ExpendituresModel>> GetAllExpFromOnlineAsync(string UserId)
-    //{
-        
-       
-
-
-    //    //var client = new RestClient("https://data.mongodb-api.com/app/data-czemo/endpoint/data/v1/action/findOne");
-    //    //var request = new RestRequest();
-    //    //request.AddHeader("Content-Type", "application/json");
-    //    //request.AddHeader("Access-Control-Request-Headers", "*");
-    //    //request.AddHeader("api-key", $"{onlineCredentials.APIKey}");
-    //    //var body = @"{" + "" +@" ""collection"":""Expenditures""," + "" +
-    //    //    @" ""database"":""SavingsTracker""," +
-    //    //    "" +@" ""dataSource"":""FlowHubCluster"" " +@"}";
-    //    //request.AddStringBody(body, DataFormat.Json);
-    //    //RestResponse response = await client.PostAsync(request);
-    //    //ExpAPIModel = JsonConvert.DeserializeObject<ExpendituresModel>(response.Content);
-
-
-    //    //var listOfExp = ExpAPIModel.documents;
-    //    //return listOfExp;
-    //}
+ 
 }

@@ -50,19 +50,17 @@ public partial class ManageExpendituresVM : ObservableObject
     [ObservableProperty]
     private bool activ=false;
 
-    [ObservableProperty]
-    private string borderColor = "Red";
     
 
     [RelayCommand]
-    public void Pageloaded()
+    public async void PageloadedAsync()
     {
         UsersModel user = userService.OfflineUser;
         ActiveUser = user;
 
         UserPocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
-        expendituresService.GetAllExpendituresAsync();
+        await expendituresService.GetAllExpendituresAsync();
         FilterGetExpOfToday();        
     }
         
@@ -155,7 +153,7 @@ public partial class ManageExpendituresVM : ObservableObject
 
     [RelayCommand]
     //the Function below can be used to find exps for CURRENT DAY
-    public async void FilterGetExpOfToday()
+    public void FilterGetExpOfToday()
     {
         try
         {
@@ -252,7 +250,7 @@ public partial class ManageExpendituresVM : ObservableObject
             if (deleteResponse)
             {
                 expendituresService.OfflineExpendituresList.Remove(expenditure);
-                ExpendituresList.Remove(expenditure);
+                //ExpendituresList.Remove(expenditure);
 
                 ActiveUser.PocketMoney += expenditure.AmountSpent;
                 UserPocketMoney += expenditure.AmountSpent;
@@ -260,6 +258,7 @@ public partial class ManageExpendituresVM : ObservableObject
 
                 await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
               
+                FilterGetExpOfToday();
             }
         }
     }
@@ -301,7 +300,7 @@ public partial class ManageExpendituresVM : ObservableObject
     {
         await expendituresService.SynchronizeExpendituresAsync(ActiveUser.Email, ActiveUser.Password);
         
-        Pageloaded();
+        PageloadedAsync();
         //  await expendituresService.GetAllExpFromOnlineAsync(ActiveUser.Id);
         //string newText= (string)await Shell.Current.ShowPopupAsync(new InputPopUpPage(isTextInput:true, optionalTitleText:"Enter New Name"));
         ////Debug.WriteLine(newText);

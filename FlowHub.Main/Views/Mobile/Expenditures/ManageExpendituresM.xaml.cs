@@ -7,7 +7,7 @@ namespace FlowHub.Main.Views.Mobile.Expenditures;
 
 public partial class ManageExpendituresM : ContentPage
 {
-    private ManageExpendituresVM viewModel;
+    private readonly ManageExpendituresVM viewModel;
     public ManageExpendituresM(ManageExpendituresVM vm)
     {
         InitializeComponent();
@@ -17,7 +17,7 @@ public partial class ManageExpendituresM : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        viewModel.PageloadedCommand.Execute(null);
+        viewModel.PageloadedAsyncCommand.Execute(null);
         
     }
 

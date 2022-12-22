@@ -98,13 +98,12 @@ public partial class UpSertExpenditureVM : ObservableObject
 
     private async void UpdateExpFxnAsync(ToastDuration duration , double fontsize, CancellationTokenSource tokenSource)
     {
-        SingleExpenditureDetails.UpdatedDateTime = DateTime.UtcNow;
+        //_expenditureService.OfflineExpendituresList.Contains(SingleExpenditureDetails);
+        var totalExpCost = SingleExpenditureDetails.UnitPrice * SingleExpenditureDetails.Quantity;
 
-        SingleExpenditureDetails.UpdateOnSync = true;
-        await _expenditureService.UpdateExpenditureAsync(SingleExpenditureDetails);
-        _expenditureService.OfflineExpendituresList.Contains(SingleExpenditureDetails);
-        double difference = SingleExpenditureDetails.AmountSpent - _initialExpenditureAmount;
+        double difference = totalExpCost - _initialExpenditureAmount;
         var finalPocketMoney = _initialUserPocketMoney - difference;
+
         if (finalPocketMoney < 0)
         {
             await Shell.Current.DisplayAlert("Failed Operation", "Flow out amount is greater than your current balance", "Okay");
@@ -112,6 +111,13 @@ public partial class UpSertExpenditureVM : ObservableObject
         }
         else
         {
+
+            SingleExpenditureDetails.UpdatedDateTime = DateTime.UtcNow;
+
+            SingleExpenditureDetails.UpdateOnSync = true;
+            SingleExpenditureDetails.AmountSpent = totalExpCost;
+            await _expenditureService.UpdateExpenditureAsync(SingleExpenditureDetails);
+
             ActiveUser.PocketMoney = finalPocketMoney;
             ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
             await userService.UpdateUserAsync(ActiveUser);
@@ -128,18 +134,19 @@ public partial class UpSertExpenditureVM : ObservableObject
     {        
 
         expenditure.Currency = ActiveUser.UserCurrency;
-        if (expenditure.AmountSpent > _initialUserPocketMoney)
+        var totalExpCost = expenditure.UnitPrice * expenditure.Quantity;
+        if (totalExpCost > _initialUserPocketMoney)
         {
             await Shell.Current.DisplayAlert("Failed Operation", $"Your balance is not enough to add Flow Out {expenditure.Reason}", "Okay");
             return false;
         }
         else
         {
-            _finalPocketMoney = _initialUserPocketMoney - expenditure.AmountSpent;
+            _finalPocketMoney = _initialUserPocketMoney - totalExpCost;
 
             if (_finalPocketMoney < 0) return false; //end the operation
 
-
+            expenditure.AmountSpent = totalExpCost;
             expenditure.Id = Guid.NewGuid().ToString();
             expenditure.AddedDateTime = DateTime.UtcNow;
             
@@ -147,7 +154,7 @@ public partial class UpSertExpenditureVM : ObservableObject
 
             await _expenditureService.AddExpenditureAsync(expenditure);
 
-            _expenditureService.OfflineExpendituresList.Add(expenditure);
+          //  _expenditureService.OfflineExpendituresList.Add(expenditure);
 
             ActiveUser.PocketMoney = _finalPocketMoney;
             ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;

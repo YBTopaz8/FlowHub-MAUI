@@ -37,7 +37,7 @@ public partial class UpSertExpenditurePageM : ContentPage
         viewModel.ThirdExp = new Models.ExpendituresModel();
     }
 
-    private void SaveExpBtn_Clicked(object sender, EventArgs e)
+    private void SaveExpBtn_Clicked(object sender, EventArgs e) //using this to call the command because it won't work on the formview. 
     {
         viewModel.UpSertExpenditureCommand.Execute(null);
     }
