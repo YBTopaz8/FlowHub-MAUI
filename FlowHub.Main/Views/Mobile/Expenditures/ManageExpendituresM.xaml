@@ -9,7 +9,7 @@
              x:Name="Page"
              >
     <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="{AppThemeBinding Dark=filter_d.png, Light= filter_l.png}" Command="{Binding ShowFilterPopUpPageCommand}"/>
+        <ToolbarItem IconImageSource="filter_d" Command="{Binding ShowFilterPopUpPageCommand}"/>
     </ContentPage.ToolbarItems>
 
     <toolkit:DockLayout>
@@ -36,7 +36,7 @@
             </VerticalStackLayout >
 
             <HorizontalStackLayout Grid.Column="2" HorizontalOptions="End" BackgroundColor="Transparent" IsVisible="true">
-                <ImageButton Source="{AppThemeBinding Dark=sync_icon_d.png, Light=sync_icon_d.png}" Command="{Binding SyncExpTestCommand}"/>
+                <ImageButton Source="{AppThemeBinding Dark=sync_icon_d.png, Light=sync_icon_l.png}" Command="{Binding SyncExpTestCommand}"/>
             </HorizontalStackLayout>
         </Grid>
 
@@ -68,10 +68,19 @@
             <ImageButton IsVisible="False" IsEnabled="False" Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding DropCollectionCommand}"
                          VerticalOptions="Start" HorizontalOptions="Start" Margin="0,0,10,0" Grid.Column="1"/>
         </Grid>
-        <CollectionView ItemsSource="{Binding ExpendituresList}" EmptyView="No Flow Outs Available...">
+        
+        <CollectionView ItemsSource="{Binding ExpendituresList}">
+            <CollectionView.EmptyView>
+                <ContentView>
+                    <VerticalStackLayout HorizontalOptions="Center"
+                                         VerticalOptions="Center">
+                        <Label Text="No Flow Outs Available..."/>
+                    </VerticalStackLayout>
+                </ContentView>
+            </CollectionView.EmptyView>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:ExpendituresModel">
-                    <ScrollView Margin="1">
+                    <ScrollView Margin="5,1">
                         <VerticalStackLayout HorizontalOptions="Center">
                             <SwipeView >
                                 <SwipeView.LeftItems>

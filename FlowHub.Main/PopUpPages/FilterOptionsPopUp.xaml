@@ -4,19 +4,20 @@
              xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"   
              xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
              CanBeDismissedByTappingOutsideOfPopup="False"
-             Size="340,188"
+             Size="400,202"
              Color="Transparent"
              x:Class="FlowHub.Main.PopUpPages.FilterOptionsPopUp">
+
     <Border Margin="10"
         Stroke="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=White}"
         StrokeThickness="0"
         StrokeShape="RoundRectangle 8">
-
         <VerticalStackLayout BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=White}" Spacing="7" Padding="9">
             <VerticalStackLayout.Resources>
                 <ResourceDictionary>
                     <Style TargetType="Label">
                         <Setter Property="TextColor" Value="{AppThemeBinding Dark=white, Light=black}"/>
+                        <Setter Property="FontSize" Value="19"/>
                     </Style>
                     <Style TargetType="Button">
                         <Setter Property="BackgroundColor" Value="Transparent"/>
@@ -24,7 +25,7 @@
                 </ResourceDictionary>
             </VerticalStackLayout.Resources>
 
-            <Label FontSize="20" TextColor="{AppThemeBinding Dark=white, Light=black}"
+            <Label FontSize="22" TextColor="{AppThemeBinding Dark=white, Light=black}"
             Text="Choose A Filter Option"
             VerticalOptions="Start" 
             HorizontalOptions="Center"/>
@@ -50,7 +51,7 @@
 
             <BoxView HeightRequest="1"/>
             <HorizontalStackLayout HorizontalOptions="EndAndExpand">
-                <Button Text="Cancel" 
+                <Button Text="Cancel" FontSize="20"
                         Clicked="OnCancelButtonClicked"/>
             </HorizontalStackLayout>
         </VerticalStackLayout>

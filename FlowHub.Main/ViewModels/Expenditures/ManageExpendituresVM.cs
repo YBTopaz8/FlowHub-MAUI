@@ -129,11 +129,9 @@ public partial class ManageExpendituresVM : ObservableObject
                     ExpendituresList.Add(exp);
                     tot += exp.AmountSpent;
                 }
-
-               
-                Debug.WriteLine(ExpendituresList.Count);
                 TotalAmount = tot;
                 TotalExpenditures = ExpendituresList.Count;
+                
                 ExpTitle = "All Flow Outs";
             }
             else
@@ -210,7 +208,7 @@ public partial class ManageExpendituresVM : ObservableObject
             Dictionary<string, object> navParam = new()
             {
                 { "SingleExpenditureDetails", new ExpendituresModel { DateSpent = DateTime.Now } },
-                { "PageTitle", new string("Add New Expenditure") },
+                { "PageTitle", new string("Add New Flow Out") },
                 { "ShowAddSecondExpCheckBox", true },
                 { "ActiveUser", ActiveUser }
             };
@@ -226,7 +224,7 @@ public partial class ManageExpendituresVM : ObservableObject
         var navParam = new Dictionary<string, object>
         {
             { "SingleExpenditureDetails", expenditure },
-            { "PageTitle", new string("Edit Expenditure") },
+            { "PageTitle", new string("Edit Flow Out") },
             { "ShowAddSecondExpCheckBox", false },
             { "ActiveUser", ActiveUser }
         };
@@ -251,7 +249,7 @@ public partial class ManageExpendituresVM : ObservableObject
             {
                 expendituresService.OfflineExpendituresList.Remove(expenditure);
                 //ExpendituresList.Remove(expenditure);
-
+                ActiveUser.TotalExpendituresAmount -= expenditure.AmountSpent;
                 ActiveUser.PocketMoney += expenditure.AmountSpent;
                 UserPocketMoney += expenditure.AmountSpent;
                 await userService.UpdateUserAsync(ActiveUser);

@@ -13,6 +13,10 @@ public class UsersModel
     public string? Email { get; set; }
     public double? Savings { get; set; }
     public double PocketMoney { get; set; }
+    public double TotalExpendituresAmount { get; set; } = 0;
+    public double TotalIncomeAmount { get; set; } = 0;
+    public double TotalInDebtAmount { get; set; } = 0;
+    public double TotalOutDebtAmount { get; set; } = 0;
     public DateTime DateTimeOfPocketMoneyUpdate { get; set; }
     public string UserCountry { get; set; }
     public string UserCurrency { get; set; }

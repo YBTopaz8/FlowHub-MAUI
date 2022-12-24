@@ -12,7 +12,7 @@
              x:Name="page">
     
     <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="{AppThemeBinding Dark=filter_d.png, Light= filter_l.png}" Command="{Binding ShowFilterPopUpPageCommand}"/>
+        <ToolbarItem IconImageSource="filter_d" Command="{Binding ShowFilterPopUpPageCommand}"/>
     </ContentPage.ToolbarItems>
     <toolkit:DockLayout>
         <Label toolkit:DockLayout.DockPosition="Top" FontSize="21" FontAttributes="Bold" HorizontalOptions="Center">

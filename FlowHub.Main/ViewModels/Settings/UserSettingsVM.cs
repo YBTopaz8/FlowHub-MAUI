@@ -33,6 +33,11 @@ public partial class UserSettingsVM : ObservableObject
     public string userName;
     [ObservableProperty]
     public string userEmail;
+    [ObservableProperty]
+    public double totalIncomeAmount;
+    [ObservableProperty]
+    public double totalExpendituresAmount;
+
 
     [ObservableProperty]
     private UsersModel activeUser = new();
@@ -46,6 +51,8 @@ public partial class UserSettingsVM : ObservableObject
         UserCountry = activeUser.UserCountry;
         UserEmail = activeUser.Email;
         UserName = activeUser.Username;
+        TotalExpendituresAmount = activeUser.TotalExpendituresAmount;
+        TotalIncomeAmount = activeUser.TotalIncomeAmount;
         CountryNamesList = countryAndCurrency.GetCountryNames();
     }
 

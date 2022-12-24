@@ -52,6 +52,7 @@ public partial class HomePageVM : ObservableObject
         PocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
         var ListOfExp = await _expendituresService.GetAllExpendituresAsync();
+
         if (ListOfExp.Count != 0)
         {
             ExpendituresDetails = ListOfExp.OrderByDescending(s => s.DateSpent).First();
@@ -96,7 +97,7 @@ public partial class HomePageVM : ObservableObject
             Dictionary<string, object> navParam = new()
             {
                 { "SingleExpenditureDetails", new ExpendituresModel { DateSpent = DateTime.Now } },
-                { "PageTitle", new string("Add New Expenditure") },
+                { "PageTitle", new string("Add New Flow Out") },
                 { "ShowAddSecondExpCheckBox", true },
                 { "ActiveUser", ActiveUser }
             };

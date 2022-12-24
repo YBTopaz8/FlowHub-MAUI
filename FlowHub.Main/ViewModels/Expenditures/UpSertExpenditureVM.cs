@@ -41,17 +41,23 @@ public partial class UpSertExpenditureVM : ObservableObject
     private double _initialUserPocketMoney = 0;
     private double _initialExpenditureAmount= 0;
     private double _finalPocketMoney = 0;
+    private double _initialTotalExpAmount = 0;
 
     [ObservableProperty]
     public ExpendituresModel secondExp = new();
     [ObservableProperty]
     public ExpendituresModel thirdExp = new();
-    
+
+    [ObservableProperty]
+    public double totalss;
+
     [RelayCommand]
     public void PageLoaded()
     {
         _initialUserPocketMoney = ActiveUser.PocketMoney;
         _initialExpenditureAmount = SingleExpenditureDetails.AmountSpent;
+        _initialTotalExpAmount = ActiveUser.TotalExpendituresAmount;
+
         SecondExp = new();
         ThirdExp = new();
     }
@@ -62,28 +68,29 @@ public partial class UpSertExpenditureVM : ObservableObject
         bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You Want To Save?")))!;
         if (response)
         {
-            SingleExpenditureDetails.DateSpent = SingleExpenditureDetails.DateSpent.AddHours(1);
-            SecondExp.DateSpent = DateTime.UtcNow.AddHours(1);
-            ThirdExp.DateSpent = DateTime.UtcNow.AddHours(1);
-
             CancellationTokenSource cancellationTokenSource = new();
 
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             if (SingleExpenditureDetails.Id is not null)
             {
-                UpdateExpFxnAsync(ToastDuration.Short, 14, cancellationTokenSource);
+                UpdateExpFxnAsync( 14, cancellationTokenSource);
             }
             else
             {
-                if (await AddExpFxnAsync(SingleExpenditureDetails) && SecondExp.AmountSpent != 0)
+
+                string ToastNotifMessage = "Nothing was added";
+                if (await AddExpFxnAsync(SingleExpenditureDetails) && SecondExp.UnitPrice != 0)
                 {
-                    if (await AddExpFxnAsync(SecondExp) && ThirdExp.AmountSpent != 0)
+                    ToastNotifMessage = "Flow Out Added";
+                    SecondExp.DateSpent = DateTime.Now;
+                    if (await AddExpFxnAsync(SecondExp) && ThirdExp.UnitPrice != 0)
                     {
-                        await AddExpFxnAsync(ThirdExp);
-                        
+                        ToastNotifMessage = "Flow Outs Added";
+                        ThirdExp.DateSpent = DateTime.Now;
+                        await AddExpFxnAsync(ThirdExp);                        
+
                     }
                 }
-                string ToastNotifMessage = "Flow Out Added";
+                 
                 IToast toast = Toast.Make(ToastNotifMessage, ToastDuration.Short, 14);
                 await toast.Show(cancellationTokenSource.Token);
 
@@ -96,12 +103,21 @@ public partial class UpSertExpenditureVM : ObservableObject
         }        
     }
 
-    private async void UpdateExpFxnAsync(ToastDuration duration , double fontsize, CancellationTokenSource tokenSource)
+    [RelayCommand]
+    void GetTotals()
     {
-        //_expenditureService.OfflineExpendituresList.Contains(SingleExpenditureDetails);
+        SingleExpenditureDetails.AmountSpent = SingleExpenditureDetails.UnitPrice * SingleExpenditureDetails.Quantity;
+        totalss = SingleExpenditureDetails.AmountSpent;
+        Debug.WriteLine(SingleExpenditureDetails.AmountSpent);
+    }
+
+    private async void UpdateExpFxnAsync( double fontsize, CancellationTokenSource tokenSource)
+    {
         var totalExpCost = SingleExpenditureDetails.UnitPrice * SingleExpenditureDetails.Quantity;
 
         double difference = totalExpCost - _initialExpenditureAmount;
+
+        var FinalTotalExp = _initialTotalExpAmount - difference;
         var finalPocketMoney = _initialUserPocketMoney - difference;
 
         if (finalPocketMoney < 0)
@@ -111,22 +127,22 @@ public partial class UpSertExpenditureVM : ObservableObject
         }
         else
         {
-
             SingleExpenditureDetails.UpdatedDateTime = DateTime.UtcNow;
 
             SingleExpenditureDetails.UpdateOnSync = true;
             SingleExpenditureDetails.AmountSpent = totalExpCost;
-            await _expenditureService.UpdateExpenditureAsync(SingleExpenditureDetails);
+            if (await _expenditureService.UpdateExpenditureAsync(SingleExpenditureDetails))
+            {
+                ActiveUser.TotalExpendituresAmount = FinalTotalExp;
+                ActiveUser.PocketMoney = finalPocketMoney;
+                ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
+                await userService.UpdateUserAsync(ActiveUser);
+                const string toastNotifMessage = "Expenditure Updated";
+                var toast = Toast.Make(toastNotifMessage, ToastDuration.Short, fontsize);
+                await toast.Show(tokenSource.Token);
 
-            ActiveUser.PocketMoney = finalPocketMoney;
-            ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
-            await userService.UpdateUserAsync(ActiveUser);
-            const string toastNotifMessage = "Expenditure Updated";
-            var toast = Toast.Make(toastNotifMessage, ToastDuration.Short, fontsize);
-            await toast.Show(tokenSource.Token);
-            
-            
-            NavFunctions.ReturnOnce();
+                NavFunctions.ReturnOnce();
+            }
         }
     }
 
@@ -152,16 +168,16 @@ public partial class UpSertExpenditureVM : ObservableObject
             
             expenditure.UserId = userService.OfflineUser.UserIDOnline;
 
-            await _expenditureService.AddExpenditureAsync(expenditure);
+            if (!await _expenditureService.AddExpenditureAsync(expenditure))
+                return false;
 
-          //  _expenditureService.OfflineExpendituresList.Add(expenditure);
-
+            ActiveUser.TotalExpendituresAmount += totalExpCost;
             ActiveUser.PocketMoney = _finalPocketMoney;
             ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
             await userService.UpdateUserAsync(ActiveUser);
             _initialUserPocketMoney = _finalPocketMoney;
 
-            Debug.WriteLine($"Added Exp: {expenditure.Reason} and Successfully, date {expenditure.DateSpent}");
+            Debug.WriteLine($"Added Exp: {expenditure.Reason} and Successfully, date {expenditure.DateSpent} {expenditure.DateSpent.Millisecond}ms");
             return true;
         }
     }

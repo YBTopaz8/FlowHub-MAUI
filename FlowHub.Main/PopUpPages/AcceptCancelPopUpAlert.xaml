@@ -17,6 +17,7 @@
                 <ResourceDictionary>
                     <Style TargetType="Label">
                         <Setter Property="TextColor" Value="{AppThemeBinding Dark=white, Light=black}"/>
+                        <Setter Property="FontSize" Value="19"/>
                     </Style>
                     <Style TargetType="Button">
                         <Setter Property="BackgroundColor" Value="Transparent"/>
@@ -33,9 +34,9 @@
 
             <HorizontalStackLayout HorizontalOptions="EndAndExpand" Spacing="5">
                 
-                <Button Text="Yes"
+                <Button Text="Yes" FontSize="20"
                         Clicked="OnYesButtonClicked"/>
-                <Button Text="Cancel"
+                <Button Text="Cancel" FontSize="20"
                         Clicked="OnNoButtonClicked"/>
             </HorizontalStackLayout>
         </VerticalStackLayout>

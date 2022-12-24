@@ -116,6 +116,8 @@ public partial class ManageIncomesVM : ObservableObject
                 TotalAmount = totalAmountFromList;
                 TotalIncomes = IncomesList.Count;
                 IncTitle = $"All Flow Ins";
+
+                
             }
             else
             {
@@ -254,6 +256,7 @@ public partial class ManageIncomesVM : ObservableObject
             
             if (deleteResponse)
             {
+                ActiveUser.TotalIncomeAmount -= income.AmountReceived;
                 ActiveUser.PocketMoney -= income.AmountReceived;
                 UserPockerMoney -= income.AmountReceived;
 

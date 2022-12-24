@@ -37,12 +37,15 @@ public partial class UpSertIncomeVM : ObservableObject
 
     double InitialUserPockerMoney = 0;
     double InitialIncomeAmout = 0;
+    double _initialTotalIncAmount = 0;
 
     [RelayCommand]
     public void PageLoaded()
     {
         InitialUserPockerMoney = ActiveUser.PocketMoney;
         InitialIncomeAmout = SingleIncomeDetails.AmountReceived;
+        _initialTotalIncAmount = ActiveUser.TotalIncomeAmount;
+
     }
     [RelayCommand]
     public async void UpSertIncome()
@@ -69,10 +72,11 @@ public partial class UpSertIncomeVM : ObservableObject
     }
 
     async void UpdateIncFxnAsync(ToastDuration duration, double fontSize, CancellationTokenSource tokenSource)
-    {
-        await incomeService.UpdateIncomeAsync(SingleIncomeDetails);
+    {        
 
         double difference = SingleIncomeDetails.AmountReceived - InitialIncomeAmout;
+
+        double FinalTotalInc = _initialTotalIncAmount + difference;
         double FinalPocketMoney = InitialUserPockerMoney + difference;
         if (FinalPocketMoney < 0)
         {
@@ -80,15 +84,19 @@ public partial class UpSertIncomeVM : ObservableObject
         }
         else
         {
-            ActiveUser.PocketMoney = FinalPocketMoney;
-            ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
-            await userService.UpdateUserAsync(ActiveUser);
+            if (await incomeService.UpdateIncomeAsync(SingleIncomeDetails))
+            { 
+                ActiveUser.TotalIncomeAmount += FinalTotalInc;
+                ActiveUser.PocketMoney = FinalPocketMoney;
+                ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
+                await userService.UpdateUserAsync(ActiveUser);
 
-            string toastNotifMessage = "Flow In Update";
-            var toastObj = Toast.Make(toastNotifMessage, duration, fontSize);
-            await toastObj.Show(tokenSource.Token);
+                string toastNotifMessage = "Flow In Update";
+                var toastObj = Toast.Make(toastNotifMessage, duration, fontSize);
+                await toastObj.Show(tokenSource.Token);
 
-            NavFunctions.ReturnOnce();
+                NavFunctions.ReturnOnce();        
+            }
         }
     }
 
@@ -104,20 +112,24 @@ public partial class UpSertIncomeVM : ObservableObject
         {
             SingleIncomeDetails.Id = Guid.NewGuid().ToString();
             SingleIncomeDetails.UserId = ActiveUser.Id;
+            SingleIncomeDetails.AddedDateTime = DateTime.UtcNow;
+            SingleIncomeDetails.UserId = ActiveUser.UserIDOnline;
 
-            await incomeService.AddIncomeAsync(SingleIncomeDetails);
+            if (await incomeService.AddIncomeAsync(SingleIncomeDetails))
+            {
+                ActiveUser.TotalIncomeAmount += SingleIncomeDetails.AmountReceived;
+                double FinalPocketMoney = InitialUserPockerMoney + SingleIncomeDetails.AmountReceived;
+                ActiveUser.PocketMoney = FinalPocketMoney;
+                ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
 
-            double FinalPocketMoney = InitialUserPockerMoney + SingleIncomeDetails.AmountReceived;
-            ActiveUser.PocketMoney = FinalPocketMoney;
-            ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
+                await userService.UpdateUserAsync(ActiveUser);
 
-            await userService.UpdateUserAsync(ActiveUser);
+                string toastNotifMessage = "Flow In Added";
+                var toast = Toast.Make(toastNotifMessage, duration, fontSize);
+                await toast.Show(tokenSource.Token);
 
-            string toastNotifMessage = "Flow In Added";
-            var toast = Toast.Make(toastNotifMessage, duration, fontSize);
-            await toast.Show(tokenSource.Token);
-
-            NavFunctions.ReturnOnce();
+                NavFunctions.ReturnOnce();
+            }
         }
     }
 

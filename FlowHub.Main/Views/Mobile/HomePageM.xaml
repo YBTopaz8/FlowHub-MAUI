@@ -19,16 +19,19 @@
                 Margin="10"
                 Padding="5"
                 StrokeShape="RoundRectangle 10">
+            <Border.Shadow>
+                <Shadow Offset="15,20"
+                                    Opacity="0.1"/>
+            </Border.Shadow>
             <VerticalStackLayout Spacing="10" Margin="6">
                 <Label Text="Latest Flow Out"
                             FontSize="25"
                             HorizontalOptions="Center"
                             Margin="90,0,0,0"
                             WidthRequest="300"/>
-                <BoxView
-                        Color="DarkSlateBlue"
-                        HeightRequest="2"
-                        HorizontalOptions="Fill"/>
+                <Rectangle
+                        Fill="DarkSlateBlue"
+                        HeightRequest="2"/>
                 <HorizontalStackLayout>
                     <Label Text="{Binding ExpendituresDetails.Reason, StringFormat='Reason : {0}'}" FontSize="18"/>
                     

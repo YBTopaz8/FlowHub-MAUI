@@ -18,4 +18,9 @@ public partial class UpSertIncomePageM : ContentPage
         base.OnAppearing();
 		viewModel.PageLoadedCommand.Execute(null);
     }
+
+    private void SaveIncBtn_Clicked(object sender, EventArgs e)
+    {
+		viewModel.UpSertIncomeCommand.Execute(null);
+    }
 }
