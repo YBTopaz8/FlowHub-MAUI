@@ -8,7 +8,7 @@
     <VerticalStackLayout>
         <Label FontSize="21" HorizontalTextAlignment="Center" FontAttributes="Bold" Margin="10">
             <Label.Text>
-                <MultiBinding StringFormat="{} Pocket Allowance is {0:n2} {1}">
+                <MultiBinding StringFormat="{} Pocket Allowance is {0:n3} {1}">
                     <Binding Path="PocketMoney"/>
                     <Binding Path="UserCurrency"/>
                 </MultiBinding>
@@ -39,7 +39,7 @@
                 <HorizontalStackLayout>
                     <Label FontSize="18">
                         <Label.Text>
-                            <MultiBinding StringFormat="{}Amount Spent : {0} {1}">
+                            <MultiBinding StringFormat="{}Amount Spent : {0:n3} {1}">
                                 <Binding Path="ExpendituresDetails.AmountSpent"/>
                                 <Binding Path="UserCurrency"/>
                             </MultiBinding>

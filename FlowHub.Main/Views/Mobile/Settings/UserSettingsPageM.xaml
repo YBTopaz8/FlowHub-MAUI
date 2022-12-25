@@ -91,7 +91,7 @@
 
                 <Label HorizontalOptions="Center" Margin="5" FontSize="15" FontAttributes="Bold">
                     <Label.Text>
-                        <MultiBinding StringFormat="{} Current Balance : {0} {1}">
+                        <MultiBinding StringFormat="{} Current Balance : {0:n3} {1}">
                             <Binding Path="PocketMoney"/>
                             <Binding Path="UserCurrency"/>
                         </MultiBinding>
@@ -163,7 +163,7 @@
                     <Label Text="Pocket Money"/>
                     <Label HorizontalTextAlignment="End">
                         <Label.Text>
-                            <MultiBinding StringFormat="{} {0:n2} {1}">
+                            <MultiBinding StringFormat="{} {0:n3} {1}">
                                 <Binding Path="PocketMoney"/>
                                 <Binding Path="UserCurrency"/>
                             </MultiBinding>

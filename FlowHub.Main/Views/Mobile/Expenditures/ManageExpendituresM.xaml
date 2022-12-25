@@ -15,7 +15,7 @@
     <toolkit:DockLayout>
         <Label toolkit:DockLayout.DockPosition="Top" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center">
             <Label.Text>
-                <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
+                <MultiBinding StringFormat="{} Current Balance is {0:n3} {1}">
                     <Binding Path="UserPocketMoney"/>
                     <Binding Path="UserCurrency"/>
                 </MultiBinding>
@@ -54,7 +54,7 @@
             </Grid.ColumnDefinitions>
             <Label FontSize="17" Margin="5" Grid.ColumnSpan="2" HorizontalOptions="Center" VerticalOptions="End">
                 <Label.Text>
-                    <MultiBinding StringFormat="{} {2} Flow Out(s) worth {0:n2} {1}">
+                    <MultiBinding StringFormat="{} {2} Flow Out(s) worth {0:n3} {1}">
                         <Binding Path="TotalAmount"/>
                         <Binding Path="UserCurrency"/>
                         <Binding Path="TotalExpenditures"/>
@@ -110,7 +110,7 @@
                                             
                                             <Label>
                                                 <Label.Text>
-                                                    <MultiBinding StringFormat="{} Amount: {0:n2} {1}">
+                                                    <MultiBinding StringFormat="{} Amount: {0:n3} {1}">
                                                         <Binding Path="AmountSpent"/>
                                                         <Binding Path="Currency"/>
                                                     </MultiBinding>

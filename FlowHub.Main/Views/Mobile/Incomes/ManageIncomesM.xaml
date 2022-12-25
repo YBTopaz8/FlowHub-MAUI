@@ -20,7 +20,7 @@
                 <TapGestureRecognizer NumberOfTapsRequired="2" Tapped="TapGestureRecognizer_Tapped"/>
             </Label.GestureRecognizers>
             <Label.Text>
-                <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
+                <MultiBinding StringFormat="{} Current Balance is {0:n3} {1}">
                     <Binding Path="UserPockerMoney"/>
                     <Binding Path="UserCurrency"/>
                 </MultiBinding>
@@ -54,7 +54,7 @@
             
             <Label FontSize="17" Grid.ColumnSpan="2" HorizontalOptions="Center" VerticalOptions="End" Margin="5">
                 <Label.Text>
-                    <MultiBinding StringFormat="{} {2} Flow In(s) worth {0:n2} {1}">
+                    <MultiBinding StringFormat="{} {2} Flow In(s) worth {0:n3} {1}">
                         <Binding Path="TotalAmount"/>
                         <Binding Path="UserCurrency"/>
                         <Binding Path="TotalIncomes"/>
@@ -98,7 +98,7 @@
                                             <Label Text="{Binding Reason, StringFormat='Reason: {0}'}"/>
                                             <Label>
                                                 <Label.Text>
-                                                    <MultiBinding StringFormat="{} Amount: {0:n2} {1}">
+                                                    <MultiBinding StringFormat="{} Amount: {0:n3} {1}">
                                                         <Binding Path="AmountReceived"/>
                                                         <Binding Path="Currency"/>
                                                     </MultiBinding>

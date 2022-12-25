@@ -97,7 +97,7 @@ public partial class ManageIncomesVM : ObservableObject
     }
 
     [RelayCommand]
-    public void FilterGetAllIncomes()
+    public async void FilterGetAllIncomes()
     {
         try
         {
@@ -116,8 +116,11 @@ public partial class ManageIncomesVM : ObservableObject
                 TotalAmount = totalAmountFromList;
                 TotalIncomes = IncomesList.Count;
                 IncTitle = $"All Flow Ins";
-
-                
+                if (ActiveUser.TotalIncomeAmount == 0)
+                {
+                    ActiveUser.TotalIncomeAmount = totalAmountFromList;
+                    await userService.UpdateUserAsync(ActiveUser);
+                }
             }
             else
             {

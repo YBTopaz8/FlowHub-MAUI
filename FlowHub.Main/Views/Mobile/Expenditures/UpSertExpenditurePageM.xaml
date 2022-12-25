@@ -15,7 +15,7 @@
     <toolkit:DockLayout >
         <Label toolkit:DockLayout.DockPosition="Top" HorizontalOptions="End" Margin="5" FontAttributes="Bold">
             <Label.Text>
-                <MultiBinding StringFormat="{} Balance : {0} {1}">
+                <MultiBinding StringFormat="{} Balance : {0:n3} {1}">
                     <Binding Path="ActiveUser.PocketMoney"/>
                     <Binding Path="ActiveUser.UserCurrency"/>
                 </MultiBinding>

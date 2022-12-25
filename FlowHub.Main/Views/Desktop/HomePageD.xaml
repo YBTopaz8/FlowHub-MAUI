@@ -21,7 +21,7 @@
         <StackLayout HorizontalOptions="Center">
             <Label FontSize="22">
                 <Label.Text>
-                    <MultiBinding StringFormat="{} Your Pocket Allowance is {0:n2} {1}">
+                    <MultiBinding StringFormat="{} Your Pocket Allowance is {0:n3} {1}">
                         <Binding Path="PocketMoney"/>
                         <Binding Path="UserCurrency"/>
                     </MultiBinding>

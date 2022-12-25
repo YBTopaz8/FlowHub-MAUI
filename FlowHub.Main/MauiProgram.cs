@@ -7,6 +7,7 @@ using FlowHub.Main.ViewModels.Expenditures;
 using FlowHub.Main.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
 using FlowHub.Main.ViewModels.Incomes;
 using FlowHub.Main.ViewModels.Settings;
+using FlowHub.Main.ViewModels.Statistics;
 using FlowHub.Main.Views.Desktop;
 using FlowHub.Main.Views.Desktop.Expenditures;
 using FlowHub.Main.Views.Mobile;
@@ -73,6 +74,9 @@ public static class MauiProgram
         builder.Services.AddSingleton<ManageMonthlyMonthlyPlannedExpendituresVM>();
         builder.Services.AddSingleton<DetailsOfMonthlyPlannedExpVM>();
         builder.Services.AddSingleton<UpSertMonthlyPlannedExpVM>();
+
+        /*-- Section for Statistics --*/
+        builder.Services.AddTransient<StatisticsPageVM>();
         /*------------------------REGISTERING DESKTOP VIEWS ----------------------------------------------------------------------------*/
 
         /*-- Section for HomePage AND Login --*/
@@ -109,7 +113,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<UpSertMonthlyPlannedExpPageM>();
 
         /* -- Section For Statistics --*/
-        builder.Services.AddSingleton<StatisticsPageM>();
+        builder.Services.AddTransient<StatisticsPageM>();
         /*--------------------------------------------------------------------------------------------------------------------------------*/
         return builder.Build();
 	}

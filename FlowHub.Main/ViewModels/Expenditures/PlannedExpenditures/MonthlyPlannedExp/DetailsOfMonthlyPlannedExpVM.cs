@@ -169,10 +169,17 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
     {
         
         PrintFunction  = new();
-        string dialogueResponse =(string) await Shell.Current.ShowPopupAsync(new InputCurrencyForPrintPopUpPage("Share PDF File?", userCurrency));
-        if (dialogueResponse is not "Cancel")
+        string dialogueResponse =(string) await Shell.Current.ShowPopupAsync(new InputCurrencyForPrintPopUpPage("Share PDF File? (Requires Internet)", userCurrency));
+        if (dialogueResponse is not "Cancel" )
         {
-            await PrintFunction.SaveListDetailMonthlyPlanned(TempList, UserCurrency, dialogueResponse, ActiveUser.Username, SingleMonthlyPlannedDetails.MonthYear);
+            if (Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
+            {
+                await PrintFunction.SaveListDetailMonthlyPlanned(TempList, UserCurrency, dialogueResponse, ActiveUser.Username, SingleMonthlyPlannedDetails.MonthYear);
+            }
+            else
+            {
+                await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("No Internet Found ! \nPlease Connect to the Internet"));
+            }
         }
     }
 }

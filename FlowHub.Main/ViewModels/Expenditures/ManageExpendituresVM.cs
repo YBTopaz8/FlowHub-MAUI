@@ -111,7 +111,7 @@ public partial class ManageExpendituresVM : ObservableObject
 
     [RelayCommand]
     //Function to show very single expenditure from DB
-    public void FilterGetAllExp()
+    public async void FilterGetAllExp()
     {
         try
         {
@@ -130,9 +130,13 @@ public partial class ManageExpendituresVM : ObservableObject
                     tot += exp.AmountSpent;
                 }
                 TotalAmount = tot;
-                TotalExpenditures = ExpendituresList.Count;
-                
+                TotalExpenditures = ExpendituresList.Count;                
                 ExpTitle = "All Flow Outs";
+                if (ActiveUser.TotalExpendituresAmount == 0)
+                {
+                    ActiveUser.TotalExpendituresAmount = tot;
+                    await userService.UpdateUserAsync(ActiveUser);
+                }
             }
             else
             {
@@ -248,7 +252,6 @@ public partial class ManageExpendituresVM : ObservableObject
             if (deleteResponse)
             {
                 expendituresService.OfflineExpendituresList.Remove(expenditure);
-                //ExpendituresList.Remove(expenditure);
                 ActiveUser.TotalExpendituresAmount -= expenditure.AmountSpent;
                 ActiveUser.PocketMoney += expenditure.AmountSpent;
                 UserPocketMoney += expenditure.AmountSpent;
