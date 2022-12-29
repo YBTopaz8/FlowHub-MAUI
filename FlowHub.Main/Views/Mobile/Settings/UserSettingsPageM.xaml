@@ -17,6 +17,7 @@
                         <Image Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}" HeightRequest="60"/>
                         <VerticalStackLayout Margin="3" Spacing="10">
                             <Label Text="{Binding UserName}" FontSize="20" FontAttributes="Bold"/>
+                            
                             <HorizontalStackLayout Spacing="5">
                                 <Image Source="{AppThemeBinding Light=email_dsb,Dark=email_dsb}" HeightRequest="20"/>
                                 <Label Text="{Binding UserEmail}"/>
@@ -25,6 +26,7 @@
 
                         </VerticalStackLayout>
                     </HorizontalStackLayout>
+                    
                     <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End">
                         <Border HeightRequest="40" WidthRequest="40"
                                 BackgroundColor="{AppThemeBinding Dark=#201F24}"
@@ -97,6 +99,7 @@
                         </MultiBinding>
                     </Label.Text>
                 </Label>
+                
             </VerticalStackLayout>
         </Border>
 
@@ -134,8 +137,9 @@
                     <Label Text="{Binding UserCurrency}" FontSize="15" FontAttributes="Bold"/>
                 </VerticalStackLayout>
                 <Rectangle />
+            <ImageButton Source="{AppThemeBinding Dark=logout_icon_d.png, Light=logout_icon_l.png}" HorizontalOptions="Center" HeightRequest="80" Command="{Binding LogOutUserCommand}"/>
 
-            </VerticalStackLayout>
+        </VerticalStackLayout>
     </toolkit:DockLayout>
     <!--<VerticalStackLayout Margin="0" Spacing="5">
         <Grid Margin="0,10,0,0">

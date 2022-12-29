@@ -13,14 +13,14 @@
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
 
-        <lvc:PieChart x:Name="pieChart" HeightRequest="350" IsVisible="false"
+        <lvc:PieChart x:Name="pieChart" HeightRequest="350" IsVisible="true"
                       TooltipTextSize="35"
-                      
+                      ChartPointPointerDown="BarChart_ChartPointPointerDown"
                       />
 
         <Rectangle HeightRequest="2" Fill="Darkslateblue"/>
 
-        <lvc:CartesianChart 
+        <lvc:CartesianChart ChartPointPointerDown="BarChart_ChartPointPointerDown"
             x:Name="BarChart" HeightRequest="250"               
             TooltipTextSize="35" 
             LegendPosition="Bottom"

@@ -56,7 +56,6 @@
 
                         <material:RadioButton Text="View All" HeightRequest="20" ClickCommand="{Binding FilterGetAllExpCommand}"/>
                         <material:RadioButton  Text="View For Today" HeightRequest="20" ClickCommand="{Binding FilterGetExpOfTodayCommand}"/>
-                        <material:RadioButton x:Name="FilterCurrentMonth"  Text="View For This Month" HeightRequest="20" ClickCommand="{Binding FilterGetExpListOfCurrentMonthCommand}"/>
                     </material:RadioButtonGroupView>
 
                     <HorizontalStackLayout HorizontalOptions="Center" HeightRequest="45" >

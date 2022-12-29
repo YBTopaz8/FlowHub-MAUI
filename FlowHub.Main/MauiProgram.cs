@@ -17,6 +17,7 @@ using FlowHub.Main.Views.Mobile.Incomes;
 using FlowHub.Main.Views.Mobile.Settings;
 using FlowHub.Main.Views.Mobile.Statistics;
 using InputKit.Handlers;
+using Microsoft.Maui.Controls.Compatibility.Hosting;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using UraniumUI;
 
@@ -77,6 +78,7 @@ public static class MauiProgram
 
         /*-- Section for Statistics --*/
         builder.Services.AddTransient<StatisticsPageVM>();
+        builder.Services.AddSingleton<SingleMonthStatsPageVM>();   
         /*------------------------REGISTERING DESKTOP VIEWS ----------------------------------------------------------------------------*/
 
         /*-- Section for HomePage AND Login --*/
@@ -114,7 +116,8 @@ public static class MauiProgram
 
         /* -- Section For Statistics --*/
         builder.Services.AddTransient<StatisticsPageM>();
-        /*--------------------------------------------------------------------------------------------------------------------------------*/
+        builder.Services.AddSingleton<SingleMonthStatsPageM>();
+/*--------------------------------------------------------------------------------------------------------------------------------*/
         return builder.Build();
 	}
 }

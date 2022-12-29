@@ -3,9 +3,7 @@
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"   
-             xmlns:materialAttach="clr-namespace:UraniumUI.Material.Attachments;assembly=UraniumUI.Material"    
-             xmlns:local="clr-namespace:FlowHub.Main.Views.Mobile.Incomes"
+             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"    
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:viewModel="clr-namespace:FlowHub.Main.ViewModels.Incomes"
              x:DataType="viewModel:ManageIncomesVM"
@@ -66,7 +64,7 @@
                          VerticalOptions="Start" HorizontalOptions="End" Margin="0,0,10,0" Grid.Column="1"/>
         </Grid>
        
-        <CollectionView ItemsSource="{Binding IncomesList}" EmptyView="No Flow Ins Available...">
+        <CollectionView IsVisible="false" ItemsSource="{Binding IncomesList}" EmptyView="No Flow Ins Available..." >
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:IncomeModel">
                     <ScrollView>
@@ -115,7 +113,23 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
+        <VerticalStackLayout RadioButtonGroup.GroupName="Filters" x:Name="Filter_Group">
 
+            <material:RadioButtonGroupView SelectedItemChanged="RadioButtonGroupView_SelectedItemChanged">
+                <material:RadioButton Text="View All" Value="Filter_All" x:Name="Filter_All"  />
+                <material:RadioButton Text="View For Today" Value="Filter_Today" x:Name="Filter_Today" />
+                <material:RadioButton Text="View For Current Month" Value="Filter_Curr_Month" x:Name="Filter_Curr_Month" />
+                <material:RadioButton Text="View For Specific Month" Value="Filter_Spec_Month" x:Name="Filter_Spec_Month"/>
+
+                <HorizontalStackLayout Spacing="10" IsVisible="{Binding IsChecked, Source={x:Reference Filter_Spec_Month}}">
+                    <Picker x:Name="MonthPicker" Title="Select a Month" SelectedIndexChanged="MonthPicker_SelectedIndexChanged"/>
+
+                    <Picker x:Name="YearPicker" Title="Select a Year" SelectedIndexChanged="YearPicker_SelectedIndexChanged" />
+                    <Button x:Name="ValidateSpecificMonthYear" Text="Select" Clicked="ValidateSpecificMonthYear_Clicked"/>
+                </HorizontalStackLayout>
+            </material:RadioButtonGroupView>
+            <Button Text="validate" x:Name="okayFilter" Clicked="okayFilter_Clicked"/>
+        </VerticalStackLayout>
     </toolkit:DockLayout>
 
 

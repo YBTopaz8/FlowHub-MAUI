@@ -149,6 +149,7 @@ public class ExpendituresRepository : IExpendituresRepository
     {
         var filterUserCredentials = Builders<UsersModel>.Filter.Eq("Email", userEmail) &
                                     Builders<UsersModel>.Filter.Eq("Password", userPassword);
+        
 
         if (DBOnline is null)
         {
@@ -179,6 +180,19 @@ public class ExpendituresRepository : IExpendituresRepository
             .Find(filter)
             .ToListAsync()!;
         var tempExpList = await GetAllExpendituresAsync();
+
+        //foreach (var exp in tempExpList)
+        //{
+        //    
+    //        if (exp.IsPurchase == false)
+    //        {
+    //            exp.IsPurchase = true;
+    //        }
+    //        exp.Currency = usersRepo.OnlineUser.UserCurrency;
+    //        await UpdateExpenditureAsync(exp);
+    //    
+        //}
+
         
         if (tempExpList.Count == 0)
         {
@@ -187,12 +201,6 @@ public class ExpendituresRepository : IExpendituresRepository
             {
                 exp.UserId = usersRepo.OfflineUser.UserIDOnline;
 
-                if (exp.Currency is null || exp.Currency == string.Empty || exp.Currency == "" )
-                {
-                    exp.Currency = usersRepo.OnlineUser.UserCurrency;
-                    await UpdateExpenditureOnlineAsync(exp);
-                }
-                
                 await AddExpenditureAsync(exp);
             }
             await GetAllExpendituresAsync();

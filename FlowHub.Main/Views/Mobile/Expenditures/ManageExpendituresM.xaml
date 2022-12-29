@@ -3,7 +3,11 @@
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
+             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"  
+             xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+             xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Expenditures"
              x:DataType="viewModels:ManageExpendituresVM"             
              x:Name="Page"
@@ -46,13 +50,97 @@
         </HorizontalStackLayout>
 
         <Label toolkit:DockLayout.DockPosition="Top" Text="{Binding ExpTitle}" FontSize="20" Margin="5" FontAttributes="Bold" HorizontalOptions="Center"/>
+        
+        <Grid ColumnDefinitions="*,*" toolkit:DockLayout.DockPosition="Top">            
+            <toolkit:Expander Grid.Column="0" HorizontalOptions="Start" x:Name="filterExpander">
+                <toolkit:Expander.Header>
+                    <HorizontalStackLayout>
+                        <Border WidthRequest="40" HorizontalOptions="Start"
+                            BackgroundColor="Transparent"
+                            Stroke="transparent">
+                            <Image Source="{AppThemeBinding Dark=sort_d, Light=sort_l}" HorizontalOptions="Start" Margin="10,0,0,0" HeightRequest="30"/>
+                        </Border>
+                        <ActivityIndicator IsRunning="{Binding IsBusy}" HeightRequest="20" IsVisible="{Binding IsBusy}"/>
+                        <Label Text="{Binding FilterTitle}" FontAttributes="Bold" Margin="0,6,0,0"/>
+                    </HorizontalStackLayout>
 
-        <Grid toolkit:DockLayout.DockPosition="Bottom" HeightRequest="65" Margin="10,10">
+                </toolkit:Expander.Header>
+            
+                <VerticalStackLayout Margin="10,0" Spacing="2" x:Name="filterOptionsContainer">
+                    <Button Text="Date Spent (Asc)" BackgroundColor="Transparent" Command="{Binding SortingCommand}" x:Name="FilterOption"  Clicked="FilterOption_Clicked">
+                    <Button.CommandParameter>
+                        <x:Int32>0</x:Int32>
+                    </Button.CommandParameter>
+                </Button>
+                    <Button Text="Date Spent (Desc)" BackgroundColor="Transparent" Command="{Binding SortingCommand}"  Clicked="FilterOption_Clicked">
+                    <Button.CommandParameter>
+                        <x:Int32>1</x:Int32>
+                    </Button.CommandParameter>
+                </Button>
+                    <Button Text="Amount Spent (Asc)" BackgroundColor="Transparent" Command="{Binding SortingCommand}" Clicked="FilterOption_Clicked" >
+                    <Button.CommandParameter>
+                        <x:Int32>2</x:Int32>
+                    </Button.CommandParameter>
+                </Button>
+                    <Button Text="Amount Spent (Desc)" BackgroundColor="Transparent" Command="{Binding SortingCommand}" Clicked="FilterOption_Clicked" >
+                    <Button.CommandParameter>
+                        <x:Int32>3</x:Int32>
+                    </Button.CommandParameter>
+                </Button> 
+
+                </VerticalStackLayout>
+            </toolkit:Expander>
+            
+            <toolkit:Expander Grid.Column="1" HorizontalOptions="End" 
+                              IsExpanded="{Binding IsExpanderExpanded}"
+                              IsVisible="{Binding ShowDayFilter}">
+                <toolkit:Expander.Header>
+                    <Border Stroke="transparent" BackgroundColor="Transparent">
+                        <HorizontalStackLayout Spacing="5" Margin="15,0" HorizontalOptions="End" >
+                            <Label Text="Clear Day Filter" IsVisible="{Binding ShowClearDayButton}">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer  Command="{Binding FilterExpListOfSpecificMonthCommand}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Image Source="calendar_d" HeightRequest="21" HorizontalOptions="End"/>
+                        </HorizontalStackLayout>
+                    </Border>
+                </toolkit:Expander.Header>
+                <input:FormView SubmitCommand="{Binding FilterGetExpOfSpecificDayMonthCommand}">
+                    
+                    <HorizontalStackLayout Margin="10,0">
+                        <material:TextField Title="Enter Day" WidthRequest="120" HeightRequest="85" AccentColor="White"
+                                                Text="{Binding DayFilterDay}" Keyboard="Numeric">
+
+                            <material:TextField.Validations>
+                                <validation:RequiredValidation/>
+                                <validation:MinValueValidation MinValue="1" Message="The day cannot be less than 1"/>
+                                <validation:MaxValueValidation MaxValue="31" Message="The day cannot be more than 31"/>
+                                <validation:NumericValidation/>
+                            </material:TextField.Validations>
+                        </material:TextField>
+                        <VerticalStackLayout>
+                            <Button Text="Search" VerticalOptions="Start" BackgroundColor="#1A191D" input:FormView.IsSubmitButton="True"/>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+
+                </input:FormView>
+            </toolkit:Expander>
+            
+        </Grid>
+        
+        <Grid toolkit:DockLayout.DockPosition="Bottom" HeightRequest="65" Margin="10,10" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label FontSize="17" Margin="5" Grid.ColumnSpan="2" HorizontalOptions="Center" VerticalOptions="End">
+
+            <ImageButton x:Name="pie_chart" Source="{AppThemeBinding Dark=pie_chart, Light=pie_chart_l}" 
+                         HorizontalOptions="Start" IsVisible="{Binding ShowStatisticBtn}"
+                         Grid.Column="0" VerticalOptions="Start" Command="{Binding GoToSpecificStatsPageCommand}"/>
+
+            <Label FontSize="17" Margin="5" Grid.Column="0" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="End">
                 <Label.Text>
                     <MultiBinding StringFormat="{} {2} Flow Out(s) worth {0:n3} {1}">
                         <Binding Path="TotalAmount"/>
@@ -63,13 +151,14 @@
             </Label>
 
             <ImageButton IsVisible="True" Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding GoToAddExpenditurePageCommand}"
-                         VerticalOptions="Start" HorizontalOptions="End" Margin="0,0,10,0" Grid.Column="1"/>
+                         VerticalOptions="Start" HorizontalOptions="End" Margin="0,0,10,0" Grid.Column="2"/>
 
             <ImageButton IsVisible="False" IsEnabled="False" Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding DropCollectionCommand}"
-                         VerticalOptions="Start" HorizontalOptions="Start" Margin="0,0,10,0" Grid.Column="1"/>
+                         VerticalOptions="Start" HorizontalOptions="Center" Margin="0,0,10,0" Grid.Column="2"/>
         </Grid>
         
-        <CollectionView ItemsSource="{Binding ExpendituresList}">
+        
+        <CollectionView x:Name="ColView" IsVisible="true" ItemsSource="{Binding ExpendituresList}"  HorizontalOptions="Center">
             <CollectionView.EmptyView>
                 <ContentView>
                     <VerticalStackLayout HorizontalOptions="Center"
@@ -127,7 +216,7 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-       
+        
     </toolkit:DockLayout>
 
 </ContentPage>

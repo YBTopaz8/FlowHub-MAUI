@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlowHub.Main.Views.Mobile.Statistics.SingleMonthStatsPageM"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
+             xmlns:viewModel="clr-namespace:FlowHub.Main.ViewModels.Statistics"
+             x:DataType="viewModel:SingleMonthStatsPageVM"
+             Title="{Binding PageTitle}">
+    <VerticalStackLayout>
+        <Label Margin="10,0"
+            Text="Here are the Numbers !"
+            FontSize="23"
+            FontAttributes="Bold"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"  />
+
+        <Grid ColumnDefinitions="*,*" HeightRequest="180" 
+                RowDefinitions="*,*">
+            <Grid.Resources>
+                <ResourceDictionary>
+                    <Style TargetType="Border">
+                        <Setter Property="Stroke" Value="transparent"/>
+                        <Setter Property="Margin" Value="10"/>
+                        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#E7EBF4, Dark=#29343E}"/>
+                    </Style>
+                    <Style TargetType="Label">
+                        <Setter Property="FontSize" Value="23"/>
+                        <Setter Property="TextColor" Value="{AppThemeBinding Light=black, Dark=white}"/>
+                    </Style>
+                    
+                </ResourceDictionary>
+            </Grid.Resources>
+            <Border Grid.Column="0" >
+                <Border.Shadow>
+                    <Shadow Offset="15,40"
+                            Opacity="0.2"/>
+                </Border.Shadow>
+                <VerticalStackLayout HorizontalOptions="Center">
+                    <Label Text="Total Flow Outs" FontSize="20" TextColor="{AppThemeBinding Light=DarkSlateBlue, Dark=#919191}" FontAttributes="Bold"/>
+                    <Label Text="{Binding TotalFlowOuts}" HorizontalTextAlignment="Center" />
+                </VerticalStackLayout> 
+            </Border>
+            <Border Grid.Column="1" >
+                <Border.Shadow>
+                    <Shadow Offset="15,40"
+                            Opacity="0.2"/>
+                </Border.Shadow>
+                <VerticalStackLayout HorizontalOptions="Center">
+                    <Label Text="Total Amount" FontSize="20" TextColor="{AppThemeBinding Light=DarkSlateBlue, Dark=#919191}" FontAttributes="Bold"/>
+                    <Label HorizontalTextAlignment="Center">
+                        <Label.Text>
+                            <MultiBinding StringFormat="{}{0:n3} {1}">
+                                <Binding Path="TotalAmount"/>
+                                <Binding Path="Currency"/>
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                </VerticalStackLayout>
+            </Border>
+            <Border Grid.Column="0"  Grid.Row="1" >
+                <Border.Shadow>
+                    <Shadow Offset="15,40"
+                            Opacity="0.2"/>
+                </Border.Shadow>
+                <VerticalStackLayout HorizontalOptions="Center">
+                    <Label Text="Average This Month" FontSize="20" TextColor="{AppThemeBinding Light=DarkSlateBlue, Dark=#919191}" FontAttributes="Bold"/>
+                    <Label HorizontalTextAlignment="Center">
+                        <Label.Text>
+                            <MultiBinding StringFormat="{}{0:n3} {1}">
+                                <Binding Path="AverageAmount"/>
+                                <Binding Path="Currency"/>
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                </VerticalStackLayout>
+            </Border>
+            <Border Grid.Column="1" Grid.Row="1">
+                <Border.Shadow>
+                    <Shadow Offset="15,40"
+                            Opacity="0.2"/>
+                </Border.Shadow>
+                <VerticalStackLayout HorizontalOptions="Center">
+                    <Label Text="Biggest Flow Out" FontSize="20" TextColor="{AppThemeBinding Light=DarkSlateBlue, Dark=#919191}" FontAttributes="Bold"/>
+                    <Label HorizontalTextAlignment="Center">
+                        <Label.Text>
+                            <MultiBinding StringFormat="{}{0:n3} {1}">
+                                <Binding Path="BiggestAmount"/>
+                                <Binding Path="Currency"/>
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+        
+        <lvc:PieChart x:Name="pieChart" HeightRequest="380" Margin="0,15"
+                    ChartPointPointerDown="pieChart_ChartPointPointerDown"                      
+                    TooltipTextSize="35">
+            <lvc:PieChart.GestureRecognizers>
+                <TapGestureRecognizer NumberOfTapsRequired="2" Tapped="TapGestureRecognizer_Tapped"/>
+                
+            </lvc:PieChart.GestureRecognizers>
+        </lvc:PieChart>
+
+        <Border Stroke="Transparent" Margin="5"
+                BackgroundColor="{AppThemeBinding Light=#E7EBF4, Dark=#29343E}">
+            <VerticalStackLayout Padding="15,10" Spacing="10">
+                <VerticalStackLayout.Resources>
+                    <ResourceDictionary>
+                        <Style TargetType="Label">
+                            <Setter Property="FontSize" Value="19"/>
+                        </Style>
+                    </ResourceDictionary>
+                </VerticalStackLayout.Resources>
+                <Label x:Name="SelectedTitle" Text="Biggest Flow Out Details" HorizontalTextAlignment="Center" FontSize="24" 
+                        TextColor="{AppThemeBinding Light=DarkSlateBlue, Dark={StaticResource Gray400}}" FontAttributes="Bold"/>
+                <Label Text="{Binding SingleExpenditure.DateSpent, StringFormat='Date Spent : {0:dd, MMM yyyy}'}"/>
+                <Label>
+                    <Label.Text>
+                        
+                        <MultiBinding StringFormat="{}Amount Spent : {0:n3} {1}">
+                            <Binding Path="SingleExpenditure.AmountSpent"/>
+                            <Binding Path="SingleExpenditure.Currency"/>
+                        </MultiBinding>
+                    </Label.Text>
+                </Label>
+                <Label Text="{Binding SingleExpenditure.Reason, StringFormat='Reason : {0}'}"
+                       LineBreakMode="WordWrap"/>
+                <HorizontalStackLayout>
+                    <Label Text="{Binding SingleExpenditure.IsPurchase, StringFormat='Flow is Purchase? : {0}'}"/>
+
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Border>
+    </VerticalStackLayout>
+</ContentPage>

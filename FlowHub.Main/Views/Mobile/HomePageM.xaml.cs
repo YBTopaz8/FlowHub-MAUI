@@ -1,4 +1,5 @@
 using FlowHub.Main.ViewModels;
+using System.Diagnostics;
 
 namespace FlowHub.Main.Views.Mobile;
 
@@ -17,4 +18,7 @@ public partial class HomePageM : ContentPage
         base.OnAppearing();
         viewModel.DisplayInfoCommand.Execute(null);
     }
+       
+
+    
 }

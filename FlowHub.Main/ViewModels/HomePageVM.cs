@@ -63,7 +63,6 @@ public partial class HomePageVM : ObservableObject
         else
         {
             ExpendituresDetails = new() { DateSpent = DateTime.Now };
-            Debug.WriteLine("Fresh Start");
         }
 
     }
@@ -75,7 +74,6 @@ public partial class HomePageVM : ObservableObject
         {
             var expList = _expendituresService.OfflineExpendituresList;
             TotalExp = expList.Count;
-            Debug.WriteLine(TotalExp);
             
            
         }
@@ -89,7 +87,6 @@ public partial class HomePageVM : ObservableObject
     {
         if (ActiveUser is null)
         {
-            Debug.WriteLine("Can't go");
             await Shell.Current.DisplayAlert("Wait", "Cannot go", "Ok");
         }
         else

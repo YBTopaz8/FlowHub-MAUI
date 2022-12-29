@@ -1,7 +1,7 @@
 using FlowHub.Main.ViewModels.Statistics;
-using LiveChartsCore;
-using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.Painting;
+using LiveChartsCore.Kernel.Sketches;
+using LiveChartsCore.Kernel;
+using System.Diagnostics;
 
 namespace FlowHub.Main.Views.Mobile.Statistics;
 
@@ -23,5 +23,17 @@ public partial class StatisticsPageM
 		BarChart.Series = viewModel.LineSeries;
     }
 
-   
+    private void BarChart_ChartPointPointerDown(IChartView chart, ChartPoint point)
+    {
+		var indexx = point.SecondaryValue;
+		int ind = Convert.ToInt32(indexx);
+		Debug.WriteLine(point.PrimaryValue);
+		Debug.WriteLine(point.SecondaryValue);
+		var test = viewModel.listOfExpDec[ind];
+
+		Debug.WriteLine($"{test.Id} \n {test.Reason}");
+
+    }
+
+    
 }

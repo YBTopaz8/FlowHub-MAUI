@@ -13,6 +13,10 @@ public class ManageExpendituresNavs
     {
         await Shell.Current.GoToAsync(nameof(ManageExpendituresM), true, navParams);
     }
+    public async void FromManageExpToSingleMonthStats(Dictionary<string, object> navParams)
+    {
+        //await Shell.Current.GoToAsync(nameof(SingleMonthStatsPageM), true, navParams);
+    }
 
     public async void ReturnOnce()
     {

@@ -287,25 +287,25 @@ public partial class ManageIncomesVM : ObservableObject
     }
 
     [RelayCommand]
-    public async void ShowFilterPopUpPage()
+    public  void ShowFilterPopUpPage()
     {
-        var filterOption = (string)await Shell.Current.ShowPopupAsync(new FilterOptionsPopUp());
-        if (filterOption.Equals("Filter_All"))
-        {
-            FilterGetAllIncomes();
-        }
-        else if (filterOption.Equals("Filter_Today"))
-        {
-            FilterGetIncOfToday();
-        }
-        else if (filterOption.Equals("Filter_CurrMonth"))
-        {
-            FilterGetIncOfCurrentMonth();
-        }
-        else
-        {
-            //nothing was chosen
-        }
+        //var filterOption = (string)await Shell.Current.ShowPopupAsync(new FilterOptionsPopUp("test"));
+        //if (filterOption.Equals("Filter_All"))
+        //{
+        //    FilterGetAllIncomes();
+        //}
+        //else if (filterOption.Equals("Filter_Today"))
+        //{
+        //    FilterGetIncOfToday();
+        //}
+        //else if (filterOption.Equals("Filter_CurrMonth"))
+        //{
+        //    FilterGetIncOfCurrentMonth();
+        //}
+        //else
+        //{
+        //    //nothing was chosen
+        //}
 
     }
 }
