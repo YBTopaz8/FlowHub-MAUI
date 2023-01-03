@@ -1,5 +1,4 @@
 using FlowHub.Main.ViewModels.Expenditures;
-using System.Diagnostics;
 
 namespace FlowHub.Main.Views.Mobile.Expenditures;
 
@@ -42,5 +41,9 @@ public partial class UpSertExpenditurePageM : ContentPage
     {
         viewModel.UpSertExpenditureCommand.Execute(null);
     }
-    
+
+    private void TextField_TextChanged()
+    {
+
+    }
 }

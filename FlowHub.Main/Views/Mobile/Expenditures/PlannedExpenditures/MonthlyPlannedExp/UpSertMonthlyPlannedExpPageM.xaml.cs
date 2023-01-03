@@ -1,4 +1,5 @@
 using FlowHub.Main.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
+using InputKit.Shared.Abstraction;
 
 namespace FlowHub.Main.Views.Mobile.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
 
@@ -10,21 +11,23 @@ public partial class UpSertMonthlyPlannedExpPageM : ContentPage
 		InitializeComponent();
 		viewModel = vm;
 		this.BindingContext = vm;
-		Comments.Text = "";
+	//	Comments.Text = "";
 	}
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
 		viewModel.PageLoadedCommand.Execute(null);
-		CommentCheck.IsChecked = viewModel.HasComment;
+	//	CommentCheck.IsChecked = viewModel.HasComment;
     }
 
     private void CommentCheck_CheckChanged(object sender, EventArgs e)
     {
-		if (!CommentCheck.IsChecked)
-		{
-			viewModel.SingleExpenditureDetails.Comment = "None";
-		}
+		//if (!CommentCheck.IsChecked)
+		//{
+		//	viewModel.SingleExpenditureDetails.Comment = "None";
+		//}
     }
+
+   
 }

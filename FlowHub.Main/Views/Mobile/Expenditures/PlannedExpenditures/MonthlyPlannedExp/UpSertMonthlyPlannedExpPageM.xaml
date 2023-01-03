@@ -10,7 +10,7 @@
              x:DataType="viewModel:UpSertMonthlyPlannedExpVM"
              Title="{Binding PageTitle}">
     <VerticalStackLayout Margin="15">
-        <input:FormView Spacing="25" SubmitCommand="{Binding UpSertMonthlyPlannedCommand}">
+        <input:FormView Spacing="25" x:Name="UpSertForm" SubmitCommand="{Binding UpSertMonthlyPlannedCommand}">
             
             <material:TextField Title="Description" Text="{Binding SingleExpenditureDetails.Reason}">
                 <validation:RequiredValidation/>
@@ -18,6 +18,8 @@
 
             <material:TextField Title="Amount" Text="{Binding SingleExpenditureDetails.AmountSpent}" Keyboard="Numeric">
                 <validation:RequiredValidation/>
+                <validation:DigitsOnlyValidation/>
+                <validation:MinValueValidation MinValue="1"/>
             </material:TextField>
 
             <material:CheckBox Text="Include in Report" Margin="5,0" IsChecked="{Binding SingleExpenditureDetails.IncludeInReport}"/>
@@ -29,11 +31,10 @@
             <material:TextField Title="Comments" x:Name="Comments" Text="{Binding SingleExpenditureDetails.Comment}" 
                             IsVisible="{Binding IsChecked, Source={x:Reference CommentCheck}}" />
 
-            <HorizontalStackLayout HorizontalOptions="Center" Spacing="15">
-                <ImageButton input:FormView.IsSubmitButton="True"
-                                Source="{AppThemeBinding Dark=save_icon_d.png, Light=save_icon_l.png}"/>
-                <ImageButton IsVisible="false" Source="{AppThemeBinding Dark=cancel_icon_d.png, Light=cancel_icon_l.png}"/>
-            </HorizontalStackLayout>
+            <Button Text="save" input:FormView.IsSubmitButton="True"/>
+            <!--<ImageButton input:FormView.IsSubmitButton="True" BackgroundColor="Red"
+                            Source="{AppThemeBinding Dark=save_icon_d.png, Light=save_icon_l.png}"/>-->
+               
         </input:FormView>
            
     </VerticalStackLayout>

@@ -94,6 +94,7 @@ public partial class UpSertExpenditureVM : ObservableObject
                 IToast toast = Toast.Make(ToastNotifMessage, ToastDuration.Short, 14);
                 await toast.Show(cancellationTokenSource.Token);
 
+                await _expenditureService.GetAllExpendituresAsync();
                 NavFunctions.ReturnOnce();
             }
         }
@@ -123,7 +124,7 @@ public partial class UpSertExpenditureVM : ObservableObject
         if (finalPocketMoney < 0)
         {
             await Shell.Current.DisplayAlert("Failed Operation", "Flow out amount is greater than your current balance", "Okay");
-            Debug.WriteLine("Failed Operation", "Okay");
+            
         }
         else
         {
@@ -133,6 +134,7 @@ public partial class UpSertExpenditureVM : ObservableObject
             SingleExpenditureDetails.AmountSpent = totalExpCost;
             if (await _expenditureService.UpdateExpenditureAsync(SingleExpenditureDetails))
             {
+                await _expenditureService.GetAllExpendituresAsync();
                 ActiveUser.TotalExpendituresAmount = FinalTotalExp;
                 ActiveUser.PocketMoney = finalPocketMoney;
                 ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;

@@ -24,20 +24,39 @@ public partial class StatisticsPageVM : ObservableObject
     public ExpendituresModel[] listOfExpDec { get; set; }
 
     public List<ISeries> Series { get; set; }
-	public SolidColorPaint LegendTextPaint { get; set; } = new SolidColorPaint
+    public List<ISeries> Series2 { get; set; }
+
+    public Axis[] YAxes { get; set; } =
+    {
+        new Axis { MinLimit = 0, MaxLimit = 50 }
+    };
+	
+
+    public SolidColorPaint LegendTextPaint { get; set; } = new SolidColorPaint
 	{
 		Color = new SKColor(240,240,240)
 	};
 	//public SolidColorPaint LegendBGPaint { get; set; } = new SolidColorPaint(new SkiaSharp.SKColor(240, 240, 240));
 
-
 	public ObservableCollection<ISeries> LineSeries { get; set; }
-
-
 
 	[RelayCommand]
 	public void PageLoaded()
 	{
+		Series2 = new ()
+		{
+			new ColumnSeries<double>
+			{
+				IsHoverable = false, // disables the series from the tooltips 
+				Values = new double[] { 44, 20, 49, 10, 12, 38, 7 },
+				Stroke = null,
+				Fill = new SolidColorPaint(new SKColor(30, 30, 30, 30)),
+
+				IgnoresBarPosition = false
+			}
+		};
+
+
 		listOfExp = new();
 
 		listOfExp = expendituresService.OfflineExpendituresList;

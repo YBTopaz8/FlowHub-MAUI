@@ -7,6 +7,6 @@ public class HomePageNavs
 {       
     public async void FromHomePageToUpsertExpenditure(Dictionary<string, object> navParams)
     {
-        await AppShell.Current.GoToAsync(nameof(UpSertExpenditurePageM), navParams);
+        await Shell.Current.GoToAsync(nameof(UpSertExpenditurePageM), navParams);
     }
 }

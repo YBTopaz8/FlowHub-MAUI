@@ -1,6 +1,7 @@
 ﻿using FlowHub.DataAccess.IRepositories;
 using FlowHub.Models;
 using LiteDB.Async;
+using MongoDB.Driver;
 using System.Diagnostics;
 
 namespace FlowHub.DataAccess.Repositories;
@@ -9,50 +10,35 @@ public class UserRepository : IUsersRepository
 {
 
     LiteDatabaseAsync db;
-    
+    IMongoDatabase DBOnline;
 
-    ILiteCollectionAsync<UsersModel> AllUsers;
+    ILiteCollectionAsync<UsersModel> OfflineUserCollection;
+    IMongoCollection<UsersModel> OnlineUserCollection;
 
     private readonly IDataAccessRepo dataAccessRepo;
+    private readonly IOnlineCredentialsRepository onlineDataAccessRepo;
+
 
     private const string userDataCollectionName = "Users";
 
     public UsersModel OfflineUser { get; set; }
     public UsersModel OnlineUser { get; set; }
 
-    public UserRepository(IDataAccessRepo dataAccess)
+    public UserRepository(IDataAccessRepo dataAccess, IOnlineCredentialsRepository onlineRepository)
     {
-        dataAccessRepo = dataAccess;   
-
+        dataAccessRepo = dataAccess;
+        onlineDataAccessRepo = onlineRepository;
     }
     void OpenDB()
     {
         db = dataAccessRepo.GetDb();
-        AllUsers = db.GetCollection<UsersModel>(userDataCollectionName);       
+        OfflineUserCollection = db.GetCollection<UsersModel>(userDataCollectionName);
     }
 
-    public async Task<UsersModel> GetUserAsync()
-    {
-        try
-        {
-            OpenDB();
-            var User = await AllUsers.Query().FirstOrDefaultAsync();
-            db.Dispose();
-
-            return User;
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex.Message);
-
-            return null;
-        }
-       
-    }
     public async Task<bool> CheckIfAnyUserExists()
     {
         OpenDB();
-        int numberofUsers = await AllUsers.Query().CountAsync();
+        int numberofUsers = await OfflineUserCollection.Query().CountAsync();
         db.Dispose();
         if (numberofUsers < 1)
         {
@@ -66,7 +52,7 @@ public class UserRepository : IUsersRepository
     public async Task<UsersModel> GetUserAsync(string userEmail, string userPassword)
     {
         OpenDB();
-        OfflineUser = await AllUsers.FindOneAsync(x => x.Email == userEmail && x.Password == userPassword);
+        OfflineUser = await OfflineUserCollection.FindOneAsync(x => x.Email == userEmail && x.Password == userPassword);
         db.Dispose();
         if (OfflineUser is null)
         {
@@ -76,11 +62,11 @@ public class UserRepository : IUsersRepository
         {
             return OfflineUser;
         }
-    } 
+    }
     public async Task<UsersModel> GetUserAsync(string UserID)
     {
         OpenDB();
-        OfflineUser = await AllUsers.FindOneAsync(x => x.Id == UserID);
+        OfflineUser = await OfflineUserCollection.FindOneAsync(x => x.Id == UserID);
         db.Dispose();
         if (OfflineUser is null)
         {
@@ -93,22 +79,39 @@ public class UserRepository : IUsersRepository
     }
 
     /*--------- SECTION FOR OFFLINE CRUD OPERATIONS----------*/
+    public async Task<UsersModel> GetUserOnlineAsync(UsersModel user)
+    {
+        FilterDefinition<UsersModel> filterUserCredentials = Builders<UsersModel>.Filter.Eq("Email", user.Email.Trim()) &
+                                    Builders<UsersModel>.Filter.Eq("Password", user.Password);
+
+        if (DBOnline is null)
+        {
+            onlineDataAccessRepo.GetOnlineConnection();
+            DBOnline = onlineDataAccessRepo.OnlineMongoDatabase;
+        }
+        OnlineUser ??= await DBOnline.GetCollection<UsersModel>("Users").Find(filterUserCredentials).FirstOrDefaultAsync();
+        if (OnlineUser is null)
+        {
+            return null;
+        }
+        OfflineUser.UserIDOnline = OnlineUser.Id;
+        _ = await UpdateUserAsync(OfflineUser);
+        return OfflineUser;
+    }
     public async Task<bool> AddUserAsync(UsersModel user)
     {
         if (await GetUserAsync(user.Email, user.Password) is null)
         {
             OpenDB();
-            if (await AllUsers.InsertAsync(user) is not null)
+            if (await OfflineUserCollection.InsertAsync(user) is not null)
             {
-                await AllUsers.EnsureIndexAsync(x => x.Id);
+                _ = await OfflineUserCollection.EnsureIndexAsync(x => x.Id);
                 db.Dispose();
                 OfflineUser = user;
                 return true;
             }
             else
             {
-                Debug.WriteLine("Failed to add User");
-
                 db.Dispose();
                 throw new Exception("Failed to add User");
             }
@@ -117,16 +120,16 @@ public class UserRepository : IUsersRepository
         {
             return false; //user already exists
         }
-        
+
     }
-    
+
     public async Task<bool> UpdateUserAsync(UsersModel user)
     {
         try
         {
             OpenDB();
-            if (await AllUsers.UpdateAsync(user))
-            {   
+            if (await OfflineUserCollection.UpdateAsync(user))
+            {
                 db?.Dispose();
                 return true;
             }
@@ -138,20 +141,20 @@ public class UserRepository : IUsersRepository
                 return false;
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Debug.WriteLine($"Update user Exception Message: {ex.Message}");
             return true;
         }
-        
+
     }
 
     public async Task<bool> DeleteUserAsync(UsersModel user)
     {
-        try 
-        { 
+        try
+        {
             OpenDB();
-            if(await AllUsers.DeleteAsync(user.Id))
+            if (await OfflineUserCollection.DeleteAsync(user.Id))
             {
                 db.Dispose();
                 return true;
@@ -162,6 +165,7 @@ public class UserRepository : IUsersRepository
                 db.Dispose();
                 throw new Exception("Failed to Delete User");
             }
+
         }
         catch (Exception ex)
         {
@@ -172,12 +176,91 @@ public class UserRepository : IUsersRepository
 
 
     /*--------- SECTION FOR ONLINE CRUD OPERATIONS----------*/
+    public async Task<bool> AddUserOnlineAsync(UsersModel user)
+    {
+        FilterDefinition<UsersModel> filterUserCredentials = Builders<UsersModel>.Filter.Eq("Email", user.Email) &
+                                    Builders<UsersModel>.Filter.Eq("Password", user.Password);
+
+        if (DBOnline is null)
+        {
+            onlineDataAccessRepo.GetOnlineConnection();
+            DBOnline = onlineDataAccessRepo.OnlineMongoDatabase;
+        }
+
+        OnlineUserCollection = DBOnline.GetCollection<UsersModel>(userDataCollectionName);
+
+        var OnlineUser = await OnlineUserCollection.Find(filterUserCredentials).FirstOrDefaultAsync();
+        if (OnlineUser != null)
+        {
+            // throw new Exception("This User Already Exists Online");
+
+            return false;
+        }
+        else
+        {
+            try
+            {
+                
+                await OnlineUserCollection.InsertOneAsync(user);
+                OfflineUser.UserIDOnline = user.Id;
+                _ = await UpdateUserAsync(OfflineUser);
+                //OnlineUser = user;
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Failed to add user online : {ex.Message}");
+                return false;
+            }
+        }
+    }
+
+    public async Task UpdateUserOnlineEditAsync(UsersModel user)
+    {
+
+        if (DBOnline is null)
+        {
+            onlineDataAccessRepo.GetOnlineConnection();
+            DBOnline = onlineDataAccessRepo.OnlineMongoDatabase;
+        }
+        OnlineUserCollection ??= DBOnline.GetCollection<UsersModel>(userDataCollectionName);
+        UsersModel userToUpdate= user;
+        userToUpdate.Id = user.UserIDOnline;
+        var s = await OnlineUserCollection.ReplaceOneAsync(u => u.Id == userToUpdate.Id, userToUpdate);
+    }
+
+    public async Task<bool> UpdateUserOnlineGetSetLatestValues(UsersModel user)
+    {
+        FilterDefinition<UsersModel> filterUserCredentials = Builders<UsersModel>.Filter.Eq("Email", user.Email) &
+                                    Builders<UsersModel>.Filter.Eq("Password", user.Password);
+
+        if (DBOnline is null)
+        {
+            onlineDataAccessRepo.GetOnlineConnection();
+            DBOnline = onlineDataAccessRepo.OnlineMongoDatabase;
+        }
+        OnlineUserCollection ??= DBOnline.GetCollection<UsersModel>(userDataCollectionName);
+
+        var OnlineUser = await OnlineUserCollection.Find(filterUserCredentials).FirstOrDefaultAsync();
+        if (OnlineUser.DateTimeOfPocketMoneyUpdate > OfflineUser.DateTimeOfPocketMoneyUpdate)
+        {
+            _ = await UpdateUserAsync(OnlineUser);
+            return true;
+        }
+        else
+        {
+            await UpdateUserOnlineEditAsync(OfflineUser);
+            return true;
+        }
+    }
 
     public async Task DropCollection()
     {
         OpenDB();
 
-        await db.DropCollectionAsync(userDataCollectionName);
+        _ = await db.DropCollectionAsync(userDataCollectionName);
         db.Dispose();
     }
+
 }

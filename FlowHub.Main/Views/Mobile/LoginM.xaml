@@ -48,7 +48,7 @@
                             </Style>
 
                             <Style TargetType="Border">
-                                <Setter Property="WidthRequest" Value="200"/>
+                                <Setter Property="WidthRequest" Value="180"/>
                                 <Setter Property="HeightRequest" Value="40"/>
                                 <Setter Property="Stroke" Value="Transparent"/>
                             </Style>
@@ -96,11 +96,11 @@
                 <!--Section for Login begins below-->
                 <VerticalStackLayout x:Name="LoginForm" Margin="25">
 
-                    <input:FormView SubmitCommand="{Binding GoToHomePageFromLoginCommand}"   Margin="0,20" Spacing="25">
-                        <Label Text="User does not exist!" TextColor="Red" FontAttributes="Bold" FontSize="19" IsVisible="{Binding ErrorMessage}" />
+                    <input:FormView SubmitCommand="{Binding GoToHomePageFromLoginCommand}" Spacing="25">
+                        <Label Text="User does not exist!" x:Name="NoUserFoundText" HorizontalOptions="Center" TextColor="Red" FontAttributes="Bold" FontSize="23" IsVisible="{Binding ErrorMessage}" />
                         <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
 
-                        <material:TextField Title="Email" Text="{Binding CurrentUser.Email}" Icon="{AppThemeBinding Dark=email_icon_d.png, Light=email_icon_l.png}">
+                        <material:TextField Title="Email" Text="{Binding CurrentUser.Email}" AllowClear="True" Icon="{AppThemeBinding Dark=email_icon_d.png, Light=email_icon_l.png}">
                             <material:TextField.Validations>
                                 <validation:RequiredValidation/>
                             </material:TextField.Validations>
@@ -114,6 +114,10 @@
                         <Button Text="Login" BackgroundColor="DarkSlateBlue" FontAttributes="Bold" 
                             FontSize="20"
                             TextColor="White" x:Name="LoginButton" input:FormView.IsSubmitButton="True"/>
+                        
+                        <Button Text="Login Online" BackgroundColor="BlueViolet" FontAttributes="Bold" 
+                            FontSize="20" x:Name="LoginOnlineBtn" Clicked="LoginOnlineBtn_Clicked"
+                            TextColor="White" input:FormView.IsSubmitButton="True"/>
 
                     </input:FormView>
 
@@ -137,9 +141,9 @@
                             <validation:RequiredValidation/>
                         </material:TextField>
 
-                            <material:TextField Title="Pocket Allowance" Text="{Binding PocketMoney}" Icon="{AppThemeBinding Dark=pocket_money_icon_d.png, Light=pocket_money_icon_l.png}" Keyboard="Numeric">
+                            <material:TextField Title="Pocket Allowance*" Text="{Binding PocketMoney}" Icon="{AppThemeBinding Dark=pocket_money_icon_d.png, Light=pocket_money_icon_l.png}" Keyboard="Numeric">
                                 <material:TextField.Validations>
-                                    <validation:MinValueValidation MinValue="1"/>
+                                    <validation:MinValueValidation MinValue="0" Message="Pocket Allowance can not be less than 0"/>
                                     <validation:RequiredValidation/>
                                 </material:TextField.Validations>
                             </material:TextField>
@@ -151,8 +155,14 @@
                                 </Grid>
                             
                             </Border>
-                        <Label Text="Input Field is required!" TextColor="Red" IsVisible="{Binding ErrorMessagePicker}"/>
+                        <Label Text="Country is required!" TextColor="Red" IsVisible="{Binding ErrorMessagePicker}"/>
 
+                        <Grid ColumnDefinitions="340,*" >
+                            <material:CheckBox Grid.Column="0" TextFontSize="16"
+                                IsChecked="{Binding RegisterAccountOnline}" Text="Register Account Online (Requires Internet)"/>
+                            <ImageButton Grid.Column="1"
+                                Source="information" HeightRequest="25" HorizontalOptions="End"/>
+                        </Grid>
                         <Button Text="Register Account" BackgroundColor="DarkSlateBlue" FontAttributes="Bold" 
                                 FontSize="20"
                                 TextColor="White"

@@ -66,6 +66,7 @@ public partial class UserSettingsVM : ObservableObject
             File.Delete(LoginDetectFile);
 
             //await userService.DropCollection();
+            
             NavFunctions.GoToLoginInPage();
         }
     }

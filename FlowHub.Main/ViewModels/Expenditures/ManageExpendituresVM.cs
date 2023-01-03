@@ -16,7 +16,7 @@ using System.Diagnostics;
 namespace FlowHub.Main.ViewModels.Expenditures;
 public partial class ManageExpendituresVM : ObservableObject
 {
-    private readonly IExpendituresRepository expendituresService;
+    public readonly IExpendituresRepository expendituresService;
     private readonly IUsersRepository userService;
 
     private readonly ManageExpendituresNavs NavFunction = new();
@@ -506,9 +506,7 @@ public partial class ManageExpendituresVM : ObservableObject
         CancellationTokenSource cancellationTokenSource = new();
         ToastDuration duration = ToastDuration.Short;
         double fontSize = 14;
-        const string text = "Expenditure Deleted";
-        var toast = Toast.Make(text, duration, fontSize);
-
+        string text;
         bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You want to delete?")))!;
         if (response)
         {
@@ -516,15 +514,23 @@ public partial class ManageExpendituresVM : ObservableObject
                     
             if (deleteResponse)
             {
+                 text = "Expenditure Deleted";
                 expendituresService.OfflineExpendituresList.Remove(expenditure);
+                ExpendituresList.Remove(expenditure);
+
                 ActiveUser.TotalExpendituresAmount -= expenditure.AmountSpent;
                 ActiveUser.PocketMoney += expenditure.AmountSpent;
                 UserPocketMoney += expenditure.AmountSpent;
-                await userService.UpdateUserAsync(ActiveUser);
-
-                await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
-                Sorting(GlobalSortNamePosition);
+                await userService.UpdateUserAsync(ActiveUser);              
+                
             }
+            else
+            {
+                 text = "Expenditure Not Deleted";
+            }
+            var toast = Toast.Make(text, duration, fontSize);
+            await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
+            Sorting(GlobalSortNamePosition);
         }
     }
 

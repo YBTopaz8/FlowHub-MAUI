@@ -37,7 +37,7 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:PlannedExpendituresModel">
                     <ScrollView >
-                        <VerticalStackLayout HorizontalOptions="Center"> <!--This will help keep the whole view centered-->
+                        <VerticalStackLayout HorizontalOptions="Center" > <!--This will help keep the whole view centered-->
                             <SwipeView Margin="20,0">
                                 <SwipeView.LeftItems>
                                     <SwipeItem Command="{Binding Source={x:Reference page},
@@ -54,8 +54,15 @@
                                                BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
                                 </SwipeView.RightItems>
                                 <VerticalStackLayout HorizontalOptions="Center" Margin="0,0,0,2" >
-                                    <Border Padding="10,5" MinimumWidthRequest="320" MaximumWidthRequest="400">
-                                        <VerticalStackLayout>
+                                    <Border Padding="10,5" MinimumWidthRequest="350" MaximumWidthRequest="400">
+                                        <VerticalStackLayout Spacing="5">
+                                            <VerticalStackLayout.Resources>
+                                                <ResourceDictionary>
+                                                    <Style TargetType="Label">
+                                                        <Setter Property="FontSize" Value="16.5"/>
+                                                    </Style>
+                                                </ResourceDictionary>
+                                            </VerticalStackLayout.Resources>
                                             <Label Text="{Binding MonthYear, StringFormat='Month and Year : {0}'}"/>
                                             <Label>
                                                 <Label.Text>

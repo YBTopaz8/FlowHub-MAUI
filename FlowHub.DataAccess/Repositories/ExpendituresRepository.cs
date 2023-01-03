@@ -181,19 +181,24 @@ public class ExpendituresRepository : IExpendituresRepository
             .ToListAsync()!;
         var tempExpList = await GetAllExpendituresAsync();
 
-        //foreach (var exp in tempExpList)
-        //{
-        //    
-    //        if (exp.IsPurchase == false)
-    //        {
-    //            exp.IsPurchase = true;
-    //        }
-    //        exp.Currency = usersRepo.OnlineUser.UserCurrency;
-    //        await UpdateExpenditureAsync(exp);
-    //    
-        //}
 
-        
+        if (File.Exists(pathToDeletedIDs))
+        {
+            var listOfDeletedIDs = File.ReadLines(pathToDeletedIDs).ToList();
+            foreach (var id in listOfDeletedIDs)
+            {
+                await DeleteExpenditureOnlineAsync(id);
+                OnlineExpendituresList.RemoveAll(x => x.Id == id);
+
+                //var expToBeDeleted = OnlineExpendituresList.SingleOrDefault(x => x.Id == id);
+                //OnlineExpendituresList.Remove(expToBeDeleted);
+            }
+#pragma warning disable CS0642 // Possible mistaken empty statement
+            await using (File.Create(pathToDeletedIDs))
+                ;
+#pragma warning restore CS0642 // Possible mistaken empty statement
+        }
+
         if (tempExpList.Count == 0)
         {
             //tempExpList = OnlineExpendituresList;
@@ -210,19 +215,6 @@ public class ExpendituresRepository : IExpendituresRepository
         }
         else
         {
-            if (File.Exists(pathToDeletedIDs))
-            {
-                var listOfDeletedIDs = File.ReadLines(pathToDeletedIDs).ToList();
-                foreach (var id in listOfDeletedIDs)
-                {
-                    await DeleteExpenditureOnlineAsync(id);
-                    OnlineExpendituresList.RemoveAll(x => x.Id == id);
-                    
-                    //var expToBeDeleted = OnlineExpendituresList.SingleOrDefault(x => x.Id == id);
-                    //OnlineExpendituresList.Remove(expToBeDeleted);
-                }
-                await using (File.Create(pathToDeletedIDs));
-            }
             
             foreach (var expOffline in tempExpList)
             {
@@ -266,6 +258,8 @@ public class ExpendituresRepository : IExpendituresRepository
             }
             
             await GetAllExpendituresAsync();
+            await usersRepo.UpdateUserOnlineGetSetLatestValues(usersRepo.OfflineUser);
+
             return true;
         }
         
@@ -295,6 +289,7 @@ public class ExpendituresRepository : IExpendituresRepository
     private async Task DeleteExpenditureOnlineAsync(string id)
     { 
         await AllOnlineExpenditures.DeleteOneAsync(x => x.Id == id);
+        
     }
 
 

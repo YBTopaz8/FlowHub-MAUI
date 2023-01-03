@@ -5,7 +5,7 @@
              xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
              x:Class="FlowHub.Main.PopUpPages.InputCurrencyForPrintPopUpPage"
              CanBeDismissedByTappingOutsideOfPopup="false"
-             Size="300,186"
+             Size="300,200"
              Color="Transparent">
     <Border
         Stroke="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=White}"

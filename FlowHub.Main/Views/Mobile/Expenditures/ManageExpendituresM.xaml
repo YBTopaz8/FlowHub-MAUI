@@ -156,9 +156,10 @@
             <ImageButton IsVisible="False" IsEnabled="False" Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding DropCollectionCommand}"
                          VerticalOptions="Start" HorizontalOptions="Center" Margin="0,0,10,0" Grid.Column="2"/>
         </Grid>
-        
-        
-        <CollectionView x:Name="ColView" IsVisible="true" ItemsSource="{Binding ExpendituresList}"  HorizontalOptions="Center">
+
+        <CollectionView x:Name="ColView" IsVisible="true" 
+                                                
+                        ItemsSource="{Binding ExpendituresList}"  HorizontalOptions="Center">
             <CollectionView.EmptyView>
                 <ContentView>
                     <VerticalStackLayout HorizontalOptions="Center"

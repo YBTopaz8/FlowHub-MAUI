@@ -20,14 +20,20 @@
 
         <Rectangle HeightRequest="2" Fill="Darkslateblue"/>
 
-        <lvc:CartesianChart ChartPointPointerDown="BarChart_ChartPointPointerDown"
-            x:Name="BarChart" HeightRequest="250"               
+        <lvc:CartesianChart ChartPointPointerDown="BarChart_ChartPointPointerDown" IsVisible="false"
+            x:Name="BarChart" HeightRequest="250"              
+                            ZoomMode="Both"
             TooltipTextSize="35" 
             LegendPosition="Bottom"
             LegendTextPaint="{Binding LegendTextPaint}"
             LegendTextSize="35">    
 
         </lvc:CartesianChart>
+
+        <lvc:CartesianChart  HeightRequest="200" x:Name="OtherBar"
+            Series="{Binding Series2}"
+            YAxes="{Binding YAxes}"
+            ZoomMode="Both"/>
 
         <Button Text="November" Command="{Binding GetNovCommand}"/>
     </VerticalStackLayout>

@@ -48,7 +48,7 @@
                 <DataTemplate x:DataType="models:ExpendituresModel">
                     <ScrollView>
                         <VerticalStackLayout HorizontalOptions="Center">
-                            <SwipeView Margin="20,0">
+                            <SwipeView Margin="10,0">
                                 <SwipeView.LeftItems>
                                     <SwipeItem IconImageSource="{AppThemeBinding Dark= edit_d.png, Light= edit_l.png}" 
                                                 BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}" 
@@ -60,8 +60,16 @@
                                                 Clicked="RightSwipeDelete_Clicked"/>
                                 </SwipeView.RightItems>
 
-                                <Border Padding="10" HeightRequest="105" HorizontalOptions="Center" MinimumWidthRequest="340" MaximumWidthRequest="400">
+                                <Border 
+                                    Padding="10" HeightRequest="117" HorizontalOptions="Center" MinimumWidthRequest="350" MaximumWidthRequest="400">
                                     <VerticalStackLayout>
+                                        <VerticalStackLayout.Resources>
+                                            <ResourceDictionary>
+                                                <Style TargetType="Label">
+                                                    <Setter Property="FontSize" Value="16.5"/>
+                                                </Style>
+                                            </ResourceDictionary>
+                                        </VerticalStackLayout.Resources>
                                         <Label Text="{Binding Reason, StringFormat='Description : {0}'}"/>
                                         <Label>
                                             <Label.Text>

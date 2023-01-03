@@ -1,9 +1,11 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FlowHub.DataAccess.IRepositories;
 using FlowHub.Main.Platforms.NavigationsMethods;
+using FlowHub.Main.PopUpPages;
 using FlowHub.Models;
 using System.Diagnostics;
 
@@ -55,6 +57,8 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
     [RelayCommand]
     public void PageLoaded()
     {
+        SingleExpenditureDetails.AmountSpent = SingleExpenditureDetails.AmountSpent == 0 ? 1 : SingleExpenditureDetails.AmountSpent;
+
         InitialSingleMonthlyPlannedExp = SingleMonthlyPlanned.TotalAmount;
         InitialExpenditureAmount = SingleExpenditureDetails.AmountSpent;
         if(SingleExpenditureDetails.Comment is not null)
@@ -71,7 +75,7 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
     }
 
     [RelayCommand]
-    public void UpSertMonthlyPlanned()
+    public async void UpSertMonthlyPlanned()
     {
         if (SingleExpenditureDetails.Comment is null)
         {
@@ -91,27 +95,45 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
 
         if (SingleMonthlyPlanned.Id is null)
         {
-            AddMonthlyPlannedExp(duration, fontSize, cancellationTokenSource);
-            NavFunctions.ReturnToDetailsMonthlyPlanned(navParam);
+            if (await AddMonthlyPlannedExp(duration, fontSize, cancellationTokenSource))
+            {
+                NavFunctions.ReturnToDetailsMonthlyPlanned(navParam);
+            }
+            else
+            {
+                await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Failed to Save Flow Out"));
+            }
+
         }
         else
         {
-            
             if (SingleExpenditureDetails.Id is null)
             {
-                AddExpToExistingMonthlyPlanned(duration, fontSize, cancellationTokenSource);
-                NavFunctions.ReturnOnce(navParam);
+                if(await AddExpToExistingMonthlyPlanned(duration, fontSize, cancellationTokenSource))
+                {
+                    NavFunctions.ReturnOnce(navParam);
+                }
+                else
+                {
+                    await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Failed to Save Flow Out"));
+                }
             }
             else 
             {
-                EditExpInExistingMonthlyPlanned(duration, fontSize, cancellationTokenSource);
-                NavFunctions.ReturnOnce(navParam);
+                if (await EditExpInExistingMonthlyPlanned(duration, fontSize, cancellationTokenSource))
+                {
+                    NavFunctions.ReturnOnce(navParam);
+                }
+                else
+                {
+                    await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Failed to Save Flow Out"));
+                }
             }
                         
         }
     }
 
-    async void AddMonthlyPlannedExp(ToastDuration duration, double fontsize, CancellationTokenSource tokenSource)
+    async Task<bool> AddMonthlyPlannedExp(ToastDuration duration, double fontsize, CancellationTokenSource tokenSource)
     {
         SingleMonthlyPlanned.Currency = ActiveUser.UserCurrency;
         SingleMonthlyPlanned.Id = Guid.NewGuid().ToString();
@@ -124,40 +146,37 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
         SingleMonthlyPlanned.TotalAmount += SingleExpenditureDetails.AmountSpent;
         SingleMonthlyPlanned.NumberOfExpenditures += 1;
 
-        await monthlyPlannedExpService.AddMonthlyPlannedExp(SingleMonthlyPlanned);
-
+        if (!await monthlyPlannedExpService.AddMonthlyPlannedExp(SingleMonthlyPlanned))
+            return false;
+                    
         string ToastNotifMessage = "Monthly Flow Out Added";
         var toast = Toast.Make(ToastNotifMessage, duration, fontsize);
         await toast.Show(tokenSource.Token);
 
-        var navParam = new Dictionary<string, object>
-        {
-            {"SingleMonthlyPlanDetails", SingleMonthlyPlanned },
-            {"PageTitle", new string($"Edit {SingleMonthlyPlanned.MonthYear}") },
-            {"ActiveUser", ActiveUser }
-        };
 
-        NavFunctions.ReturnToDetailsMonthlyPlanned(navParam);
+        return true;
     }
 
-    async void AddExpToExistingMonthlyPlanned(ToastDuration duration, double fontsize, CancellationTokenSource tokenSource)
+    async Task<bool> AddExpToExistingMonthlyPlanned(ToastDuration duration, double fontsize, CancellationTokenSource tokenSource)
     {
         SingleExpenditureDetails.Id = Guid.NewGuid().ToString();
-        SingleExpenditureDetails.IncludeInReport = false;
+        
         SingleExpenditureDetails.Currency = ActiveUser.UserCurrency;
         SingleMonthlyPlanned.Expenditures.Add(SingleExpenditureDetails);
 
         SingleMonthlyPlanned.TotalAmount += SingleExpenditureDetails.AmountSpent;
         SingleMonthlyPlanned.NumberOfExpenditures += 1;
 
-        await monthlyPlannedExpService.UpdateMonthlyPlannedExp(SingleMonthlyPlanned);
+        if(!await monthlyPlannedExpService.UpdateMonthlyPlannedExp(SingleMonthlyPlanned))
+            return false;
 
         string ToastNotifMessage = "Flow Out Added";
         var toast = Toast.Make(ToastNotifMessage, duration, fontsize);
         await toast.Show(tokenSource.Token);
+        return true;
     }
 
-    async void EditExpInExistingMonthlyPlanned(ToastDuration duration, double fontsize, CancellationTokenSource tokenSource)
+    async Task<bool> EditExpInExistingMonthlyPlanned(ToastDuration duration, double fontsize, CancellationTokenSource tokenSource)
     {        
         if (SingleMonthlyPlanned.Expenditures.Contains(SingleExpenditureDetails))
         {
@@ -165,9 +184,13 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
             SingleMonthlyPlanned.TotalAmount = InitialSingleMonthlyPlannedExp - difference;
         }
 
-        await monthlyPlannedExpService.UpdateMonthlyPlannedExp(SingleMonthlyPlanned);
+        if(!await monthlyPlannedExpService.UpdateMonthlyPlannedExp(SingleMonthlyPlanned))
+            return false;
+
         string ToastNotifMessage = "Flow Out Edited";
         var toast = Toast.Make(ToastNotifMessage, duration, fontsize);
         await toast.Show(tokenSource.Token);
+
+        return true;
     }
 }

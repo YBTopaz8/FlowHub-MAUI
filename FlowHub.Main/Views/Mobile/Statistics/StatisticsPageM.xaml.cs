@@ -21,7 +21,9 @@ public partial class StatisticsPageM
 		viewModel.PageLoadedCommand.Execute(null);
 		pieChart.Series = viewModel.Series;
 		BarChart.Series = viewModel.LineSeries;
-    }
+
+		OtherBar.Series = viewModel.Series2;
+	}
 
     private void BarChart_ChartPointPointerDown(IChartView chart, ChartPoint point)
     {

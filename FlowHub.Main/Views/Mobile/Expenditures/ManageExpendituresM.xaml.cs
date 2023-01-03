@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui.Views;
 using FlowHub.Main.PopUpPages;
 using FlowHub.Main.ViewModels.Expenditures;
+using FlowHub.Models;
 using Microsoft.Maui.Controls.Platform;
 using System.Diagnostics;
 
@@ -20,20 +21,25 @@ public partial class ManageExpendituresM : ContentPage
             if (view is DatePicker)
             {
 #if ANDROID
-                Android.Graphics.Drawables.GradientDrawable gd = new Android.Graphics.Drawables.GradientDrawable();
+                Android.Graphics.Drawables.GradientDrawable gd = new();
                 gd.SetColor(global::Android.Graphics.Color.Transparent);
                 handler.PlatformView.SetBackground(gd);
 #endif
             }
         });
 
+        viewModel.PageloadedAsyncCommand.Execute(null);
+        //viewModel.PropertyChanged += ViewModel_PropertyChanged;
     }
 
+    //private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    //{
+
+    //}
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        viewModel.PageloadedAsyncCommand.Execute(null);
     }    
 
     private async void ExportToPDFImageButton_Clicked(object sender, EventArgs e)
@@ -66,5 +72,27 @@ public partial class ManageExpendituresM : ContentPage
         await filterOptionsContainer.FadeTo(1, 0);                
     }
 
+    /*
+     * This snippet can be used if i ever want to allow multi selection
+    private void ColView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var previous = e.PreviousSelection;
+        var current = e.CurrentSelection.ToList();
+        
+        Debug.WriteLine(current.GetType());
+    }
 
+    private void CheckBox_CheckChanged(object sender, EventArgs e)
+    {
+        if (selMode.IsChecked)
+        {
+            ColView.SelectionMode = SelectionMode.Multiple;
+        }
+        else
+        {
+            ColView.SelectedItems.Clear();
+            ColView.SelectionMode = SelectionMode.None;
+        }
+    }
+    */
 }

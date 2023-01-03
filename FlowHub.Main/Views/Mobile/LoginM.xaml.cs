@@ -20,7 +20,7 @@ public partial class LoginM : ContentPage
             if (view is Picker)
             {
 #if ANDROID
-                Android.Graphics.Drawables.GradientDrawable gd = new Android.Graphics.Drawables.GradientDrawable();
+                Android.Graphics.Drawables.GradientDrawable gd = new();
                 gd.SetColor(global::Android.Graphics.Color.Transparent);
                 handler.PlatformView.SetBackground(gd);
 #endif
@@ -38,11 +38,6 @@ public partial class LoginM : ContentPage
 
     }
 
-    private async void SignUpUnFocused_Tapped(object sender, TappedEventArgs e)
-    {
-        await ShowRegisterForm();
-    }
-
     private async Task ShowRegisterForm()
     {
         LoginForm.IsVisible = false;
@@ -58,11 +53,6 @@ public partial class LoginM : ContentPage
             BorderFadeOut(SignUpUnFocused),
             BorderFadeOut(LoginFocused),
             VSLayoutFadeOut(LoginForm));
-    }
-
-    private async void LoginUnFocused_Tapped(object sender, TappedEventArgs e)
-    {
-        await ShowLoginForm();
     }
 
     private async Task ShowLoginForm()
@@ -122,8 +112,15 @@ public partial class LoginM : ContentPage
         viewModel.QuickLoginCommand.Execute(null);
     }
 
-    
+    private async void LoginUnFocused_Tapped(object sender, TappedEventArgs e)
+    {
+        await ShowLoginForm();
+    }
 
+    private async void SignUpUnFocused_Tapped(object sender, TappedEventArgs e)
+    {
+        await ShowRegisterForm();
+    }
 
     uint animationSpeed = 300;
     Easing animationIn = Easing.CubicIn;
@@ -145,4 +142,11 @@ public partial class LoginM : ContentPage
         return border.FadeTo(1, animationSpeed, animationIn);
     }
 
+    private void LoginOnlineBtn_Clicked(object sender, EventArgs e)
+    {
+        viewModel.IsLoginOnlineButtonClicked = true;
+        
+    }
+
+   
 }

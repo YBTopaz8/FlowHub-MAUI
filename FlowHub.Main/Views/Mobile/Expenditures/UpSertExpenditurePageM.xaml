@@ -50,7 +50,7 @@
 
                     <Grid ColumnDefinitions="294,10*">
 
-                        <material:TextField Grid.Column="0" Title="Unit Price" 
+                        <material:TextField Grid.Column="0" Title="Unit Price"
                                             Text="{Binding SingleExpenditureDetails.UnitPrice}" Keyboard="Numeric" >
                             
                             <material:TextField.Validations>

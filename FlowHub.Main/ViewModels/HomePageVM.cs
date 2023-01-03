@@ -85,6 +85,7 @@ public partial class HomePageVM : ObservableObject
     [RelayCommand]
     public async void GoToAddExpenditurePage()
     {
+
         if (ActiveUser is null)
         {
             await Shell.Current.DisplayAlert("Wait", "Cannot go", "Ok");

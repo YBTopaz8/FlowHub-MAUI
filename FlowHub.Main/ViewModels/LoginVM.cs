@@ -14,7 +14,7 @@ public partial class LoginVM : ObservableObject
     private readonly IUsersRepository userService;
     private readonly CountryAndCurrencyCodes countryAndCurrency = new();
 
-    LoginNavs NavFunctions = new();
+    readonly LoginNavs NavFunctions = new();
     public LoginVM(ISettingsServiceRepository sessionServiceRepo, IUsersRepository userRepo)
     {
         settingsService = sessionServiceRepo;
@@ -56,10 +56,16 @@ public partial class LoginVM : ObservableObject
     private bool isQuickLoginVisible = false;
 
     [ObservableProperty]
+    private bool registerAccountOnline = false;
+
+    [ObservableProperty]
     private bool isBusy=false;
 
     [ObservableProperty]
     private bool showQuickLoginErrorMessage = false;
+
+    [ObservableProperty]
+    private bool isLoginOnlineButtonClicked = false;
 
     readonly string LoginDetectFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "QuickLogin.text");
 
@@ -114,7 +120,8 @@ public partial class LoginVM : ObservableObject
     [RelayCommand]
     public async void GoToHomePageFromRegister()
     {
-        if (userCurrency is null)
+
+        if (userCurrency is null) //currency is null b/c the country was not chosen
         {
             ErrorMessagePicker = true;
         }
@@ -129,14 +136,26 @@ public partial class LoginVM : ObservableObject
                 await settingsService.SetPreference(nameof(CurrentUser.Id), CurrentUser.Id.ToString());
                 await settingsService.SetPreference("Username", CurrentUser.Username);
                 await settingsService.SetPreference(nameof(CurrentUser.UserCurrency), CurrentUser.UserCurrency);
-                
+
                 if (!File.Exists(LoginDetectFile))
                 {
                     File.Create(LoginDetectFile).Close();
                 }
-                
+
+                if (RegisterAccountOnline && Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
+                {
+                    if (await userService.AddUserOnlineAsync(CurrentUser))
+                    {
+                        await Shell.Current.DisplayAlert("User Registration", "Online Account Created !", "Ok");
+                        NavFunctions.GoToHomePage();
+                    }
+                    else
+                    {
+                        await Shell.Current.DisplayAlert("User Registration", "Online Account Exists Already !", "Ok");
+                    }
+                }
+
                 IsQuickLoginVisible = false;
-                NavFunctions.GoToHomePage();
             }
             else
             {
@@ -149,8 +168,17 @@ public partial class LoginVM : ObservableObject
     public async void GoToHomePageFromLogin()
     {
         IsBusy = true;
-        var checkedUser = await userService.GetUserAsync(CurrentUser.Email.Trim(), CurrentUser.Password);
-        if (checkedUser is null)
+        UsersModel User = new();
+        if (IsLoginOnlineButtonClicked)
+        {
+            User = await userService.GetUserOnlineAsync(CurrentUser);
+        }
+        else
+        {
+            User = await userService.GetUserAsync(CurrentUser.Email.Trim(), CurrentUser.Password);
+        }
+
+        if (User is null)
         {
             IsBusy = false;
             ErrorMessage = true;
@@ -158,15 +186,11 @@ public partial class LoginVM : ObservableObject
         else
         {
             IsBusy = false;
-            
             if (!File.Exists(LoginDetectFile))
             {
                 File.Create(LoginDetectFile).Close();
-            }            
-            
-            CurrentUser = checkedUser;
-
-            // await userService.AddUserAsync(CurrentUser, false);
+            }
+            CurrentUser = User;
             userService.OfflineUser = await userService.GetUserAsync(CurrentUser.Id); //initialized user to be used by the entire app
             await settingsService.SetPreference<string>(nameof(CurrentUser.Id), CurrentUser.Id.ToString());
             await settingsService.SetPreference<string>("Username", CurrentUser.Username);
@@ -177,8 +201,9 @@ public partial class LoginVM : ObservableObject
 
         }
 
-    }
+    } 
 
+   
     [RelayCommand]
     public async void QuickLogin()
     {
@@ -207,7 +232,7 @@ public partial class LoginVM : ObservableObject
         }
     }
 
-    void deletedLoginDetectFile()
+    void DeletedLoginDetectFile()
     {
         File.Delete(LoginDetectFile);
     }
