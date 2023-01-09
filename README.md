@@ -5,7 +5,7 @@ An Application used to manage Savings, Expenditures, Incomes, Debts, Financial p
 
 Ideal for anyone who likes to keep track of their Financial Flow.
 ## Requirements
-This project is build on .NET CORE 7, .NET MAUI and LiteDB as its DataBase using QuestPDF and iText 7 for PDF Generation.
+This project is build on .NET CORE 7, .NET MAUI and LiteDB as its DataBase using iText 7 for PDF Generation.
 
 The Requirement to run use THIS project, you would need;
 - A Computer running Windows 10 at least.
