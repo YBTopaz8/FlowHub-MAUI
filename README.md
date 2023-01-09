@@ -52,6 +52,11 @@ Build and run your app and that's it!
 
 > Those are just the surfaces..
 
+## Lots and Lots of thanks to:
+ - [enisn](https://github.com/enisn) for their incredible [UraniumUI](https://github.com/enisn/UraniumUI) and [InputKit](https://github.com/enisn/Xamarin.Forms.InputKit) That I HEAVILY use in this project ❤️
+- [Beto Rodriguez](https://github.com/beto-rodriguez) for the charts & graph library : [LiveCharts2](https://github.com/beto-rodriguez/LiveCharts2)
+
+
 ## Authors
 
 - [Yvan Brunel](https://github.com/YBTopaz8) (Author)
