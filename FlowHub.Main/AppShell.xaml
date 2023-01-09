@@ -4,7 +4,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
         x:Class="FlowHub.Main.AppShell"
         xmlns:views="clr-namespace:FlowHub.Main.Views.Desktop"
-        xmlns:local="clr-namespace:FlowHub.Main"
         xmlns:viewsExpenditures="clr-namespace:FlowHub.Main.Views.Desktop.Expenditures"
         Shell.NavBarIsVisible="False"
         Shell.FlyoutBehavior="Disabled"
@@ -20,20 +19,19 @@
                 Route="HomePage"/>
 
             <ShellContent Title="Log Out"/>
-            <ShellContent Title="Exit"/>
+            <ShellContent Title="Exit" />
         </Tab>
 
         <Tab Title="Expenditures" >
-            <ShellContent Title="Manage Expenditures"    
+            <ShellContent Title="Manage Expenditures"                          
                 ContentTemplate="{DataTemplate viewsExpenditures:ManageExpendituresD}"
                 Route="ManageExpenditures"/>
         </Tab>
 
         <Tab Title="Incomes">
-            <ShellContent Title="Manage Incomes"    
-               
-                />
+            <ShellContent Title="Manage Incomes"/>
         </Tab>
+        
         <Tab Title="Planning">
             <ShellContent Title="Monthly Plannings"/>
 

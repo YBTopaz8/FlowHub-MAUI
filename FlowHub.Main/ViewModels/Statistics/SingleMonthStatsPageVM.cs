@@ -50,7 +50,7 @@ public partial class SingleMonthStatsPageVM :ObservableObject
 
 	[ObservableProperty]
 	public ObservableCollection<ExpendituresModel> listOfExpenditures;
-	public List<ISeries> PieSeries { get; set; }	
+	public List<ISeries> PieSeries { get; set; }
 
 	[RelayCommand]
 	public void PageLoaded()

@@ -4,11 +4,13 @@ namespace FlowHub.DataAccess.IRepositories;
 
 public interface IPlannedExpendituresRepository
 {
-    Task<List<PlannedExpendituresModel>> GetAllMonthlyPlannedExp();
+    Task<List<PlannedExpendituresModel>> GetAllPlannedExp();
 
-    Task<bool> AddMonthlyPlannedExp(PlannedExpendituresModel plannedExpendituresModel); 
-    Task<bool> UpdateMonthlyPlannedExp(PlannedExpendituresModel plannedExpendituresModel); 
-    Task<bool> DeleteMonthlyPlannedExp(PlannedExpendituresModel plannedExpendituresModel);
+    List<PlannedExpendituresModel> OfflinePlannedExpendituresList { get; set; }
+    Task<bool> AddPlannedExp(PlannedExpendituresModel plannedExpendituresModel);
+    Task<bool> UpdatePlannedExp(PlannedExpendituresModel plannedExpendituresModel);
+    Task<bool> DeletePlannedExp(string id);
+    Task<bool> SynchronizePlannedExpendituresAsync(string userEmail, string userPassword);
 
-    Task DropMonthlyPlannedExpCollection();
+    Task DropPlannedExpCollection();
 }

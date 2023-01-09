@@ -30,7 +30,7 @@ public partial class DetailsOfMonthlyPlannedExpPageM : ContentPage
 			var expItem = (ExpendituresModel) swipeItem.BindingContext;
 
 			viewModel.DeleteExpFromMonthlyPCommand.Execute(expItem);
-						
+
 			ExpList.ItemsSource = null;
             ExpList.ItemsSource = viewModel.TempList;
         }

@@ -4,6 +4,7 @@ using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FlowHub.DataAccess.IRepositories;
+using FlowHub.Main.PDF_Classes;
 using FlowHub.Main.Platforms.NavigationsMethods;
 using FlowHub.Main.PopUpPages;
 using FlowHub.Models;
@@ -19,6 +20,7 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
     private IUsersRepository userService;
 
     readonly MonthlyPlannedExpNavs NavFunctions = new();
+    PrintDetailsMonthlyExpenditure PrintFunction;
 
     public ManageMonthlyMonthlyPlannedExpendituresVM(IPlannedExpendituresRepository monthlyPlannedExpRepo, IUsersRepository userRepo)
     {
@@ -31,24 +33,28 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
 
     private List<PlannedExpendituresModel> tempList = new();
 
+    [ObservableProperty]
+    private bool isBusy;
+
+    public List<List<ExpendituresModel>> ListOfExpenditures;
+    public List<string> ListOfExpTitles;
 
     [RelayCommand]
     public async void PageLoaded()
     {
         var user = userService.OfflineUser;
         ActiveUser = user;
-        tempList = await monthlyPlannedExpService.GetAllMonthlyPlannedExp();
-       
+        _ = await monthlyPlannedExpService.GetAllPlannedExp(); 
         GetAllMonthlyPlanned();
-
     }
 
     private void GetAllMonthlyPlanned()
     {
         try
         {
-            List<PlannedExpendituresModel> ListMonthlyPlannedExp = tempList.FindAll(x => x.IsMonthlyPlanned == true)
-                .Select(model => new { Exp = model, Sort = DateTime.ParseExact(model.MonthYear, "MMMM, yyyy", CultureInfo.InvariantCulture) })
+            var ListMonthlyPlannedExp = monthlyPlannedExpService.OfflinePlannedExpendituresList
+                .FindAll(x => x.IsMonthlyPlanned)
+                .Select(model => new { Exp = model, Sort = DateTime.ParseExact(model.Title, "MMMM, yyyy", CultureInfo.InvariantCulture) })
                 .OrderBy(model => model.Sort)
                 .Select(model => model.Exp)
                 .ToList();
@@ -93,7 +99,7 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
             {
                 var navParam = new Dictionary<string, object>
                 {
-                    {"SingleMonthlyPlanned", new PlannedExpendituresModel {MonthYear = monthYear, IsMonthlyPlanned=true, Expenditures = new List<ExpendituresModel>()} },
+                    {"SingleMonthlyPlanned", new PlannedExpendituresModel {Title = monthYear, IsMonthlyPlanned=true, Expenditures = new List<ExpendituresModel>()} },
                     {"SingleExpenditureDetails", new ExpendituresModel () },
                     {"PageTitle", new string ($"Planned Flow Out: {monthYear}") },
                     
@@ -111,7 +117,7 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
         var navParam = new Dictionary<string, object>
         {
             {"SingleMonthlyPlanDetails", monthlyPlannedExp },
-            {"PageTitle", new string($"View {monthlyPlannedExp.MonthYear}") },
+            {"PageTitle", new string($"View {monthlyPlannedExp.Title}") },
             { "ActiveUser", ActiveUser }
         };
         NavFunctions.ToDetailsMonthlyPlanned(navParam);
@@ -123,12 +129,50 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
         CancellationTokenSource cancellationTokenSource = new();
         ToastDuration duration = ToastDuration.Short;
         double fontSize = 14;
-        string text = $"Monthly Planned For {monthlyPlannedExp.MonthYear} Deleted";
+        string text = $"Monthly Planned For {monthlyPlannedExp.Title} Deleted";
         var toast = Toast.Make(text, duration, fontSize);
 
-        var deleteRespone = await monthlyPlannedExpService.DeleteMonthlyPlannedExp(monthlyPlannedExp);
+        await monthlyPlannedExpService.DeletePlannedExp(monthlyPlannedExp.Id);
+        monthlyPlannedExpService.OfflinePlannedExpendituresList.Remove(monthlyPlannedExp);
         MonthlyPlannedExpList.Remove(monthlyPlannedExp);
         await toast.Show(cancellationTokenSource.Token);
         //GetAllMonthlyPlanned();
+    }
+
+
+    [RelayCommand]
+    public async void SyncPlannedExpTest()
+    {
+        IsBusy = true;
+        Debug.WriteLine("Begin Sync");
+        if (await monthlyPlannedExpService.SynchronizePlannedExpendituresAsync(ActiveUser.Email, ActiveUser.Password))
+        {
+            PageLoaded();
+
+            IsBusy = false;
+        }
+        Debug.WriteLine("End Sync");
+    }
+
+    
+    public async Task PrintPDFandShare(List<List<ExpendituresModel>> ListofListofExps, List<string> listofExpTitles)
+    {
+        Debug.WriteLine(ListofListofExps.Count);
+        Debug.WriteLine(listofExpTitles.Count);
+        PrintFunction = new PrintDetailsMonthlyExpenditure();
+        string dialogueResponse = (string)await Shell.Current.ShowPopupAsync(new InputCurrencyForPrintPopUpPage("Share PDF File? (Requires Internet)", ActiveUser.UserCurrency));
+        if (dialogueResponse is not "Cancel")
+        {
+            await PrintFunction.SaveListDetailMonthlyPlanned(ListofListofExps, ActiveUser.UserCurrency, dialogueResponse, ActiveUser.Username, listofExpTitles);
+        }
+            //if (Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
+            //{
+            //    await PrintFunction.SaveListDetailMonthlyPlanned(TempList, UserCurrency, dialogueResponse, ActiveUser.Username, SingleMonthlyPlannedDetails.Title);
+            //}
+            //else
+            //{
+            //    await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("No Internet Found ! \nPlease Connect to the Internet"));
+            //}
+        //}
     }
 }

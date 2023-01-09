@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace FlowHub.Main.Views.Mobile.Statistics;
 
-public partial class StatisticsPageM 
+public partial class StatisticsPageM
 {
 	private readonly StatisticsPageVM viewModel;
 	public StatisticsPageM(StatisticsPageVM vm)
@@ -37,5 +37,4 @@ public partial class StatisticsPageM
 
     }
 
-    
 }

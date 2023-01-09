@@ -146,16 +146,17 @@
 
             <!-- End Section for income display-->
             <Border
+                BackgroundColor="Transparent"
                 Grid.Row="1"
                 StrokeThickness="0"
                 Margin="0,10,0,0">
-                <ImageButton Source="add_btn_48.png" 
+                <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" 
                              BackgroundColor="Transparent"
                              Command="{Binding GoToAddExpenditurePageCommand}"
                              ToolTipProperties.Text="Add New Expenditure"/>
 
             </Border>
-            <Border
+            <Border IsVisible="false"
                 Grid.Column="1"
                 Grid.Row="1"
                 StrokeThickness="0"

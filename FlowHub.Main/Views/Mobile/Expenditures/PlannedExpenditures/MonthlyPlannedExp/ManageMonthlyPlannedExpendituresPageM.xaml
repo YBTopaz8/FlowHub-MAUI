@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"  
              x:Class="FlowHub.Main.Views.Mobile.Expenditures.PlannedExpenditures.MonthlyPlannedExp.ManageMonthlyPlannedExpendituresPageM"
              xmlns:model="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:viewModel="clr-namespace:FlowHub.Main.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlannedExp"
@@ -9,79 +10,95 @@
              x:Name="page">
 
     <toolkit:DockLayout>
-        <Grid toolkit:DockLayout.DockPosition="Top" HeightRequest="30" Margin="10,3">
+
+        <Grid toolkit:DockLayout.DockPosition="Top" HeightRequest="40" Margin="5,10"
+              ColumnDefinitions="100*,100*,50*">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
+            <HorizontalStackLayout Grid.Column="0" BackgroundColor="red">
+                <material:CheckBox Text="Select Multiple" TextFontSize="15" BoxSizeRequest="20" 
+                               CheckChanged="MultiSelectToggle_CheckChanged"
+                               x:Name="MultiSelectToggle"/>
+                <ImageButton Clicked="ExportToPDFImageButton_Clicked" IsVisible="{Binding IsChecked, Source={x:Reference MultiSelectToggle}}"
+                    Source="{AppThemeBinding Dark=save_to_pdf_d.png, Light=save_to_pdf_l.png}" 
+                            />
+                <ProgressBar IsVisible="false" x:Name="PrintProgressBarIndic" ProgressColor="DarkSlateBlue" WidthRequest="50"/>
+            </HorizontalStackLayout >
+
+            <HorizontalStackLayout Grid.Column="2" HorizontalOptions="End" BackgroundColor="Transparent" IsVisible="true">
+                <ImageButton Source="{AppThemeBinding Dark=sync_icon_d.png, Light=sync_icon_l.png}"                              
+                             Command="{Binding SyncPlannedExpTestCommand}"
+                             x:Name="SyncButton"/>
+            </HorizontalStackLayout>
+        </Grid>
+
+        <Grid toolkit:DockLayout.DockPosition="Bottom" HeightRequest="65" Margin="10,10" >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20*"/>
-                <ColumnDefinition Width="100*"/>
-                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <HorizontalStackLayout Grid.Column="2" HorizontalOptions="End" BackgroundColor="Transparent">
-                <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding ShowInputMonthYearPopupPageCommand}" />
-            </HorizontalStackLayout>
-           
-        </Grid>
-        <Label toolkit:DockLayout.DockPosition="Top" Text="All Monthly Planned Flow Outs" FontSize="20" Margin="5" FontAttributes="Bold" HorizontalOptions="Center"/>
+            <ImageButton x:Name="pie_chart" Source="{AppThemeBinding Dark=pie_chart, Light=pie_chart_l}" 
+                         IsVisible="{Binding IsChecked, Source={x:Reference MultiSelectToggle}}"
+                         HorizontalOptions="Start" 
+                         Grid.Column="0" VerticalOptions="Start" />
 
-        <HorizontalStackLayout toolkit:DockLayout.DockPosition="Bottom" HeightRequest="34" HorizontalOptions="CenterAndExpand" >
-            <Label FontSize="17" Margin="5" Text="">                
-            </Label>
-        </HorizontalStackLayout>
-        
-        <CollectionView ItemsSource="{Binding MonthlyPlannedExpList}" EmptyView="No Flow Outs Available...">
+
+            <ImageButton IsVisible="True" Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding ShowInputMonthYearPopupPageCommand}"
+                         VerticalOptions="Start" HorizontalOptions="End" Margin="0,0,10,0" Grid.Column="2"/>
+
+        </Grid>
+        <CollectionView ItemsSource="{Binding MonthlyPlannedExpList}" x:Name="ColView"
+                        SelectionChanged="ColView_SelectionChanged">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:PlannedExpendituresModel">
                     <ScrollView >
-                        <VerticalStackLayout HorizontalOptions="Center" > <!--This will help keep the whole view centered-->
-                            <SwipeView Margin="20,0">
-                                <SwipeView.LeftItems>
-                                    <SwipeItem Command="{Binding Source={x:Reference page},
+                        <SwipeView HeightRequest="100">
+                            <SwipeView.LeftItems>
+                                <SwipeItem Command="{Binding Source={x:Reference page},
                                                     Path=BindingContext.GoToViewMonthlyPlannedExpCommand}"
                                                 CommandParameter="{Binding .}"
                                                IconImageSource="{AppThemeBinding Dark=view_d.png, Light=view_l.png}" 
                                                BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
-                                </SwipeView.LeftItems>
-                                <SwipeView.RightItems>
-                                    <SwipeItem Command="{Binding Source={x:Reference page},
+                            </SwipeView.LeftItems>
+                            <SwipeView.RightItems>
+                                <SwipeItem Command="{Binding Source={x:Reference page},
                                                          Path=BindingContext.DeleteMonthlyPlannedExpCommand}"
                                                CommandParameter="{Binding .}"
                                                IconImageSource="{AppThemeBinding Dark=delete_d.png, Light=delete_l.png}" 
                                                BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
-                                </SwipeView.RightItems>
-                                <VerticalStackLayout HorizontalOptions="Center" Margin="0,0,0,2" >
-                                    <Border Padding="10,5" MinimumWidthRequest="350" MaximumWidthRequest="400">
-                                        <VerticalStackLayout Spacing="5">
-                                            <VerticalStackLayout.Resources>
-                                                <ResourceDictionary>
-                                                    <Style TargetType="Label">
-                                                        <Setter Property="FontSize" Value="16.5"/>
-                                                    </Style>
-                                                </ResourceDictionary>
-                                            </VerticalStackLayout.Resources>
-                                            <Label Text="{Binding MonthYear, StringFormat='Month and Year : {0}'}"/>
-                                            <Label>
-                                                <Label.Text>
-                                                    <MultiBinding StringFormat="{}Total Amount {0:n3} {1}">
-                                                        <Binding Path="TotalAmount"/>
-                                                        <Binding Path="Currency"/>
-                                                    </MultiBinding>
-                                                </Label.Text>
-                                            </Label>
-                                            <Label Text="{Binding NumberOfExpenditures, StringFormat='Number of Flow Outs : {0}'}"/>
-                                        </VerticalStackLayout>
-
-                                    </Border>
+                            </SwipeView.RightItems>
+                            <Border Padding="10,5" HorizontalOptions="Center" WidthRequest="280">
+                                <VerticalStackLayout Spacing="8">
+                                    <VerticalStackLayout.Resources>
+                                        <ResourceDictionary>
+                                            <Style TargetType="Label">
+                                                <Setter Property="FontSize" Value="16.5"/>
+                                            </Style>
+                                        </ResourceDictionary>
+                                    </VerticalStackLayout.Resources>
+                                    <Label Text="{Binding Title, StringFormat='Month and Year : {0}'}"/>
+                                    <Label>
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{}Total Amount: {0:n3} {1}">
+                                                <Binding Path="TotalAmount" />
+                                                <Binding Path="Currency"/>
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+                                    <Label Text="{Binding NumberOfExpenditures, StringFormat='Number of Flow Outs : {0}'}"/>
                                 </VerticalStackLayout>
-                            </SwipeView>
-                        </VerticalStackLayout>
+                            </Border>
+                            
+                        </SwipeView>
                     </ScrollView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
+
         </CollectionView>
     </toolkit:DockLayout>
 </ContentPage>

@@ -12,13 +12,15 @@ public partial class LoginVM : ObservableObject
 {
     private readonly ISettingsServiceRepository settingsService;
     private readonly IUsersRepository userService;
+    private readonly IExpendituresRepository expenditureService;
     private readonly CountryAndCurrencyCodes countryAndCurrency = new();
 
     readonly LoginNavs NavFunctions = new();
-    public LoginVM(ISettingsServiceRepository sessionServiceRepo, IUsersRepository userRepo)
+    public LoginVM(ISettingsServiceRepository sessionServiceRepo, IUsersRepository userRepo, IExpendituresRepository expRepo)
     {
         settingsService = sessionServiceRepo;
         userService = userRepo;
+        expenditureService = expRepo;
     }
 
     [ObservableProperty]
@@ -40,7 +42,7 @@ public partial class LoginVM : ObservableObject
 
     [ObservableProperty]
     private bool errorMessage = false;
-    
+
     [ObservableProperty]
     private bool errorMessagePicker = false;
 
@@ -72,10 +74,6 @@ public partial class LoginVM : ObservableObject
     [RelayCommand]
     public async void PageLoaded()
     {
-
-        //deletedLoginDetectFile();
-        //await userService.dropCollection();
-
         if (IsQuickLoginDetectionFilePresent())
         {
             Username = await settingsService.GetPreference<string>("Username", null);
@@ -85,7 +83,7 @@ public partial class LoginVM : ObservableObject
         else
         {
             CurrentUser = new();
-         
+
             HasLoginRemembered = false;
             CountryNamesList = countryAndCurrency.GetCountryNames();
 
@@ -120,7 +118,6 @@ public partial class LoginVM : ObservableObject
     [RelayCommand]
     public async void GoToHomePageFromRegister()
     {
-
         if (userCurrency is null) //currency is null b/c the country was not chosen
         {
             ErrorMessagePicker = true;
@@ -133,7 +130,7 @@ public partial class LoginVM : ObservableObject
             CurrentUser.RememberLogin = true;
             if (await userService.AddUserAsync(CurrentUser))
             {
-                await settingsService.SetPreference(nameof(CurrentUser.Id), CurrentUser.Id.ToString());
+                await settingsService.SetPreference(nameof(CurrentUser.Id), CurrentUser.Id);
                 await settingsService.SetPreference("Username", CurrentUser.Username);
                 await settingsService.SetPreference(nameof(CurrentUser.UserCurrency), CurrentUser.UserCurrency);
 
@@ -185,33 +182,32 @@ public partial class LoginVM : ObservableObject
         }
         else
         {
-            IsBusy = false;
             if (!File.Exists(LoginDetectFile))
             {
                 File.Create(LoginDetectFile).Close();
             }
             CurrentUser = User;
             userService.OfflineUser = await userService.GetUserAsync(CurrentUser.Id); //initialized user to be used by the entire app
-            await settingsService.SetPreference<string>(nameof(CurrentUser.Id), CurrentUser.Id.ToString());
+            await settingsService.SetPreference<string>(nameof(CurrentUser.Id), CurrentUser.Id);
             await settingsService.SetPreference<string>("Username", CurrentUser.Username);
             await settingsService.SetPreference<string>(nameof(CurrentUser.UserCurrency), CurrentUser.UserCurrency);
+
+            await expenditureService.SynchronizeExpendituresAsync(CurrentUser.Email, CurrentUser.Password);
+
+            IsBusy = false;
+
             IsQuickLoginVisible = true;
-
             NavFunctions.GoToHomePage();
-
         }
+    }
 
-    } 
-
-   
     [RelayCommand]
     public async void QuickLogin()
     {
         if (File.Exists(LoginDetectFile))
         {
             IsQuickLoginVisible = false;
-            userService.OfflineUser = await userService.GetUserAsync(userId); //initialized user to be used by the entire app            
-                       
+            userService.OfflineUser = await userService.GetUserAsync(userId); //initialized user to be used by the entire app                                
             NavFunctions.GoToHomePage();
         }
         else
@@ -222,14 +218,7 @@ public partial class LoginVM : ObservableObject
 
     bool IsQuickLoginDetectionFilePresent()
     {
-        if (File.Exists(LoginDetectFile))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return File.Exists(LoginDetectFile);
     }
 
     void DeletedLoginDetectFile()

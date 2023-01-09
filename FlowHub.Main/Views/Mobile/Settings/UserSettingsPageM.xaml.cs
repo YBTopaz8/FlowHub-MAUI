@@ -17,7 +17,7 @@ public partial class UserSettingsPageM
     {
         base.OnAppearing();
 		viewModel.PageLoadedCommand.Execute(null);
-		
+
     }
 
     private void ImageButton_Clicked(object sender, EventArgs e)

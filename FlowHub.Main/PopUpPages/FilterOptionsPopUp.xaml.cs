@@ -35,7 +35,7 @@ public partial class FilterOptionsPopUp : Popup
         if (specificMonth == 0 && specificYear == 0)
         {
             int monthIndex = DateTime.UtcNow.Month - 1;
-            MonthPicker.SelectedIndex = monthIndex;            
+            MonthPicker.SelectedIndex = monthIndex;
             selectedMonth = ReturnFirstThreeLetters(ListOfMonths[monthIndex]);
             YearPicker.SelectedItem = DateTime.UtcNow.Year.ToString();
         }
@@ -55,7 +55,7 @@ public partial class FilterOptionsPopUp : Popup
 
         var radioGroup = (UraniumUI.Material.Controls.RadioButtonGroupView)sender;
         if (radioGroup.SelectedItem.ToString() == "Filter_Spec_Month")
-        {            
+        {
             FilterResult = new List<string>
             {
                 radioGroup.SelectedItem.ToString(),
@@ -76,7 +76,7 @@ public partial class FilterOptionsPopUp : Popup
     private void MonthPicker_SelectedIndexChanged(object sender, EventArgs e)
     {
         if (Filter_Spec_Month.IsChecked)
-        {            
+        {
             FilterResult[1] = (MonthPicker.SelectedIndex + 1).ToString();
             FilterResult[3] = ReturnFirstThreeLetters(MonthPicker.SelectedItem.ToString());
         }
@@ -97,5 +97,5 @@ public partial class FilterOptionsPopUp : Popup
     {
         return SelectedMonthParam[..3];
     }
-    
+
 }

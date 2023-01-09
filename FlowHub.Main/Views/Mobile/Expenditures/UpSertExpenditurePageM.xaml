@@ -23,132 +23,26 @@
         </Label>
         <HorizontalStackLayout toolkit:DockLayout.DockPosition="Bottom"
                     HorizontalOptions="Center" Margin="5">
-            <ImageButton x:Name="SaveExpBtn" Clicked="SaveExpBtn_Clicked"
-                                                Source="{AppThemeBinding Dark=save_icon_d.png, Light=save_icon_l.png}"/>
+            
             <ImageButton Command="{Binding CancelBtnCommand}" IsVisible="false"
                                     Source="{AppThemeBinding Dark=cancel_icon_d.png, Light=cancel_icon_l.png}" />
         </HorizontalStackLayout>
         <ScrollView Margin="8">
-            <input:FormView>
+            <input:FormView SubmitCommand="{Binding UpSertExpenditureCommand}">
 
-                <VerticalStackLayout>
-                <VerticalStackLayout x:Name="FirstForm" Spacing="15">
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="First Flow Out" HorizontalOptions="Center" />
-                        <BoxView HeightRequest="1" Margin="0,0,0,10"/>
-                        <material:DatePickerField Title="Date Spent" 
-                                                        MinimumDate="01/01/2022" 
-                                    MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
-                                    Date="{Binding SingleExpenditureDetails.DateSpent}">
-                            <material:DatePickerField.Validations>
-                                <validation:RequiredValidation/>
-
-                            </material:DatePickerField.Validations>
-                        </material:DatePickerField>
-
-                    </VerticalStackLayout>
-
-                    <Grid ColumnDefinitions="294,10*">
-
-                        <material:TextField Grid.Column="0" Title="Unit Price"
-                                            Text="{Binding SingleExpenditureDetails.UnitPrice}" Keyboard="Numeric" >
-                            
-                            <material:TextField.Validations>
-                                <validation:RequiredValidation/>
-                                <validation:MinValueValidation MinValue="0.1" Message="The Unit Price cannot be 0 or Less"/>
-                                <validation:NumericValidation/>
-                            </material:TextField.Validations>
-                        </material:TextField>
-
-                        <material:TextField Grid.Column="1" Title="Quantity" 
-                                            Text="{Binding SingleExpenditureDetails.Quantity}"  Keyboard="Numeric" >
-                            <material:TextField.Validations>
-                                <validation:RequiredValidation/>
-                                <validation:MinValueValidation MinValue="1" Message="The Quantity cannot be 0 or Less"/>
-                                <validation:NumericValidation/>
-                            </material:TextField.Validations>
-                        </material:TextField>
-
-                    </Grid>
-                    <material:TextField Title="Reason" Text="{Binding SingleExpenditureDetails.Reason}">
-                        <material:TextField.Validations>
-                            <validation:RequiredValidation/>
-                        </material:TextField.Validations>
-                    </material:TextField>
-
-                    <material:CheckBox Text="Add Another Flow Out" x:Name="AddSecondFlowOut" CheckChanged="AddSecondFlowOut_CheckChanged" />
-                </VerticalStackLayout>
-
-                <VerticalStackLayout x:Name="SecondForm" IsVisible="{Binding IsChecked, Source={x:Reference AddSecondFlowOut}}" Margin="0,10" Spacing="15">
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Second Flow Out" HorizontalOptions="Center" />
-                        <BoxView HeightRequest="1" Margin="0,0,0,10"/>
-
-                    </VerticalStackLayout>
-
-                    <Grid ColumnDefinitions="350,10*">
-                        <material:TextField Grid.Column="0" Title="Unit Price" Text="{Binding SecondExp.UnitPrice}" Keyboard="Numeric">
-                            <material:TextField.Validations>
-                                <validation:RequiredValidation/>
-                                <validation:MinValueValidation MinValue="0.1" Message="The Unit Price cannot be 0 or Less"/>
-                                <validation:NumericValidation/>
-                            </material:TextField.Validations>
-                        </material:TextField>
-
-                        <material:TextField Grid.Column="1" Title="Quantity" Text="{Binding SecondExp.Quantity}" Keyboard="Numeric">
-                            <material:TextField.Validations>
-                                <validation:RequiredValidation/>
-                                <validation:MinValueValidation MinValue="1" Message="The Quantity cannot be less than 1"/>
-                                <validation:NumericValidation/>
-                            </material:TextField.Validations>
-                        </material:TextField>
-
-                    </Grid>
-                    <material:TextField Title="Reason" Text="{Binding SecondExp.Reason}">
-                        <material:TextField.Validations>
-                            <validation:RequiredValidation/>
-                        </material:TextField.Validations>
-                    </material:TextField>
-
-                    <material:CheckBox Text="Add Another Flow Out" x:Name="AddThirdFlowOut" CheckChanged="AddThirdFlowOut_CheckChanged"/>
-
-                </VerticalStackLayout>
-
-                <VerticalStackLayout x:Name="ThirdForm" IsVisible="{Binding IsChecked, Source={x:Reference AddThirdFlowOut}}" Spacing="15">
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Third Flow Out" HorizontalOptions="Center" />
-                        <BoxView HeightRequest="1" Margin="0,0,0,10"/>
-
-                    </VerticalStackLayout>
-
-                    <Grid ColumnDefinitions="350,10*">
-                        <material:TextField Grid.Column="0" Title="Unit Price" Text="{Binding ThirdExp.UnitPrice}" Keyboard="Numeric">
-                            <material:TextField.Validations>
-                                <validation:RequiredValidation/>
-                                <validation:MinValueValidation MinValue="0.1" Message="The Unit Price cannot be 0 or Less"/>
-                                <validation:NumericValidation/>
-                            </material:TextField.Validations>
-                        </material:TextField>
-                        <material:TextField Grid.Column="1" Title="Quantity" Text="{Binding ThirdExp.Quantity}" Keyboard="Numeric">
-                            <material:TextField.Validations>
-                                <validation:RequiredValidation/>
-                                <validation:MinValueValidation MinValue="1" Message="The Quantity cannot be less than 1"/>
-                                <validation:NumericValidation/>
-                            </material:TextField.Validations>
-                        </material:TextField>
-
-                    </Grid>
-                    <material:TextField Title="Reason" Text="{Binding ThirdExp.Reason}">
-                        <material:TextField.Validations>
-                            <validation:RequiredValidation/>
-                        </material:TextField.Validations>
-                    </material:TextField>
-
-                </VerticalStackLayout>
-
-                
-                </VerticalStackLayout>
-        </input:FormView>
+                <material:TextField Text="{Binding SingleExpenditureDetails.Reason}" Title="Reason">
+                    <material:TextField.Validations>
+                        <validation:RequiredValidation/>
+                    </material:TextField.Validations>
+                </material:TextField>
+                <ImageButton Source="save_icon_d" 
+                             input:FormView.IsSubmitButton="True"/>
+                <material:ButtonView input:FormView.IsSubmitButton="True">
+                    <Label Text="save1 "/>
+                </material:ButtonView> 
+                <Button input:FormView.IsSubmitButton="True" Text="Save"/>
+                <Button input:FormView.IsSubmitButton="True" Text="Saves"/>
+            </input:FormView>
         </ScrollView>
     </toolkit:DockLayout>
 </ContentPage>

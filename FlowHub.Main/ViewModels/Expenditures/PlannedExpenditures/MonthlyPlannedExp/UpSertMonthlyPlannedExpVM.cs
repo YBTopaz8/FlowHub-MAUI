@@ -38,7 +38,7 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
 
     [ObservableProperty]
     string mode;
-    
+
     [ObservableProperty]
     bool createNewMonthlyPlanned;
 
@@ -89,7 +89,7 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
         var navParam = new Dictionary<string, object>
                 {
                     {"SingleMonthlyPlanDetails", SingleMonthlyPlanned },
-                    {"PageTitle", new string($"Edit {SingleMonthlyPlanned.MonthYear}") },
+                    {"PageTitle", new string($"Edit {SingleMonthlyPlanned.Title}") },
                     {"ActiveUser", ActiveUser }
                 };
 
@@ -118,7 +118,7 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
                     await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Failed to Save Flow Out"));
                 }
             }
-            else 
+            else
             {
                 if (await EditExpInExistingMonthlyPlanned(duration, fontSize, cancellationTokenSource))
                 {
@@ -129,7 +129,7 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
                     await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Failed to Save Flow Out"));
                 }
             }
-                        
+
         }
     }
 
@@ -142,13 +142,13 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
         SingleExpenditureDetails.Id = Guid.NewGuid().ToString();
         SingleExpenditureDetails.Currency = ActiveUser.UserCurrency;
         SingleMonthlyPlanned.Expenditures.Add(SingleExpenditureDetails);
-        
+
         SingleMonthlyPlanned.TotalAmount += SingleExpenditureDetails.AmountSpent;
         SingleMonthlyPlanned.NumberOfExpenditures += 1;
 
-        if (!await monthlyPlannedExpService.AddMonthlyPlannedExp(SingleMonthlyPlanned))
+        if (!await monthlyPlannedExpService.AddPlannedExp(SingleMonthlyPlanned))
             return false;
-                    
+
         string ToastNotifMessage = "Monthly Flow Out Added";
         var toast = Toast.Make(ToastNotifMessage, duration, fontsize);
         await toast.Show(tokenSource.Token);
@@ -160,14 +160,14 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
     async Task<bool> AddExpToExistingMonthlyPlanned(ToastDuration duration, double fontsize, CancellationTokenSource tokenSource)
     {
         SingleExpenditureDetails.Id = Guid.NewGuid().ToString();
-        
+
         SingleExpenditureDetails.Currency = ActiveUser.UserCurrency;
         SingleMonthlyPlanned.Expenditures.Add(SingleExpenditureDetails);
 
         SingleMonthlyPlanned.TotalAmount += SingleExpenditureDetails.AmountSpent;
         SingleMonthlyPlanned.NumberOfExpenditures += 1;
 
-        if(!await monthlyPlannedExpService.UpdateMonthlyPlannedExp(SingleMonthlyPlanned))
+        if(!await monthlyPlannedExpService.UpdatePlannedExp(SingleMonthlyPlanned))
             return false;
 
         string ToastNotifMessage = "Flow Out Added";
@@ -177,17 +177,21 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
     }
 
     async Task<bool> EditExpInExistingMonthlyPlanned(ToastDuration duration, double fontsize, CancellationTokenSource tokenSource)
-    {        
-        if (SingleMonthlyPlanned.Expenditures.Contains(SingleExpenditureDetails))
+    {
+        int ExpIndex = SingleMonthlyPlanned.Expenditures.FindIndex(exp => exp.Id == SingleExpenditureDetails.Id);
+        if (ExpIndex != -1)
         {
-            var difference = InitialExpenditureAmount - SingleExpenditureDetails.AmountSpent;
-            SingleMonthlyPlanned.TotalAmount = InitialSingleMonthlyPlannedExp - difference;
+            SingleMonthlyPlanned.UpdatedDateTime = DateTime.UtcNow;
+            SingleMonthlyPlanned.UpdateOnSync = true;
+            SingleMonthlyPlanned.Expenditures[ExpIndex] = SingleExpenditureDetails;
         }
+        var difference = InitialExpenditureAmount - SingleExpenditureDetails.AmountSpent;
+        SingleMonthlyPlanned.TotalAmount = InitialSingleMonthlyPlannedExp - difference;
 
-        if(!await monthlyPlannedExpService.UpdateMonthlyPlannedExp(SingleMonthlyPlanned))
+        if(!await monthlyPlannedExpService.UpdatePlannedExp(SingleMonthlyPlanned))
             return false;
 
-        string ToastNotifMessage = "Flow Out Edited";
+        const string ToastNotifMessage = "Flow Out Edited";
         var toast = Toast.Make(ToastNotifMessage, duration, fontsize);
         await toast.Show(tokenSource.Token);
 

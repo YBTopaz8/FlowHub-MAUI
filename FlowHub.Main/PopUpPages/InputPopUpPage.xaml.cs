@@ -28,7 +28,6 @@ public partial class InputPopUpPage : Popup
         }
 	}
 
-    
     void OnOKButtonClicked(object sender, EventArgs e)
     {
 		if (IsNumericInput)
@@ -38,7 +37,7 @@ public partial class InputPopUpPage : Popup
         }
 
         if(IsTextInput)
-        {            
+        {
             Close(InputText.Text);
         }
     }
@@ -54,5 +53,5 @@ public partial class InputPopUpPage : Popup
             Close("");
         }
     }
-   
+
 }

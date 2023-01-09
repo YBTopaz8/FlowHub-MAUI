@@ -65,6 +65,7 @@ public partial class UpSertExpenditureVM : ObservableObject
     [RelayCommand]
     public async void UpSertExpenditure()
     {
+        /*
         bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You Want To Save?")))!;
         if (response)
         {
@@ -78,19 +79,21 @@ public partial class UpSertExpenditureVM : ObservableObject
             {
 
                 string ToastNotifMessage = "Nothing was added";
-                if (await AddExpFxnAsync(SingleExpenditureDetails) && SecondExp.UnitPrice != 0)
+                if (await AddExpFxnAsync(SingleExpenditureDetails))
                 {
                     ToastNotifMessage = "Flow Out Added";
-                    SecondExp.DateSpent = DateTime.Now;
-                    if (await AddExpFxnAsync(SecondExp) && ThirdExp.UnitPrice != 0)
+                    if (SecondExp.UnitPrice != 0)
                     {
-                        ToastNotifMessage = "Flow Outs Added";
-                        ThirdExp.DateSpent = DateTime.Now;
-                        await AddExpFxnAsync(ThirdExp);                        
+                        SecondExp.DateSpent = DateTime.Now;
+                        if (await AddExpFxnAsync(SecondExp) && ThirdExp.UnitPrice != 0)
+                        {
+                            ToastNotifMessage = "Flow Outs Added";
+                            ThirdExp.DateSpent = DateTime.Now;
+                            await AddExpFxnAsync(ThirdExp);
 
+                        }
                     }
                 }
-                 
                 IToast toast = Toast.Make(ToastNotifMessage, ToastDuration.Short, 14);
                 await toast.Show(cancellationTokenSource.Token);
 
@@ -101,7 +104,8 @@ public partial class UpSertExpenditureVM : ObservableObject
         else
         {
             Debug.WriteLine("Action cancelled by user");
-        }        
+        }
+        */
     }
 
     [RelayCommand]
@@ -179,7 +183,6 @@ public partial class UpSertExpenditureVM : ObservableObject
             await userService.UpdateUserAsync(ActiveUser);
             _initialUserPocketMoney = _finalPocketMoney;
 
-            Debug.WriteLine($"Added Exp: {expenditure.Reason} and Successfully, date {expenditure.DateSpent} {expenditure.DateSpent.Millisecond}ms");
             return true;
         }
     }

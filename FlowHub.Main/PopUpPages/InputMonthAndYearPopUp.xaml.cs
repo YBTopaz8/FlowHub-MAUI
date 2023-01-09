@@ -8,7 +8,7 @@ public partial class InputMonthAndYearPopUp : Popup
 	{
 		InitializeComponent();
 
-        List<string> ListOfMonths = new() 
+        List<string> ListOfMonths = new()
         { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
         MonthPicker.ItemsSource = ListOfMonths;
 
@@ -18,7 +18,7 @@ public partial class InputMonthAndYearPopUp : Popup
 
         int monthIndex = DateTime.UtcNow.Month;
 
-        MonthPicker.SelectedIndex =  monthIndex - 1; 
+        MonthPicker.SelectedIndex =  monthIndex - 1;
         YearPicker.SelectedItem = DateTime.UtcNow.Year.ToString();
 	}
 
@@ -26,7 +26,7 @@ public partial class InputMonthAndYearPopUp : Popup
     {
         string MonthValue =  MonthPicker.SelectedItem.ToString();
         string YearValue = YearPicker.SelectedItem.ToString();
-        
+
         string MonthYear = $"{MonthValue}, {YearValue}";
         Close(MonthYear);
     }

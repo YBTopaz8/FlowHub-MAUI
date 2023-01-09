@@ -48,6 +48,7 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
     [ObservableProperty]
     int numberOfExpInReport;
 
+
     [ObservableProperty]
     private UsersModel activeUser;
     public ObservableCollection<ExpendituresModel> ExpendituresList { get; set; } = new();
@@ -138,7 +139,7 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
         {
             { "SingleMonthlyPlanned", SingleMonthlyPlannedDetails },
             { "SingleExpenditureDetails", model },
-            { "PageTitle", new string ($"Edit Flow Out") },
+            { "PageTitle", new string ("Edit Flow Out") },
             { "ActiveUser" , ActiveUser }
         };
         NavFunctions.ToUpSertMonthlyPlanned(navParam);
@@ -150,14 +151,17 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
         CancellationTokenSource cancellationTokenSource = new();
         ToastDuration duration = ToastDuration.Short;
         double fontSize = 14;
-        string text = $"Flow Out Deleted";
+        string text = "Flow Out Deleted";
         var toast = Toast.Make(text, duration, fontSize);
 
         SingleMonthlyPlannedDetails.Expenditures.Remove(model);
-        SingleMonthlyPlannedDetails.NumberOfExpenditures -= 1;
+        SingleMonthlyPlannedDetails.NumberOfExpenditures--;
         SingleMonthlyPlannedDetails.TotalAmount -= model.AmountSpent;
 
-        await monthlyPlannedExpService.UpdateMonthlyPlannedExp(SingleMonthlyPlannedDetails);
+        SingleMonthlyPlannedDetails.UpdatedDateTime = DateTime.UtcNow;
+        SingleMonthlyPlannedDetails.UpdateOnSync = true;
+
+        await monthlyPlannedExpService.UpdatePlannedExp(SingleMonthlyPlannedDetails);
         TempList.Remove(model);
 
         GetTotals();
@@ -168,13 +172,13 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
     async Task PrintPDFandShare()
     {
         
-        PrintFunction  = new();
+        PrintFunction  = new PrintDetailsMonthlyExpenditure();
         string dialogueResponse =(string) await Shell.Current.ShowPopupAsync(new InputCurrencyForPrintPopUpPage("Share PDF File? (Requires Internet)", userCurrency));
         if (dialogueResponse is not "Cancel" )
         {
             if (Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
             {
-                await PrintFunction.SaveListDetailMonthlyPlanned(TempList, UserCurrency, dialogueResponse, ActiveUser.Username, SingleMonthlyPlannedDetails.MonthYear);
+                await PrintFunction.SaveListDetailMonthlyPlanned(TempList, UserCurrency, dialogueResponse, ActiveUser.Username, SingleMonthlyPlannedDetails.Title);
             }
             else
             {
@@ -182,4 +186,5 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
             }
         }
     }
+
 }

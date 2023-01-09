@@ -15,9 +15,10 @@ public partial class UpSertExpenditurePageM : ContentPage
     {
         base.OnAppearing();
         viewModel.PageLoadedCommand.Execute(null);
-        AddSecondFlowOut.IsVisible= viewModel.ShowAddSecondExpCheckBox;
-        AddSecondFlowOut.IsChecked = false;
-        AddThirdFlowOut.IsChecked = false;
+        //AddSecondFlowOut.IsVisible= viewModel.ShowAddSecondExpCheckBox;
+        //AddSecondFlowOut.IsChecked = false;
+        
+    //    AddThirdFlowOut.IsChecked = false;
         viewModel.SecondExp = new Models.ExpendituresModel();
         viewModel.ThirdExp = new Models.ExpendituresModel();
     }
@@ -26,10 +27,10 @@ public partial class UpSertExpenditurePageM : ContentPage
     {
         viewModel.SecondExp = new Models.ExpendituresModel();
         viewModel.ThirdExp = new Models.ExpendituresModel();
-        if (!AddSecondFlowOut.IsChecked)
-        {
-            AddThirdFlowOut.IsChecked = false;
-        }
+        //if (!AddSecondFlowOut.IsChecked)
+        //{
+        //   // AddThirdFlowOut.IsChecked = false;
+        //}
     }
     private void AddThirdFlowOut_CheckChanged(object sender, EventArgs e)
     {
@@ -39,11 +40,7 @@ public partial class UpSertExpenditurePageM : ContentPage
 
     private void SaveExpBtn_Clicked(object sender, EventArgs e) //using this to call the command because it won't work on the formview. 
     {
-        viewModel.UpSertExpenditureCommand.Execute(null);
+       // viewModel.UpSertExpenditureCommand.Execute(null);
     }
 
-    private void TextField_TextChanged()
-    {
-
-    }
 }

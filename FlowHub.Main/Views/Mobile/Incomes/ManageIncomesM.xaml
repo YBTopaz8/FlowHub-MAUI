@@ -113,23 +113,7 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <VerticalStackLayout RadioButtonGroup.GroupName="Filters" x:Name="Filter_Group">
-
-            <material:RadioButtonGroupView SelectedItemChanged="RadioButtonGroupView_SelectedItemChanged">
-                <material:RadioButton Text="View All" Value="Filter_All" x:Name="Filter_All"  />
-                <material:RadioButton Text="View For Today" Value="Filter_Today" x:Name="Filter_Today" />
-                <material:RadioButton Text="View For Current Month" Value="Filter_Curr_Month" x:Name="Filter_Curr_Month" />
-                <material:RadioButton Text="View For Specific Month" Value="Filter_Spec_Month" x:Name="Filter_Spec_Month"/>
-
-                <HorizontalStackLayout Spacing="10" IsVisible="{Binding IsChecked, Source={x:Reference Filter_Spec_Month}}">
-                    <Picker x:Name="MonthPicker" Title="Select a Month" SelectedIndexChanged="MonthPicker_SelectedIndexChanged"/>
-
-                    <Picker x:Name="YearPicker" Title="Select a Year" SelectedIndexChanged="YearPicker_SelectedIndexChanged" />
-                    <Button x:Name="ValidateSpecificMonthYear" Text="Select" Clicked="ValidateSpecificMonthYear_Clicked"/>
-                </HorizontalStackLayout>
-            </material:RadioButtonGroupView>
-            <Button Text="validate" x:Name="okayFilter" Clicked="okayFilter_Clicked"/>
-        </VerticalStackLayout>
+       
     </toolkit:DockLayout>
 
 

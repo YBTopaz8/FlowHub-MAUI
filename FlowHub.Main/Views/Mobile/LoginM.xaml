@@ -20,7 +20,7 @@
             
         </ResourceDictionary>
     </ContentPage.Resources>
-        <ScrollView>
+    <ScrollView>
         <VerticalStackLayout Spacing="10" BackgroundColor="{AppThemeBinding Dark=#1A1A1A, Light=#EEF1F6}" >
             
             <VerticalStackLayout BackgroundColor="{AppThemeBinding Dark=#201F24, Light=white}" >

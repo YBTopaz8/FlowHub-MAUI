@@ -11,18 +11,22 @@ public class ExpendituresRepository : IExpendituresRepository
     LiteDatabaseAsync db;
     IMongoDatabase DBOnline;
     List<ExpendituresModel> OnlineExpendituresList { get; set; }
+
+
     public List<ExpendituresModel> OfflineExpendituresList { get; set; }
 
     private IMongoCollection<ExpendituresModel> AllOnlineExpenditures;
+    private IMongoCollection<IDsToBeDeleted> AllOnlineIDsToBeDeleted;
+
     ILiteCollectionAsync<ExpendituresModel> AllExpenditures;
+    ILiteCollectionAsync<IDsToBeDeleted> AllIDsToBeDeleted;
 
     private readonly IDataAccessRepo dataAccessRepo;
     private readonly IUsersRepository usersRepo;
     private readonly IOnlineCredentialsRepository onlineDataAccessRepo;
 
     private const string expendituresDataCollectionName = "Expenditures";
-
-    private readonly string pathToDeletedIDs = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IDToBeDeleted.txt");
+    private const string IDsDataCollectionName = "IDsToDelete";
 
     public ExpendituresRepository(IDataAccessRepo dataAccess, IUsersRepository userRepo, IOnlineCredentialsRepository onlineRepository)
     {
@@ -34,9 +38,9 @@ public class ExpendituresRepository : IExpendituresRepository
     void OpenDB()
     {
         db = dataAccessRepo.GetDb();
-        AllExpenditures = db.GetCollection<ExpendituresModel>(expendituresDataCollectionName);     
+        AllExpenditures = db.GetCollection<ExpendituresModel>(expendituresDataCollectionName);
+        AllIDsToBeDeleted = db.GetCollection<IDsToBeDeleted>(IDsDataCollectionName);
     }
-
 
     public async Task<List<ExpendituresModel>> GetAllExpendituresAsync()
     {
@@ -56,18 +60,16 @@ public class ExpendituresRepository : IExpendituresRepository
         }
         catch (Exception ex)
         {
-
             Debug.WriteLine(ex.Message);
             return Enumerable.Empty<ExpendituresModel>().ToList();
         }
-       
     }
 
     /*--------- SECTION FOR OFFLINE CRUD OPERATIONS----------*/
     public async Task<bool> AddExpenditureAsync(ExpendituresModel expenditure)
     {
         expenditure.PlatformModel = DeviceInfo.Current.Model;
-        
+
         try
         {
             OpenDB();
@@ -76,10 +78,10 @@ public class ExpendituresRepository : IExpendituresRepository
                 await AllExpenditures.EnsureIndexAsync(x => x.Id);
                 db.Dispose();
                 return true;
-            }        
+            }
             else
             {
-                Debug.WriteLine("Error while inserting Expenditure");        
+                Debug.WriteLine("Error while inserting Expenditure");
             }
             return true;
         }
@@ -114,18 +116,24 @@ public class ExpendituresRepository : IExpendituresRepository
             db.Dispose();
             Debug.WriteLine(ex.Message);
             return false;
-        }        
+        }
     }
 
-    public async Task<bool> DeleteExpenditureAsync(ExpendituresModel expenditure)
+    public async Task<bool> DeleteExpenditureAsync(string id)
     {
         try
         {
             OpenDB();
-            if (await AllExpenditures.DeleteAsync(expenditure.Id))
+            if (await AllExpenditures.DeleteAsync(id))
             {
-                await using StreamWriter textFile = new(pathToDeletedIDs, true);
-                await textFile.WriteLineAsync(expenditure.Id);
+                IDsToBeDeleted idToBeDeleted = new()
+                {
+                    Id = $"Exp_{id}",
+                    UserID = usersRepo.OfflineUser.UserIDOnline ?? usersRepo.OfflineUser.Id,
+                    PlatformModel = DeviceInfo.Current.Model
+                };
+
+                await AllIDsToBeDeleted.InsertAsync(idToBeDeleted);
                 db.Dispose();
                 return true;
             }
@@ -142,14 +150,12 @@ public class ExpendituresRepository : IExpendituresRepository
             Debug.WriteLine(ex.Message);
             return false;
         }
-        
     }
 
     public async Task<bool> SynchronizeExpendituresAsync(string userEmail, string userPassword)
     {
         var filterUserCredentials = Builders<UsersModel>.Filter.Eq("Email", userEmail) &
                                     Builders<UsersModel>.Filter.Eq("Password", userPassword);
-        
 
         if (DBOnline is null)
         {
@@ -171,101 +177,136 @@ public class ExpendituresRepository : IExpendituresRepository
                 usersRepo.OfflineUser.UserIDOnline = usersRepo.OnlineUser.Id;
             }
         }
-        
-        var filter = Builders<ExpendituresModel>.Filter.Eq("UserId", usersRepo.OfflineUser.UserIDOnline);
+
+        var filter = Builders<ExpendituresModel>.Filter.Eq("UserId", usersRepo.OnlineUser.Id);
 
         AllOnlineExpenditures ??= DBOnline?.GetCollection<ExpendituresModel>(expendituresDataCollectionName);
 
-        OnlineExpendituresList = await DBOnline?.GetCollection<ExpendituresModel>(expendituresDataCollectionName)
-            .Find(filter)
-            .ToListAsync()!;
+        OnlineExpendituresList = await AllOnlineExpenditures.Find(filter).ToListAsync()!;
         var tempExpList = await GetAllExpendituresAsync();
 
-
-        if (File.Exists(pathToDeletedIDs))
+        if (await DeleteAllExpOnline() && await DeleteAllExpOffline())
         {
-            var listOfDeletedIDs = File.ReadLines(pathToDeletedIDs).ToList();
-            foreach (var id in listOfDeletedIDs)
+            if (tempExpList.Count == 0)
             {
-                await DeleteExpenditureOnlineAsync(id);
-                OnlineExpendituresList.RemoveAll(x => x.Id == id);
+                //tempExpList = OnlineExpendituresList;
+                foreach (var exp in OnlineExpendituresList)
+                {
+                    exp.UserId = usersRepo.OfflineUser.UserIDOnline;
 
-                //var expToBeDeleted = OnlineExpendituresList.SingleOrDefault(x => x.Id == id);
-                //OnlineExpendituresList.Remove(expToBeDeleted);
+                    await AddExpenditureAsync(exp);
+                }
+                await GetAllExpendituresAsync();
+
+                await usersRepo.UpdateUserAsync(usersRepo.OfflineUser);
+                return true;
             }
-#pragma warning disable CS0642 // Possible mistaken empty statement
-            await using (File.Create(pathToDeletedIDs))
-                ;
-#pragma warning restore CS0642 // Possible mistaken empty statement
+            else
+            {
+                await UpdateOnlineDBWithLocalData(tempExpList);
+
+                await UpdateLocalDBWithOnlineData(tempExpList);
+
+                await GetAllExpendituresAsync();
+                await usersRepo.UpdateUserOnlineGetSetLatestValues(usersRepo.OfflineUser);
+
+                return true;
+            }
         }
 
-        if (tempExpList.Count == 0)
+        return true;
+    }
+   
+    private async Task UpdateLocalDBWithOnlineData(List<ExpendituresModel> tempExpList)
+    {
+        foreach (var expOnline in OnlineExpendituresList)
         {
-            //tempExpList = OnlineExpendituresList;
-            foreach (var exp in OnlineExpendituresList)
+            if (tempExpList.Exists(x => x.Id == expOnline.Id) && expOnline.UpdateOnSync &&
+                expOnline.PlatformModel != DeviceInfo.Current.Model)
             {
-                exp.UserId = usersRepo.OfflineUser.UserIDOnline;
-
-                await AddExpenditureAsync(exp);
+                expOnline.PlatformModel = DeviceInfo.Current.Model;
+                await UpdateExpenditureAsync(expOnline);
             }
-            await GetAllExpendituresAsync();
-
-            await usersRepo.UpdateUserAsync(usersRepo.OfflineUser);
-            return true;
+            else if (!tempExpList.Exists(x => x.Id == expOnline.Id))
+            {
+                if (string.IsNullOrEmpty(expOnline.Currency) || expOnline.Currency?.Length == 0)
+                {
+                    expOnline.Currency = usersRepo.OnlineUser.UserCurrency;
+                    await UpdateExpenditureOnlineAsync(expOnline);
+                }
+                await AddExpenditureAsync(expOnline);
+            }
         }
-        else
-        {
-            
-            foreach (var expOffline in tempExpList)
-            {
-                if (!OnlineExpendituresList.Exists(x => x.Id == expOffline.Id))
-                {
-                     expOffline.UserId = usersRepo.OfflineUser.UserIDOnline;
-                     expOffline.PlatformModel = DeviceInfo.Current.Model;
-                     await AddExpenditureOnlineAsync(expOffline);
-                }
-                else
-                {
-
-                    if (expOffline.UpdateOnSync && expOffline.PlatformModel == DeviceInfo.Current.Model)
-                    {
-                        
-                        expOffline.PlatformModel = DeviceInfo.Current.Model;
-                        
-                        await UpdateExpenditureOnlineAsync(expOffline);
-                    }
-                }
-            }
-
-            foreach (var expOnline in OnlineExpendituresList)
-            {
-                if (tempExpList.Exists(x => x.Id == expOnline.Id) && expOnline.UpdateOnSync &&
-                    expOnline.PlatformModel != DeviceInfo.Current.Model)
-                {
-                    expOnline.PlatformModel = DeviceInfo.Current.Model;
-                    await UpdateExpenditureAsync(expOnline);
-                }
-                else if (!tempExpList.Exists(x => x.Id== expOnline.Id))
-                {
-
-                    if (expOnline.Currency is null || expOnline.Currency == string.Empty || expOnline.Currency == "")
-                    {
-                        expOnline.Currency = usersRepo.OnlineUser.UserCurrency;
-                        await UpdateExpenditureOnlineAsync(expOnline);
-                    }
-                    await AddExpenditureAsync(expOnline);
-                }
-            }
-            
-            await GetAllExpendituresAsync();
-            await usersRepo.UpdateUserOnlineGetSetLatestValues(usersRepo.OfflineUser);
-
-            return true;
-        }
-        
-        
     }
 
+    private async Task UpdateOnlineDBWithLocalData(List<ExpendituresModel> tempExpList)
+    {
+        foreach (var expOffline in tempExpList)
+        {
+            if (!OnlineExpendituresList.Exists(x => x.Id == expOffline.Id))
+            {
+                expOffline.UserId = usersRepo.OfflineUser.UserIDOnline;
+                expOffline.PlatformModel = DeviceInfo.Current.Model;
+                await AddExpenditureOnlineAsync(expOffline);
+            }
+            else
+            {
+                if (expOffline.UpdateOnSync && expOffline.PlatformModel == DeviceInfo.Current.Model)
+                {
+                    expOffline.PlatformModel = DeviceInfo.Current.Model;
+
+                    await UpdateExpenditureOnlineAsync(expOffline);
+                }
+            }
+        }
+    }
+
+    private async Task<bool> DeleteAllExpOnline()
+    {
+        OpenDB();
+        var AllOfflineIDsToBeDeleted = await AllIDsToBeDeleted.Query().ToListAsync();
+        db.Dispose();
+        var idsFilter = Builders<IDsToBeDeleted>.Filter.Eq("UserID", usersRepo.OnlineUser.Id);
+        AllOnlineIDsToBeDeleted ??=  DBOnline?.GetCollection<IDsToBeDeleted>(IDsDataCollectionName);
+        foreach (var idToDelete in AllOfflineIDsToBeDeleted)
+        {
+            if (idToDelete.UserID == usersRepo.OnlineUser.Id)
+            {
+                string id = idToDelete.Id.Remove(0, 4);
+                await DeleteExpenditureOnlineAsync(id);
+                _ = OnlineExpendituresList.RemoveAll(x => x.Id == id);
+            }
+            try
+            {
+                await AllOnlineIDsToBeDeleted.InsertOneAsync(idToDelete);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+
+        }
+        OpenDB();
+            await AllIDsToBeDeleted.DeleteAllAsync();
+        db.Dispose();
+        return true;
+    }
+    private async Task<bool> DeleteAllExpOffline()
+    {
+        var idsFilter = Builders<IDsToBeDeleted>.Filter.Eq("UserID", usersRepo.OnlineUser.Id);
+        var AllOnlineIDsToBeDeleted = await DBOnline?.GetCollection<IDsToBeDeleted>(IDsDataCollectionName)
+            .Find(idsFilter).ToListAsync()!;
+        foreach (var idToDelete in AllOnlineIDsToBeDeleted)
+        {
+            if (idToDelete.UserID == usersRepo.OnlineUser.Id && idToDelete.PlatformModel != DeviceInfo.Current.Model)
+            {
+                string id = idToDelete.Id.Remove(0, 4);
+                await DeleteExpenditureAsync(id);
+                _ = OfflineExpendituresList.RemoveAll(x => x.Id == id);
+            }
+        }
+        return true;
+    }
 
     /*--------- SECTION FOR ONLINE CRUD OPERATIONS OF SINGLE DOCUMENTS----------*/
     private async Task AddExpenditureOnlineAsync(ExpendituresModel expenditure)
@@ -277,7 +318,6 @@ public class ExpendituresRepository : IExpendituresRepository
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
-            
         }
     }
 
@@ -287,11 +327,9 @@ public class ExpendituresRepository : IExpendituresRepository
     }
 
     private async Task DeleteExpenditureOnlineAsync(string id)
-    { 
+    {
         await AllOnlineExpenditures.DeleteOneAsync(x => x.Id == id);
-        
     }
-
 
     public async Task DropExpendituresCollection()
     {
@@ -301,5 +339,4 @@ public class ExpendituresRepository : IExpendituresRepository
         Debug.WriteLine("Expenditures Collection dropped!");
     }
 
- 
 }

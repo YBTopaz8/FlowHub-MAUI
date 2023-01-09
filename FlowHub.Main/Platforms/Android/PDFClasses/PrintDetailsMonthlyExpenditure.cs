@@ -7,6 +7,10 @@ using Color = iText.Kernel.Colors.Color;
 using System.Collections.ObjectModel;
 using FlowHub.Main.AdditionalResourcefulApiClasses;
 using static FlowHub.Main.AdditionalResourcefulApiClasses.ExchangeRateAPI;
+using iText.Layout.Properties;
+using TextAlignment = iText.Layout.Properties.TextAlignment;
+using System.Diagnostics;
+using iText.Kernel.Pdf.Canvas.Draw;
 
 namespace FlowHub.Main.PDF_Classes;
 
@@ -29,12 +33,32 @@ public class PrintDetailsMonthlyExpenditure
 
         string pdfTitle = $"List Of Estimated Expenditures For {monthYear}";
 
-        await Task.Run(()=> CreatePFDoc(expList, PathFile, userCurrency, printDisplayCurrency, ObjectWithRate.result, ObjectWithRate.date, pdfTitle, userName));
+        await Task.Run(()=> CreatePDFDoc(expList, PathFile, userCurrency, printDisplayCurrency, ObjectWithRate.result, ObjectWithRate.date, pdfTitle, userName));
+
+    }
+    public async Task SaveListDetailMonthlyPlanned(List<List<ExpendituresModel>> expLists, string userCurrency, string printDisplayCurrency, string userName, List<string> ListOfTitles)
+    {
+        ConvertedRate ObjectWithRate = new() { result = 1, date = DateTime.UtcNow };
+
+        if (!userCurrency.Equals(printDisplayCurrency))
+        {
+            ExchangeRateAPI JSONWithRates = new();
+
+            ObjectWithRate = JSONWithRates.GetConvertedRate(userCurrency, printDisplayCurrency);
+        }
+
+        string path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+        string fileName = "Report_Multiple_MonthlyPlanned.pdf";
+        string PathFile = $"{path}/{fileName}";
+
+
+        await Task.Run(()=> CreatePDFDocOfMultipleLists(expLists, PathFile, ListOfTitles, userName, userCurrency, printDisplayCurrency,  ObjectWithRate.result, ObjectWithRate.date));
 
     }
 
-    void CreatePFDoc(List<ExpendituresModel> expList, string pathFile, string userCurrency, string printDisplayCurrency, double rate, DateTime dateOfRateUpdate, string pdfTitle, string username)
+    void CreatePDFDoc(List<ExpendituresModel> expList, string pathFile, string userCurrency, string printDisplayCurrency, double rate, DateTime dateOfRateUpdate, string pdfTitle, string username)
     {
+        
         Color HeaderColor = WebColors.GetRGBColor("DarkSlateBlue");
 
         
@@ -43,7 +67,7 @@ public class PrintDetailsMonthlyExpenditure
         Document document = new(pdf, pageSize: iText.Kernel.Geom.PageSize.A4, immediateFlush: false);
 
         Paragraph header = new Paragraph(pdfTitle)
-            .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
+            .SetTextAlignment(TextAlignment.CENTER)
             .SetFontColor(HeaderColor)
             .SetBold()
             .SetFontSize(20);
@@ -56,13 +80,13 @@ public class PrintDetailsMonthlyExpenditure
         Table table = new Table(4, false).UseAllAvailableWidth();
 
         table.AddHeaderCell("#")
-            .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER);
+            .SetTextAlignment(TextAlignment.CENTER);
         table.AddHeaderCell("Description")
-            .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER);
+            .SetTextAlignment(TextAlignment.CENTER);
         table.AddHeaderCell("Amount")
-            .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER);
+            .SetTextAlignment(TextAlignment.CENTER);
         table.AddHeaderCell("Comments")
-            .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER);
+            .SetTextAlignment(TextAlignment.CENTER);
 
         double totalOfAllExp = 0;
         for (int i = 0; i < expList.Count; i++)
@@ -71,15 +95,15 @@ public class PrintDetailsMonthlyExpenditure
             double amount = item.AmountSpent * rate;
 
             table.AddCell(new Paragraph($"{expList.IndexOf(item) + 1}")
-                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
+                .SetTextAlignment(TextAlignment.CENTER));
 
             table.AddCell(new Paragraph($"{item.Reason}")
-                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
+                .SetTextAlignment(TextAlignment.CENTER));
 
             table.AddCell(new Paragraph($"{amount:n3} {printDisplayCurrency}")
-                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
+                .SetTextAlignment(TextAlignment.CENTER));
             table.AddCell(new Paragraph($"{item.Comment}")
-                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
+                .SetTextAlignment(TextAlignment.CENTER));
 
             if (item.IncludeInReport)
             {
@@ -91,15 +115,15 @@ public class PrintDetailsMonthlyExpenditure
         document.Flush();
 
         Paragraph footerText = new Paragraph($"Total Amount {totalOfAllExp:n3} {printDisplayCurrency}")
-            .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
+            .SetTextAlignment(TextAlignment.CENTER)
             .SetFontSize(24)
             .SetBold();
 
         Paragraph waterMarkText = new Paragraph($"Report Generated by FlowHub App for {username}")
-            .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
+            .SetTextAlignment(TextAlignment.LEFT)
             .SetFontSize(15);
         Paragraph bottomNotesText= new Paragraph($"Converted using the rate of 1 {userCurrency} = {rate:n3} {printDisplayCurrency} \nRate updated on {dateOfRateUpdate:D}")
-            .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
+            .SetTextAlignment(TextAlignment.LEFT)
             .SetFontSize(10);
 
         document.Add(new Paragraph());
@@ -126,13 +150,133 @@ public class PrintDetailsMonthlyExpenditure
         {
             document.ShowTextAligned(new Paragraph(string
                .Format("Page" + i + " of " + numberPages)),
-               559, 806, i, iText.Layout.Properties.TextAlignment.LEFT,
+               559, 806, i, TextAlignment.LEFT,
                iText.Layout.Properties.VerticalAlignment.BOTTOM, 0);
         }
 
         document.Close();
-
+        
         SharePdfFile(pdfTitle, pathFile);
+    }
+    
+    void CreatePDFDocOfMultipleLists(List<List<ExpendituresModel>> expLists, string pathFile, List<string> ListOfTitles, string username, string userCurrency, string printDisplayCurrency, double rate, DateTime dateOfRateUpdate)
+    {
+        
+        Color HeaderColor = WebColors.GetRGBColor("DarkSlateBlue");
+
+        
+        PdfWriter writer = new(pathFile);
+        PdfDocument pdf = new(writer);
+        Document document = new(pdf, pageSize: iText.Kernel.Geom.PageSize.A4, immediateFlush: false);
+
+        double FinalTotal = 0;
+        for (int i = 0; i < expLists.Count; i++)
+        {
+            Paragraph header = new Paragraph($"Expenditures for {ListOfTitles[i]}")
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetFontColor(HeaderColor)
+            .SetBold()
+            .SetFontSize(25);
+            document.Add(header);
+            document.Flush();
+
+            document.Add(new Paragraph());
+            document.Flush();
+
+            Table table = new Table(4, false).UseAllAvailableWidth();
+
+            table.AddHeaderCell("#")
+                .SetTextAlignment(TextAlignment.CENTER);
+            table.AddHeaderCell("Description")
+                .SetTextAlignment(TextAlignment.CENTER);
+            table.AddHeaderCell("Amount")
+                .SetTextAlignment(TextAlignment.CENTER);
+            table.AddHeaderCell("Comments")
+                .SetTextAlignment(TextAlignment.CENTER);
+
+            double totalOfAllExp = 0;
+            var ExpList = expLists[i];
+            for (int j = 0; j < ExpList.Count; j++)
+            {
+                ExpendituresModel item = ExpList[j];
+                double amount = item.AmountSpent * rate;
+
+                table.AddCell(new Paragraph($"{ExpList.IndexOf(item) + 1}")
+                    .SetTextAlignment(TextAlignment.CENTER));
+
+                table.AddCell(new Paragraph($"{item.Reason}")
+                    .SetTextAlignment(TextAlignment.CENTER));
+
+                table.AddCell(new Paragraph($"{amount:n3} {printDisplayCurrency}")
+                    .SetTextAlignment(TextAlignment.CENTER));
+                table.AddCell(new Paragraph($"{item.Comment}")
+                    .SetTextAlignment(TextAlignment.CENTER));
+
+                if (item.IncludeInReport)
+                {
+                    totalOfAllExp += amount;
+                    FinalTotal += amount;
+                }
+            }
+
+            document.Add(table);
+            document.Flush();
+
+            Paragraph footerText = new Paragraph($"Total Amount {totalOfAllExp:n3} {printDisplayCurrency}")
+                .SetTextAlignment(TextAlignment.LEFT)
+                .SetFontSize(15);
+            document.Add(new Paragraph());
+            document.Flush();
+
+            document.Add(footerText);
+            document.Flush();
+
+        }
+
+        Paragraph FinalTotalParagraph = new Paragraph($"Grand Total : {FinalTotal:n3} {printDisplayCurrency}")
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetFontSize(20)
+            .SetBold();
+
+        Paragraph waterMarkText = new Paragraph($"Report Generated by FlowHub App for {username}")
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetFontSize(15);
+        Paragraph bottomNotesText= new Paragraph($"Converted using the rate of 1 {userCurrency} = {rate:n3} {printDisplayCurrency} \nRate updated on {dateOfRateUpdate:D}")
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetFontSize(10);
+
+        LineSeparator ls = new LineSeparator(new SolidLine());
+        document.Add(ls);
+        document.Flush();
+
+        document.Add(FinalTotalParagraph);
+        document.Flush();
+
+        document.Add(new Paragraph());
+        document.Flush();
+
+        document.Add(waterMarkText);
+        document.Flush();
+
+        document.Add(new Paragraph());
+        document.Flush();
+
+        document.Add(bottomNotesText);
+        document.Flush();
+
+
+        int numberPages = pdf.GetNumberOfPages();
+        for (int i = 1; i <= numberPages; i++)
+        {
+            document.ShowTextAligned(new Paragraph(string
+               .Format("Page" + i + " of " + numberPages)),
+               559, 806, i, TextAlignment.LEFT,
+               iText.Layout.Properties.VerticalAlignment.BOTTOM, 0);
+        }
+
+        document.Close();
+        
+        SharePdfFile("Report of Multiple Months", pathFile);
     }
 
     async void SharePdfFile(string PdfTitle, string PathFile)

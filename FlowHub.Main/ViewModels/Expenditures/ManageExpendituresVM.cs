@@ -1,16 +1,17 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FlowHub.DataAccess.IRepositories;
+using FlowHub.Main.AdditionalResourcefulAPIClasses;
 using FlowHub.Main.PDF_Classes;
 using FlowHub.Main.Platforms.NavigationMethods;
 using FlowHub.Main.PopUpPages;
 using FlowHub.Models;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-
 
 //This is the view model for the page that shows ALL expenditures
 namespace FlowHub.Main.ViewModels.Expenditures;
@@ -25,7 +26,8 @@ public partial class ManageExpendituresVM : ObservableObject
         expendituresService = expendituresRepository;
         userService = usersRepository;
     }
-    public ObservableCollection<ExpendituresModel> ExpendituresList { get; set; } = new ();
+    public SmartObservableCollection<ExpendituresModel> ExpendituresList { get; set; } = new();
+   // public ObservableCollection<ExpendituresModel> ExpendituresList { get; set; } = new ();
 
     [ObservableProperty]
     private double totalAmount;
@@ -48,7 +50,7 @@ public partial class ManageExpendituresVM : ObservableObject
     private UsersModel ActiveUser = new();
 
     [ObservableProperty]
-    private bool activ=false;
+    private bool activ;
 
     [ObservableProperty]
     private bool showDayFilter = false;
@@ -67,12 +69,15 @@ public partial class ManageExpendituresVM : ObservableObject
 
     [ObservableProperty]
     private string filterTitle;
-    
+
     [ObservableProperty]
     private bool showClearDayButton = false;
 
     [ObservableProperty]
     private bool isExpanderExpanded = false;
+
+    [ObservableProperty]
+    private bool isSyncing = false;
 
     private string filterOption;
     private int GlobalSortNamePosition = 1;
@@ -92,41 +97,45 @@ public partial class ManageExpendituresVM : ObservableObject
         await expendituresService.GetAllExpendituresAsync();
         filterOption = "Filter_Curr_Month";
         //FilterGetExpOfToday(GlobalSortNamePosition);        
-        FilterExpListOfCurrentMonth();
+        //  FilterExpListOfCurrentMonth();
+        FilterGetAllExp();
     }
+
 
     [RelayCommand]
     public void Sorting(int SortNamePosition)
     {
+        IsBusy= true;
         GlobalSortNamePosition = SortNamePosition;
 
-        var expList = new List<ExpendituresModel>();
+        var expList = new List<ExpendituresModel>();  
         switch (SortNamePosition)
         {
             case 0:
                 expList = ExpendituresList.OrderBy(x => x.DateSpent).ToList();
-                FilterTitle = $"Date Spent Ascending";
+                FilterTitle = "Date Spent Ascending";
                 break;
             case 1:
                 expList = ExpendituresList.OrderByDescending(x => x.DateSpent).ToList();
-                FilterTitle = $"Date Spent Descending";
+                FilterTitle = "Date Spent Descending";
                 break;
             case 2:
                 expList = ExpendituresList.OrderBy(x => x.AmountSpent).ToList();
-                FilterTitle = $"Amount Spent Ascending";
+                FilterTitle = "Amount Spent Ascending";
                 break;
             case 3:
                 expList = ExpendituresList.OrderByDescending(x => x.AmountSpent).ToList();
-                FilterTitle = $"Amount Spent Descending";
+                FilterTitle = "Amount Spent Descending";
                 break;
             default:
                 break;
         }
-        ExpendituresList.Clear();
-        for (int i = 0; i < expList.Count; i++)
-        {
-            ExpendituresList.Add(expList[i]);
-        }
+
+        //    ExpendituresList.Clear();
+        //ExpendituresList.AddRange(expList);
+        ExpendituresList.Reset(expList);
+        IsBusy= false;
+        
     }
 
     [RelayCommand]
@@ -142,20 +151,21 @@ public partial class ManageExpendituresVM : ObservableObject
             DayFilterYear = DateTime.UtcNow.Year;
             filterOption = "Filter_Curr_Month";
             List<ExpendituresModel> expOfCurrentMonth = new();
-            
+
             expOfCurrentMonth = expendituresService.OfflineExpendituresList
                             .FindAll(x => x.DateSpent.Month == DateTime.Today.Month)
                             .OrderByDescending(x => x.DateSpent)
                             .ToList();
-            FilterTitle = $"Date Spent Descending";
-                   
+            FilterTitle = "Date Spent Descending";
+
             IsBusy = true;
             double tot = 0;
+
+            ExpendituresList.Clear();
 
             if (expOfCurrentMonth.Count > 0)
             {
                 IsBusy = false;
-                ExpendituresList.Clear();
                 for (int i = 0; i < expOfCurrentMonth.Count; i++)
                 {
                     ExpendituresList.Add(expOfCurrentMonth[i]);
@@ -169,19 +179,11 @@ public partial class ManageExpendituresVM : ObservableObject
             else
             {
                 IsBusy=false;
-                ExpendituresList.Clear();
                 TotalExpenditures = ExpendituresList.Count;
                 ExpTitle = $"Flow Outs For {DateTime.Now:MMM - yyyy}";
                 TotalAmount = 0;
             }
-            if (expOfCurrentMonth.Count < 3)
-            {
-                ShowStatisticBtn = false;
-            }
-            else
-            {
-                ShowStatisticBtn = true;
-            }
+            ShowStatisticBtn = expOfCurrentMonth.Count >= 3;
         }
         catch (Exception ex)
         {
@@ -200,11 +202,11 @@ public partial class ManageExpendituresVM : ObservableObject
 
             filterOption = "Filter_Spec_Month";
             List<ExpendituresModel> expOfSpecMonth = new();
-        
+
             expOfSpecMonth = expendituresService.OfflineExpendituresList
                             .FindAll(x => x.DateSpent.Month == DayFilterMonth && x.DateSpent.Year == DayFilterYear)
                             .OrderByDescending(x => x.DateSpent)
-                            .ToList(); 
+                            .ToList();
             IsBusy = true;
             double tot = 0;
 
@@ -217,7 +219,6 @@ public partial class ManageExpendituresVM : ObservableObject
                     ExpendituresList.Add(expOfSpecMonth[i]);
                     tot += expOfSpecMonth[i].AmountSpent;
                 }
-
 
                 TotalAmount = tot;
                 TotalExpenditures = ExpendituresList.Count;
@@ -232,14 +233,7 @@ public partial class ManageExpendituresVM : ObservableObject
                 TotalAmount = 0;
             }
 
-            if (expOfSpecMonth.Count < 3)
-            {
-                ShowStatisticBtn = false;
-            }
-            else
-            {
-                ShowStatisticBtn = true;
-            }
+            ShowStatisticBtn = expOfSpecMonth.Count >= 3;
         }
         catch (Exception ex)
         {
@@ -256,27 +250,30 @@ public partial class ManageExpendituresVM : ObservableObject
             ShowDayFilter = false;
             filterOption = "Filter_All";
             List<ExpendituresModel> expList = new ();
-            
+
             expList = expendituresService.OfflineExpendituresList.OrderByDescending(x => x.DateSpent).ToList();
-            FilterTitle = $"Date Spent Descending";
-            
+            FilterTitle = "Date Spent Descending";
+
             IsBusy= true;
             double tot = 0;
-
-            
+          //  ExpendituresList.Clear();
             if (expList.Count > 0)
             {
+                ExpendituresList.Reset(expList);
+                //ExpendituresList.AddRange(expList);
+                //ExpendituresList.Reset(expList);
                 IsBusy = false;
-                ExpendituresList.Clear();
-                foreach (ExpendituresModel exp in expList)
-                {
-                    ExpendituresList.Add(exp);
-                    tot += exp.AmountSpent;
-                }
-                TotalAmount = tot;
-                TotalExpenditures = ExpendituresList.Count;                
-                ExpTitle = "All Flow Outs";
+                tot = expList.Sum(x => x.AmountSpent);
+                //ExpendituresList.Clear();
 
+                //foreach (ExpendituresModel exp in expList)
+                //{
+                //   // ExpendituresList.Add(exp);
+                //    tot += exp.AmountSpent;
+                //}
+                TotalAmount = tot;
+                TotalExpenditures = ExpendituresList.Count;
+                ExpTitle = "All Flow Outs";
 
                 if (ActiveUser.TotalExpendituresAmount == 0)
                 {
@@ -291,15 +288,7 @@ public partial class ManageExpendituresVM : ObservableObject
                 TotalAmount = 0;
                 ExpTitle = "All Flow Outs";
             }
-            if (expList.Count < 3)
-            {
-                ShowStatisticBtn = false;
-            }
-            else
-            {
-                ShowStatisticBtn = true;
-            }
-
+            ShowStatisticBtn = expList.Count >= 3;
         }
         catch (Exception ex)
         {
@@ -316,13 +305,13 @@ public partial class ManageExpendituresVM : ObservableObject
             ShowDayFilter = false;
             filterOption = "Filter_Today";
             List<ExpendituresModel> expOfToday = new();
-            
+
             expOfToday = expendituresService.OfflineExpendituresList
                         .FindAll(x => x.DateSpent.Date == DateTime.Today.Date)
                         .OrderByDescending(x => x.DateSpent)
                         .ToList();
-            FilterTitle = $"Date Spent Descending";
-                    
+            FilterTitle = "Date Spent Descending";
+
             IsBusy = true;
             double tot = 0;
 
@@ -348,22 +337,12 @@ public partial class ManageExpendituresVM : ObservableObject
                 TotalExpenditures = 0;
                 ExpTitle = "Today's Flow Out";
             }
-            if (expOfToday.Count < 3)
-            {
-                ShowStatisticBtn = false;
-            }
-            else
-            {
-                ShowStatisticBtn = true;
-            }
-
+            ShowStatisticBtn = expOfToday.Count >= 3;
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"Exception MESSAGE: {ex.Message}");
-            
         }
-        
     }
 
     [RelayCommand]
@@ -376,15 +355,15 @@ public partial class ManageExpendituresVM : ObservableObject
             IsExpanderExpanded = false;
 
             filterOption = "Filter_Spec_Day_Month";
-            DateTime specificDate = new DateTime(DayFilterYear, DayFilterMonth, DayFilterDay);
+            DateTime specificDate = new(DayFilterYear, DayFilterMonth, DayFilterDay);
             List<ExpendituresModel> expOfSpecDayInMonth = new();
-           
+
             expOfSpecDayInMonth = expendituresService.OfflineExpendituresList
                             .FindAll(x => x.DateSpent.Date == specificDate)
                             .OrderByDescending(x => x.DateSpent)
                             .ToList();
-            FilterTitle = $"Date Spent Descending";
-                  
+            FilterTitle = "Date Spent Descending";
+
             IsBusy = true;
             double tot = 0;
             if (expOfSpecDayInMonth.Count > 0)
@@ -396,7 +375,6 @@ public partial class ManageExpendituresVM : ObservableObject
                     ExpendituresList.Add(expOfSpecDayInMonth[i]);
                     tot += expOfSpecDayInMonth[i].AmountSpent;
                 }
-
 
                 TotalAmount = tot;
                 TotalExpenditures = ExpendituresList.Count;
@@ -410,14 +388,7 @@ public partial class ManageExpendituresVM : ObservableObject
                 ExpTitle = $"Flow Outs For {specificDate:dd, MMM yyyy}";
                 TotalAmount = 0;
             }
-            if (expOfSpecDayInMonth.Count < 3)
-            {
-                ShowStatisticBtn = false;
-            }
-            else
-            {
-                ShowStatisticBtn = true;
-            }
+            ShowStatisticBtn = expOfSpecDayInMonth.Count >= 3;
             GlobalSortNamePosition = 1;
         }
         catch (Exception ex)
@@ -494,35 +465,33 @@ public partial class ManageExpendituresVM : ObservableObject
             default:
                 //Debug.WriteLine("Cancelled");
                 break;
-        }     
-        
+        }
+
         NavFunction.FromManageExpToSingleMonthStats(navParam);
-        
     }
 
     [RelayCommand]
     public async void DeleteExpenditureBtn(ExpendituresModel expenditure)
     {
         CancellationTokenSource cancellationTokenSource = new();
-        ToastDuration duration = ToastDuration.Short;
-        double fontSize = 14;
+        const ToastDuration duration = ToastDuration.Short;
+        const double fontSize = 14;
         string text;
         bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You want to delete?")))!;
         if (response)
         {
-            var deleteResponse = await expendituresService.DeleteExpenditureAsync(expenditure); //delete the expenditure from db
-                    
+            var deleteResponse = await expendituresService.DeleteExpenditureAsync(expenditure.Id); //delete the expenditure from db
+
             if (deleteResponse)
             {
-                 text = "Expenditure Deleted";
+                text = "Expenditure Deleted";
                 expendituresService.OfflineExpendituresList.Remove(expenditure);
                 ExpendituresList.Remove(expenditure);
 
                 ActiveUser.TotalExpendituresAmount -= expenditure.AmountSpent;
                 ActiveUser.PocketMoney += expenditure.AmountSpent;
                 UserPocketMoney += expenditure.AmountSpent;
-                await userService.UpdateUserAsync(ActiveUser);              
-                
+                await userService.UpdateUserAsync(ActiveUser);
             }
             else
             {
@@ -551,9 +520,8 @@ public partial class ManageExpendituresVM : ObservableObject
     [RelayCommand]
     public async void ShowFilterPopUpPage()
     {
-
         List<string> FilterResult = new();
-        
+
         FilterResult = (List<string>)await Shell.Current.ShowPopupAsync(new FilterOptionsPopUp(filterOption, DayFilterMonth,DayFilterYear));
         GlobalSortNamePosition = 1;
         if (FilterResult.Count == 1)
@@ -583,16 +551,20 @@ public partial class ManageExpendituresVM : ObservableObject
             monthName= FilterResult[3];
             FilterExpListOfSpecificMonth();
         }
-
     }
-
 
     [RelayCommand]
     public async void SyncExpTest()
     {
-        await expendituresService.SynchronizeExpendituresAsync(ActiveUser.Email, ActiveUser.Password);
-        
-        PageloadedAsync();
+        IsBusy = true;
+        Debug.WriteLine("Begin Sync");
+        if(await expendituresService.SynchronizeExpendituresAsync(ActiveUser.Email, ActiveUser.Password))
+        {
+            PageloadedAsync();
+            IsBusy = false;
+        }
+
+        Debug.WriteLine("End Sync");
         //  await expendituresService.GetAllExpFromOnlineAsync(ActiveUser.Id);
         //string newText= (string)await Shell.Current.ShowPopupAsync(new InputPopUpPage(isTextInput:true, optionalTitleText:"Enter New Name"));
         ////Debug.WriteLine(newText);

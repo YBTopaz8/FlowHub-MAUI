@@ -6,11 +6,11 @@ public class LoginNavs
 {
     public async void GoToHomePage()
     {
-        await AppShellMobile.Current.GoToAsync($"//HomePageM");
+        await Shell.Current.GoToAsync($"//HomePage");
     }
     public async void GoToLoginInPage()
     {
-        await AppShellMobile.Current.GoToAsync($"//LoginM");
+        await Shell.Current.GoToAsync($"//LoginD");
     }
 }
 

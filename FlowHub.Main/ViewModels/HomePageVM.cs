@@ -29,7 +29,7 @@ public partial class HomePageVM : ObservableObject
 
     [ObservableProperty]
     public int totalExp;
-    
+
     [ObservableProperty]
     public string username;
     [ObservableProperty]
@@ -53,20 +53,9 @@ public partial class HomePageVM : ObservableObject
         UserCurrency = ActiveUser.UserCurrency;
         var ListOfExp = await _expendituresService.GetAllExpendituresAsync();
 
-        if (ListOfExp.Count != 0)
-        {
-            ExpendituresDetails = ListOfExp.OrderByDescending(s => s.DateSpent).First();
-            //orderbyDescending will give the closest date (newest) to today as the first of the list.
-            //then just retrieve it with the First() method.
-
-        }
-        else
-        {
-            ExpendituresDetails = new() { DateSpent = DateTime.Now };
-        }
-
+        ExpendituresDetails = ListOfExp.Count != 0 ? ListOfExp.OrderByDescending(s => s.DateSpent).First() : (new() { DateSpent = DateTime.Now });
     }
-    
+
     [RelayCommand]
     public void GetTotal()
     {
@@ -74,8 +63,7 @@ public partial class HomePageVM : ObservableObject
         {
             var expList = _expendituresService.OfflineExpendituresList;
             TotalExp = expList.Count;
-            
-           
+
         }
         catch (Exception ex)
         {
@@ -102,13 +90,13 @@ public partial class HomePageVM : ObservableObject
             NavFunction.FromHomePageToUpsertExpenditure(navParam);
         }
     }
-        
+
 
 
     [RelayCommand]
     public void SaveToJSON()
     {
-        
+
         /*
         var User = new UsersModel
         {
@@ -126,5 +114,5 @@ public partial class HomePageVM : ObservableObject
             Debug.WriteLine("======>> UNSAVED");
         }*/
     }
-    
+
 }

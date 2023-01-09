@@ -8,7 +8,7 @@ public partial class AcceptCancelPopUpAlert : Popup
 	{
 		InitializeComponent();
 		DisplayAlertText.Text = AlertText;
-		
+
 	}
     void OnYesButtonClicked(object sender, EventArgs e) => Close(true);
 

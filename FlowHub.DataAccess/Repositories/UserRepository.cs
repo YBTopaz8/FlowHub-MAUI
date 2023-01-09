@@ -8,7 +8,6 @@ namespace FlowHub.DataAccess.Repositories;
 
 public class UserRepository : IUsersRepository
 {
-
     LiteDatabaseAsync db;
     IMongoDatabase DBOnline;
 
@@ -17,17 +16,16 @@ public class UserRepository : IUsersRepository
 
     private readonly IDataAccessRepo dataAccessRepo;
     private readonly IOnlineCredentialsRepository onlineDataAccessRepo;
-
-
     private const string userDataCollectionName = "Users";
 
     public UsersModel OfflineUser { get; set; }
     public UsersModel OnlineUser { get; set; }
 
-    public UserRepository(IDataAccessRepo dataAccess, IOnlineCredentialsRepository onlineRepository)
+    public UserRepository(IDataAccessRepo dataAccess, IOnlineCredentialsRepository onlineRepository)//, IExpendituresRepository expenditureRepository)
     {
         dataAccessRepo = dataAccess;
         onlineDataAccessRepo = onlineRepository;
+       // expenditureRepo = expenditureRepository;
     }
     void OpenDB()
     {
@@ -40,42 +38,21 @@ public class UserRepository : IUsersRepository
         OpenDB();
         int numberofUsers = await OfflineUserCollection.Query().CountAsync();
         db.Dispose();
-        if (numberofUsers < 1)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return numberofUsers >= 1;
     }
     public async Task<UsersModel> GetUserAsync(string userEmail, string userPassword)
     {
         OpenDB();
         OfflineUser = await OfflineUserCollection.FindOneAsync(x => x.Email == userEmail && x.Password == userPassword);
         db.Dispose();
-        if (OfflineUser is null)
-        {
-            return null;
-        }
-        else
-        {
-            return OfflineUser;
-        }
+        return OfflineUser;
     }
     public async Task<UsersModel> GetUserAsync(string UserID)
     {
         OpenDB();
         OfflineUser = await OfflineUserCollection.FindOneAsync(x => x.Id == UserID);
         db.Dispose();
-        if (OfflineUser is null)
-        {
-            return OfflineUser;
-        }
-        else
-        {
-            return OfflineUser;
-        }
+        return OfflineUser;
     }
 
     /*--------- SECTION FOR OFFLINE CRUD OPERATIONS----------*/
@@ -94,8 +71,16 @@ public class UserRepository : IUsersRepository
         {
             return null;
         }
-        OfflineUser.UserIDOnline = OnlineUser.Id;
-        _ = await UpdateUserAsync(OfflineUser);
+        if (OfflineUser is null)
+        {
+            OfflineUser = OnlineUser;
+            await AddUserAsync(OnlineUser);
+        }
+        else
+        {
+            OfflineUser.UserIDOnline = OnlineUser.Id;
+            _ = await UpdateUserAsync(OfflineUser);
+        }
         return OfflineUser;
     }
     public async Task<bool> AddUserAsync(UsersModel user)

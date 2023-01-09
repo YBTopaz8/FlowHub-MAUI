@@ -18,6 +18,7 @@
 
     <toolkit:DockLayout>
         <Label toolkit:DockLayout.DockPosition="Top" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center">
+            
             <Label.Text>
                 <MultiBinding StringFormat="{} Current Balance is {0:n3} {1}">
                     <Binding Path="UserPocketMoney"/>
@@ -40,11 +41,13 @@
             </VerticalStackLayout >
 
             <HorizontalStackLayout Grid.Column="2" HorizontalOptions="End" BackgroundColor="Transparent" IsVisible="true">
-                <ImageButton Source="{AppThemeBinding Dark=sync_icon_d.png, Light=sync_icon_l.png}" Command="{Binding SyncExpTestCommand}"/>
+                <ImageButton Source="{AppThemeBinding Dark=sync_icon_d.png, Light=sync_icon_l.png}" 
+                             x:Name="SyncButton"
+                             Command="{Binding SyncExpTestCommand}"/>
             </HorizontalStackLayout>
         </Grid>
 
-        <HorizontalStackLayout toolkit:DockLayout.DockPosition="Top" HorizontalOptions="Center">
+        <HorizontalStackLayout toolkit:DockLayout.DockPosition="Top" HorizontalOptions="Center" x:Name="SyncIndicator">
             <Label Text="Syncing..." IsVisible="{Binding IsBusy}" Margin="0,0,0,0" FontSize="13" />
             <ActivityIndicator IsRunning="{Binding IsBusy}" HeightRequest="20" IsVisible="{Binding IsBusy}"/>
         </HorizontalStackLayout>
@@ -68,6 +71,7 @@
             
                 <VerticalStackLayout Margin="10,0" Spacing="2" x:Name="filterOptionsContainer">
                     <Button Text="Date Spent (Asc)" BackgroundColor="Transparent" Command="{Binding SortingCommand}" x:Name="FilterOption"  Clicked="FilterOption_Clicked">
+                        
                     <Button.CommandParameter>
                         <x:Int32>0</x:Int32>
                     </Button.CommandParameter>
@@ -157,9 +161,8 @@
                          VerticalOptions="Start" HorizontalOptions="Center" Margin="0,0,10,0" Grid.Column="2"/>
         </Grid>
 
-        <CollectionView x:Name="ColView" IsVisible="true" 
-                                                
-                        ItemsSource="{Binding ExpendituresList}"  HorizontalOptions="Center">
+        <CollectionView x:Name="ColView" IsVisible="true" ItemsSource="{Binding ExpendituresList}"
+                        HorizontalOptions="Center">
             <CollectionView.EmptyView>
                 <ContentView>
                     <VerticalStackLayout HorizontalOptions="Center"
@@ -173,9 +176,9 @@
                     <ScrollView Margin="5,1">
                         <VerticalStackLayout HorizontalOptions="Center">
                             <SwipeView >
-                                <SwipeView.LeftItems>
-                                    
-                                    <SwipeItem Command="{Binding Source={x:Reference Page}, 
+                                <SwipeView.LeftItems>                                    
+                                    <SwipeItem 
+                                        Command="{Binding Source={x:Reference Page}, 
                                             Path=BindingContext.GoToEditExpenditurePageCommand}"  
                                                    CommandParameter="{Binding .}" 
                                             IconImageSource="{AppThemeBinding Dark= edit_d.png, Light= edit_l.png}" 
@@ -217,7 +220,8 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        
+
+       
     </toolkit:DockLayout>
 
 </ContentPage>

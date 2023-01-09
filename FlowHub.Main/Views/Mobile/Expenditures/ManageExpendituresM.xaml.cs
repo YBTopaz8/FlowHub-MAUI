@@ -1,20 +1,22 @@
 ﻿using CommunityToolkit.Maui.Views;
 using FlowHub.Main.PopUpPages;
 using FlowHub.Main.ViewModels.Expenditures;
-using FlowHub.Models;
 using Microsoft.Maui.Controls.Platform;
-using System.Diagnostics;
 
 namespace FlowHub.Main.Views.Mobile.Expenditures;
 
 public partial class ManageExpendituresM : ContentPage
 {
     private readonly ManageExpendituresVM viewModel;
+    readonly Animation rotation;
     public ManageExpendituresM(ManageExpendituresVM vm)
     {
         InitializeComponent();
         viewModel = vm;
         this.BindingContext = vm;
+
+        rotation = new Animation(v => SyncButton.Rotation = v,
+            0, 360, Easing.Linear);
 
         Microsoft.Maui.Handlers.DatePickerHandler.Mapper.AppendToMapping("MyCustomDatePicker", (handler, view) =>
         {
@@ -28,19 +30,34 @@ public partial class ManageExpendituresM : ContentPage
             }
         });
 
-        viewModel.PageloadedAsyncCommand.Execute(null);
-        //viewModel.PropertyChanged += ViewModel_PropertyChanged;
+        viewModel.PropertyChanged += ViewModel_PropertyChanged;
     }
 
-    //private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    //{
+    private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(viewModel.IsBusy))
+        {
+            if (viewModel.IsBusy)
+            {
+                rotation.Commit(this, "RotateSyncButton", 16, 1000, Easing.Linear,
+                    (value , b) => SyncButton.Rotation = 0,
+                    () => true);
+                ColView.IsVisible = false;
+            }
+            else
+            {
+                this.AbortAnimation("RotateSyncButton");
+                ColView.IsVisible = true;
 
-    //}
+            }
+        }
+    }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
-    }    
+        viewModel.PageloadedAsyncCommand.Execute(null);
+    }
 
     private async void ExportToPDFImageButton_Clicked(object sender, EventArgs e)
     {
@@ -56,8 +73,8 @@ public partial class ManageExpendituresM : ContentPage
 
             await viewModel.PrintExpendituresBtnCommand.ExecuteAsync(null);
             PrintProgressBarIndic.IsVisible = false;
-        }        
-        
+        }
+
     }
 
     private async void FilterOption_Clicked(object sender, EventArgs e)
@@ -69,8 +86,9 @@ public partial class ManageExpendituresM : ContentPage
         filterExpander.IsExpanded = false;
         filterOptionsContainer.TranslationY= 0;
         ColView.TranslationY= 0;
-        await filterOptionsContainer.FadeTo(1, 0);                
+        await filterOptionsContainer.FadeTo(1, 0);
     }
+
 
     /*
      * This snippet can be used if i ever want to allow multi selection

@@ -35,7 +35,7 @@ public partial class SingleMonthStatsPageM : ContentPage
 			var SelectedExpIndex = Convert.ToInt32(point.TertiaryValue);
 			viewModel.ChangeSelectedExp(SelectedExpIndex);
 		}
-		
+
     }
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)

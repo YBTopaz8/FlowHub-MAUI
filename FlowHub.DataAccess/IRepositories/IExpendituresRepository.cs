@@ -12,7 +12,7 @@ public interface IExpendituresRepository
  //   Task<List<ExpendituresModel>> GetAllExpFromOnlineAsync(string UserId);
     Task<bool> AddExpenditureAsync(ExpendituresModel expenditure);
     Task<bool> UpdateExpenditureAsync(ExpendituresModel expenditure);
-    Task<bool> DeleteExpenditureAsync(ExpendituresModel expenditure);
+    Task<bool> DeleteExpenditureAsync(string id);
 
     Task<bool> SynchronizeExpendituresAsync(string userEmail, string userPassword);
 
