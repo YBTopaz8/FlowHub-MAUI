@@ -26,6 +26,13 @@ To install the project, please do as follows;
 - Make sure you have Hardware Acceleration enabled on your PC
 Build and run your app and that's it!
 
+## FAQ:
+
+| CodeName      | UI Name       |
+| ------------- |:-------------:|
+| Expenditure   | Flow Out      |
+| Income        | Flow In       |
+
 ## Currently Existing Features
 
 - An official Android Version
