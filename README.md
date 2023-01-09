@@ -40,10 +40,8 @@ Build and run your app and that's it!
 - Normal Planned Expenditures
 - Income, Debt Management.
 - Application Customisation
-- True Cross-Platform interaction with One DB 
 - Localization for Multilanguage and Multi Currency support.
 - Statistics, Charts and Graphs
-- Cross platform with between Android devices and Windows Devices. (With Cross Sync)
 
 > Those are just the surfaces..
 
