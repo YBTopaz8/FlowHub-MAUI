@@ -20,21 +20,21 @@ public partial class SingleMonthStatsPageM : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-		viewModel.PageLoadedCommand.Execute(null);
-		pieChart.Series = viewModel.PieSeries;
-        SelectedTitle.Text = "Biggest Flow Out Details";
+		//viewModel.PageLoadedCommand.Execute(null);
+		//pieChart.Series = viewModel.PieSeries;
+  //      SelectedTitle.Text = "Biggest Flow Out Details";
 
     }
 	ChartPoint obj = null;
     private void pieChart_ChartPointPointerDown(IChartView chart, ChartPoint point)
     {
-		if (point is not null)
-		{
-			obj=point;
-			SelectedTitle.Text = "Selected Flow Out Details";
-			var SelectedExpIndex = Convert.ToInt32(point.TertiaryValue);
-			viewModel.ChangeSelectedExp(SelectedExpIndex);
-		}
+		//if (point is not null)
+		//{
+		//	obj=point;
+		//	SelectedTitle.Text = "Selected Flow Out Details";
+		//	var SelectedExpIndex = Convert.ToInt32(point.TertiaryValue);
+		//	viewModel.ChangeSelectedExp(SelectedExpIndex);
+		//}
 
     }
 

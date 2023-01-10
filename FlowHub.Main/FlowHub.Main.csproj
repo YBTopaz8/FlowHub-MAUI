@@ -26,8 +26,8 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
-		<AssemblyVersion>1.3.0.0</AssemblyVersion>
-		<FileVersion>1.3.0.0</FileVersion>
+		<AssemblyVersion>1.3.2.0</AssemblyVersion>
+		<FileVersion>1.3.2.0</FileVersion>
 		<GenerateAppInstallerFile>False</GenerateAppInstallerFile>
 		<AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
 		<PackageCertificateThumbprint>EAF338A1F8540A36EA9F7D9E0570F46A6CCEEA40</PackageCertificateThumbprint>
@@ -41,26 +41,26 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android33.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
-	  <ApplicationDisplayVersion>1.3.0</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.3.2</ApplicationDisplayVersion>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android33.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
-	  <ApplicationDisplayVersion>1.3.0</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.3.2</ApplicationDisplayVersion>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
-	  <ApplicationDisplayVersion>1.3.0</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.3.2</ApplicationDisplayVersion>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
-	  <ApplicationDisplayVersion>1.3.0</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.3.2</ApplicationDisplayVersion>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 

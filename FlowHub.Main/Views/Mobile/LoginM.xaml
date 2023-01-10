@@ -111,12 +111,16 @@
                                 <validation:RequiredValidation/>
                             </material:TextField.Validations>
                         </material:TextField>
+                        <ImageButton Source="{AppThemeBinding Dark=login_d, Light=login_l}" input:FormView.IsSubmitButton="True"/>
+
+                        <ImageButton Source="{AppThemeBinding Dark=login_online_d, Light=login_online_l}"
+                                     Clicked="LoginOnlineBtn_Clicked" x:Name="LoginButton" input:FormView.IsSubmitButton="True"/>
                         <Button Text="Login" BackgroundColor="DarkSlateBlue" FontAttributes="Bold" 
-                            FontSize="20"
-                            TextColor="White" x:Name="LoginButton" input:FormView.IsSubmitButton="True"/>
+                            FontSize="20" IsVisible="false"
+                            TextColor="White" input:FormView.IsSubmitButton="True"/>
                         
                         <Button Text="Login Online" BackgroundColor="BlueViolet" FontAttributes="Bold" 
-                            FontSize="20" x:Name="LoginOnlineBtn" Clicked="LoginOnlineBtn_Clicked"
+                            FontSize="20" IsVisible="false" Clicked="LoginOnlineBtn_Clicked"
                             TextColor="White" input:FormView.IsSubmitButton="True"/>
 
                     </input:FormView>

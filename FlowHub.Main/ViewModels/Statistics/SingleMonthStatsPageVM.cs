@@ -56,32 +56,32 @@ public partial class SingleMonthStatsPageVM :ObservableObject
 	public void PageLoaded()
 	{
 
-		TotalFlowOuts = ListOfExpenditures.Count;
-		TotalAmount = ListOfExpenditures.Sum(exp => exp.AmountSpent);
-		AverageAmount = TotalAmount / TotalFlowOuts;
-		BiggestAmount = ListOfExpenditures.Max(exp => exp.AmountSpent);
-		SingleExpenditure = ListOfExpenditures.MaxBy(exp => exp.AmountSpent);
-		Currency = SingleExpenditure.Currency;
+		//TotalFlowOuts = ListOfExpenditures.Count;
+		//TotalAmount = ListOfExpenditures.Sum(exp => exp.AmountSpent);
+		//AverageAmount = TotalAmount / TotalFlowOuts;
+		//BiggestAmount = ListOfExpenditures.Max(exp => exp.AmountSpent);
+		//SingleExpenditure = ListOfExpenditures.MaxBy(exp => exp.AmountSpent);
+		//Currency = SingleExpenditure.Currency;
 
-		PieSeries = new List<ISeries>();
+		//PieSeries = new List<ISeries>();
 
-		List<PieSeries<ExpendituresModel>> ListOfPieSeries = new();
-		foreach (var Exp in ListOfExpenditures)
-		{
-			PieSeries.
-			Add(new PieSeries<double>
-			{
-				Values = new double[] { Exp.AmountSpent },
-				Name = Exp.Reason,
-				TooltipLabelFormatter =
-				(ChartPoint) => $"{Exp.Reason}",
-				Mapping = (exp, point) =>
-				{
-					point.PrimaryValue = Exp.AmountSpent;
-					point.TertiaryValue = ListOfExpenditures.IndexOf(Exp);
-				}
-			});
-		}
+		//List<PieSeries<ExpendituresModel>> ListOfPieSeries = new();
+		//foreach (var Exp in ListOfExpenditures)
+		//{
+		//	PieSeries.
+		//	Add(new PieSeries<double>
+		//	{
+		//		Values = new double[] { Exp.AmountSpent },
+		//		Name = Exp.Reason,
+		//		TooltipLabelFormatter =
+		//		(ChartPoint) => $"{Exp.Reason}",
+		//		Mapping = (exp, point) =>
+		//		{
+		//			point.PrimaryValue = Exp.AmountSpent;
+		//			point.TertiaryValue = ListOfExpenditures.IndexOf(Exp);
+		//		}
+		//	});
+		//}
 
     }
 
