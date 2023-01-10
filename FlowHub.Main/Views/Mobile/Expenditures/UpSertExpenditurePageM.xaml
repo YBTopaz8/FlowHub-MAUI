@@ -12,37 +12,92 @@
              x:DataType="viewModels:UpSertExpenditureVM"             
              Title="{Binding PageTitle}">
 
-    <toolkit:DockLayout >
-        <Label toolkit:DockLayout.DockPosition="Top" HorizontalOptions="End" Margin="5" FontAttributes="Bold">
-            <Label.Text>
-                <MultiBinding StringFormat="{} Balance : {0:n3} {1}">
-                    <Binding Path="ActiveUser.PocketMoney"/>
-                    <Binding Path="ActiveUser.UserCurrency"/>
-                </MultiBinding>
-            </Label.Text>
-        </Label>
+    <toolkit:DockLayout>
+        <VerticalStackLayout toolkit:DockLayout.DockPosition="Top" >
+            <Label HorizontalOptions="End" Margin="5" FontAttributes="Bold">
+                <Label.Text>
+                    <MultiBinding StringFormat="{} Balance : {0:n3} {1}">
+                        <Binding Path="ActiveUser.PocketMoney"/>
+                        <Binding Path="ActiveUser.UserCurrency"/>
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+            <Label HorizontalOptions="End" Margin="5,0,5,5" FontAttributes="Italic"
+                   TextColor="AliceBlue">
+                <Label.Text>
+                    <MultiBinding StringFormat="{} Resulting Balance : {0:n3} {1}">
+                        <Binding Path="ResultingBalance"/>
+                        <Binding Path="ActiveUser.UserCurrency"/>
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+
+        </VerticalStackLayout>
         <HorizontalStackLayout toolkit:DockLayout.DockPosition="Bottom"
                     HorizontalOptions="Center" Margin="5">
             
             <ImageButton Command="{Binding CancelBtnCommand}" IsVisible="false"
                                     Source="{AppThemeBinding Dark=cancel_icon_d.png, Light=cancel_icon_l.png}" />
         </HorizontalStackLayout>
-        <ScrollView Margin="8">
-            <input:FormView SubmitCommand="{Binding UpSertExpenditureCommand}">
 
-                <material:TextField Text="{Binding SingleExpenditureDetails.Reason}" Title="Reason">
+        <input:FormView Spacing="15" 
+                        Margin="10"
+                        SubmitCommand="{Binding UpSertExpenditureCommand}">
+            <VerticalStackLayout Spacing="5">
+                <material:DatePickerField Title="Date Spent" 
+                                                MinimumDate="01/01/2022" 
+                            MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
+                            Date="{Binding SingleExpenditureDetails.DateSpent}">
+                    <material:DatePickerField.Validations>
+                        <validation:RequiredValidation/>
+
+                    </material:DatePickerField.Validations>
+                </material:DatePickerField>
+
+            </VerticalStackLayout>
+
+            <Grid ColumnDefinitions="294,10*">
+
+                <material:TextField Grid.Column="0" Title="Unit Price"
+                                    x:Name="UnitPrice"
+                                    TextChanged="UnitPriceOrQty_TextChanged"
+                                    Text="{Binding SingleExpenditureDetails.UnitPrice}" Keyboard="Numeric" >
+
                     <material:TextField.Validations>
                         <validation:RequiredValidation/>
+                        <validation:MinValueValidation MinValue="0.1" Message="The Unit Price cannot be 0 or Less"/>
+                        <validation:NumericValidation/>
                     </material:TextField.Validations>
                 </material:TextField>
-                <ImageButton Source="save_icon_d" 
-                             input:FormView.IsSubmitButton="True"/>
-                <material:ButtonView input:FormView.IsSubmitButton="True">
-                    <Label Text="save1 "/>
-                </material:ButtonView> 
-                <Button input:FormView.IsSubmitButton="True" Text="Save"/>
-                <Button input:FormView.IsSubmitButton="True" Text="Saves"/>
-            </input:FormView>
-        </ScrollView>
+
+                <material:TextField Grid.Column="1" Title="Quantity"
+                                    x:Name="Qty"
+                                    TextChanged="UnitPriceOrQty_TextChanged"
+                                    Text="{Binding SingleExpenditureDetails.Quantity}"  Keyboard="Numeric" >
+                    <material:TextField.Validations>
+                        <validation:RequiredValidation/>
+                        <validation:MinValueValidation MinValue="1" Message="The Quantity cannot be 0 or Less"/>
+                        <validation:NumericValidation/>
+                    </material:TextField.Validations>
+                </material:TextField>
+
+            </Grid>
+            <material:TextField Title="Reason" Text="{Binding SingleExpenditureDetails.Reason}">
+                <material:TextField.Validations>
+                    <validation:RequiredValidation/>
+                </material:TextField.Validations>
+            </material:TextField>
+
+            <material:CheckBox IsChecked="{Binding AddAnotherExp}" IsVisible="{Binding IsAdd}"
+                                   CheckChanged="CheckBox_CheckChanged"
+                                   Text="Save and Add another" />
+
+            
+            <ImageButton Source="{AppThemeBinding Dark=save_icon_d, Light=save_icon_l}" input:FormView.IsSubmitButton="True"/>
+            
+
+        </input:FormView>
+
+        
     </toolkit:DockLayout>
 </ContentPage>

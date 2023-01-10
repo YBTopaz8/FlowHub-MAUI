@@ -17,6 +17,7 @@ namespace FlowHub.Main.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlanne
 [QueryProperty(nameof(SingleExpenditureDetails), "SingleExpenditureDetails")]
 [QueryProperty(nameof(SingleMonthlyPlanned), "SingleMonthlyPlanned")]
 [QueryProperty(nameof(ActiveUser), "ActiveUser")]
+[QueryProperty(nameof(IsAdd), "IsAdd")]
 public partial class UpSertMonthlyPlannedExpVM : ObservableObject
 {
     private readonly IPlannedExpendituresRepository monthlyPlannedExpService;
@@ -40,6 +41,9 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
     string mode;
 
     [ObservableProperty]
+    bool isAdd;
+
+    [ObservableProperty]
     bool createNewMonthlyPlanned;
 
     [ObservableProperty]
@@ -50,6 +54,11 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
 
     [ObservableProperty]
     bool hasComment = false;
+
+    [ObservableProperty]
+    private bool addAnotherExp;
+
+    int expCounter;
 
     double InitialSingleMonthlyPlannedExp = 0;
     double InitialExpenditureAmount = 0;
@@ -97,7 +106,17 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
         {
             if (await AddMonthlyPlannedExp(duration, fontSize, cancellationTokenSource))
             {
-                NavFunctions.ReturnToDetailsMonthlyPlanned(navParam);
+                if (AddAnotherExp)
+                {
+                    expCounter++;
+                    PageTitle = $"Add Flow Out N° {expCounter}";
+                    SingleExpenditureDetails = new() { DateSpent = DateTime.Now };
+                    AddAnotherExp = false;
+                }
+                else
+                {
+                    NavFunctions.ReturnToDetailsMonthlyPlanned(navParam);
+                }
             }
             else
             {
@@ -111,7 +130,17 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
             {
                 if(await AddExpToExistingMonthlyPlanned(duration, fontSize, cancellationTokenSource))
                 {
-                    NavFunctions.ReturnOnce(navParam);
+                    if (AddAnotherExp)
+                    {
+                        expCounter++;
+                        PageTitle = $"Add Flow Out N° {expCounter}";
+                        SingleExpenditureDetails = new() { DateSpent = DateTime.Now };
+                        AddAnotherExp = false;
+                    }
+                    else
+                    {
+                        NavFunctions.ReturnToDetailsMonthlyPlanned(navParam);
+                    }
                 }
                 else
                 {

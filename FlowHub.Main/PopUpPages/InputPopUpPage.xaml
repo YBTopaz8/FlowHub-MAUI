@@ -3,7 +3,7 @@
              xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FlowHub.Main.PopUpPages.InputPopUpPage"
-             xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+             xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"  
              xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
              CanBeDismissedByTappingOutsideOfPopup="False"
             
@@ -34,7 +34,7 @@
             <material:TextField Title="Enter New Text" IsVisible="False" x:Name="InputText">
                 <material:TextField.Validations>
                     <validation:RequiredValidation/>
-                </material:TextField.Validations>
+                </material:TextField.Validations>                
             </material:TextField>
 
             <material:TextField Keyboard="Numeric" x:Name="InputAmount" Title="Enter New Amount" IsVisible="false">

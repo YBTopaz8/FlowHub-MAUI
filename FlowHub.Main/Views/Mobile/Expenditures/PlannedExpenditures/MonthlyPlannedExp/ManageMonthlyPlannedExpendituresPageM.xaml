@@ -18,7 +18,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <HorizontalStackLayout Grid.Column="0" BackgroundColor="red">
+            <HorizontalStackLayout Grid.Column="0">
                 <material:CheckBox Text="Select Multiple" TextFontSize="15" BoxSizeRequest="20" 
                                CheckChanged="MultiSelectToggle_CheckChanged"
                                x:Name="MultiSelectToggle"/>
@@ -56,24 +56,26 @@
                         SelectionChanged="ColView_SelectionChanged">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:PlannedExpendituresModel">
-                    <ScrollView >
-                        <SwipeView HeightRequest="100">
-                            <SwipeView.LeftItems>
-                                <SwipeItem Command="{Binding Source={x:Reference page},
+                    <ScrollView Margin="5,1">
+                        <VerticalStackLayout HorizontalOptions="Center">                            
+                            <SwipeView HeightRequest="115" >
+                                <SwipeView.LeftItems>
+                                    <SwipeItem Command="{Binding Source={x:Reference page},
                                                     Path=BindingContext.GoToViewMonthlyPlannedExpCommand}"
                                                 CommandParameter="{Binding .}"
                                                IconImageSource="{AppThemeBinding Dark=view_d.png, Light=view_l.png}" 
                                                BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
-                            </SwipeView.LeftItems>
-                            <SwipeView.RightItems>
-                                <SwipeItem Command="{Binding Source={x:Reference page},
+                                </SwipeView.LeftItems>
+                                <SwipeView.RightItems>
+                                    <SwipeItem Command="{Binding Source={x:Reference page},
                                                          Path=BindingContext.DeleteMonthlyPlannedExpCommand}"
                                                CommandParameter="{Binding .}"
                                                IconImageSource="{AppThemeBinding Dark=delete_d.png, Light=delete_l.png}" 
                                                BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
-                            </SwipeView.RightItems>
-                            <Border Padding="10,5" HorizontalOptions="Center" WidthRequest="280">
-                                <VerticalStackLayout Spacing="8">
+                                </SwipeView.RightItems>
+                                <Border Padding="10,5" HorizontalOptions="Center" 
+                                        MinimumWidthRequest="370" MaximumWidthRequest="400">
+                                <VerticalStackLayout>
                                     <VerticalStackLayout.Resources>
                                         <ResourceDictionary>
                                             <Style TargetType="Label">
@@ -81,7 +83,8 @@
                                             </Style>
                                         </ResourceDictionary>
                                     </VerticalStackLayout.Resources>
-                                    <Label Text="{Binding Title, StringFormat='Month and Year : {0}'}"/>
+                                    <Label Text="{Binding Title, StringFormat='Month and Year : {0}'}" HorizontalTextAlignment="Center"/>
+                                    <Rectangle Fill="darkslateblue" WidthRequest="2"/>
                                     <Label>
                                         <Label.Text>
                                             <MultiBinding StringFormat="{}Total Amount: {0:n3} {1}">
@@ -93,8 +96,9 @@
                                     <Label Text="{Binding NumberOfExpenditures, StringFormat='Number of Flow Outs : {0}'}"/>
                                 </VerticalStackLayout>
                             </Border>
-                            
-                        </SwipeView>
+
+                            </SwipeView>
+                        </VerticalStackLayout>
                     </ScrollView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

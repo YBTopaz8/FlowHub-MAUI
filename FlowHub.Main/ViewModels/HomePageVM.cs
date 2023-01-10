@@ -84,7 +84,7 @@ public partial class HomePageVM : ObservableObject
             {
                 { "SingleExpenditureDetails", new ExpendituresModel { DateSpent = DateTime.Now } },
                 { "PageTitle", new string("Add New Flow Out") },
-                { "ShowAddSecondExpCheckBox", true },
+                { "IsAdd", true },
                 { "ActiveUser", ActiveUser }
             };
             NavFunction.FromHomePageToUpsertExpenditure(navParam);

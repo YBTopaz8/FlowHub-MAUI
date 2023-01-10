@@ -411,7 +411,7 @@ public partial class ManageExpendituresVM : ObservableObject
             {
                 { "SingleExpenditureDetails", new ExpendituresModel { DateSpent = DateTime.Now } },
                 { "PageTitle", new string("Add New Flow Out") },
-                { "ShowAddSecondExpCheckBox", true },
+                { "IsAdd", true },
                 { "ActiveUser", ActiveUser }
             };
 
@@ -426,7 +426,7 @@ public partial class ManageExpendituresVM : ObservableObject
         {
             { "SingleExpenditureDetails", expenditure },
             { "PageTitle", new string("Edit Flow Out") },
-            { "ShowAddSecondExpCheckBox", false },
+            { "IsAdd", false },
             { "ActiveUser", ActiveUser }
         };
 
@@ -480,6 +480,7 @@ public partial class ManageExpendituresVM : ObservableObject
         bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You want to delete?")))!;
         if (response)
         {
+            IsBusy = true;
             var deleteResponse = await expendituresService.DeleteExpenditureAsync(expenditure.Id); //delete the expenditure from db
 
             if (deleteResponse)
@@ -500,6 +501,8 @@ public partial class ManageExpendituresVM : ObservableObject
             var toast = Toast.Make(text, duration, fontSize);
             await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
             Sorting(GlobalSortNamePosition);
+            IsBusy = false;
+
         }
     }
 

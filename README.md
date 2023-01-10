@@ -26,6 +26,13 @@ To install the project, please do as follows;
 - Make sure you have Hardware Acceleration enabled on your PC
 Build and run your app and that's it!
 
+## FAQ:
+
+| CodeName      | UI Name       |
+| ------------- |:-------------:|
+| Expenditure   | Flow Out      |
+| Income        | Flow In       |
+
 ## Currently Existing Features
 
 - An official Android Version
@@ -40,10 +47,8 @@ Build and run your app and that's it!
 - Normal Planned Expenditures
 - Income, Debt Management.
 - Application Customisation
-- True Cross-Platform interaction with One DB 
 - Localization for Multilanguage and Multi Currency support.
 - Statistics, Charts and Graphs
-- Cross platform with between Android devices and Windows Devices. (With Cross Sync)
 
 > Those are just the surfaces..
 

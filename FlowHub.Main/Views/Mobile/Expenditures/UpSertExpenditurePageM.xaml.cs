@@ -1,10 +1,13 @@
 using FlowHub.Main.ViewModels.Expenditures;
+using System.Diagnostics;
 
 namespace FlowHub.Main.Views.Mobile.Expenditures;
 
 public partial class UpSertExpenditurePageM : ContentPage
 {
     private readonly UpSertExpenditureVM viewModel;
+    double CurrentBalance;
+    double InitialExpAmountSpent;
     public UpSertExpenditurePageM(UpSertExpenditureVM vm)
     {
         InitializeComponent();
@@ -15,32 +18,36 @@ public partial class UpSertExpenditurePageM : ContentPage
     {
         base.OnAppearing();
         viewModel.PageLoadedCommand.Execute(null);
-        //AddSecondFlowOut.IsVisible= viewModel.ShowAddSecondExpCheckBox;
-        //AddSecondFlowOut.IsChecked = false;
-        
-    //    AddThirdFlowOut.IsChecked = false;
-        viewModel.SecondExp = new Models.ExpendituresModel();
-        viewModel.ThirdExp = new Models.ExpendituresModel();
+        InitialExpAmountSpent = viewModel.SingleExpenditureDetails.AmountSpent;
+
     }
 
-    private void AddSecondFlowOut_CheckChanged(object sender, EventArgs e)
-    {
-        viewModel.SecondExp = new Models.ExpendituresModel();
-        viewModel.ThirdExp = new Models.ExpendituresModel();
-        //if (!AddSecondFlowOut.IsChecked)
-        //{
-        //   // AddThirdFlowOut.IsChecked = false;
-        //}
-    }
-    private void AddThirdFlowOut_CheckChanged(object sender, EventArgs e)
+
+    private void CheckBox_CheckChanged(object sender, EventArgs e)
     {
 
-        viewModel.ThirdExp = new Models.ExpendituresModel();
     }
 
-    private void SaveExpBtn_Clicked(object sender, EventArgs e) //using this to call the command because it won't work on the formview. 
+    private void UnitPriceOrQty_TextChanged(object sender, TextChangedEventArgs e)
     {
-       // viewModel.UpSertExpenditureCommand.Execute(null);
-    }
+        CurrentBalance = viewModel.ActiveUser.PocketMoney;
 
+        double total = 0;
+        if (string.IsNullOrEmpty(UnitPrice.Text) || string.IsNullOrWhiteSpace(UnitPrice.Text))
+        {
+        }
+        if (!string.IsNullOrEmpty(Qty.Text) || !string.IsNullOrWhiteSpace(Qty.Text))
+        {
+        }
+        _ = double.TryParse(UnitPrice.Text, out double up);
+        _ = double.TryParse(Qty.Text, out double qty);
+
+        total = up * qty;
+
+        var diff = total - InitialExpAmountSpent;
+        CurrentBalance -= diff;
+
+        viewModel.ResultingBalance = CurrentBalance;
+
+    }
 }

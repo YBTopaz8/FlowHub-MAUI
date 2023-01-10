@@ -107,9 +107,10 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
         {
             { "SingleMonthlyPlanned", SingleMonthlyPlannedDetails },
             { "SingleExpenditureDetails", new ExpendituresModel() },
-            { "PageTitle", new string ($"Add Flow Out") },
+            { "PageTitle", new string ("Add Flow Out") },
             { "CreateNewMonthlyPlanned", false },
             { "Mode", new string("AddNewExp") },
+            { "IsAdd", true},
             { "ActiveUser" , ActiveUser }
         };
 
@@ -140,6 +141,7 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
             { "SingleMonthlyPlanned", SingleMonthlyPlannedDetails },
             { "SingleExpenditureDetails", model },
             { "PageTitle", new string ("Edit Flow Out") },
+            { "IsAdd", false },
             { "ActiveUser" , ActiveUser }
         };
         NavFunctions.ToUpSertMonthlyPlanned(navParam);
