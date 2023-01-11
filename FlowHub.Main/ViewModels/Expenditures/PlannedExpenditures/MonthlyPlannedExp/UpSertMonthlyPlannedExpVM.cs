@@ -67,7 +67,7 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
     public void PageLoaded()
     {
         SingleExpenditureDetails.AmountSpent = SingleExpenditureDetails.AmountSpent == 0 ? 1 : SingleExpenditureDetails.AmountSpent;
-
+        expCounter = 1;
         InitialSingleMonthlyPlannedExp = SingleMonthlyPlanned.TotalAmount;
         InitialExpenditureAmount = SingleExpenditureDetails.AmountSpent;
         if(SingleExpenditureDetails.Comment is not null)

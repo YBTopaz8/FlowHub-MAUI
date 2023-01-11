@@ -94,13 +94,24 @@
         </Grid>
         
         <lvc:PieChart x:Name="pieChart" HeightRequest="380" Margin="0,5" 
-                    ChartPointPointerDown="pieChart_ChartPointPointerDown"                      
-                    TooltipTextSize="35">
+                    ChartPointPointerDown="Chart_ChartPointPointerDown"
+                      IsVisible="{Binding IsPieChartVisible}"
+                    TooltipTextSize="35"
+                      >
             <lvc:PieChart.GestureRecognizers>
-                <TapGestureRecognizer NumberOfTapsRequired="2" Tapped="TapGestureRecognizer_Tapped"/>
-                
+                <TapGestureRecognizer NumberOfTapsRequired="2" Tapped="TapGestureRecognizer_Tapped"/>                
             </lvc:PieChart.GestureRecognizers>
         </lvc:PieChart>
+
+        <lvc:CartesianChart x:Name="LineChart" ChartPointPointerDown="Chart_ChartPointPointerDown" 
+                            IsVisible="{Binding IsLineChartVisible}"
+                            HeightRequest="380" Margin="0,5" 
+                            TooltipTextSize="35"
+                            ZoomMode="Both">
+            <lvc:CartesianChart.GestureRecognizers>
+                <TapGestureRecognizer NumberOfTapsRequired="2" Tapped="TapGestureRecognizer_Tapped"/>
+            </lvc:CartesianChart.GestureRecognizers>
+        </lvc:CartesianChart>
 
         <Border Stroke="Transparent" Margin="5"
                 BackgroundColor="{AppThemeBinding Light=#E7EBF4, Dark=#29343E}">

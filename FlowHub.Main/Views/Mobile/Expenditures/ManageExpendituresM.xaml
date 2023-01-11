@@ -141,9 +141,9 @@
             </Grid.ColumnDefinitions>
 
             <ImageButton x:Name="pie_chart" Source="{AppThemeBinding Dark=pie_chart, Light=pie_chart_l}" 
-                         HorizontalOptions="Start" IsVisible="{Binding ShowStatisticBtn}"
+                         HorizontalOptions="Start" IsVisible="true"
                          Grid.Column="0" VerticalOptions="Start" Command="{Binding GoToSpecificStatsPageCommand}"/>
-
+            <!--IsVisible="{Binding ShowStatisticBtn}"-->
             <Label FontSize="17" Margin="5" Grid.Column="0" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="End">
                 <Label.Text>
                     <MultiBinding StringFormat="{} {2} Flow Out(s) worth {0:n3} {1}">
@@ -173,7 +173,7 @@
             </CollectionView.EmptyView>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:ExpendituresModel">
-                    <ScrollView Margin="5,1">
+                    <ScrollView Margin="5,1.3">
                         <VerticalStackLayout HorizontalOptions="Center">
                             <SwipeView >
                                 <SwipeView.LeftItems>                                    

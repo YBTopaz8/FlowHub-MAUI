@@ -71,6 +71,8 @@ public partial class FilterOptionsPopUp : Popup
                 radioGroup.SelectedItem.ToString()
             };
         }
+
+        
     }
 
     private void MonthPicker_SelectedIndexChanged(object sender, EventArgs e)

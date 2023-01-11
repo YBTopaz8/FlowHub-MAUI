@@ -26,8 +26,8 @@ public partial class ManageExpendituresVM : ObservableObject
         expendituresService = expendituresRepository;
         userService = usersRepository;
     }
-    public SmartObservableCollection<ExpendituresModel> ExpendituresList { get; set; } = new();
-   // public ObservableCollection<ExpendituresModel> ExpendituresList { get; set; } = new ();
+   // public SmartObservableCollection<ExpendituresModel> ExpendituresList { get; set; } = new();
+    public ObservableCollection<ExpendituresModel> ExpendituresList { get; set; } = new ();
 
     [ObservableProperty]
     private double totalAmount;
@@ -97,8 +97,8 @@ public partial class ManageExpendituresVM : ObservableObject
         await expendituresService.GetAllExpendituresAsync();
         filterOption = "Filter_Curr_Month";
         //FilterGetExpOfToday(GlobalSortNamePosition);        
-        //  FilterExpListOfCurrentMonth();
-        FilterGetAllExp();
+        FilterExpListOfCurrentMonth();
+      //  FilterGetAllExp();
     }
 
 
@@ -131,10 +131,13 @@ public partial class ManageExpendituresVM : ObservableObject
                 break;
         }
 
-        //    ExpendituresList.Clear();
-        //ExpendituresList.AddRange(expList);
-        ExpendituresList.Reset(expList);
-        IsBusy= false;
+        ExpendituresList.Clear();
+
+        foreach (ExpendituresModel exp in expList)
+        {
+            ExpendituresList.Add(exp);         
+        }
+        IsBusy = false;
         
     }
 
@@ -256,21 +259,18 @@ public partial class ManageExpendituresVM : ObservableObject
 
             IsBusy= true;
             double tot = 0;
-          //  ExpendituresList.Clear();
+            ExpendituresList.Clear();
             if (expList.Count > 0)
             {
-                ExpendituresList.Reset(expList);
-                //ExpendituresList.AddRange(expList);
-                //ExpendituresList.Reset(expList);
                 IsBusy = false;
                 tot = expList.Sum(x => x.AmountSpent);
-                //ExpendituresList.Clear();
+                ExpendituresList.Clear();
 
-                //foreach (ExpendituresModel exp in expList)
-                //{
-                //   // ExpendituresList.Add(exp);
-                //    tot += exp.AmountSpent;
-                //}
+                foreach (ExpendituresModel exp in expList)
+                {
+                    ExpendituresList.Add(exp);
+                    tot += exp.AmountSpent;
+                }
                 TotalAmount = tot;
                 TotalExpenditures = ExpendituresList.Count;
                 ExpTitle = "All Flow Outs";

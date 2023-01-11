@@ -41,7 +41,7 @@ public partial class LoginVM : ObservableObject
     private string userCurrency;
 
     [ObservableProperty]
-    private bool errorMessage = false;
+    private bool errorMessageVisible = false;
 
     [ObservableProperty]
     private bool errorMessagePicker = false;
@@ -164,6 +164,8 @@ public partial class LoginVM : ObservableObject
     [RelayCommand]
     public async void GoToHomePageFromLogin()
     {
+
+        ErrorMessageVisible = false;
         IsBusy = true;
         UsersModel User = new();
         if (IsLoginOnlineButtonClicked)
@@ -178,7 +180,7 @@ public partial class LoginVM : ObservableObject
         if (User is null)
         {
             IsBusy = false;
-            ErrorMessage = true;
+            ErrorMessageVisible = true;
         }
         else
         {
