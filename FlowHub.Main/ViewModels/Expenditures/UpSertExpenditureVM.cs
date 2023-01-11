@@ -175,11 +175,11 @@ public partial class UpSertExpenditureVM : ObservableObject
             if (!await _expenditureService.AddExpenditureAsync(expenditure))
                 return false;
 
-            //ActiveUser.TotalExpendituresAmount += ExpAmountSpent;
-            //ActiveUser.PocketMoney = ResultingBalance;
-            //ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
-            //await userService.UpdateUserAsync(ActiveUser);
-            
+            ActiveUser.TotalExpendituresAmount += ExpAmountSpent;
+            ActiveUser.PocketMoney = ResultingBalance;
+            ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
+            await userService.UpdateUserAsync(ActiveUser);
+
 
             return true;
         }

@@ -124,7 +124,8 @@
                             </material:TextField.Validations>
                         </material:TextField>
                         <VerticalStackLayout>
-                            <Button Text="Search" VerticalOptions="Start" BackgroundColor="#1A191D" input:FormView.IsSubmitButton="True"/>
+                            <ImageButton Source="{AppThemeBinding Dark=search_d, Light=search_l}" VerticalOptions="End" Margin="0,10,0,0" 
+                                         HeightRequest="30" input:FormView.IsSubmitButton="True"/>
                         </VerticalStackLayout>
                     </HorizontalStackLayout>
 
