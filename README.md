@@ -5,7 +5,7 @@ An Application used to manage Savings, Expenditures, Incomes, Debts, Financial p
 
 Ideal for anyone who likes to keep track of their Financial Flow.
 ## Requirements
-This project is build on .NET CORE 7, .NET MAUI and LiteDB as its DataBase using QuestPDF and iText 7 for PDF Generation.
+This project is build on .NET CORE 7, .NET MAUI and LiteDB as its DataBase using iText 7 for PDF Generation.
 
 The Requirement to run use THIS project, you would need;
 - A Computer running Windows 10 at least.
@@ -51,6 +51,11 @@ Build and run your app and that's it!
 - Statistics, Charts and Graphs
 
 > Those are just the surfaces..
+
+## Lots and Lots of thanks to:
+ - [enisn](https://github.com/enisn) for their incredible [UraniumUI](https://github.com/enisn/UraniumUI) and [InputKit](https://github.com/enisn/Xamarin.Forms.InputKit) That I HEAVILY use in this project ❤️
+- [Beto Rodriguez](https://github.com/beto-rodriguez) for the charts & graph library : [LiveCharts2](https://github.com/beto-rodriguez/LiveCharts2)
+
 
 ## Authors
 
