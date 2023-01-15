@@ -20,8 +20,4 @@ public partial class UserSettingsPageM
 
     }
 
-    private void ImageButton_Clicked(object sender, EventArgs e)
-    {
-		Debug.WriteLine("Edit Image Clicked");
-    }
 }

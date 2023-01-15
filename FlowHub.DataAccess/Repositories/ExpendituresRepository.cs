@@ -48,11 +48,12 @@ public class ExpendituresRepository : IExpendituresRepository
         {
             OpenDB();
             string userId = usersRepo.OfflineUser.Id;
+            string userCurrency = usersRepo.OfflineUser.UserCurrency;
             if (usersRepo.OfflineUser.UserIDOnline != string.Empty)
             {
                 userId = usersRepo.OfflineUser.UserIDOnline;
             }
-            OfflineExpendituresList = await AllExpenditures.Query().Where(x => x.UserId == userId).ToListAsync();
+            OfflineExpendituresList = await AllExpenditures.Query().Where(x => x.UserId == userId && x.Currency == userCurrency).ToListAsync();
 
             db.Dispose();
 

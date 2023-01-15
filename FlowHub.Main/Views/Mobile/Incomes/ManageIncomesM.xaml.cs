@@ -42,7 +42,8 @@ public partial class ManageIncomesM : ContentPage
     }
     private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
-      await  Shell.Current.ShowPopupAsync(new InputPopUpPage(isNumericInput: true, optionalTitleText:"Enter New Pocket Money"));
+        double NewAmount = (double) await Shell.Current.ShowPopupAsync(new InputPopUpPage(isNumericInput: true, optionalTitleText:"Enter New Pocket Money"));
+        viewModel.ResetUserPocketMoneyCommand.Execute(NewAmount);
     }
 
 }

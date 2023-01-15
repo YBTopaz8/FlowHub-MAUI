@@ -95,7 +95,7 @@
         
         <lvc:PieChart x:Name="pieChart" HeightRequest="380" Margin="0,5" 
                     ChartPointPointerDown="Chart_ChartPointPointerDown"
-                      IsVisible="{Binding IsPieChartVisible}"
+                    IsVisible="{Binding IsPieChartVisible}"
                     TooltipTextSize="35"
                       >
             <lvc:PieChart.GestureRecognizers>
@@ -107,7 +107,7 @@
                             IsVisible="{Binding IsLineChartVisible}"
                             HeightRequest="380" Margin="0,5" 
                             TooltipTextSize="35"
-                            ZoomMode="Both">
+                            ZoomMode="None">
             <lvc:CartesianChart.GestureRecognizers>
                 <TapGestureRecognizer NumberOfTapsRequired="2" Tapped="TapGestureRecognizer_Tapped"/>
             </lvc:CartesianChart.GestureRecognizers>

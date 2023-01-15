@@ -93,26 +93,5 @@ public partial class HomePageVM : ObservableObject
 
 
 
-    [RelayCommand]
-    public void SaveToJSON()
-    {
-
-        /*
-        var User = new UsersModel
-        {
-            Id = 1,
-            Username = "Yvan"
-            
-        };
-        if (  SessionService.SaveSessionAsync(User, true))
-        {
-            Debug.WriteLine("======>> SAVED");
-        }
-        else
-        {
-
-            Debug.WriteLine("======>> UNSAVED");
-        }*/
-    }
 
 }

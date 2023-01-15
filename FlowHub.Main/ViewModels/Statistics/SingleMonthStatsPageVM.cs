@@ -87,7 +87,7 @@ public partial class SingleMonthStatsPageVM :ObservableObject
 
     private void LoadLineChart()
     {
-        // TODO : Implement this
+       
         LineSeries = new();
 
         var listof15 = ListOfExpenditures.Take(15).ToList();

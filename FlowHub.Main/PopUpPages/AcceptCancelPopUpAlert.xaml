@@ -4,7 +4,7 @@
              xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
              x:Class="FlowHub.Main.PopUpPages.AcceptCancelPopUpAlert"
              CanBeDismissedByTappingOutsideOfPopup="False"
-             Size="300,150"
+             Size="300,160"
              Color="Transparent">
 
     <Border

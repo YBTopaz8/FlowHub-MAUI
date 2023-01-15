@@ -15,16 +15,17 @@
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">
+                            
                             <VisualState x:Name="Normal">
                                 <VisualState.Setters>
                                     <Setter Property="BackgroundColor"
-                                            Value="Transparent"/>
+                                        Value="#1E1E1E" />
                                 </VisualState.Setters>
                             </VisualState>
                             <VisualState x:Name="Selected">
                                 <VisualState.Setters>
                                     <Setter Property="BackgroundColor"
-                                        Value="DarkSlateBlue" />
+                                        Value="#ACD6D7" />
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>

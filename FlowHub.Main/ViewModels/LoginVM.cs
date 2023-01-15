@@ -124,6 +124,7 @@ public partial class LoginVM : ObservableObject
         }
         else
         {
+            CurrentUser.Email = CurrentUser.Email.Trim();
             CurrentUser.Id = Guid.NewGuid().ToString();
             CurrentUser.UserCurrency = userCurrency;
             CurrentUser.PocketMoney = PocketMoney;

@@ -175,13 +175,16 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
         SingleMonthlyPlanned.TotalAmount += SingleExpenditureDetails.AmountSpent;
         SingleMonthlyPlanned.NumberOfExpenditures += 1;
 
-        if (!await monthlyPlannedExpService.AddPlannedExp(SingleMonthlyPlanned))
-            return false;
+        bool dialogResult = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Add New Monthly Planned Flow Out?"));
+        if (dialogResult)
+        {
+            if (!await monthlyPlannedExpService.AddPlannedExp(SingleMonthlyPlanned))
+                return false;
 
-        string ToastNotifMessage = "Monthly Flow Out Added";
-        var toast = Toast.Make(ToastNotifMessage, duration, fontsize);
-        await toast.Show(tokenSource.Token);
-
+            string ToastNotifMessage = "Monthly Flow Out Added";
+            var toast = Toast.Make(ToastNotifMessage, duration, fontsize);
+            await toast.Show(tokenSource.Token);
+        }
 
         return true;
     }
@@ -196,9 +199,12 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
         SingleMonthlyPlanned.TotalAmount += SingleExpenditureDetails.AmountSpent;
         SingleMonthlyPlanned.NumberOfExpenditures += 1;
 
-        if(!await monthlyPlannedExpService.UpdatePlannedExp(SingleMonthlyPlanned))
-            return false;
-
+        bool dialogResult = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Add New Flow?"));
+        if (dialogResult)
+        {
+            if (!await monthlyPlannedExpService.UpdatePlannedExp(SingleMonthlyPlanned))
+                return false;
+        }
         string ToastNotifMessage = "Flow Out Added";
         var toast = Toast.Make(ToastNotifMessage, duration, fontsize);
         await toast.Show(tokenSource.Token);
@@ -217,9 +223,12 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
         var difference = InitialExpenditureAmount - SingleExpenditureDetails.AmountSpent;
         SingleMonthlyPlanned.TotalAmount = InitialSingleMonthlyPlannedExp - difference;
 
-        if(!await monthlyPlannedExpService.UpdatePlannedExp(SingleMonthlyPlanned))
-            return false;
-
+        bool dialogResult = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Save Edit?"));
+        if (dialogResult)
+        {
+            if (!await monthlyPlannedExpService.UpdatePlannedExp(SingleMonthlyPlanned))
+                return false;
+        }
         const string ToastNotifMessage = "Flow Out Edited";
         var toast = Toast.Make(ToastNotifMessage, duration, fontsize);
         await toast.Show(tokenSource.Token);

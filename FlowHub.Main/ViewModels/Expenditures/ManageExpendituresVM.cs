@@ -560,14 +560,18 @@ public partial class ManageExpendituresVM : ObservableObject
     public async void SyncExpTest()
     {
         IsBusy = true;
-        Debug.WriteLine("Begin Sync");
         if(await expendituresService.SynchronizeExpendituresAsync(ActiveUser.Email, ActiveUser.Password))
         {
             PageloadedAsync();
             IsBusy = false;
+            CancellationTokenSource cancellationTokenSource = new();
+            const ToastDuration duration = ToastDuration.Short;
+            const double fontSize = 16;
+            string text = "All Synchronized!";
+            var toast = Toast.Make(text, duration, fontSize);
+            await toast.Show(cancellationTokenSource.Token); //toast a notification about Sync Success0!
         }
 
-        Debug.WriteLine("End Sync");
         //  await expendituresService.GetAllExpFromOnlineAsync(ActiveUser.Id);
         //string newText= (string)await Shell.Current.ShowPopupAsync(new InputPopUpPage(isTextInput:true, optionalTitleText:"Enter New Name"));
         ////Debug.WriteLine(newText);

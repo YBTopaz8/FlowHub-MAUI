@@ -127,16 +127,20 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
     [RelayCommand]
     public async void DeleteMonthlyPlannedExp(PlannedExpendituresModel monthlyPlannedExp)
     {
-        CancellationTokenSource cancellationTokenSource = new();
-        ToastDuration duration = ToastDuration.Short;
-        double fontSize = 14;
-        string text = $"Monthly Planned For {monthlyPlannedExp.Title} Deleted";
-        var toast = Toast.Make(text, duration, fontSize);
+        bool dialogResult = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Delete Monthly Planned Flow?"));
+        if (dialogResult)
+        {
+            CancellationTokenSource cancellationTokenSource = new();
+            ToastDuration duration = ToastDuration.Short;
+            double fontSize = 14;
+            string text = $"Monthly Planned For {monthlyPlannedExp.Title} Deleted";
+            var toast = Toast.Make(text, duration, fontSize);
 
-        await monthlyPlannedExpService.DeletePlannedExp(monthlyPlannedExp.Id);
-        monthlyPlannedExpService.OfflinePlannedExpendituresList.Remove(monthlyPlannedExp);
-        MonthlyPlannedExpList.Remove(monthlyPlannedExp);
-        await toast.Show(cancellationTokenSource.Token);
+            await monthlyPlannedExpService.DeletePlannedExp(monthlyPlannedExp.Id);
+            monthlyPlannedExpService.OfflinePlannedExpendituresList.Remove(monthlyPlannedExp);
+            MonthlyPlannedExpList.Remove(monthlyPlannedExp);
+            await toast.Show(cancellationTokenSource.Token);
+        }
         //GetAllMonthlyPlanned();
     }
 
