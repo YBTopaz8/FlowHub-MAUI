@@ -70,7 +70,6 @@ public class IncomeRepository : IIncomeRepository
             Debug.WriteLine(ex.Message);
             return false;
         }
-       
     }
 
     public async Task<bool> DeleteIncomeAsync(BsonValue incomeId)
@@ -89,7 +88,6 @@ public class IncomeRepository : IIncomeRepository
                 db.Dispose();
                 return false;
             }
-
         }
         catch (Exception ex)
         {
@@ -97,7 +95,6 @@ public class IncomeRepository : IIncomeRepository
             Debug.WriteLine(ex.Message);
             return false;
         }
-        
     }
 
     public async Task<bool> UpdateIncomeAsync(IncomeModel income)
@@ -130,5 +127,4 @@ public class IncomeRepository : IIncomeRepository
     {
         throw new NotImplementedException();
     }
-
 }

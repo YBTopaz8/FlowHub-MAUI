@@ -35,7 +35,6 @@ public partial class LoginM : ContentPage
         bool isLoginFormVisible = viewModel.IsLoginFormVisible;
 
         ToggleFormAndValidation(HasLoginRemembered, isLoginFormVisible);
-
     }
 
     private async Task ShowRegisterForm()
@@ -89,7 +88,6 @@ public partial class LoginM : ContentPage
             LoginForm.IsVisible = true;
             LoginSignUpTab.IsVisible = true;
         }
-
     }
    
     private void Picker_SelectedIndexChanged(object sender, EventArgs e)
@@ -146,6 +144,5 @@ public partial class LoginM : ContentPage
     {
         viewModel.IsLoginOnlineButtonClicked = true;        
     }
-
    
 }

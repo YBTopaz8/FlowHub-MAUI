@@ -21,5 +21,4 @@ public class UsersModel
     public string UserCountry { get; set; }
     public string UserCurrency { get; set; }
     public bool RememberLogin { get; set; } = false;
-
 }

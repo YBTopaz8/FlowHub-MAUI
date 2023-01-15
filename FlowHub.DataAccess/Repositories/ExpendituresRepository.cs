@@ -285,7 +285,6 @@ public class ExpendituresRepository : IExpendituresRepository
             {
                 Debug.WriteLine(ex.Message);
             }
-
         }
         OpenDB();
             await AllIDsToBeDeleted.DeleteAllAsync();
@@ -339,5 +338,4 @@ public class ExpendituresRepository : IExpendituresRepository
         db.Dispose();
         Debug.WriteLine("Expenditures Collection dropped!");
     }
-
 }

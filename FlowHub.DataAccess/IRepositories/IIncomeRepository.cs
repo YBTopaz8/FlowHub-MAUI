@@ -12,5 +12,4 @@ public interface IIncomeRepository
     Task<bool> DeleteIncomeAsync(BsonValue incomeId);
     Task<bool> UpdateIncomeAsync(IncomeModel income);
     Task DropIncomesCollection();
-
 }

@@ -65,10 +65,8 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
 
     void GetAllPlannedExpForMonth()
     {
-
         try
         {
-            
             TempList = SingleMonthlyPlannedDetails.Expenditures;
 
             GetTotals();
@@ -96,7 +94,6 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
         catch (Exception ex)
         {
             Debug.WriteLine($"Exception MESSAGE: {ex.Message}");
-
         }
     }
 
@@ -177,7 +174,6 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
     [RelayCommand]
     async Task PrintPDFandShare()
     {
-        
         PrintFunction  = new PrintDetailsMonthlyExpenditure();
         string dialogueResponse =(string) await Shell.Current.ShowPopupAsync(new InputCurrencyForPrintPopUpPage("Share PDF File? (Requires Internet)", userCurrency));
         if (dialogueResponse is not "Cancel" )
@@ -192,5 +188,4 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
             }
         }
     }
-
 }

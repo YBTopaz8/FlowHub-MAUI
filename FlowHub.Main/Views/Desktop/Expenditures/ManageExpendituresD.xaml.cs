@@ -31,7 +31,6 @@ public partial class ManageExpendituresD : ContentPage
         {
             dockLeft.WidthRequest = 210;
             DGScrollView.Margin = new Thickness(0, 0, 130, 0);
-
         }
     }
 
@@ -84,7 +83,6 @@ public partial class ManageExpendituresD : ContentPage
     {
         if (upBtn.IsVisible)
         {//show sorted by DESC
-
             viewModel.SortingCommand.Execute(1);
 
             upBtn.IsVisible = false;

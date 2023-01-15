@@ -45,7 +45,6 @@ public partial class UpSertIncomeVM : ObservableObject
         InitialUserPockerMoney = ActiveUser.PocketMoney;
         InitialIncomeAmout = SingleIncomeDetails.AmountReceived;
         _initialTotalIncAmount = ActiveUser.TotalIncomeAmount;
-
     }
     [RelayCommand]
     public async void UpSertIncome()
@@ -73,7 +72,6 @@ public partial class UpSertIncomeVM : ObservableObject
 
     async void UpdateIncFxnAsync(ToastDuration duration, double fontSize, CancellationTokenSource tokenSource)
     {        
-
         double difference = SingleIncomeDetails.AmountReceived - InitialIncomeAmout;
 
         double FinalTotalInc = _initialTotalIncAmount + difference;

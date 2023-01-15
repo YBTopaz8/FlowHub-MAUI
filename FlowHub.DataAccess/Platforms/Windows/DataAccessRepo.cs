@@ -20,17 +20,13 @@ public class DataAccessRepo : IDataAccessRepo
             Directory.CreateDirectory(path);
 
             db = new LiteDatabaseAsync(path + fileName);
-
         }
         else
         {
-
             var fileName = "SavingTracker.db";
             string connectionString = $"Filename={path}{fileName};Connection=shared";
             db = new LiteDatabaseAsync(connectionString);
         }
         return db;
-
     }
-
 }

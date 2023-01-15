@@ -13,4 +13,3 @@ public class LoginNavs
         await Shell.Current.GoToAsync($"//LoginD");
     }
 }
-

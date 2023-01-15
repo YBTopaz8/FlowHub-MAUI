@@ -63,7 +63,6 @@ public partial class HomePageVM : ObservableObject
         {
             var expList = _expendituresService.OfflineExpendituresList;
             TotalExp = expList.Count;
-
         }
         catch (Exception ex)
         {
@@ -73,7 +72,6 @@ public partial class HomePageVM : ObservableObject
     [RelayCommand]
     public async void GoToAddExpenditurePage()
     {
-
         if (ActiveUser is null)
         {
             await Shell.Current.DisplayAlert("Wait", "Cannot go", "Ok");
@@ -90,7 +88,6 @@ public partial class HomePageVM : ObservableObject
             NavFunction.FromHomePageToUpsertExpenditure(navParam);
         }
     }
-
 
 
 

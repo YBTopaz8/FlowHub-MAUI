@@ -13,4 +13,3 @@ public class LoginNavs
         await AppShellMobile.Current.GoToAsync($"//LoginM");
     }
 }
-

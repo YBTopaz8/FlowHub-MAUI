@@ -27,7 +27,6 @@ public partial class EditUserSettingsPageM : ContentPage
         if (pickedCountry is not null)
         {
             viewmodel.CurrencyFromCountryPickedCommand.Execute(pickedCountry.ToString());
-
         }
     }
 }

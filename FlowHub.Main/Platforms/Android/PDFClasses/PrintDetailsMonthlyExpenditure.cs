@@ -34,7 +34,6 @@ public class PrintDetailsMonthlyExpenditure
         string pdfTitle = $"List Of Estimated Expenditures For {monthYear}";
 
         await Task.Run(()=> CreatePDFDoc(expList, PathFile, userCurrency, printDisplayCurrency, ObjectWithRate.result, ObjectWithRate.date, pdfTitle, userName));
-
     }
     public async Task SaveListDetailMonthlyPlanned(List<List<ExpendituresModel>> expLists, string userCurrency, string printDisplayCurrency, string userName, List<string> ListOfTitles)
     {
@@ -53,12 +52,10 @@ public class PrintDetailsMonthlyExpenditure
 
 
         await Task.Run(()=> CreatePDFDocOfMultipleLists(expLists, PathFile, ListOfTitles, userName, userCurrency, printDisplayCurrency,  ObjectWithRate.result, ObjectWithRate.date));
-
     }
 
     void CreatePDFDoc(List<ExpendituresModel> expList, string pathFile, string userCurrency, string printDisplayCurrency, double rate, DateTime dateOfRateUpdate, string pdfTitle, string username)
     {
-        
         Color HeaderColor = WebColors.GetRGBColor("DarkSlateBlue");
 
         
@@ -161,7 +158,6 @@ public class PrintDetailsMonthlyExpenditure
     
     void CreatePDFDocOfMultipleLists(List<List<ExpendituresModel>> expLists, string pathFile, List<string> ListOfTitles, string username, string userCurrency, string printDisplayCurrency, double rate, DateTime dateOfRateUpdate)
     {
-        
         Color HeaderColor = WebColors.GetRGBColor("DarkSlateBlue");
 
         
@@ -230,7 +226,6 @@ public class PrintDetailsMonthlyExpenditure
 
             document.Add(footerText);
             document.Flush();
-
         }
 
         Paragraph FinalTotalParagraph = new Paragraph($"Grand Total : {FinalTotal:n3} {printDisplayCurrency}")
@@ -287,7 +282,6 @@ public class PrintDetailsMonthlyExpenditure
             File = new ShareFile(PathFile)
         });
     }
-
 
 
 }

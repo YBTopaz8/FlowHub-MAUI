@@ -4,7 +4,6 @@ namespace FlowHub.DataAccess.Repositories;
 
 public class SettingsServiceRepository : ISettingsServiceRepository
 {
-
     public Task<T> GetPreference<T>(string key, T defaultValue)
     {
         var result = Preferences.Default.Get<T>(key, defaultValue); 
@@ -20,5 +19,4 @@ public class SettingsServiceRepository : ISettingsServiceRepository
         Preferences.Default.Clear();
         return Task.CompletedTask;
     }
-
 }

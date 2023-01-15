@@ -72,7 +72,6 @@ public class PrintExpenditures
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
 
             totall += item.AmountSpent;
-
         }
 
         document.Add(table);
@@ -102,5 +101,4 @@ public class PrintExpenditures
             File = new ShareFile(FilePath)
         });
     }
-
 }

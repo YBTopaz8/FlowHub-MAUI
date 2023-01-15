@@ -1,11 +1,9 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
-using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FlowHub.DataAccess.IRepositories;
-using FlowHub.Main.AdditionalResourcefulAPIClasses;
 using FlowHub.Main.PDF_Classes;
 using FlowHub.Main.Platforms.NavigationMethods;
 using FlowHub.Main.PopUpPages;
@@ -96,11 +94,10 @@ public partial class ManageExpendituresVM : ObservableObject
         UserCurrency = ActiveUser.UserCurrency;
         await expendituresService.GetAllExpendituresAsync();
         filterOption = "Filter_Curr_Month";
-        //FilterGetExpOfToday(GlobalSortNamePosition);        
-        FilterExpListOfCurrentMonth();
+        FilterGetExpOfToday();        
+        //FilterExpListOfCurrentMonth();
       //  FilterGetAllExp();
     }
-
 
     [RelayCommand]
     public void Sorting(int SortNamePosition)
@@ -108,7 +105,7 @@ public partial class ManageExpendituresVM : ObservableObject
         IsBusy= true;
         GlobalSortNamePosition = SortNamePosition;
 
-        var expList = new List<ExpendituresModel>();  
+        var expList = new List<ExpendituresModel>();
         switch (SortNamePosition)
         {
             case 0:
@@ -135,10 +132,9 @@ public partial class ManageExpendituresVM : ObservableObject
 
         foreach (ExpendituresModel exp in expList)
         {
-            ExpendituresList.Add(exp);         
+            ExpendituresList.Add(exp);
         }
         IsBusy = false;
-        
     }
 
     [RelayCommand]
@@ -502,7 +498,6 @@ public partial class ManageExpendituresVM : ObservableObject
             await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
             Sorting(GlobalSortNamePosition);
             IsBusy = false;
-
         }
     }
 
@@ -559,22 +554,22 @@ public partial class ManageExpendituresVM : ObservableObject
     [RelayCommand]
     public async void SyncExpTest()
     {
-        IsBusy = true;
-        if(await expendituresService.SynchronizeExpendituresAsync(ActiveUser.Email, ActiveUser.Password))
+        bool response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do you want to Sync data?"));
+        if (response)
         {
-            PageloadedAsync();
-            IsBusy = false;
-            CancellationTokenSource cancellationTokenSource = new();
-            const ToastDuration duration = ToastDuration.Short;
-            const double fontSize = 16;
-            string text = "All Synchronized!";
-            var toast = Toast.Make(text, duration, fontSize);
-            await toast.Show(cancellationTokenSource.Token); //toast a notification about Sync Success0!
+            IsBusy = true;
+            if (await expendituresService.SynchronizeExpendituresAsync(ActiveUser.Email, ActiveUser.Password))
+            {
+                PageloadedAsync();
+                IsBusy = false;
+                CancellationTokenSource cancellationTokenSource = new();
+                const ToastDuration duration = ToastDuration.Short;
+                const double fontSize = 16;
+                string text = "All Synchronized!";
+                var toast = Toast.Make(text, duration, fontSize);
+                await toast.Show(cancellationTokenSource.Token); //toast a notification about Sync Success0!
+            }
         }
-
-        //  await expendituresService.GetAllExpFromOnlineAsync(ActiveUser.Id);
-        //string newText= (string)await Shell.Current.ShowPopupAsync(new InputPopUpPage(isTextInput:true, optionalTitleText:"Enter New Name"));
-        ////Debug.WriteLine(newText);
     }
 
     [RelayCommand]

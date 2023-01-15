@@ -18,7 +18,6 @@ public partial class ManageMonthlyPlannedExpendituresPageM : ContentPage
     {
         base.OnAppearing();
         viewModel.PageLoadedCommand.Execute(null);
-
     }
 
     private void MultiSelectToggle_CheckChanged(object sender, EventArgs e)

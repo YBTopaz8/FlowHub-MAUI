@@ -6,11 +6,9 @@ public class MonthlyExpendituresNavs
 {
     public void FromManageMonthlyPlannedToDetailsSingleMonthPlan(Dictionary<string, object> navParams)
     {
-       
     }
     public void NavigateToUpsertMonthlyPlannedExpenditure(Dictionary<string, object> navParams)
     {
-
     }
 
     public async void ReturnOnce()

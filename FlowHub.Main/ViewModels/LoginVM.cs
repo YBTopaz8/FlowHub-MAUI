@@ -165,7 +165,6 @@ public partial class LoginVM : ObservableObject
     [RelayCommand]
     public async void GoToHomePageFromLogin()
     {
-
         ErrorMessageVisible = false;
         IsBusy = true;
         UsersModel User = new();

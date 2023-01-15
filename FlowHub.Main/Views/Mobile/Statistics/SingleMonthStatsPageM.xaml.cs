@@ -24,7 +24,6 @@ public partial class SingleMonthStatsPageM : ContentPage
 		pieChart.Series = viewModel.PieSeries;
 		LineChart.Series = viewModel.LineSeries;
 		SelectedTitle.Text = "Biggest Flow Out Details";
-
 	}
 	ChartPoint obj = null;
     private void Chart_ChartPointPointerDown(IChartView chart, ChartPoint point)
@@ -36,7 +35,6 @@ public partial class SingleMonthStatsPageM : ContentPage
 			var SelectedExpIndex = Convert.ToInt32(point.TertiaryValue);
 			viewModel.ChangeSelectedExp(SelectedExpIndex);
 		}
-
 	}
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
