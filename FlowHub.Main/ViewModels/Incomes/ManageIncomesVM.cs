@@ -287,6 +287,27 @@ public partial class ManageIncomesVM : ObservableObject
     }
 
     [RelayCommand]
+    public async void ResetUserPocketMoney(double amount)
+    {
+        if (amount != 0)
+        {
+            ActiveUser.PocketMoney = amount;
+            ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
+            userService.OfflineUser = ActiveUser;
+            await userService.UpdateUserAsync(ActiveUser);
+
+            CancellationTokenSource cancellationTokenSource = new();
+            const ToastDuration duration = ToastDuration.Short;
+            const double fontSize = 16;
+            string text = "User Balance Updated!";
+            var toast = Toast.Make(text, duration, fontSize);
+            await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
+
+            PageLoaded();
+        }
+    }
+
+    [RelayCommand]
     public  void ShowFilterPopUpPage()
     {
         //var filterOption = (string)await Shell.Current.ShowPopupAsync(new FilterOptionsPopUp("test"));

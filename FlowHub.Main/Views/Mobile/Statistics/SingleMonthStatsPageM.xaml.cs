@@ -22,25 +22,25 @@ public partial class SingleMonthStatsPageM : ContentPage
         base.OnAppearing();
 		viewModel.PageLoadedCommand.Execute(null);
 		pieChart.Series = viewModel.PieSeries;
-        SelectedTitle.Text = "Biggest Flow Out Details";
+		LineChart.Series = viewModel.LineSeries;
+		SelectedTitle.Text = "Biggest Flow Out Details";
 
-    }
+	}
 	ChartPoint obj = null;
-    private void pieChart_ChartPointPointerDown(IChartView chart, ChartPoint point)
+    private void Chart_ChartPointPointerDown(IChartView chart, ChartPoint point)
     {
 		if (point is not null)
 		{
-			obj=point;
+			obj = point;
 			SelectedTitle.Text = "Selected Flow Out Details";
 			var SelectedExpIndex = Convert.ToInt32(point.TertiaryValue);
 			viewModel.ChangeSelectedExp(SelectedExpIndex);
 		}
 
-    }
+	}
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
-
-		Debug.WriteLine($"Double Tapped {obj.PrimaryValue}");
+		Debug.WriteLine($"Double Tapped {obj.PrimaryValue} {obj.SecondaryValue}");
     }
 }

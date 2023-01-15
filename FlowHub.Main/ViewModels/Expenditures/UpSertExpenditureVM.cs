@@ -13,8 +13,8 @@ namespace FlowHub.Main.ViewModels.Expenditures;
 
 [QueryProperty(nameof(SingleExpenditureDetails), "SingleExpenditureDetails")]
 [QueryProperty(nameof(PageTitle), nameof(PageTitle))]
-[QueryProperty(nameof(ShowAddSecondExpCheckBox), nameof(ShowAddSecondExpCheckBox))]
 [QueryProperty(nameof(ActiveUser), "ActiveUser")]
+[QueryProperty(nameof(IsAdd), "IsAdd")]
 public partial class UpSertExpenditureVM : ObservableObject
 {
     private readonly IExpendituresRepository _expenditureService;
@@ -36,20 +36,25 @@ public partial class UpSertExpenditureVM : ObservableObject
     private UsersModel _activeUser;
 
     [ObservableProperty]
-    bool _showAddSecondExpCheckBox;
+    private bool isAdd;
 
+    [ObservableProperty]
+    private bool addAnotherExp;
+
+    [ObservableProperty]
+    public double totalss;
+    
+    [ObservableProperty]
+    public double resultingBalance;
+
+
+
+    private int expCounter;
     private double _initialUserPocketMoney = 0;
     private double _initialExpenditureAmount= 0;
     private double _finalPocketMoney = 0;
     private double _initialTotalExpAmount = 0;
 
-    [ObservableProperty]
-    public ExpendituresModel secondExp = new();
-    [ObservableProperty]
-    public ExpendituresModel thirdExp = new();
-
-    [ObservableProperty]
-    public double totalss;
 
     [RelayCommand]
     public void PageLoaded()
@@ -57,15 +62,15 @@ public partial class UpSertExpenditureVM : ObservableObject
         _initialUserPocketMoney = ActiveUser.PocketMoney;
         _initialExpenditureAmount = SingleExpenditureDetails.AmountSpent;
         _initialTotalExpAmount = ActiveUser.TotalExpendituresAmount;
-
-        SecondExp = new();
-        ThirdExp = new();
+        expCounter = 1;
+        ResultingBalance = ActiveUser.PocketMoney;
     }
 
     [RelayCommand]
     public async void UpSertExpenditure()
     {
-        /*
+        
+        
         bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You Want To Save?")))!;
         if (response)
         {
@@ -73,46 +78,45 @@ public partial class UpSertExpenditureVM : ObservableObject
 
             if (SingleExpenditureDetails.Id is not null)
             {
-                UpdateExpFxnAsync( 14, cancellationTokenSource);
+                UpdateExpFxnAsync(14, cancellationTokenSource);
             }
             else
             {
-
                 string ToastNotifMessage = "Nothing was added";
                 if (await AddExpFxnAsync(SingleExpenditureDetails))
                 {
                     ToastNotifMessage = "Flow Out Added";
-                    if (SecondExp.UnitPrice != 0)
-                    {
-                        SecondExp.DateSpent = DateTime.Now;
-                        if (await AddExpFxnAsync(SecondExp) && ThirdExp.UnitPrice != 0)
-                        {
-                            ToastNotifMessage = "Flow Outs Added";
-                            ThirdExp.DateSpent = DateTime.Now;
-                            await AddExpFxnAsync(ThirdExp);
-
-                        }
-                    }
                 }
                 IToast toast = Toast.Make(ToastNotifMessage, ToastDuration.Short, 14);
                 await toast.Show(cancellationTokenSource.Token);
 
-                await _expenditureService.GetAllExpendituresAsync();
-                NavFunctions.ReturnOnce();
+
+                if (AddAnotherExp)
+                {
+                    expCounter++;
+                    PageTitle = $"Add Flow Out N° {expCounter}";
+                    SingleExpenditureDetails = new() { DateSpent = DateTime.Now};
+                    AddAnotherExp = false;
+                }
+                else
+                {
+                    NavFunctions.ReturnOnce();
+                }
+                
             }
-        }
+    }
         else
         {
             Debug.WriteLine("Action cancelled by user");
         }
-        */
+        
     }
 
     [RelayCommand]
     void GetTotals()
     {
         SingleExpenditureDetails.AmountSpent = SingleExpenditureDetails.UnitPrice * SingleExpenditureDetails.Quantity;
-        totalss = SingleExpenditureDetails.AmountSpent;
+        Totalss = SingleExpenditureDetails.AmountSpent;
         Debug.WriteLine(SingleExpenditureDetails.AmountSpent);
     }
 
@@ -123,9 +127,8 @@ public partial class UpSertExpenditureVM : ObservableObject
         double difference = totalExpCost - _initialExpenditureAmount;
 
         var FinalTotalExp = _initialTotalExpAmount - difference;
-        var finalPocketMoney = _initialUserPocketMoney - difference;
 
-        if (finalPocketMoney < 0)
+        if ( ResultingBalance < 0)
         {
             await Shell.Current.DisplayAlert("Failed Operation", "Flow out amount is greater than your current balance", "Okay");
             
@@ -140,7 +143,7 @@ public partial class UpSertExpenditureVM : ObservableObject
             {
                 await _expenditureService.GetAllExpendituresAsync();
                 ActiveUser.TotalExpendituresAmount = FinalTotalExp;
-                ActiveUser.PocketMoney = finalPocketMoney;
+                ActiveUser.PocketMoney = ResultingBalance;
                 ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
                 await userService.UpdateUserAsync(ActiveUser);
                 const string toastNotifMessage = "Expenditure Updated";
@@ -153,22 +156,17 @@ public partial class UpSertExpenditureVM : ObservableObject
     }
 
     private async Task<bool> AddExpFxnAsync(ExpendituresModel expenditure)
-    {        
-
+    {
+        var ExpAmountSpent = SingleExpenditureDetails.UnitPrice * SingleExpenditureDetails.Quantity;
         expenditure.Currency = ActiveUser.UserCurrency;
-        var totalExpCost = expenditure.UnitPrice * expenditure.Quantity;
-        if (totalExpCost > _initialUserPocketMoney)
+        if (ResultingBalance < 0)
         {
             await Shell.Current.DisplayAlert("Failed Operation", $"Your balance is not enough to add Flow Out {expenditure.Reason}", "Okay");
             return false;
         }
         else
         {
-            _finalPocketMoney = _initialUserPocketMoney - totalExpCost;
-
-            if (_finalPocketMoney < 0) return false; //end the operation
-
-            expenditure.AmountSpent = totalExpCost;
+            expenditure.AmountSpent = ExpAmountSpent;
             expenditure.Id = Guid.NewGuid().ToString();
             expenditure.AddedDateTime = DateTime.UtcNow;
             
@@ -177,11 +175,11 @@ public partial class UpSertExpenditureVM : ObservableObject
             if (!await _expenditureService.AddExpenditureAsync(expenditure))
                 return false;
 
-            ActiveUser.TotalExpendituresAmount += totalExpCost;
-            ActiveUser.PocketMoney = _finalPocketMoney;
+            ActiveUser.TotalExpendituresAmount += ExpAmountSpent;
+            ActiveUser.PocketMoney = ResultingBalance;
             ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
             await userService.UpdateUserAsync(ActiveUser);
-            _initialUserPocketMoney = _finalPocketMoney;
+
 
             return true;
         }

@@ -35,7 +35,7 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 	        }).UseMauiCommunityToolkit();
-
+        
         builder.ConfigureMauiHandlers(handlers =>
         {
 #if ANDROID
@@ -108,6 +108,7 @@ public static class MauiProgram
         /*-- Section for Settings --*/
         builder.Services.AddSingleton<UserSettingsPageM>();
         builder.Services.AddSingleton<ApplicationSettingsPageM>();
+        builder.Services.AddTransient<EditUserSettingsPageM>();
 
         /*-- Section for Monthly Planned Expenditures --*/
         builder.Services.AddSingleton<ManageMonthlyPlannedExpendituresPageM>();

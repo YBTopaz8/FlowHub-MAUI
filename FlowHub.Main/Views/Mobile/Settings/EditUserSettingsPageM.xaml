@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlowHub.Main.Views.Mobile.Settings.EditUserSettingsPageM"             
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+             xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
+             xmlns:viewModel="clr-namespace:FlowHub.Main.ViewModels.Settings"      
+             x:DataType="viewModel:UserSettingsVM"
+             Title="Edit Profile">
+    <toolkit:DockLayout>
+        <VerticalStackLayout toolkit:DockLayout.DockPosition="Top" >
+            <Image Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}" HeightRequest="90"/>
+        </VerticalStackLayout>
+
+        <input:FormView SubmitCommand="{Binding UpdateUserInformationCommand}"
+            toolkit:DockLayout.DockPosition="Top" Spacing="10" Margin="10,10,10,0">
+            <material:TextField Title="User name" Text="{Binding ActiveUser.Username}">
+                <validation:RequiredValidation Message="Please enter your Username"/>
+            </material:TextField>
+            <material:TextField Title="Email" Text="{Binding ActiveUser.Email}">
+                <validation:RequiredValidation Message="Please enter your Email"/>
+            </material:TextField>
+            <material:PickerField Title="Country" ItemsSource="{Binding CountryNamesList}"
+                                      toolkit:DockLayout.DockPosition="Top"
+                                      x:Name="CountryPicker" SelectedValueChanged="CountryPicker_SelectedValueChanged">
+                    <validation:RequiredValidation Message="Please Select a Country"/>
+                </material:PickerField>
+            <Label Text="{Binding SelectCountryCurrency}" HorizontalTextAlignment="End" FontSize="16" FontAttributes="Bold"/>
+            <ImageButton Source="save_icon_d" input:FormView.IsSubmitButton="True"/>
+        </input:FormView>
+        
+    </toolkit:DockLayout>
+</ContentPage>

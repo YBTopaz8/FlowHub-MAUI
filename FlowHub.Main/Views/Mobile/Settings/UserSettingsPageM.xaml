@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewModel="clr-namespace:FlowHub.Main.ViewModels.Settings"             
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"       
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewModel="clr-namespace:FlowHub.Main.ViewModels.Settings"      
              x:Class="FlowHub.Main.Views.Mobile.Settings.UserSettingsPageM"
              x:DataType="viewModel:UserSettingsVM"
-             Title="Settings">
+             Title="My Profile">
 
     <toolkit:DockLayout>
         <Border toolkit:DockLayout.DockPosition="Top" Stroke="transparent" BackgroundColor="{AppThemeBinding Light=White, Dark=#171717}" StrokeShape="RoundRectangle 0,0,25,25">
@@ -36,7 +36,8 @@
                                 <Shadow Offset="5,8"
                                     Opacity="0.1"/>
                             </Border.Shadow>
-                            <ImageButton HeightRequest="25" Source="{AppThemeBinding Dark=edit_d, Light=edit_l}" Clicked="ImageButton_Clicked"/>
+                            <ImageButton HeightRequest="25" Source="{AppThemeBinding Dark=edit_d, Light=edit_l}" 
+                                         Command="{Binding GoToEditUserSettingsPageCommand}"/>
                         </Border>
                     </HorizontalStackLayout>
                 </Grid>
@@ -141,40 +142,5 @@
 
         </VerticalStackLayout>
     </toolkit:DockLayout>
-    <!--<VerticalStackLayout Margin="0" Spacing="5">
-        <Grid Margin="0,10,0,0">
-            <ImageButton Source="{AppThemeBinding Dark=logout_icon_d.png, Light=logout_icon_l.png}" HorizontalOptions="End" HeightRequest="20" Command="{Binding LogOutUserCommand}"/>
-        </Grid>
-        <Border BackgroundColor="Transparent" StrokeThickness="0">
-            <VerticalStackLayout Spacing="8" Margin="12,0,12,0">
-                <Grid>
-                    <Label Text="User Name"/>
-                    <Label Text="{Binding UserName}" HorizontalOptions="End"/>
-                </Grid>
-                <Grid>
-                    <Label Text="User Email"/>
-                    <Label Text="{Binding UserEmail}" HorizontalOptions="End"/>
-                </Grid>
-                <Grid>
-                    <Label Text="User Country"/>
-                    <Label Text="{Binding UserCountry}" HorizontalOptions="End"/>
-                </Grid>
-                <Grid>
-                    <Label Text="User Currency"/>
-                    <Label Text="{Binding UserCurrency}" HorizontalOptions="End"/>
-                </Grid>
-                <Grid>
-                    <Label Text="Pocket Money"/>
-                    <Label HorizontalTextAlignment="End">
-                        <Label.Text>
-                            <MultiBinding StringFormat="{} {0:n3} {1}">
-                                <Binding Path="PocketMoney"/>
-                                <Binding Path="UserCurrency"/>
-                            </MultiBinding>
-                        </Label.Text>
-                    </Label>
-                </Grid>
-            </VerticalStackLayout>
-        </Border>
-    </VerticalStackLayout>-->
+
 </ContentPage>

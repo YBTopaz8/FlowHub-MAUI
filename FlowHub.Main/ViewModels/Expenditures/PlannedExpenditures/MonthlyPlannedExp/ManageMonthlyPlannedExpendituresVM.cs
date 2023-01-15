@@ -101,6 +101,7 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
                 {
                     {"SingleMonthlyPlanned", new PlannedExpendituresModel {Title = monthYear, IsMonthlyPlanned=true, Expenditures = new List<ExpendituresModel>()} },
                     {"SingleExpenditureDetails", new ExpendituresModel () },
+                    { "IsAdd", true },
                     {"PageTitle", new string ($"Planned Flow Out: {monthYear}") },
                     
                     {"ActiveUser" , ActiveUser }
@@ -126,16 +127,20 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
     [RelayCommand]
     public async void DeleteMonthlyPlannedExp(PlannedExpendituresModel monthlyPlannedExp)
     {
-        CancellationTokenSource cancellationTokenSource = new();
-        ToastDuration duration = ToastDuration.Short;
-        double fontSize = 14;
-        string text = $"Monthly Planned For {monthlyPlannedExp.Title} Deleted";
-        var toast = Toast.Make(text, duration, fontSize);
+        bool dialogResult = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Delete Monthly Planned Flow?"));
+        if (dialogResult)
+        {
+            CancellationTokenSource cancellationTokenSource = new();
+            ToastDuration duration = ToastDuration.Short;
+            double fontSize = 14;
+            string text = $"Monthly Planned For {monthlyPlannedExp.Title} Deleted";
+            var toast = Toast.Make(text, duration, fontSize);
 
-        await monthlyPlannedExpService.DeletePlannedExp(monthlyPlannedExp.Id);
-        monthlyPlannedExpService.OfflinePlannedExpendituresList.Remove(monthlyPlannedExp);
-        MonthlyPlannedExpList.Remove(monthlyPlannedExp);
-        await toast.Show(cancellationTokenSource.Token);
+            await monthlyPlannedExpService.DeletePlannedExp(monthlyPlannedExp.Id);
+            monthlyPlannedExpService.OfflinePlannedExpendituresList.Remove(monthlyPlannedExp);
+            MonthlyPlannedExpList.Remove(monthlyPlannedExp);
+            await toast.Show(cancellationTokenSource.Token);
+        }
         //GetAllMonthlyPlanned();
     }
 
@@ -163,16 +168,16 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
         string dialogueResponse = (string)await Shell.Current.ShowPopupAsync(new InputCurrencyForPrintPopUpPage("Share PDF File? (Requires Internet)", ActiveUser.UserCurrency));
         if (dialogueResponse is not "Cancel")
         {
-            await PrintFunction.SaveListDetailMonthlyPlanned(ListofListofExps, ActiveUser.UserCurrency, dialogueResponse, ActiveUser.Username, listofExpTitles);
+            if (Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
+            {
+                await PrintFunction.SaveListDetailMonthlyPlanned(ListofListofExps, ActiveUser.UserCurrency, dialogueResponse, ActiveUser.Username, listofExpTitles);
+            }
+            else
+            {
+                await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("No Internet Found ! \nPlease Connect to the Internet"));
+            }
         }
-            //if (Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
-            //{
-            //    await PrintFunction.SaveListDetailMonthlyPlanned(TempList, UserCurrency, dialogueResponse, ActiveUser.Username, SingleMonthlyPlannedDetails.Title);
-            //}
-            //else
-            //{
-            //    await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("No Internet Found ! \nPlease Connect to the Internet"));
-            //}
-        //}
+        
     }
+
 }

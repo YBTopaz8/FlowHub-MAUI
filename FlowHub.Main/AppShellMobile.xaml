@@ -23,7 +23,7 @@
         <ShellContent Title="Flow Ins" Icon="{AppThemeBinding Dark=request_money_d.png, Light=request_money_l.png}"
             ContentTemplate="{DataTemplate viewsInc:ManageIncomesM}"/>
 
-        <ShellContent Title="Statistics" Icon="graph_d.png"
+        <ShellContent Title="Statistics" Icon="graph_d.png" IsVisible="False"
             ContentTemplate="{DataTemplate viewsStats:StatisticsPageM}"/>
 
         <ShellContent Title="Monthly Planned" Icon="{AppThemeBinding Dark=monthly_planned_icon_d.png, Light=monthly_planned_icon_l.png}"

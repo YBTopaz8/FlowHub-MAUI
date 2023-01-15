@@ -26,8 +26,8 @@ public partial class ManageExpendituresVM : ObservableObject
         expendituresService = expendituresRepository;
         userService = usersRepository;
     }
-    public SmartObservableCollection<ExpendituresModel> ExpendituresList { get; set; } = new();
-   // public ObservableCollection<ExpendituresModel> ExpendituresList { get; set; } = new ();
+   // public SmartObservableCollection<ExpendituresModel> ExpendituresList { get; set; } = new();
+    public ObservableCollection<ExpendituresModel> ExpendituresList { get; set; } = new ();
 
     [ObservableProperty]
     private double totalAmount;
@@ -97,8 +97,8 @@ public partial class ManageExpendituresVM : ObservableObject
         await expendituresService.GetAllExpendituresAsync();
         filterOption = "Filter_Curr_Month";
         //FilterGetExpOfToday(GlobalSortNamePosition);        
-        //  FilterExpListOfCurrentMonth();
-        FilterGetAllExp();
+        FilterExpListOfCurrentMonth();
+      //  FilterGetAllExp();
     }
 
 
@@ -131,10 +131,13 @@ public partial class ManageExpendituresVM : ObservableObject
                 break;
         }
 
-        //    ExpendituresList.Clear();
-        //ExpendituresList.AddRange(expList);
-        ExpendituresList.Reset(expList);
-        IsBusy= false;
+        ExpendituresList.Clear();
+
+        foreach (ExpendituresModel exp in expList)
+        {
+            ExpendituresList.Add(exp);         
+        }
+        IsBusy = false;
         
     }
 
@@ -256,21 +259,18 @@ public partial class ManageExpendituresVM : ObservableObject
 
             IsBusy= true;
             double tot = 0;
-          //  ExpendituresList.Clear();
+            ExpendituresList.Clear();
             if (expList.Count > 0)
             {
-                ExpendituresList.Reset(expList);
-                //ExpendituresList.AddRange(expList);
-                //ExpendituresList.Reset(expList);
                 IsBusy = false;
                 tot = expList.Sum(x => x.AmountSpent);
-                //ExpendituresList.Clear();
+                ExpendituresList.Clear();
 
-                //foreach (ExpendituresModel exp in expList)
-                //{
-                //   // ExpendituresList.Add(exp);
-                //    tot += exp.AmountSpent;
-                //}
+                foreach (ExpendituresModel exp in expList)
+                {
+                    ExpendituresList.Add(exp);
+                    tot += exp.AmountSpent;
+                }
                 TotalAmount = tot;
                 TotalExpenditures = ExpendituresList.Count;
                 ExpTitle = "All Flow Outs";
@@ -411,7 +411,7 @@ public partial class ManageExpendituresVM : ObservableObject
             {
                 { "SingleExpenditureDetails", new ExpendituresModel { DateSpent = DateTime.Now } },
                 { "PageTitle", new string("Add New Flow Out") },
-                { "ShowAddSecondExpCheckBox", true },
+                { "IsAdd", true },
                 { "ActiveUser", ActiveUser }
             };
 
@@ -426,7 +426,7 @@ public partial class ManageExpendituresVM : ObservableObject
         {
             { "SingleExpenditureDetails", expenditure },
             { "PageTitle", new string("Edit Flow Out") },
-            { "ShowAddSecondExpCheckBox", false },
+            { "IsAdd", false },
             { "ActiveUser", ActiveUser }
         };
 
@@ -480,6 +480,7 @@ public partial class ManageExpendituresVM : ObservableObject
         bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You want to delete?")))!;
         if (response)
         {
+            IsBusy = true;
             var deleteResponse = await expendituresService.DeleteExpenditureAsync(expenditure.Id); //delete the expenditure from db
 
             if (deleteResponse)
@@ -500,6 +501,8 @@ public partial class ManageExpendituresVM : ObservableObject
             var toast = Toast.Make(text, duration, fontSize);
             await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
             Sorting(GlobalSortNamePosition);
+            IsBusy = false;
+
         }
     }
 
@@ -557,14 +560,18 @@ public partial class ManageExpendituresVM : ObservableObject
     public async void SyncExpTest()
     {
         IsBusy = true;
-        Debug.WriteLine("Begin Sync");
         if(await expendituresService.SynchronizeExpendituresAsync(ActiveUser.Email, ActiveUser.Password))
         {
             PageloadedAsync();
             IsBusy = false;
+            CancellationTokenSource cancellationTokenSource = new();
+            const ToastDuration duration = ToastDuration.Short;
+            const double fontSize = 16;
+            string text = "All Synchronized!";
+            var toast = Toast.Make(text, duration, fontSize);
+            await toast.Show(cancellationTokenSource.Token); //toast a notification about Sync Success0!
         }
 
-        Debug.WriteLine("End Sync");
         //  await expendituresService.GetAllExpFromOnlineAsync(ActiveUser.Id);
         //string newText= (string)await Shell.Current.ShowPopupAsync(new InputPopUpPage(isTextInput:true, optionalTitleText:"Enter New Name"));
         ////Debug.WriteLine(newText);

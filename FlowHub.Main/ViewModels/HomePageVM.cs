@@ -84,7 +84,7 @@ public partial class HomePageVM : ObservableObject
             {
                 { "SingleExpenditureDetails", new ExpendituresModel { DateSpent = DateTime.Now } },
                 { "PageTitle", new string("Add New Flow Out") },
-                { "ShowAddSecondExpCheckBox", true },
+                { "IsAdd", true },
                 { "ActiveUser", ActiveUser }
             };
             NavFunction.FromHomePageToUpsertExpenditure(navParam);
@@ -93,26 +93,5 @@ public partial class HomePageVM : ObservableObject
 
 
 
-    [RelayCommand]
-    public void SaveToJSON()
-    {
-
-        /*
-        var User = new UsersModel
-        {
-            Id = 1,
-            Username = "Yvan"
-            
-        };
-        if (  SessionService.SaveSessionAsync(User, true))
-        {
-            Debug.WriteLine("======>> SAVED");
-        }
-        else
-        {
-
-            Debug.WriteLine("======>> UNSAVED");
-        }*/
-    }
 
 }

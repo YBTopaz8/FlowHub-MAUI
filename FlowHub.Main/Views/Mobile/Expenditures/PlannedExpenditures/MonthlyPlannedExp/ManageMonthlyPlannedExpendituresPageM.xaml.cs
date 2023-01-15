@@ -30,8 +30,11 @@ public partial class ManageMonthlyPlannedExpendituresPageM : ContentPage
         else
         {
             ColView.SelectionMode = SelectionMode.None;
-            ListOfExps.Clear();
-            ListOfTitles.Clear();
+            if (ListOfExps is not null)
+            {
+                ListOfExps.Clear();
+                ListOfTitles.Clear();
+            }
         }
     }
     List<List<ExpendituresModel>> ListOfExps { get;set; }

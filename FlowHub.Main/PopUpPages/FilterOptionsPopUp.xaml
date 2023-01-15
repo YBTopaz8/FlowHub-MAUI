@@ -33,17 +33,6 @@
 
             <VerticalStackLayout RadioButtonGroup.GroupName="Filters" x:Name="Filter_Group">
 
-                <!--<RadioButton Content="View All" Value="Filter_All" x:Name="Filter_All"  CheckedChanged="View_other_filters_RadioButton_CheckedChanged" />
-                <RadioButton Content="View For Today" Value="Filter_Today" x:Name="Filter_Today" CheckedChanged="View_other_filters_RadioButton_CheckedChanged" />
-                <RadioButton Content="View For Current Month" Value="Filter_Curr_Month" x:Name="Filter_Curr_Month" CheckedChanged="View_other_filters_RadioButton_CheckedChanged" />
-                <RadioButton Content="View For Specific Month" Value="Filter_Spec_Month" CheckedChanged="View_Spec_Month_RadioButton_CheckedChanged" x:Name="Filter_Spec_Month"/>-->
-
-                <!--<HorizontalStackLayout Spacing="10" IsVisible="{Binding IsChecked, Source={x:Reference Filter_Spec_Month}}">
-                    <Picker x:Name="MonthPicker" Title="Select a Month" SelectedIndexChanged="MonthPicker_SelectedIndexChanged"/>
-
-                    <Picker x:Name="YearPicker" Title="Select a Year" SelectedIndexChanged="YearPicker_SelectedIndexChanged" />
-                 </HorizontalStackLayout>-->
-
                 <material:RadioButtonGroupView x:Name="FilterOptionsRadioGroup" SelectedItemChanged="FilterOptionsRadioGroup_SelectedItemChanged"   >
                     <material:RadioButton Text="View All" Value="Filter_All" x:Name="Filter_All"  />
                     <material:RadioButton Text="View For Today" Value="Filter_Today" x:Name="Filter_Today" />
@@ -58,6 +47,7 @@
                 </material:RadioButtonGroupView>
 
             </VerticalStackLayout>
+
 
             <BoxView HeightRequest="1"/>
             <HorizontalStackLayout HorizontalOptions="End" VerticalOptions="End">

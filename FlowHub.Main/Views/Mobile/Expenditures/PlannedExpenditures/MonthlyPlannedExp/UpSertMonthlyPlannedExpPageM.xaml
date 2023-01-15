@@ -31,9 +31,13 @@
             <material:TextField Title="Comments" x:Name="Comments" Text="{Binding SingleExpenditureDetails.Comment}" 
                             IsVisible="{Binding IsChecked, Source={x:Reference CommentCheck}}" />
 
-            <Button Text="save" input:FormView.IsSubmitButton="True"/>
-            <!--<ImageButton input:FormView.IsSubmitButton="True" BackgroundColor="Red"
-                            Source="{AppThemeBinding Dark=save_icon_d.png, Light=save_icon_l.png}"/>-->
+            <material:CheckBox Margin="5,0"
+                IsChecked="{Binding AddAnotherExp}" IsVisible="{Binding IsAdd}"
+                                   
+                                   Text="Save and Add another" />
+
+            <ImageButton Source="{AppThemeBinding Dark=save_icon_d, Light=save_icon_l}" input:FormView.IsSubmitButton="True"/>
+            
                
         </input:FormView>
            

@@ -89,7 +89,8 @@
                 <VerticalStackLayout x:Name="LoginForm" Margin="25">
 
                     <input:FormView SubmitCommand="{Binding GoToHomePageFromLoginCommand}" Spacing="25">
-                        <Label Text="User does not exist!" x:Name="NoUserFoundText" HorizontalOptions="Center" TextColor="Red" FontAttributes="Bold" FontSize="23" IsVisible="{Binding ErrorMessage}" />
+                        <Label Text="User does not exist!" x:Name="NoUserFoundText" HorizontalOptions="Center" 
+                               TextColor="Red" FontAttributes="Bold" FontSize="23" IsVisible="{Binding ErrorMessageVisible}" />
                         <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
 
                         <material:TextField Title="Email" Text="{Binding CurrentUser.Email}" AllowClear="True" Icon="{AppThemeBinding Dark=email_icon_d.png, Light=email_icon_l.png}">

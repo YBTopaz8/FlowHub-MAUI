@@ -107,9 +107,10 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
         {
             { "SingleMonthlyPlanned", SingleMonthlyPlannedDetails },
             { "SingleExpenditureDetails", new ExpendituresModel() },
-            { "PageTitle", new string ($"Add Flow Out") },
+            { "PageTitle", new string ("Add Flow Out") },
             { "CreateNewMonthlyPlanned", false },
             { "Mode", new string("AddNewExp") },
+            { "IsAdd", true},
             { "ActiveUser" , ActiveUser }
         };
 
@@ -140,6 +141,7 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
             { "SingleMonthlyPlanned", SingleMonthlyPlannedDetails },
             { "SingleExpenditureDetails", model },
             { "PageTitle", new string ("Edit Flow Out") },
+            { "IsAdd", false },
             { "ActiveUser" , ActiveUser }
         };
         NavFunctions.ToUpSertMonthlyPlanned(navParam);
@@ -148,24 +150,28 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
     [RelayCommand]
     async void DeleteExpFromMonthlyP(ExpendituresModel model)
     {
-        CancellationTokenSource cancellationTokenSource = new();
-        ToastDuration duration = ToastDuration.Short;
-        double fontSize = 14;
-        string text = "Flow Out Deleted";
-        var toast = Toast.Make(text, duration, fontSize);
+        bool dialogResult = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Delete Flow Out?"));
+        if (dialogResult)
+        {
+            CancellationTokenSource cancellationTokenSource = new();
+            ToastDuration duration = ToastDuration.Short;
+            double fontSize = 14;
+            string text = "Flow Out Deleted";
+            var toast = Toast.Make(text, duration, fontSize);
 
-        SingleMonthlyPlannedDetails.Expenditures.Remove(model);
-        SingleMonthlyPlannedDetails.NumberOfExpenditures--;
-        SingleMonthlyPlannedDetails.TotalAmount -= model.AmountSpent;
+            SingleMonthlyPlannedDetails.Expenditures.Remove(model);
+            SingleMonthlyPlannedDetails.NumberOfExpenditures--;
+            SingleMonthlyPlannedDetails.TotalAmount -= model.AmountSpent;
 
-        SingleMonthlyPlannedDetails.UpdatedDateTime = DateTime.UtcNow;
-        SingleMonthlyPlannedDetails.UpdateOnSync = true;
+            SingleMonthlyPlannedDetails.UpdatedDateTime = DateTime.UtcNow;
+            SingleMonthlyPlannedDetails.UpdateOnSync = true;
 
-        await monthlyPlannedExpService.UpdatePlannedExp(SingleMonthlyPlannedDetails);
-        TempList.Remove(model);
+            await monthlyPlannedExpService.UpdatePlannedExp(SingleMonthlyPlannedDetails);
+            TempList.Remove(model);
 
-        GetTotals();
-        await toast.Show(cancellationTokenSource.Token);
+            GetTotals();
+            await toast.Show(cancellationTokenSource.Token);
+        }
     }
 
     [RelayCommand]

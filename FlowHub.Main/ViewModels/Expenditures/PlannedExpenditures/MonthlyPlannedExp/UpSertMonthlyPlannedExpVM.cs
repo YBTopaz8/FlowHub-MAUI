@@ -17,6 +17,7 @@ namespace FlowHub.Main.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlanne
 [QueryProperty(nameof(SingleExpenditureDetails), "SingleExpenditureDetails")]
 [QueryProperty(nameof(SingleMonthlyPlanned), "SingleMonthlyPlanned")]
 [QueryProperty(nameof(ActiveUser), "ActiveUser")]
+[QueryProperty(nameof(IsAdd), "IsAdd")]
 public partial class UpSertMonthlyPlannedExpVM : ObservableObject
 {
     private readonly IPlannedExpendituresRepository monthlyPlannedExpService;
@@ -40,6 +41,9 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
     string mode;
 
     [ObservableProperty]
+    bool isAdd;
+
+    [ObservableProperty]
     bool createNewMonthlyPlanned;
 
     [ObservableProperty]
@@ -51,6 +55,11 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
     [ObservableProperty]
     bool hasComment = false;
 
+    [ObservableProperty]
+    private bool addAnotherExp;
+
+    int expCounter;
+
     double InitialSingleMonthlyPlannedExp = 0;
     double InitialExpenditureAmount = 0;
 
@@ -58,7 +67,7 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
     public void PageLoaded()
     {
         SingleExpenditureDetails.AmountSpent = SingleExpenditureDetails.AmountSpent == 0 ? 1 : SingleExpenditureDetails.AmountSpent;
-
+        expCounter = 1;
         InitialSingleMonthlyPlannedExp = SingleMonthlyPlanned.TotalAmount;
         InitialExpenditureAmount = SingleExpenditureDetails.AmountSpent;
         if(SingleExpenditureDetails.Comment is not null)
@@ -97,7 +106,17 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
         {
             if (await AddMonthlyPlannedExp(duration, fontSize, cancellationTokenSource))
             {
-                NavFunctions.ReturnToDetailsMonthlyPlanned(navParam);
+                if (AddAnotherExp)
+                {
+                    expCounter++;
+                    PageTitle = $"Add Flow Out N° {expCounter}";
+                    SingleExpenditureDetails = new() { DateSpent = DateTime.Now };
+                    AddAnotherExp = false;
+                }
+                else
+                {
+                    NavFunctions.ReturnToDetailsMonthlyPlanned(navParam);
+                }
             }
             else
             {
@@ -111,7 +130,17 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
             {
                 if(await AddExpToExistingMonthlyPlanned(duration, fontSize, cancellationTokenSource))
                 {
-                    NavFunctions.ReturnOnce(navParam);
+                    if (AddAnotherExp)
+                    {
+                        expCounter++;
+                        PageTitle = $"Add Flow Out N° {expCounter}";
+                        SingleExpenditureDetails = new() { DateSpent = DateTime.Now };
+                        AddAnotherExp = false;
+                    }
+                    else
+                    {
+                        NavFunctions.ReturnToDetailsMonthlyPlanned(navParam);
+                    }
                 }
                 else
                 {
@@ -146,13 +175,16 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
         SingleMonthlyPlanned.TotalAmount += SingleExpenditureDetails.AmountSpent;
         SingleMonthlyPlanned.NumberOfExpenditures += 1;
 
-        if (!await monthlyPlannedExpService.AddPlannedExp(SingleMonthlyPlanned))
-            return false;
+        bool dialogResult = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Add New Monthly Planned Flow Out?"));
+        if (dialogResult)
+        {
+            if (!await monthlyPlannedExpService.AddPlannedExp(SingleMonthlyPlanned))
+                return false;
 
-        string ToastNotifMessage = "Monthly Flow Out Added";
-        var toast = Toast.Make(ToastNotifMessage, duration, fontsize);
-        await toast.Show(tokenSource.Token);
-
+            string ToastNotifMessage = "Monthly Flow Out Added";
+            var toast = Toast.Make(ToastNotifMessage, duration, fontsize);
+            await toast.Show(tokenSource.Token);
+        }
 
         return true;
     }
@@ -167,9 +199,12 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
         SingleMonthlyPlanned.TotalAmount += SingleExpenditureDetails.AmountSpent;
         SingleMonthlyPlanned.NumberOfExpenditures += 1;
 
-        if(!await monthlyPlannedExpService.UpdatePlannedExp(SingleMonthlyPlanned))
-            return false;
-
+        bool dialogResult = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Add New Flow?"));
+        if (dialogResult)
+        {
+            if (!await monthlyPlannedExpService.UpdatePlannedExp(SingleMonthlyPlanned))
+                return false;
+        }
         string ToastNotifMessage = "Flow Out Added";
         var toast = Toast.Make(ToastNotifMessage, duration, fontsize);
         await toast.Show(tokenSource.Token);
@@ -188,9 +223,12 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
         var difference = InitialExpenditureAmount - SingleExpenditureDetails.AmountSpent;
         SingleMonthlyPlanned.TotalAmount = InitialSingleMonthlyPlannedExp - difference;
 
-        if(!await monthlyPlannedExpService.UpdatePlannedExp(SingleMonthlyPlanned))
-            return false;
-
+        bool dialogResult = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Save Edit?"));
+        if (dialogResult)
+        {
+            if (!await monthlyPlannedExpService.UpdatePlannedExp(SingleMonthlyPlanned))
+                return false;
+        }
         const string ToastNotifMessage = "Flow Out Edited";
         var toast = Toast.Make(ToastNotifMessage, duration, fontsize);
         await toast.Show(tokenSource.Token);
