@@ -8,7 +8,6 @@ namespace FlowHub.Main.AdditionalResourcefulAPIClasses;
 
 public class SmartObservableCollection<T> : ObservableCollection<T>
 {
-
 	public void AddRange (IEnumerable<T> items)
 	{
 		foreach (var item in items)

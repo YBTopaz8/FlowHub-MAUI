@@ -17,7 +17,5 @@ public partial class UserSettingsPageM
     {
         base.OnAppearing();
 		viewModel.PageLoadedCommand.Execute(null);
-
     }
-
 }

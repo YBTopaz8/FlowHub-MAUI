@@ -1,11 +1,9 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
-using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FlowHub.DataAccess.IRepositories;
-using FlowHub.Main.AdditionalResourcefulAPIClasses;
 using FlowHub.Main.PDF_Classes;
 using FlowHub.Main.Platforms.NavigationMethods;
 using FlowHub.Main.PopUpPages;
@@ -26,8 +24,9 @@ public partial class ManageExpendituresVM : ObservableObject
         expendituresService = expendituresRepository;
         userService = usersRepository;
     }
-   // public SmartObservableCollection<ExpendituresModel> ExpendituresList { get; set; } = new();
-    public ObservableCollection<ExpendituresModel> ExpendituresList { get; set; } = new ();
+    
+    [ObservableProperty]
+    ObservableCollection<ExpendituresModel> expendituresList;
 
     [ObservableProperty]
     private double totalAmount;
@@ -97,10 +96,9 @@ public partial class ManageExpendituresVM : ObservableObject
         await expendituresService.GetAllExpendituresAsync();
         filterOption = "Filter_Curr_Month";
         //FilterGetExpOfToday(GlobalSortNamePosition);        
-        FilterExpListOfCurrentMonth();
+        FilterGetAllExp();
       //  FilterGetAllExp();
     }
-
 
     [RelayCommand]
     public void Sorting(int SortNamePosition)
@@ -108,7 +106,7 @@ public partial class ManageExpendituresVM : ObservableObject
         IsBusy= true;
         GlobalSortNamePosition = SortNamePosition;
 
-        var expList = new List<ExpendituresModel>();  
+        var expList = new List<ExpendituresModel>();
         switch (SortNamePosition)
         {
             case 0:
@@ -135,10 +133,9 @@ public partial class ManageExpendituresVM : ObservableObject
 
         foreach (ExpendituresModel exp in expList)
         {
-            ExpendituresList.Add(exp);         
+            ExpendituresList.Add(exp);
         }
         IsBusy = false;
-        
     }
 
     [RelayCommand]
@@ -161,31 +158,36 @@ public partial class ManageExpendituresVM : ObservableObject
                             .ToList();
             FilterTitle = "Date Spent Descending";
 
-            IsBusy = true;
-            double tot = 0;
+            //IsBusy = true;
 
-            ExpendituresList.Clear();
+            ExpendituresList = new ObservableCollection<ExpendituresModel>(expOfCurrentMonth);
+            //ExpendituresList.Clear();
 
-            if (expOfCurrentMonth.Count > 0)
-            {
-                IsBusy = false;
-                for (int i = 0; i < expOfCurrentMonth.Count; i++)
-                {
-                    ExpendituresList.Add(expOfCurrentMonth[i]);
-                    tot += expOfCurrentMonth[i].AmountSpent;
-                }
+            ExpTitle = $"Flow Outs For {DateTime.Now:MMM - yyyy}";
 
-                TotalAmount = tot;
-                TotalExpenditures = ExpendituresList.Count;
-                ExpTitle = $"Flow Outs For {DateTime.Now:MMM - yyyy}";
-            }
-            else
-            {
-                IsBusy=false;
-                TotalExpenditures = ExpendituresList.Count;
-                ExpTitle = $"Flow Outs For {DateTime.Now:MMM - yyyy}";
-                TotalAmount = 0;
-            }
+            TotalAmount = ExpendituresList.Count > 0 ? ExpendituresList.Count : 0;
+            IsBusy = false;
+
+            //if (expOfCurrentMonth.Count > 0)
+            //{
+            //    IsBusy = false;
+            //    for (int i = 0; i < expOfCurrentMonth.Count; i++)
+            //    {
+            //        ExpendituresList.Add(expOfCurrentMonth[i]);
+            //        tot += expOfCurrentMonth[i].AmountSpent;
+            //    }
+
+            //    TotalAmount = tot;
+            //    TotalExpenditures = ExpendituresList.Count;
+            //    ExpTitle = $"Flow Outs For {DateTime.Now:MMM - yyyy}";
+            //}
+            //else
+            //{
+            //    IsBusy=false;
+            //    TotalExpenditures = ExpendituresList.Count;
+            //    ExpTitle = $"Flow Outs For {DateTime.Now:MMM - yyyy}";
+            //    TotalAmount = 0;
+            //}
             ShowStatisticBtn = expOfCurrentMonth.Count >= 3;
         }
         catch (Exception ex)
@@ -257,37 +259,22 @@ public partial class ManageExpendituresVM : ObservableObject
             expList = expendituresService.OfflineExpendituresList.OrderByDescending(x => x.DateSpent).ToList();
             FilterTitle = "Date Spent Descending";
 
-            IsBusy= true;
-            double tot = 0;
-            ExpendituresList.Clear();
-            if (expList.Count > 0)
-            {
-                IsBusy = false;
-                tot = expList.Sum(x => x.AmountSpent);
-                ExpendituresList.Clear();
+            var tempList = await Task.Run(async () => new ObservableCollection<ExpendituresModel>(expList));
+            ExpendituresList = tempList;
+            
+            
+            TotalAmount = ExpendituresList.Sum(x => x.AmountSpent);
+            TotalExpenditures = ExpendituresList.Count;
 
-                foreach (ExpendituresModel exp in expList)
-                {
-                    ExpendituresList.Add(exp);
-                    tot += exp.AmountSpent;
-                }
-                TotalAmount = tot;
-                TotalExpenditures = ExpendituresList.Count;
+            IsBusy = false;
+                //if (ActiveUser.TotalExpendituresAmount == 0)
+                //{
+                //    ActiveUser.TotalExpendituresAmount = tot;
+                //    await userService.UpdateUserAsync(ActiveUser);
+                //}
+            
                 ExpTitle = "All Flow Outs";
-
-                if (ActiveUser.TotalExpendituresAmount == 0)
-                {
-                    ActiveUser.TotalExpendituresAmount = tot;
-                    await userService.UpdateUserAsync(ActiveUser);
-                }
-            }
-            else
-            {
-                IsBusy= false;
-                ExpendituresList.Clear();
-                TotalAmount = 0;
-                ExpTitle = "All Flow Outs";
-            }
+            
             ShowStatisticBtn = expList.Count >= 3;
         }
         catch (Exception ex)
@@ -302,6 +289,8 @@ public partial class ManageExpendituresVM : ObservableObject
     {
         try
         {
+
+            Debug.WriteLine("entered today");
             ShowDayFilter = false;
             filterOption = "Filter_Today";
             List<ExpendituresModel> expOfToday = new();
@@ -502,7 +491,6 @@ public partial class ManageExpendituresVM : ObservableObject
             await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
             Sorting(GlobalSortNamePosition);
             IsBusy = false;
-
         }
     }
 
@@ -559,22 +547,22 @@ public partial class ManageExpendituresVM : ObservableObject
     [RelayCommand]
     public async void SyncExpTest()
     {
-        IsBusy = true;
-        if(await expendituresService.SynchronizeExpendituresAsync(ActiveUser.Email, ActiveUser.Password))
+        bool response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do you want to Sync data?"));
+        if (response)
         {
-            PageloadedAsync();
-            IsBusy = false;
-            CancellationTokenSource cancellationTokenSource = new();
-            const ToastDuration duration = ToastDuration.Short;
-            const double fontSize = 16;
-            string text = "All Synchronized!";
-            var toast = Toast.Make(text, duration, fontSize);
-            await toast.Show(cancellationTokenSource.Token); //toast a notification about Sync Success0!
+            IsBusy = true;
+            if (await expendituresService.SynchronizeExpendituresAsync(ActiveUser.Email, ActiveUser.Password))
+            {
+                PageloadedAsync();
+                IsBusy = false;
+                CancellationTokenSource cancellationTokenSource = new();
+                const ToastDuration duration = ToastDuration.Short;
+                const double fontSize = 16;
+                string text = "All Synchronized!";
+                var toast = Toast.Make(text, duration, fontSize);
+                await toast.Show(cancellationTokenSource.Token); //toast a notification about Sync Success0!
+            }
         }
-
-        //  await expendituresService.GetAllExpFromOnlineAsync(ActiveUser.Id);
-        //string newText= (string)await Shell.Current.ShowPopupAsync(new InputPopUpPage(isTextInput:true, optionalTitleText:"Enter New Name"));
-        ////Debug.WriteLine(newText);
     }
 
     [RelayCommand]

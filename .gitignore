@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /FlowHub.DataAccess/Platforms/Android/OnlineDataAccessRepository.cs
 /FlowHub.DataAccess/Platforms/Windows/OnlineDataAccessRepository.cs
+/FlowHub.DataAccess/Repositories/OnlineCredentialsRepository.cs

@@ -19,5 +19,4 @@ public partial class HomePageM : ContentPage
         viewModel.DisplayInfoCommand.Execute(null);
     }
 
-
 }

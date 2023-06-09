@@ -14,15 +14,12 @@ public partial class ManageIncomesM : ContentPage
         InitializeComponent();
         viewModel = vm;
         this.BindingContext = vm;
-
     }
 
     protected override void OnAppearing()
     {
-
         base.OnAppearing();
         viewModel.PageLoadedCommand.Execute(null);
-
     }
     private async void ExportToPDFImageButton_Clicked(object sender, EventArgs e)
     {
@@ -45,5 +42,4 @@ public partial class ManageIncomesM : ContentPage
         double NewAmount = (double) await Shell.Current.ShowPopupAsync(new InputPopUpPage(isNumericInput: true, optionalTitleText:"Enter New Pocket Money"));
         viewModel.ResetUserPocketMoneyCommand.Execute(NewAmount);
     }
-
 }

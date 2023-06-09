@@ -28,5 +28,4 @@ public partial class UpSertMonthlyPlannedExpPageM : ContentPage
 		//	viewModel.SingleExpenditureDetails.Comment = "None";
 		//}
     }
-
 }

@@ -39,7 +39,7 @@
                />
 
         </Tab>
-        <Tab Title="Settings" >
+        <Tab Title="Settings">
 
             <ShellContent  Title="User Settings" 
                 

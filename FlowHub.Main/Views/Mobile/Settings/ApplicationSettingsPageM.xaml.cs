@@ -8,5 +8,4 @@ public partial class ApplicationSettingsPageM
 	{
 		InitializeComponent();
     }
-
 }

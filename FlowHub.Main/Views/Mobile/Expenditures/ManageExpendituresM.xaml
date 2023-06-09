@@ -142,7 +142,7 @@
             </Grid.ColumnDefinitions>
 
             <ImageButton x:Name="pie_chart" Source="{AppThemeBinding Dark=pie_chart, Light=pie_chart_l}" 
-                         HorizontalOptions="Start" IsVisible="true"
+                         HorizontalOptions="Start" IsVisible="{Binding ShowStatisticBtn}"
                          Grid.Column="0" VerticalOptions="Start" Command="{Binding GoToSpecificStatsPageCommand}"/>
             <!--IsVisible="{Binding ShowStatisticBtn}"-->
             <Label FontSize="17" Margin="5" Grid.Column="0" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="End">

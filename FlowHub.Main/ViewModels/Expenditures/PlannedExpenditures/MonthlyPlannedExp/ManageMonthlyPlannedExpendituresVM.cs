@@ -65,7 +65,6 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
                 {
                     MonthlyPlannedExpList.Add(mPlannedExp);
                 }
-
             }
             else
             {
@@ -75,7 +74,6 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
         catch (Exception ex)
         {
             Debug.WriteLine($"Exception MESSAGE: {ex.Message}");
-
         }
     }
 
@@ -177,7 +175,5 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
                 await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("No Internet Found ! \nPlease Connect to the Internet"));
             }
         }
-        
     }
-
 }

@@ -19,13 +19,11 @@ public partial class UpSertExpenditurePageM : ContentPage
         base.OnAppearing();
         viewModel.PageLoadedCommand.Execute(null);
         InitialExpAmountSpent = viewModel.SingleExpenditureDetails.AmountSpent;
-
     }
 
 
     private void CheckBox_CheckChanged(object sender, EventArgs e)
     {
-
     }
 
     private void UnitPriceOrQty_TextChanged(object sender, TextChangedEventArgs e)
@@ -48,6 +46,5 @@ public partial class UpSertExpenditurePageM : ContentPage
         CurrentBalance -= diff;
 
         viewModel.ResultingBalance = CurrentBalance;
-
     }
 }

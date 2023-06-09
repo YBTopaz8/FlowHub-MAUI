@@ -52,7 +52,6 @@ public partial class FilterOptionsPopUp : Popup
 
     private void FilterOptionsRadioGroup_SelectedItemChanged(object sender, EventArgs e)
     {
-
         var radioGroup = (UraniumUI.Material.Controls.RadioButtonGroupView)sender;
         if (radioGroup.SelectedItem.ToString() == "Filter_Spec_Month")
         {
@@ -71,7 +70,6 @@ public partial class FilterOptionsPopUp : Popup
                 radioGroup.SelectedItem.ToString()
             };
         }
-
         
     }
 
@@ -99,5 +97,4 @@ public partial class FilterOptionsPopUp : Popup
     {
         return SelectedMonthParam[..3];
     }
-
 }

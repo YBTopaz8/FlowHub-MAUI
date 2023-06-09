@@ -1,5 +1,6 @@
 using FlowHub.Main.ViewModels;
 using FlowHub.Main.ViewModels.Expenditures;
+using System.Diagnostics;
 
 namespace FlowHub.Main.Views.Desktop;
 
@@ -12,7 +13,6 @@ public partial class LoginD : ContentPage
         InitializeComponent();
         viewModel = vm;
         this.BindingContext = vm;
-
     }
     protected override void OnAppearing()
     {
@@ -22,7 +22,6 @@ public partial class LoginD : ContentPage
         bool isLoginFormVisible = viewModel.IsLoginFormVisible;
 
         ToggleFormAndValidation(HasLoginRemembered, isLoginFormVisible);
-
     }
 
     private async Task ShowRegisterForm()
@@ -76,7 +75,6 @@ public partial class LoginD : ContentPage
             LoginForm.IsVisible = true;
             LoginSignUpTab.IsVisible = true;
         }
-
     }
 
     private void Picker_SelectedIndexChanged(object sender, EventArgs e)
@@ -132,14 +130,15 @@ public partial class LoginD : ContentPage
     private void LoginOnlineBtn_Clicked(object sender, EventArgs e)
     {
         viewModel.IsLoginOnlineButtonClicked = true;
-
     }
+    
 
     private void PickerField_SelectedValueChanged(object sender, object e)
     {
-        
-
         string selectedCountry = CountryPicker.SelectedItem.ToString() ?? "";
         viewModel.CurrencyFromCountryPickedCommand.Execute(selectedCountry);
     }
+
+
+    
 }

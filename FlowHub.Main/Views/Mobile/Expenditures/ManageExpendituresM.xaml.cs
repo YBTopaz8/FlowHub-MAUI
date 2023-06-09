@@ -48,7 +48,6 @@ public partial class ManageExpendituresM : ContentPage
             {
                 this.AbortAnimation("RotateSyncButton");
                 ColView.IsVisible = true;
-
             }
         }
     }
@@ -74,7 +73,6 @@ public partial class ManageExpendituresM : ContentPage
             await viewModel.PrintExpendituresBtnCommand.ExecuteAsync(null);
             PrintProgressBarIndic.IsVisible = false;
         }
-
     }
 
     private async void FilterOption_Clicked(object sender, EventArgs e)
@@ -88,7 +86,6 @@ public partial class ManageExpendituresM : ContentPage
         ColView.TranslationY= 0;
         await filterOptionsContainer.FadeTo(1, 0);
     }
-
 
     /*
      * This snippet can be used if i ever want to allow multi selection

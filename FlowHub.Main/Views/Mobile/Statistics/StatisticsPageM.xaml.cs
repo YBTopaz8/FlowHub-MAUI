@@ -34,7 +34,5 @@ public partial class StatisticsPageM
 		var test = viewModel.listOfExpDec[ind];
 
 		Debug.WriteLine($"{test.Id} \n {test.Reason}");
-
     }
-
 }

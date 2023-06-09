@@ -87,7 +87,6 @@ public partial class StatisticsPageVM : ObservableObject
 		foreach (var item in listOfExpDec)
 		{
 			listOfPieSeries.Add(new PieSeries<double>{ 
-				
 				Name = item.Reason,
 				Values = new double[] { item.AmountSpent },
 				TooltipLabelFormatter =
@@ -151,7 +150,6 @@ public partial class StatisticsPageVM : ObservableObject
 	[RelayCommand]
 	void GetNov ()
 	{
-
         var listOfExp = expendituresService.OfflineExpendituresList;
 
         var listOfExpDec = listOfExp.Where(x => x.DateSpent.Month == 11).ToArray();
@@ -165,9 +163,7 @@ public partial class StatisticsPageVM : ObservableObject
 			{
 				point.PrimaryValue = (double)testt.AmountSpent;
 				point.SecondaryValue = point.Context.Entity.EntityIndex;
-
 			},
-
 		};
 
         LineSeries<ExpendituresModel> LinesSeriesToPlot = new()
@@ -181,7 +177,6 @@ public partial class StatisticsPageVM : ObservableObject
             {
                 point.PrimaryValue = (double)testt.AmountSpent;
                 point.SecondaryValue = point.Context.Entity.EntityIndex;
-				
             },
             Stroke = new SolidColorPaint(SKColors.DarkSlateBlue) { StrokeThickness = 4 },
 
@@ -213,4 +208,3 @@ public partial class StatisticsPageVM : ObservableObject
 		}
 	}
 }
-

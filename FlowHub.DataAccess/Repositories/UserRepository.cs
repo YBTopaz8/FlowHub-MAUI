@@ -105,7 +105,6 @@ public class UserRepository : IUsersRepository
         {
             return false; //user already exists
         }
-
     }
 
     public async Task<bool> UpdateUserAsync(UsersModel user)
@@ -131,7 +130,6 @@ public class UserRepository : IUsersRepository
             Debug.WriteLine($"Update user Exception Message: {ex.Message}");
             return true;
         }
-
     }
 
     public async Task<bool> DeleteUserAsync(UsersModel user)
@@ -150,7 +148,6 @@ public class UserRepository : IUsersRepository
                 db.Dispose();
                 throw new Exception("Failed to Delete User");
             }
-
         }
         catch (Exception ex)
         {
@@ -185,13 +182,11 @@ public class UserRepository : IUsersRepository
         {
             try
             {
-                
                 await OnlineUserCollection.InsertOneAsync(user);
                 OfflineUser.UserIDOnline = user.Id;
                 _ = await UpdateUserAsync(OfflineUser);
                 //OnlineUser = user;
                 return true;
-
             }
             catch (Exception ex)
             {
@@ -203,7 +198,6 @@ public class UserRepository : IUsersRepository
 
     public async Task UpdateUserOnlineEditAsync(UsersModel user)
     {
-
         if (DBOnline is null)
         {
             onlineDataAccessRepo.GetOnlineConnection();
@@ -247,5 +241,4 @@ public class UserRepository : IUsersRepository
         _ = await db.DropCollectionAsync(userDataCollectionName);
         db.Dispose();
     }
-
 }

@@ -4,7 +4,6 @@ namespace FlowHub.Models;
 
 public class ExpendituresModel
 {
-
     [BsonId]
     public string Id { get; set; }
     public DateTime DateSpent { get; set; }
@@ -21,5 +20,4 @@ public class ExpendituresModel
     public string? PlatformModel { get; set; }
     public bool UpdateOnSync { get; set; } = false;
     public string UserId { get; set; }
-
 }

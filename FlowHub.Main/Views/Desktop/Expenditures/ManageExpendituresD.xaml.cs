@@ -22,17 +22,17 @@ public partial class ManageExpendituresD : ContentPage
 
     private void ManageExpendituresD_SizeChanged(object sender, EventArgs e)
     {
-        if (page.Width > 1280)
-        {
-            dockLeft.WidthRequest = 400;
-            DGScrollView.Margin = new Thickness(0, 0, 300, 0);
-        }
-        else
-        {
-            dockLeft.WidthRequest = 210;
-            DGScrollView.Margin = new Thickness(0, 0, 130, 0);
+        //if (page.Width > 1280)
+        //{
+        //    dockLeft.WidthRequest = 400;
+        //    DGScrollView.Margin = new Thickness(0, 0, 300, 0);
+        //}
+        //else
+        //{
+        //    dockLeft.WidthRequest = 210;
+        //    DGScrollView.Margin = new Thickness(0, 0, 130, 0);
 
-        }
+        //}
     }
 
     protected override void OnAppearing()
@@ -84,7 +84,6 @@ public partial class ManageExpendituresD : ContentPage
     {
         if (upBtn.IsVisible)
         {//show sorted by DESC
-
             viewModel.SortingCommand.Execute(1);
 
             upBtn.IsVisible = false;
@@ -98,4 +97,6 @@ public partial class ManageExpendituresD : ContentPage
             downBtn.IsVisible = false;
         }
     }
+
+    
 }

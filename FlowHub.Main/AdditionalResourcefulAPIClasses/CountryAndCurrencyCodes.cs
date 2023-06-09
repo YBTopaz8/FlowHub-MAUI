@@ -8,7 +8,6 @@ namespace FlowHub.Main.AdditionalResourcefulAPIClasses;
 
 public class CountryAndCurrencyCodes
 {
-
     Dictionary<string, string> CountryAndCurrency;
      readonly List<string> CountryNames= new();
 
@@ -41,7 +40,6 @@ public class CountryAndCurrencyCodes
 
     public List<string> GetCountryNames()
     {
-
         var dict = LoadDictionaryWithCountryAndCurrency();
 
         foreach (var item in dict)
@@ -50,5 +48,4 @@ public class CountryAndCurrencyCodes
         }
         return CountryNames;
     }
-
 }

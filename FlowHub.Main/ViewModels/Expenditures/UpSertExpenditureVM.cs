@@ -70,7 +70,6 @@ public partial class UpSertExpenditureVM : ObservableObject
     public async void UpSertExpenditure()
     {
         
-        
         bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You Want To Save?")))!;
         if (response)
         {
@@ -102,14 +101,12 @@ public partial class UpSertExpenditureVM : ObservableObject
                 {
                     NavFunctions.ReturnOnce();
                 }
-                
             }
     }
         else
         {
             Debug.WriteLine("Action cancelled by user");
         }
-        
     }
 
     [RelayCommand]
@@ -131,7 +128,6 @@ public partial class UpSertExpenditureVM : ObservableObject
         if ( ResultingBalance < 0)
         {
             await Shell.Current.DisplayAlert("Failed Operation", "Flow out amount is greater than your current balance", "Okay");
-            
         }
         else
         {

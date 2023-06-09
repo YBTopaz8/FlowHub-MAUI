@@ -13,7 +13,7 @@
 
     <toolkit:DockLayout>
         <Label FontSize="21" HorizontalOptions="Center" 
-                   Margin="10"
+                   Margin="8"
                    toolkit:DockLayout.DockPosition="Top">
                 <Label.Text>
                     <MultiBinding StringFormat="{} Current Balance is {0:n3} {1}">
@@ -22,6 +22,7 @@
                     </MultiBinding>
                 </Label.Text>
             </Label>
+        
         <HorizontalStackLayout toolkit:DockLayout.DockPosition="Top"  Spacing="2"
                                HorizontalOptions="Center" x:Name="SyncIndicator">
             <Label Text="Syncing..." IsVisible="{Binding IsBusy}" Margin="0,0,0,0" FontSize="13" />
@@ -30,46 +31,11 @@
 
         <Label toolkit:DockLayout.DockPosition="Top" Text="{Binding ExpTitle}" FontSize="20" Margin="5" FontAttributes="Bold" HorizontalOptions="Center"/>
 
-        <VerticalStackLayout toolkit:DockLayout.DockPosition="Left" x:Name="dockLeft"
-                            >
-
-            <Label Text="Filters" FontSize="23" Margin="0,10,10,0" HorizontalOptions="Center"/>
-            <Button Text="test" Clicked="Button_Clicked"/>
-            <material:RadioButtonGroupView Spacing="16" Margin="8">
-                    <material:RadioButtonGroupView.Resources>
-                        <ResourceDictionary>
-                            <Style TargetType="material:RadioButton">
-                                <Setter Property="TextFontSize" Value="16"/>
-                            </Style>
-                        </ResourceDictionary>
-                    </material:RadioButtonGroupView.Resources>
-
-                    <material:RadioButton  Text="View All" HeightRequest="20" ClickCommand="{Binding FilterGetAllExpCommand}"/>
-                    <material:RadioButton  Text="View For Today" HeightRequest="20" ClickCommand="{Binding FilterGetExpOfTodayCommand}"/>
-                </material:RadioButtonGroupView>
-
-                <HorizontalStackLayout HorizontalOptions="Center" HeightRequest="45" >
-                    <ImageButton Source="clear_filters48.png"/>
-                </HorizontalStackLayout>
-            </VerticalStackLayout>
+      
         
-        <VerticalStackLayout HorizontalOptions="Start" toolkit:DockLayout.DockPosition="Right">
-            <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png}" HeightRequest="50" 
-                    BackgroundColor="Transparent"
-                    Command="{Binding GoToAddExpenditurePageCommand}"
-                    ToolTipProperties.Text="Add New Income"/>
-            <ImageButton Margin="10" Source="save_to_pdf_d.png" HeightRequest="50"
-                        ToolTipProperties.Text="Click to Save to PDF" 
-                        Command="{Binding PrintExpendituresBtnCommand}"/>
-            <ImageButton Source="{AppThemeBinding Dark=sync_icon_d.png, Light=sync_icon_l.png}" 
-                         HeightRequest="45"
-                             x:Name="SyncButton"
-                             Command="{Binding SyncExpTestCommand}"/>
-        </VerticalStackLayout>
-
-        <HorizontalStackLayout toolkit:DockLayout.DockPosition="Bottom"
-                    HorizontalOptions="Center">
-            <Label FontSize="19">
+        <HorizontalStackLayout toolkit:DockLayout.DockPosition="Bottom" Margin="10"
+                               HorizontalOptions="Center">
+            <Label FontSize="19" >
                 <Label.Text>
                     <MultiBinding StringFormat="{} {2} Flow Outs worth {0:n3} {1}">
                         <Binding Path="TotalAmount"/>
@@ -79,10 +45,46 @@
                 </Label.Text>
             </Label>
         </HorizontalStackLayout>
+        <VerticalStackLayout toolkit:DockLayout.DockPosition="Left" x:Name="dockLeft" >
+
+            
+            <material:RadioButtonGroupView Spacing="16" Margin="8">
+                    <material:RadioButtonGroupView.Resources>
+                        <ResourceDictionary>
+                            <Style TargetType="material:RadioButton">
+                                <Setter Property="TextFontSize" Value="16"/>
+                            </Style>
+                        </ResourceDictionary>
+                    </material:RadioButtonGroupView.Resources>
+
+                    <!--<material:RadioButton Text="View All" HeightRequest="20" ClickCommand="{Binding FilterGetAllExpCommand}"/>-->
+                    
+                    <!--<material:RadioButton Text="View For Today" HeightRequest="20" ClickCommand="{Binding FilterGetExpOfTodayCommand}"/>-->
+                    
+                </material:RadioButtonGroupView>
+
+                <HorizontalStackLayout HorizontalOptions="Center" HeightRequest="45" >
+                    <ImageButton Source="clear_filters48.png" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        
+        <VerticalStackLayout HorizontalOptions="Start" toolkit:DockLayout.DockPosition="Right">
+            <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png}" HeightRequest="60" 
+                    BackgroundColor="Transparent"
+                    Command="{Binding GoToAddExpenditurePageCommand}"
+                    ToolTipProperties.Text="Add New Income"/>
+            <ImageButton Margin="10" Source="save_to_pdf_d.png" HeightRequest="60"
+                        ToolTipProperties.Text="Click to Save to PDF" 
+                        Command="{Binding PrintExpendituresBtnCommand}"/>
+            <ImageButton Source="{AppThemeBinding Dark=sync_icon_d.png, Light=sync_icon_l.png}" 
+                         HeightRequest="55"
+                             x:Name="SyncButton"
+                             Command="{Binding SyncExpTestCommand}"/>
+        </VerticalStackLayout>
+
 
         <ScrollView x:Name="DGScrollView" 
-                    HorizontalOptions="Center"
-                    WidthRequest="800">
+                    HorizontalOptions="FillAndExpand">
             <material:DataGrid ItemsSource="{Binding ExpendituresList}" 
                                     MaximumWidthRequest="1000" Padding="10" 
                                     HorizontalOptions="Center">

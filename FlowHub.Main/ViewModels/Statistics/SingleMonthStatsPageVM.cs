@@ -87,14 +87,12 @@ public partial class SingleMonthStatsPageVM :ObservableObject
 
     private void LoadLineChart()
     {
-       
         LineSeries = new();
 
         var listof15 = ListOfExpenditures.Take(15).ToList();
 
         LineSeries<ExpendituresModel> LineSeriesToPlot = new()
         {
-
             Values = ListOfExpenditures,
             TooltipLabelFormatter =
             (point) => $"{point.Model.Reason}",
