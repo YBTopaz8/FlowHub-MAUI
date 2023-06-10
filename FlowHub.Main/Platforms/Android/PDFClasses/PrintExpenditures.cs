@@ -24,13 +24,12 @@ public class PrintExpenditures
         string PdfTitle = "Expenditures Report";
 
         CreatePdfDoc(expList, PathFile, userCurrency);
-        SharePdfFile(PdfTitle, PathFile);   
+        SharePdfFile(PdfTitle, PathFile);
     }
 
     void CreatePdfDoc(ObservableCollection<ExpendituresModel> expList, string PathFile, string userCurrency)
     {
         Color HeaderTextColor = WebColors.GetRGBColor("darkslateblue");
-
 
         PdfWriter writer = new PdfWriter(PathFile);
         PdfDocument pdf = new PdfDocument(writer);

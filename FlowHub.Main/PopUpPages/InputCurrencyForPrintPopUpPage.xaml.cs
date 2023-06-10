@@ -9,7 +9,6 @@ public partial class InputCurrencyForPrintPopUpPage : Popup
         InitializeComponent();
         DisplayAlertText.Text = DisplayText;
 
-
        List<string> ListOfCurrencies= new(){ "AUD", "BRL", "CAD", "CNY", "EUR", "GBP", "KES", "NGN", "TND", "USD", "XOF", "XAF", "ZAR"};
        CurrencyPicker.ItemsSource = ListOfCurrencies;
        CurrencyPicker.SelectedItem = userCurrency;

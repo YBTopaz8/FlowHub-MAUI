@@ -50,7 +50,6 @@ public class PrintDetailsMonthlyExpenditure
         string fileName = "Report_Multiple_MonthlyPlanned.pdf";
         string PathFile = $"{path}/{fileName}";
 
-
         await Task.Run(()=> CreatePDFDocOfMultipleLists(expLists, PathFile, ListOfTitles, userName, userCurrency, printDisplayCurrency,  ObjectWithRate.result, ObjectWithRate.date));
     }
 
@@ -58,7 +57,6 @@ public class PrintDetailsMonthlyExpenditure
     {
         Color HeaderColor = WebColors.GetRGBColor("DarkSlateBlue");
 
-        
         PdfWriter writer = new(pathFile);
         PdfDocument pdf = new(writer);
         Document document = new(pdf, pageSize: iText.Kernel.Geom.PageSize.A4, immediateFlush: false);
@@ -141,7 +139,6 @@ public class PrintDetailsMonthlyExpenditure
         document.Add(bottomNotesText);
         document.Flush();
 
-
         int numberPages = pdf.GetNumberOfPages();
         for (int i = 1; i <= numberPages; i++)
         {
@@ -152,15 +149,14 @@ public class PrintDetailsMonthlyExpenditure
         }
 
         document.Close();
-        
+
         SharePdfFile(pdfTitle, pathFile);
     }
-    
+
     void CreatePDFDocOfMultipleLists(List<List<ExpendituresModel>> expLists, string pathFile, List<string> ListOfTitles, string username, string userCurrency, string printDisplayCurrency, double rate, DateTime dateOfRateUpdate)
     {
         Color HeaderColor = WebColors.GetRGBColor("DarkSlateBlue");
 
-        
         PdfWriter writer = new(pathFile);
         PdfDocument pdf = new(writer);
         Document document = new(pdf, pageSize: iText.Kernel.Geom.PageSize.A4, immediateFlush: false);
@@ -259,7 +255,6 @@ public class PrintDetailsMonthlyExpenditure
         document.Add(bottomNotesText);
         document.Flush();
 
-
         int numberPages = pdf.GetNumberOfPages();
         for (int i = 1; i <= numberPages; i++)
         {
@@ -270,7 +265,7 @@ public class PrintDetailsMonthlyExpenditure
         }
 
         document.Close();
-        
+
         SharePdfFile("Report of Multiple Months", pathFile);
     }
 
@@ -282,6 +277,5 @@ public class PrintDetailsMonthlyExpenditure
             File = new ShareFile(PathFile)
         });
     }
-
 
 }

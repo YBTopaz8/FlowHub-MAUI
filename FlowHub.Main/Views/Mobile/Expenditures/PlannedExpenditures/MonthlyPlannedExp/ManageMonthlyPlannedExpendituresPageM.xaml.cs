@@ -50,7 +50,6 @@ public partial class ManageMonthlyPlannedExpendituresPageM : ContentPage
         }
     }
 
-
     private async void ExportToPDFImageButton_Clicked(object sender, EventArgs e)
     {
         if (ListOfExps is not null && ListOfExps.Count != 0)

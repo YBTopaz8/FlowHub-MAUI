@@ -4,7 +4,7 @@
              xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
              x:Class="FlowHub.Main.PopUpPages.ErrorNotificationPopUpAlert"
              CanBeDismissedByTappingOutsideOfPopup="False"
-             Size="330,160"
+             Size="335,180"
            Color="Transparent">
     
     <Border 
@@ -25,7 +25,8 @@
             </VerticalStackLayout.Resources>
 
             <HorizontalStackLayout Spacing="5">
-                <Label FontSize="22" TextColor="{AppThemeBinding Dark=white, Light=black}"
+                <Label FontSize="24" TextColor="{AppThemeBinding Dark=white, Light=black}"
+                       FontAttributes="Bold"
                 Text="Error Alert"
                 VerticalOptions="Start" 
                 HorizontalOptions="Start" />
@@ -34,8 +35,8 @@
 
             <Label x:Name="DisplayErrorText" FontSize="16"/>
 
-            <HorizontalStackLayout HorizontalOptions="EndAndExpand">
-                <Button Text="OK" FontSize="15"
+            <HorizontalStackLayout HorizontalOptions="EndAndExpand" VerticalOptions="End">
+                <Button Text="OK" FontSize="15" VerticalOptions="End" HorizontalOptions="End"
                         Clicked="OnOKButtonClicked"/>
                 
             </HorizontalStackLayout>

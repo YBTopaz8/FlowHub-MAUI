@@ -49,7 +49,7 @@ public partial class SingleMonthStatsPageVM :ObservableObject
 
     [ObservableProperty]
     public bool isPieChartVisible;
-    
+
     [ObservableProperty]
     public bool isLineChartVisible;
 
@@ -104,7 +104,7 @@ public partial class SingleMonthStatsPageVM :ObservableObject
             },
             Stroke = new SolidColorPaint(SKColors.DarkSlateBlue) { StrokeThickness = 4 },
         };
-        
+
         LineSeries.Add(LineSeriesToPlot);
     }
     private void LoadPieChart()

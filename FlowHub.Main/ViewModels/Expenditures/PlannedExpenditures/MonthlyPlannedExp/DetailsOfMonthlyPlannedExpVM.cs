@@ -48,11 +48,10 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
     [ObservableProperty]
     int numberOfExpInReport;
 
-
     [ObservableProperty]
     private UsersModel activeUser;
     public ObservableCollection<ExpendituresModel> ExpendituresList { get; set; } = new();
-    
+
     [ObservableProperty]
     List<ExpendituresModel> tempList = new();
     [RelayCommand]
@@ -123,9 +122,7 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
         }
         TotalAmount = tot;
 
-
        // NumberOfExpInReport = TempList.Count(x => x.IncludeInReport); this is better apparently
-
 
         //NumberOfExpInReport= TempList.Where(x => x.IncludeInReport == true).Count();
     }

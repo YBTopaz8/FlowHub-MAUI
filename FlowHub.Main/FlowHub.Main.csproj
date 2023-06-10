@@ -23,7 +23,7 @@
 		<ApplicationVersion>1</ApplicationVersion>
 
     
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">30.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<AssemblyVersion>1.3.6.0</AssemblyVersion>
@@ -41,26 +41,26 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android33.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
-	  <ApplicationDisplayVersion>1.3.6</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>0.0.8</ApplicationDisplayVersion>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android33.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
-	  <ApplicationDisplayVersion>1.3.6</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>0.0.8</ApplicationDisplayVersion>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
-	  <ApplicationDisplayVersion>1.3.6</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>0.0.8</ApplicationDisplayVersion>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhub</ApplicationId>
-	  <ApplicationDisplayVersion>1.3.6</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>0.0.8</ApplicationDisplayVersion>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 

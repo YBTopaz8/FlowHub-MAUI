@@ -7,7 +7,7 @@ namespace FlowHub.Main.Views.Desktop;
 public partial class LoginD : ContentPage
 {
     private readonly LoginVM viewModel;
-    
+
     public LoginD(LoginVM vm)
     {
         InitializeComponent();
@@ -131,7 +131,7 @@ public partial class LoginD : ContentPage
     {
         viewModel.IsLoginOnlineButtonClicked = true;
     }
-    
+
 
     private void PickerField_SelectedValueChanged(object sender, object e)
     {
@@ -139,6 +139,4 @@ public partial class LoginD : ContentPage
         viewModel.CurrencyFromCountryPickedCommand.Execute(selectedCountry);
     }
 
-
-    
 }

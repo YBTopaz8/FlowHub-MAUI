@@ -71,7 +71,7 @@ public partial class UpSertIncomeVM : ObservableObject
     }
 
     async void UpdateIncFxnAsync(ToastDuration duration, double fontSize, CancellationTokenSource tokenSource)
-    {        
+    {
         double difference = SingleIncomeDetails.AmountReceived - InitialIncomeAmout;
 
         double FinalTotalInc = _initialTotalIncAmount + difference;
@@ -83,7 +83,7 @@ public partial class UpSertIncomeVM : ObservableObject
         else
         {
             if (await incomeService.UpdateIncomeAsync(SingleIncomeDetails))
-            { 
+            {
                 ActiveUser.TotalIncomeAmount += FinalTotalInc;
                 ActiveUser.PocketMoney = FinalPocketMoney;
                 ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
@@ -93,7 +93,7 @@ public partial class UpSertIncomeVM : ObservableObject
                 var toastObj = Toast.Make(toastNotifMessage, duration, fontSize);
                 await toastObj.Show(tokenSource.Token);
 
-                NavFunctions.ReturnOnce();        
+                NavFunctions.ReturnOnce();
             }
         }
     }

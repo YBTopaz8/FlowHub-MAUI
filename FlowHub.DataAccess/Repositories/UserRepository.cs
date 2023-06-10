@@ -156,7 +156,6 @@ public class UserRepository : IUsersRepository
         }
     }
 
-
     /*--------- SECTION FOR ONLINE CRUD OPERATIONS----------*/
     public async Task<bool> AddUserOnlineAsync(UsersModel user)
     {

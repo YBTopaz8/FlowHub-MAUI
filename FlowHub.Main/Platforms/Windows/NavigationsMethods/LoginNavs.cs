@@ -1,5 +1,4 @@
 ﻿
-
 namespace FlowHub.Main.Platforms.NavigationMethods;
 
 public class LoginNavs

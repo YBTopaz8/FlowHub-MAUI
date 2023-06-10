@@ -4,7 +4,7 @@
              xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
              x:Class="FlowHub.Main.PopUpPages.AcceptCancelPopUpAlert"
              CanBeDismissedByTappingOutsideOfPopup="False"
-             Size="300,160"
+             Size="330,185"
              Color="Transparent">
 
     <Border
@@ -26,13 +26,13 @@
             </VerticalStackLayout.Resources>
 
             <Label FontSize="20" TextColor="{AppThemeBinding Dark=white, Light=black}"
-            Text="Confirm Action"
+            Text="Confirm Action" x:Name="DisplayAlertTitle"
             VerticalOptions="Start" 
             HorizontalOptions="Start" />
 
             <Label x:Name="DisplayAlertText"  FontSize="18"/>
 
-            <HorizontalStackLayout HorizontalOptions="EndAndExpand" Spacing="5">
+            <HorizontalStackLayout HorizontalOptions="EndAndExpand" Spacing="8">
                 
                 <Button Text="Yes" FontSize="20"
                         Clicked="OnYesButtonClicked"/>

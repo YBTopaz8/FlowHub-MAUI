@@ -11,7 +11,6 @@ using Android.Content.Res;
 using Android.Graphics.Drawables;
 using Orientation = Android.Widget.Orientation;
 
-
 namespace FlowHub;
 public class MyShellRenderer : ShellRenderer
 {

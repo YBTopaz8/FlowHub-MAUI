@@ -16,7 +16,6 @@ public class ExchangeRateAPI
         return JsonObject;
     }
 
-
     public class ConvertedRate
     {
         public string success { get; set; }

@@ -21,7 +21,6 @@ public partial class UpSertExpenditurePageM : ContentPage
         InitialExpAmountSpent = viewModel.SingleExpenditureDetails.AmountSpent;
     }
 
-
     private void CheckBox_CheckChanged(object sender, EventArgs e)
     {
     }
