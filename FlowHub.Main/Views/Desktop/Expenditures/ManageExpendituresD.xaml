@@ -83,7 +83,7 @@
         </VerticalStackLayout>
 
 
-        <ScrollView x:Name="DGScrollView" 
+        <ScrollView x:Name="DGScrollView" VerticalScrollBarVisibility="Never"
                     HorizontalOptions="FillAndExpand">
             <material:DataGrid ItemsSource="{Binding ExpendituresList}" 
                                     MaximumWidthRequest="1000" Padding="10" 
@@ -137,6 +137,23 @@
                         </DataTemplate>
                     </material:DataGridColumn.CellItemTemplate>
                 </material:DataGridColumn>
+
+                    <material:DataGridColumn Title="Actions">
+                        <material:DataGridColumn.CellItemTemplate>
+                            <DataTemplate>
+                                <HorizontalStackLayout >
+                                    <ImageButton Source="{AppThemeBinding Light=edit_l.png, Dark=edit_d.png}" WidthRequest="50"
+                                                 Command="{Binding Source={x:Reference page}, 
+                                            Path=BindingContext.GoToEditExpenditurePageCommand}"  
+                                                   CommandParameter="{Binding .}" />
+                                    <ImageButton Source="{AppThemeBinding Light=delete_l.png, Dark=delete_d.png}" WidthRequest="50" 
+                                                 Command="{Binding Source={x:Reference page}, 
+                                            Path=BindingContext.DeleteExpenditureBtnCommand}"  
+                                                   CommandParameter="{Binding .}"  />
+                                </HorizontalStackLayout>
+                            </DataTemplate>
+                        </material:DataGridColumn.CellItemTemplate>
+                    </material:DataGridColumn>
             </material:DataGrid.Columns>
             </material:DataGrid>
         </ScrollView>

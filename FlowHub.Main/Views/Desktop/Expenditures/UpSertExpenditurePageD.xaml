@@ -2,71 +2,125 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FlowHub.Main.Views.Desktop.Expenditures.UpSertExpenditurePageD"
-              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"      
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+             xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Expenditures"
-             x:DataType="viewModels:UpSertExpenditureVM"                         
+             x:DataType="viewModels:UpSertExpenditureVM"                   
              >
 
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style TargetType="Label">
-                <Setter Property="FontSize" Value="28"/>
+                <Setter Property="FontSize" Value="14"/>
                 <Setter Property="FontAttributes" Value="Bold"/>
             </Style>
-            <Style TargetType="DatePicker">
-                <Setter Property="FontSize" Value="20"/>
-            </Style>
-            <Style TargetType="Entry">
-                <Setter Property="FontSize" Value="18"/>
-            </Style>
+            
 
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <VerticalStackLayout>
+    <toolkit:DockLayout>
 
-        <Label Text="{Binding PageTitle}" HorizontalOptions="Start" Margin="20,10,0,0" 
+        <Label Text="{Binding PageTitle}" HorizontalOptions="Center" Margin="20,10,0,0" 
                    FontSize="23" TextColor="White"  />
 
-        <Border HorizontalOptions="Center" WidthRequest="450"
-                Margin="10" Padding="10" BackgroundColor="{AppThemeBinding Dark=#29343E, Light=white}"
-                Stroke="DarkSlateBlue"
-                StrokeThickness="2"
-                StrokeShape="RoundRectangle 10">
+       
+        <Border HorizontalOptions="Center" WidthRequest="450" HeightRequest="400" VerticalOptions="Start"
+                    Margin="10" Padding="10" BackgroundColor="{AppThemeBinding Dark=#29343E, Light=white}"
+                    Stroke="DarkSlateBlue"
+                    StrokeThickness="2"
+                    StrokeShape="RoundRectangle 10">
             <Border.Shadow>
-                <Shadow Offset="15,55"
-                        Opacity="0.4"/>
+                <Shadow Offset="40,52"
+                            Opacity="0.4"/>
             </Border.Shadow>
-            <VerticalStackLayout>
-                <Label Text="Expenditure Form" HorizontalOptions="Center" Margin="0,0,0,10"/>
+            <input:FormView Spacing="5"
+                SubmitCommand="{Binding UpSertExpenditureCommand}">          
 
-                <Label Text="Date Spent"/>
-                <DatePicker MinimumDate="01/01/2022"
-                            MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
-                            Date="{Binding SingleExpenditureDetails.DateSpent}"/>
-                <BoxView HeightRequest="0.5" Color="DarkSlateBlue" />
+                    <VerticalStackLayout toolkit:DockLayout.DockPosition="Top" >
+                        
+                        <Label HorizontalOptions="End" Margin="5" FontAttributes="Bold" FontSize="15">
+                            <Label.Text>
+                                <MultiBinding StringFormat="{} Balance : {0:n3} {1}">
+                                    <Binding Path="ActiveUser.PocketMoney"/>
+                                    <Binding Path="ActiveUser.UserCurrency"/>
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
+                        <Label HorizontalOptions="End" Margin="5,0,5,5" FontAttributes="Italic" FontSize="13"
+                   TextColor="AliceBlue">
+                            <Label.Text>
+                                <MultiBinding StringFormat="{} Resulting Balance : {0:n3} {1}">
+                                    <Binding Path="ResultingBalance"/>
+                                    <Binding Path="ActiveUser.UserCurrency"/>
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
+                    </VerticalStackLayout>
 
-                <Label Text="Reason" Margin="0,15,0,0"/>
-                <Entry Text="{Binding SingleExpenditureDetails.Reason}"/>
+                    <material:DatePickerField MinimumDate="01/01/2022" Title="Date Spent" 
+                                        MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
+                                        Date="{Binding SingleExpenditureDetails.DateSpent}">
+                        
+                        <material:DatePickerField.Validations>
+                            <validation:RequiredValidation/>
+                        </material:DatePickerField.Validations>
+                    </material:DatePickerField>
+                    
+                    <BoxView HeightRequest="0.8" Color="DarkSlateBlue" />
 
-                <Label Text="Amount Spent" Margin="0,15,0,0"/>
-                <Entry Keyboard="Numeric" Text="{Binding SingleExpenditureDetails.AmountSpent}"/>
-                <BoxView HeightRequest="0.8" Color="DarkSlateBlue"/>
+
+                    <Grid ColumnDefinitions="215,10*" ColumnSpacing="8">
+                        <material:TextField Grid.Column="0" Title="Unit Price"
+                                    x:Name="UnitPrice"
+                                    TextChanged="UnitPrice_TextChanged"
+                                    Text="{Binding SingleExpenditureDetails.UnitPrice}" Keyboard="Numeric" >
+
+                            <material:TextField.Validations>
+                                <validation:RequiredValidation/>
+                                <validation:MinValueValidation MinValue="0.1" Message="The Unit Price cannot be 0 or Less" />
+                                <validation:NumericValidation/>
+                            </material:TextField.Validations>
+                        </material:TextField>
+
+                        <material:TextField Grid.Column="1" Title="Quantity"
+                                    x:Name="Qty"
+                                    TextChanged="UnitPrice_TextChanged"
+                                    Text="{Binding SingleExpenditureDetails.Quantity}"  Keyboard="Numeric" >
+                            <material:TextField.Validations>
+                                <validation:RequiredValidation/>
+                                <validation:MinValueValidation MinValue="1" Message="The Quantity cannot be 0 or Less"/>
+                                <validation:NumericValidation/>
+                            </material:TextField.Validations>
+                        </material:TextField>
+
+                    </Grid>
+
+                    <material:EditorField Title="Reason" Text="{Binding SingleExpenditureDetails.Reason}">
+                        <material:EditorField.Validations>
+                            <validation:RequiredValidation/>
+                        </material:EditorField.Validations>
+                    </material:EditorField>
+                    <BoxView HeightRequest="0.8" Color="DarkSlateBlue"/>
 
 
-                <HorizontalStackLayout HorizontalOptions="Center" Margin="0,15,0,0" Spacing="15">
-                    <Button Command="{Binding UpSertExpenditureCommand}"
-                            Text="Save Expenditure" BackgroundColor="{StaticResource SaveBtnColor}" TextColor="White" 
-                            FontSize="20" FontAttributes="Bold"/>
+                    <HorizontalStackLayout HorizontalOptions="Center" Margin="0,15,0,0" Spacing="15">
+                        <Button input:FormView.IsSubmitButton="True"
+                                        Text="Save Expenditure" BackgroundColor="{StaticResource SaveBtnColor}" TextColor="White" 
+                                        FontSize="20" FontAttributes="Bold"/>
+                        
+                        <Button Command="{Binding CancelBtnCommand}"
+                                        Text="Cancel" BackgroundColor="{StaticResource NegativeActionBtnDark}" TextColor="White"
+                                        FontSize="16" />
 
-                    <Button Command="{Binding CancelBtnCommand}"
-                            Text="Cancel" BackgroundColor="{StaticResource NegativeActionBtnDark}" TextColor="White"
-                            FontSize="16" />
-
-                </HorizontalStackLayout>
-            </VerticalStackLayout>
-        </Border>
-
-    </VerticalStackLayout>
+                    </HorizontalStackLayout>
+                    
+                
+        </input:FormView>
+    </Border>
+    </toolkit:DockLayout>
 </ContentPage>

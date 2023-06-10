@@ -69,55 +69,49 @@ public partial class UpSertExpenditureVM : ObservableObject
     [RelayCommand]
     public async void UpSertExpenditure()
     {
+        if (ResultingBalance < 0)
+        {
+            await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Not Enough balance to save"));
+            return;
+        }
         
         bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You Want To Save?")))!;
-        if (response)
-        {
-            CancellationTokenSource cancellationTokenSource = new();
-
-            if (SingleExpenditureDetails.Id is not null)
-            {
-                UpdateExpFxnAsync(14, cancellationTokenSource);
-            }
-            else
-            {
-                string ToastNotifMessage = "Nothing was added";
-                if (await AddExpFxnAsync(SingleExpenditureDetails))
-                {
-                    ToastNotifMessage = "Flow Out Added";
-                }
-                IToast toast = Toast.Make(ToastNotifMessage, ToastDuration.Short, 14);
-                await toast.Show(cancellationTokenSource.Token);
-
-
-                if (AddAnotherExp)
-                {
-                    expCounter++;
-                    PageTitle = $"Add Flow Out N° {expCounter}";
-                    SingleExpenditureDetails = new() { DateSpent = DateTime.Now};
-                    AddAnotherExp = false;
-                }
-                else
-                {
-                    NavFunctions.ReturnOnce();
-                }
-            }
-    }
-        else
+        if (!response)
         {
             Debug.WriteLine("Action cancelled by user");
+            return;
+        }        
+        
+        CancellationTokenSource cancellationTokenSource = new();
+
+        if (SingleExpenditureDetails.Id is not null)
+        {
+            UpdateExpenditureAsync(14, cancellationTokenSource);
+            return;
         }
-    }
 
-    [RelayCommand]
-    void GetTotals()
-    {
-        SingleExpenditureDetails.AmountSpent = SingleExpenditureDetails.UnitPrice * SingleExpenditureDetails.Quantity;
-        Totalss = SingleExpenditureDetails.AmountSpent;
-        Debug.WriteLine(SingleExpenditureDetails.AmountSpent);
-    }
+        string ToastNotifMessage = (await AddExpenditureAsync(SingleExpenditureDetails)) ? "Flow Out Added" : "Nothing was added";
 
-    private async void UpdateExpFxnAsync( double fontsize, CancellationTokenSource tokenSource)
+        IToast toast = Toast.Make(ToastNotifMessage, ToastDuration.Short, 14);
+        await toast.Show(cancellationTokenSource.Token);
+
+
+        if (!AddAnotherExp)
+        {
+            NavFunctions.ReturnOnce();
+            return;
+        }
+        
+        expCounter++;
+        PageTitle = $"Add Flow Out N° {expCounter}";
+        SingleExpenditureDetails = new() { DateSpent = DateTime.Now };
+        AddAnotherExp = false;
+        
+
+
+
+    }
+    private async void UpdateExpenditureAsync( double fontsize, CancellationTokenSource tokenSource)
     {
         var totalExpCost = SingleExpenditureDetails.UnitPrice * SingleExpenditureDetails.Quantity;
 
@@ -125,72 +119,69 @@ public partial class UpSertExpenditureVM : ObservableObject
 
         var FinalTotalExp = _initialTotalExpAmount - difference;
 
-        if ( ResultingBalance < 0)
-        {
-            await Shell.Current.DisplayAlert("Failed Operation", "Flow out amount is greater than your current balance", "Okay");
-        }
-        else
-        {
-            SingleExpenditureDetails.UpdatedDateTime = DateTime.UtcNow;
+        
+        SingleExpenditureDetails.UpdatedDateTime = DateTime.UtcNow;
 
-            SingleExpenditureDetails.UpdateOnSync = true;
-            SingleExpenditureDetails.AmountSpent = totalExpCost;
-            if (await _expenditureService.UpdateExpenditureAsync(SingleExpenditureDetails))
-            {
-                await _expenditureService.GetAllExpendituresAsync();
-                ActiveUser.TotalExpendituresAmount = FinalTotalExp;
-                ActiveUser.PocketMoney = ResultingBalance;
-                ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
-                await userService.UpdateUserAsync(ActiveUser);
-                const string toastNotifMessage = "Expenditure Updated";
-                var toast = Toast.Make(toastNotifMessage, ToastDuration.Short, fontsize);
-                await toast.Show(tokenSource.Token);
+        SingleExpenditureDetails.UpdateOnSync = true;
+        SingleExpenditureDetails.AmountSpent = totalExpCost;
+        if (await _expenditureService.UpdateExpenditureAsync(SingleExpenditureDetails))
+        {
+            await _expenditureService.GetAllExpendituresAsync();
 
-                NavFunctions.ReturnOnce();
-            }
+            await UpdateUserAsync(FinalTotalExp);
+            
+            const string toastNotifMessage = "Expenditure Updated";
+            var toast = Toast.Make(toastNotifMessage, ToastDuration.Short, fontsize);
+            await toast.Show(tokenSource.Token);
+
+            NavFunctions.ReturnOnce();
         }
+        
     }
 
-    private async Task<bool> AddExpFxnAsync(ExpendituresModel expenditure)
+    private async Task<bool> AddExpenditureAsync(ExpendituresModel expenditure)
     {
         var ExpAmountSpent = SingleExpenditureDetails.UnitPrice * SingleExpenditureDetails.Quantity;
         expenditure.Currency = ActiveUser.UserCurrency;
-        if (ResultingBalance < 0)
-        {
-            await Shell.Current.DisplayAlert("Failed Operation", $"Your balance is not enough to add Flow Out {expenditure.Reason}", "Okay");
+
+        expenditure.AmountSpent = ExpAmountSpent;
+        expenditure.Id = Guid.NewGuid().ToString();
+        expenditure.AddedDateTime = DateTime.UtcNow;
+
+        expenditure.UserId = userService.OfflineUser.UserIDOnline;
+
+        if (!await _expenditureService.AddExpenditureAsync(expenditure))
             return false;
-        }
-        else
-        {
-            expenditure.AmountSpent = ExpAmountSpent;
-            expenditure.Id = Guid.NewGuid().ToString();
-            expenditure.AddedDateTime = DateTime.UtcNow;
-            
-            expenditure.UserId = userService.OfflineUser.UserIDOnline;
+        await UpdateUserAsync(ExpAmountSpent);
 
-            if (!await _expenditureService.AddExpenditureAsync(expenditure))
-                return false;
+        return true;
 
-            ActiveUser.TotalExpendituresAmount += ExpAmountSpent;
-            ActiveUser.PocketMoney = ResultingBalance;
-            ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
-            await userService.UpdateUserAsync(ActiveUser);
+    }
 
-
-            return true;
-        }
+    private async Task UpdateUserAsync(double ExpAmountSpent)
+    {
+        ActiveUser.TotalExpendituresAmount += ExpAmountSpent;
+        ActiveUser.PocketMoney = ResultingBalance;
+        ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
+        await userService.UpdateUserAsync(ActiveUser);
     }
 
     [RelayCommand]
-    public async void CancelBtn()
+    public void CancelBtn()
     {
-        bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You Want To Cancel Action?")))!;
-        if (response)
-        {
-            NavFunctions.ReturnOnce();
-        }
+        //bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You Want To Cancel Action?")))!;
+        //if (response)
+        //{
+        NavFunctions.ReturnOnce();
+        //}
     }
-   
+    void GetTotals()
+    {
+        SingleExpenditureDetails.AmountSpent = SingleExpenditureDetails.UnitPrice * SingleExpenditureDetails.Quantity;
+        Totalss = SingleExpenditureDetails.AmountSpent;
+        Debug.WriteLine(SingleExpenditureDetails.AmountSpent);
+    }
+
     [RelayCommand]
     public void GoToManageExpenditures()
     {        

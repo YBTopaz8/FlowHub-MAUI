@@ -50,7 +50,6 @@
                             Date="{Binding SingleExpenditureDetails.DateSpent}">
                     <material:DatePickerField.Validations>
                         <validation:RequiredValidation/>
-
                     </material:DatePickerField.Validations>
                 </material:DatePickerField>
 
