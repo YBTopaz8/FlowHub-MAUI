@@ -89,7 +89,7 @@ public partial class LoginM : ContentPage
             LoginSignUpTab.IsVisible = true;
         }
     }
-   
+
     private void Picker_SelectedIndexChanged(object sender, EventArgs e)
     {
         string selectedCountry = CountryPicker.SelectedItem.ToString();
@@ -142,7 +142,6 @@ public partial class LoginM : ContentPage
 
     private void LoginOnlineBtn_Clicked(object sender, EventArgs e)
     {
-        viewModel.IsLoginOnlineButtonClicked = true;        
+        viewModel.IsLoginOnlineButtonClicked = true;
     }
-   
 }

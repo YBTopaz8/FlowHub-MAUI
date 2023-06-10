@@ -28,7 +28,7 @@ public partial class UpSertExpenditureVM : ObservableObject
 
     [ObservableProperty]
     private ExpendituresModel _SingleExpenditureDetails = new(){ DateSpent = DateTime.Now };
-    
+
     [ObservableProperty]
     private string _pageTitle;
 
@@ -43,18 +43,15 @@ public partial class UpSertExpenditureVM : ObservableObject
 
     [ObservableProperty]
     public double totalss;
-    
+
     [ObservableProperty]
     public double resultingBalance;
-
-
 
     private int expCounter;
     private double _initialUserPocketMoney = 0;
     private double _initialExpenditureAmount= 0;
     private double _finalPocketMoney = 0;
     private double _initialTotalExpAmount = 0;
-
 
     [RelayCommand]
     public void PageLoaded()
@@ -74,14 +71,14 @@ public partial class UpSertExpenditureVM : ObservableObject
             await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Not Enough balance to save"));
             return;
         }
-        
+
         bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You Want To Save?")))!;
         if (!response)
         {
             Debug.WriteLine("Action cancelled by user");
             return;
-        }        
-        
+        }
+
         CancellationTokenSource cancellationTokenSource = new();
 
         if (SingleExpenditureDetails.Id is not null)
@@ -95,20 +92,16 @@ public partial class UpSertExpenditureVM : ObservableObject
         IToast toast = Toast.Make(ToastNotifMessage, ToastDuration.Short, 14);
         await toast.Show(cancellationTokenSource.Token);
 
-
         if (!AddAnotherExp)
         {
             NavFunctions.ReturnOnce();
             return;
         }
-        
+
         expCounter++;
         PageTitle = $"Add Flow Out N° {expCounter}";
         SingleExpenditureDetails = new() { DateSpent = DateTime.Now };
         AddAnotherExp = false;
-        
-
-
 
     }
     private async void UpdateExpenditureAsync( double fontsize, CancellationTokenSource tokenSource)
@@ -119,7 +112,6 @@ public partial class UpSertExpenditureVM : ObservableObject
 
         var FinalTotalExp = _initialTotalExpAmount - difference;
 
-        
         SingleExpenditureDetails.UpdatedDateTime = DateTime.UtcNow;
 
         SingleExpenditureDetails.UpdateOnSync = true;
@@ -129,14 +121,13 @@ public partial class UpSertExpenditureVM : ObservableObject
             await _expenditureService.GetAllExpendituresAsync();
 
             await UpdateUserAsync(FinalTotalExp);
-            
+
             const string toastNotifMessage = "Expenditure Updated";
             var toast = Toast.Make(toastNotifMessage, ToastDuration.Short, fontsize);
             await toast.Show(tokenSource.Token);
 
             NavFunctions.ReturnOnce();
         }
-        
     }
 
     private async Task<bool> AddExpenditureAsync(ExpendituresModel expenditure)
@@ -155,7 +146,6 @@ public partial class UpSertExpenditureVM : ObservableObject
         await UpdateUserAsync(ExpAmountSpent);
 
         return true;
-
     }
 
     private async Task UpdateUserAsync(double ExpAmountSpent)
@@ -184,7 +174,7 @@ public partial class UpSertExpenditureVM : ObservableObject
 
     [RelayCommand]
     public void GoToManageExpenditures()
-    {        
+    {
         NavFunctions.ReturnOnce();
     }
 }

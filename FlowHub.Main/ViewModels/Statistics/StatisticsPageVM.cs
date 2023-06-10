@@ -19,7 +19,6 @@ public partial class StatisticsPageVM : ObservableObject
 		expendituresService = expRepo;
 	}
 
-	
     public List<ExpendituresModel> listOfExp { get; set; }
     public ExpendituresModel[] listOfExpDec { get; set; }
 
@@ -30,7 +29,7 @@ public partial class StatisticsPageVM : ObservableObject
     {
         new Axis { MinLimit = 0, MaxLimit = 50 }
     };
-	
+
 
     public SolidColorPaint LegendTextPaint { get; set; } = new SolidColorPaint
 	{
@@ -55,7 +54,6 @@ public partial class StatisticsPageVM : ObservableObject
 				IgnoresBarPosition = false
 			}
 		};
-
 
 		listOfExp = new();
 
@@ -86,17 +84,17 @@ public partial class StatisticsPageVM : ObservableObject
 
 		foreach (var item in listOfExpDec)
 		{
-			listOfPieSeries.Add(new PieSeries<double>{ 
+			listOfPieSeries.Add(new PieSeries<double>{
 				Name = item.Reason,
 				Values = new double[] { item.AmountSpent },
 				TooltipLabelFormatter =
 					(ChartPoint) => $"{ChartPoint.Context.Series.Name }: {ChartPoint.PrimaryValue:n3} {item.Currency}",
-			});			
+			});
 		}
-		
+
 		Series = new List<ISeries>();
 		LineSeries = new ObservableCollection<ISeries>();
-		
+
 		Series.AddRange(listOfPieSeries);
 
         LineSeries<ExpendituresModel> LinesSeriesToPlot = new()
@@ -108,14 +106,14 @@ public partial class StatisticsPageVM : ObservableObject
 			Mapping =(testt, point) =>
 			{
 				point.PrimaryValue = (double)testt.AmountSpent;
-				point.SecondaryValue = point.Context.Entity.EntityIndex; 
+				point.SecondaryValue = point.Context.Entity.EntityIndex;
 			},
 			Stroke = new SolidColorPaint(SKColors.DarkSlateBlue) { StrokeThickness = 4 },
-			
+
 			
 		//	Name = "Plot",
 		//	DataLabelsSize = 30,
-			
+
 		//	DataLabelsPaint = new SolidColorPaint(SKColors.White),
 		//	DataLabelsPosition = LiveChartsCore.Measure.DataLabelsPosition.Top,
 		//	Fill = null,
@@ -154,7 +152,6 @@ public partial class StatisticsPageVM : ObservableObject
 
         var listOfExpDec = listOfExp.Where(x => x.DateSpent.Month == 11).ToArray();
 
-
 		PieSeries<ExpendituresModel> PieSeriesToPlot = new PieSeries<ExpendituresModel>()
 		{
 			Name = $"Graph of {listOfExpDec.Length} Flow Outs For November 2022",
@@ -169,7 +166,7 @@ public partial class StatisticsPageVM : ObservableObject
         LineSeries<ExpendituresModel> LinesSeriesToPlot = new()
         {
             Name = $"Graph of {listOfExpDec.Length} Flow Outs For November 2022",
-            TooltipLabelFormatter = (point) => 
+            TooltipLabelFormatter = (point) =>
 			$"{point.Model.Reason} : {point.Model.AmountSpent:n3} {point.Model.Currency}\n" +
 			$"{point.Model.DateSpent:dd-MMM-yy}",
             Values = listOfExpDec,
@@ -179,7 +176,6 @@ public partial class StatisticsPageVM : ObservableObject
                 point.SecondaryValue = point.Context.Entity.EntityIndex;
             },
             Stroke = new SolidColorPaint(SKColors.DarkSlateBlue) { StrokeThickness = 4 },
-
 
             //	Name = "Plot",
             //	DataLabelsSize = 30,

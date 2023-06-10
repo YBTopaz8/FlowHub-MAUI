@@ -24,7 +24,7 @@ public partial class ManageExpendituresVM : ObservableObject
         expendituresService = expendituresRepository;
         userService = usersRepository;
     }
-    
+
     [ObservableProperty]
     ObservableCollection<ExpendituresModel> expendituresList;
 
@@ -261,7 +261,7 @@ public partial class ManageExpendituresVM : ObservableObject
 
             var tempList = await Task.Run(async () => new ObservableCollection<ExpendituresModel>(expList));
             ExpendituresList = tempList;
-            
+
             
             TotalAmount = ExpendituresList.Sum(x => x.AmountSpent);
             TotalExpenditures = ExpendituresList.Count;
@@ -272,9 +272,9 @@ public partial class ManageExpendituresVM : ObservableObject
                 //    ActiveUser.TotalExpendituresAmount = tot;
                 //    await userService.UpdateUserAsync(ActiveUser);
                 //}
-            
+
                 ExpTitle = "All Flow Outs";
-            
+
             ShowStatisticBtn = expList.Count >= 3;
         }
         catch (Exception ex)
@@ -289,7 +289,6 @@ public partial class ManageExpendituresVM : ObservableObject
     {
         try
         {
-
             Debug.WriteLine("entered today");
             ShowDayFilter = false;
             filterOption = "Filter_Today";

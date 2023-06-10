@@ -45,7 +45,6 @@ public partial class ManageIncomesVM : ObservableObject
     [ObservableProperty]
     private string incTitle;
 
-
     private UsersModel ActiveUser = new();
 
     [RelayCommand]
@@ -256,7 +255,7 @@ public partial class ManageIncomesVM : ObservableObject
         if (response)
         {
             var deleteResponse = await incomeService.DeleteIncomeAsync(income.Id);
-            
+
             if (deleteResponse)
             {
                 ActiveUser.TotalIncomeAmount -= income.AmountReceived;

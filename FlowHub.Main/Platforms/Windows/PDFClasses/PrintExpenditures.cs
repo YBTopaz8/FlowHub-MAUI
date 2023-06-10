@@ -32,7 +32,6 @@ public class PrintExpenditures
     {
         Color HeaderTextColor = WebColors.GetRGBColor("darkslateblue");
 
-
         PdfWriter writer = new PdfWriter(PathFile);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);

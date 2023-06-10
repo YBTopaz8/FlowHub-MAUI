@@ -35,7 +35,7 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 	        }).UseMauiCommunityToolkit();
-        
+
         builder.ConfigureMauiHandlers(handlers =>
         {
 #if ANDROID
@@ -89,7 +89,6 @@ public static class MauiProgram
         builder.Services.AddSingleton<UpSertExpenditurePageD>();
         builder.Services.AddSingleton<ManageExpendituresD>();
 
-        
 
 /*-------------------------------REGISTERING MOBILE VIEWS ---------------------------------------------------------------*/
 

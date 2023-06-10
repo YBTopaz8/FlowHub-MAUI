@@ -98,5 +98,4 @@ public partial class ManageExpendituresD : ContentPage
         }
     }
 
-    
 }

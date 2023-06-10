@@ -44,7 +44,7 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
     {
         var user = userService.OfflineUser;
         ActiveUser = user;
-        _ = await monthlyPlannedExpService.GetAllPlannedExp(); 
+        _ = await monthlyPlannedExpService.GetAllPlannedExp();
         GetAllMonthlyPlanned();
     }
 
@@ -101,7 +101,7 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
                     {"SingleExpenditureDetails", new ExpendituresModel () },
                     { "IsAdd", true },
                     {"PageTitle", new string ($"Planned Flow Out: {monthYear}") },
-                    
+
                     {"ActiveUser" , ActiveUser }
                 };
 
@@ -142,7 +142,6 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
         //GetAllMonthlyPlanned();
     }
 
-
     [RelayCommand]
     public async void SyncPlannedExpTest()
     {
@@ -157,7 +156,6 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
         Debug.WriteLine("End Sync");
     }
 
-    
     public async Task PrintPDFandShare(List<List<ExpendituresModel>> ListofListofExps, List<string> listofExpTitles)
     {
         Debug.WriteLine(ListofListofExps.Count);

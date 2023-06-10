@@ -7,7 +7,7 @@ public class ExpendituresModel
     [BsonId]
     public string Id { get; set; }
     public DateTime DateSpent { get; set; }
-    public double UnitPrice { get; set; } 
+    public double UnitPrice { get; set; }
     public double Quantity { get; set; } = 1;
     public double AmountSpent { get; set; }
     public string? Reason { get; set; }

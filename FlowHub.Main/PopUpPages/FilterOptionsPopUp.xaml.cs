@@ -31,7 +31,6 @@ public partial class FilterOptionsPopUp : Popup
         MonthPicker.ItemsSource = ListOfMonths;
         YearPicker.ItemsSource = ListOfYears;
 
-
         if (specificMonth == 0 && specificYear == 0)
         {
             int monthIndex = DateTime.UtcNow.Month - 1;
@@ -70,7 +69,6 @@ public partial class FilterOptionsPopUp : Popup
                 radioGroup.SelectedItem.ToString()
             };
         }
-        
     }
 
     private void MonthPicker_SelectedIndexChanged(object sender, EventArgs e)

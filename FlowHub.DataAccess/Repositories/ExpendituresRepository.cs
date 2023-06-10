@@ -12,7 +12,6 @@ public class ExpendituresRepository : IExpendituresRepository
     IMongoDatabase DBOnline;
     List<ExpendituresModel> OnlineExpendituresList { get; set; }
 
-
     public List<ExpendituresModel> OfflineExpendituresList { get; set; }
 
     private IMongoCollection<ExpendituresModel> AllOnlineExpenditures;
@@ -217,7 +216,7 @@ public class ExpendituresRepository : IExpendituresRepository
 
         return true;
     }
-   
+
     private async Task UpdateLocalDBWithOnlineData(List<ExpendituresModel> tempExpList)
     {
         foreach (var expOnline in OnlineExpendituresList)
