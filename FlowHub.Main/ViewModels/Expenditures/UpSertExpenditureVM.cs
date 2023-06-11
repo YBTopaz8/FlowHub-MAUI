@@ -102,7 +102,6 @@ public partial class UpSertExpenditureVM : ObservableObject
         PageTitle = $"Add Flow Out N° {expCounter}";
         SingleExpenditureDetails = new() { DateSpent = DateTime.Now };
         AddAnotherExp = false;
-
     }
     private async void UpdateExpenditureAsync( double fontsize, CancellationTokenSource tokenSource)
     {

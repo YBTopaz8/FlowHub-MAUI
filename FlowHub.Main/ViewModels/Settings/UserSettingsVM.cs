@@ -59,8 +59,6 @@ public partial class UserSettingsVM : ObservableObject
         UserName = activeUser.Username;
         TotalExpendituresAmount = expService.OfflineExpendituresList.Select(x => x.AmountSpent).Sum();
 
-        
-
         SelectCountryCurrency = ActiveUser.UserCurrency;
     }
 

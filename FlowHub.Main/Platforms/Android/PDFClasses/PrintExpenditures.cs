@@ -16,7 +16,6 @@ public class PrintExpenditures
      //   PermissionStatus statusread = await Permissions.RequestAsync<Permissions.StorageRead>();
      //   PermissionStatus statuswrite = await Permissions.RequestAsync<Permissions.StorageWrite>();
         string path;
-   //     path = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments).AbsolutePath;
         path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
         string fileName = "ExpendituresReport.pdf";
         string PathFile = $"{path}/{fileName}";

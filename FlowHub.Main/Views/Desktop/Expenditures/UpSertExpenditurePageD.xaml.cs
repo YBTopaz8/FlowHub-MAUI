@@ -1,4 +1,6 @@
 using FlowHub.Main.ViewModels.Expenditures;
+using System.Diagnostics;
+using UraniumUI.Material.Controls;
 
 namespace FlowHub.Main.Views.Desktop.Expenditures;
 
@@ -23,6 +25,13 @@ public partial class UpSertExpenditurePageD : ContentPage
 
     private void UnitPrice_TextChanged(object sender, TextChangedEventArgs e)
     {
+        //Custom validation
+        if (!string.IsNullOrWhiteSpace(e.NewTextValue))
+        {
+            bool isValid = double.TryParse(e.NewTextValue, out _);
+            ((TextField)sender).Text = isValid ? e.NewTextValue : e.OldTextValue;
+        }
+
         CurrentBalance = viewModel.ActiveUser.PocketMoney;
 
         double total = 0;
@@ -41,5 +50,14 @@ public partial class UpSertExpenditurePageD : ContentPage
         CurrentBalance -= diff;
 
         viewModel.ResultingBalance = CurrentBalance;
+    }
+
+    private void UnitPrice_Focused(object sender, FocusEventArgs e)
+    {
+        if (UnitPrice.Text == "0")
+        {
+            UnitPrice.Text = "";
+            //Debug.WriteLine("UnitPrice_Focused");
+        }
     }
 }

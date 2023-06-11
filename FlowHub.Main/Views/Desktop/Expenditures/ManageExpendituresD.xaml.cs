@@ -97,5 +97,4 @@ public partial class ManageExpendituresD : ContentPage
             downBtn.IsVisible = false;
         }
     }
-
 }

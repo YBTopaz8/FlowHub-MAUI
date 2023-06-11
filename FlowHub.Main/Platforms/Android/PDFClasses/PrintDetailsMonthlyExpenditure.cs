@@ -57,8 +57,8 @@ public class PrintDetailsMonthlyExpenditure
     {
         Color HeaderColor = WebColors.GetRGBColor("DarkSlateBlue");
 
-        PdfWriter writer = new(pathFile);
-        PdfDocument pdf = new(writer);
+        using PdfWriter writer = new(pathFile);
+        using PdfDocument pdf = new(writer);
         Document document = new(pdf, pageSize: iText.Kernel.Geom.PageSize.A4, immediateFlush: false);
 
         Paragraph header = new Paragraph(pdfTitle)
@@ -277,5 +277,4 @@ public class PrintDetailsMonthlyExpenditure
             File = new ShareFile(PathFile)
         });
     }
-
 }

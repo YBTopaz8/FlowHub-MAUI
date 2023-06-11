@@ -88,6 +88,4 @@ public partial class HomePageVM : ObservableObject
             NavFunction.FromHomePageToUpsertExpenditure(navParam);
         }
     }
-
-
 }

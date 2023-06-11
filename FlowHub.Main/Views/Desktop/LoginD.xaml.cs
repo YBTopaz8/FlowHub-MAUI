@@ -132,11 +132,9 @@ public partial class LoginD : ContentPage
         viewModel.IsLoginOnlineButtonClicked = true;
     }
 
-
     private void PickerField_SelectedValueChanged(object sender, object e)
     {
         string selectedCountry = CountryPicker.SelectedItem.ToString() ?? "";
         viewModel.CurrencyFromCountryPickedCommand.Execute(selectedCountry);
     }
-
 }
