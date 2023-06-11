@@ -180,6 +180,9 @@
 	  <MauiXaml Update="Views\Desktop\LoginD.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Desktop\Settings\UserSettingsPageD.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Mobile\Expenditures\ManageExpendituresM.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -226,7 +229,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Resources\Images\darkicons\" />
-	  <Folder Include="Views\Desktop\Settings\" />
 	</ItemGroup>
 
 	<ItemGroup>
