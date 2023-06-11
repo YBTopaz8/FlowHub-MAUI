@@ -30,7 +30,6 @@ public partial class StatisticsPageVM : ObservableObject
         new Axis { MinLimit = 0, MaxLimit = 50 }
     };
 
-
     public SolidColorPaint LegendTextPaint { get; set; } = new SolidColorPaint
 	{
 		Color = new SKColor(240,240,240)
@@ -110,7 +109,6 @@ public partial class StatisticsPageVM : ObservableObject
 			},
 			Stroke = new SolidColorPaint(SKColors.DarkSlateBlue) { StrokeThickness = 4 },
 
-			
 		//	Name = "Plot",
 		//	DataLabelsSize = 30,
 

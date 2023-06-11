@@ -89,7 +89,6 @@ public static class MauiProgram
         builder.Services.AddSingleton<UpSertExpenditurePageD>();
         builder.Services.AddSingleton<ManageExpendituresD>();
 
-
 /*-------------------------------REGISTERING MOBILE VIEWS ---------------------------------------------------------------*/
 
         /*--  REGISTERING MOBILE VIEWS --*/

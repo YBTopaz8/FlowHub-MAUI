@@ -262,7 +262,6 @@ public partial class ManageExpendituresVM : ObservableObject
             var tempList = await Task.Run(async () => new ObservableCollection<ExpendituresModel>(expList));
             ExpendituresList = tempList;
 
-            
             TotalAmount = ExpendituresList.Sum(x => x.AmountSpent);
             TotalExpenditures = ExpendituresList.Count;
 
@@ -497,15 +496,28 @@ public partial class ManageExpendituresVM : ObservableObject
     public async Task PrintExpendituresBtn()
     {
         Activ = true;
-        if (ExpendituresList?.Count < 1)
+
+        if (ExpendituresList?.Count < 1 || ExpendituresList is null)
         {
             await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Cannot save an Empty list to PDF"));
+            return;
         }
-        else
+        PrintExpenditures prtt = new();
+
+        string dialogueResponse = (string)await Shell.Current.ShowPopupAsync(new InputCurrencyForPrintPopUpPage("Please Select Currency", UserCurrency));
+        if (dialogueResponse is "Cancel")
         {
-            PrintExpenditures prtt = new();
-            prtt.SaveExpenditureToPDF(ExpendituresList, UserCurrency);
+            return;
         }
+
+        if (dialogueResponse != UserCurrency && !Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
+        {
+            await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("No Internet !\nPlease Connect to the Internet in order to save in other currencies"));
+            return;
+        }
+
+        await prtt.SaveExpenditureToPDF(ExpendituresList, dialogueResponse);
+
     }
     [RelayCommand]
     public async void ShowFilterPopUpPage()

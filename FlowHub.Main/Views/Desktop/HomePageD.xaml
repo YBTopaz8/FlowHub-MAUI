@@ -82,7 +82,7 @@
                             HorizontalOptions="Start"
                            Margin="10,0,0,0"
                             />
-                        <Label Text="TND"
+                        <Label Text="{Binding UserCurrency}"
                            FontSize="18"
                             HorizontalOptions="Start"
                            Margin="5,0,0,0"

@@ -15,7 +15,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style TargetType="Label">
-                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontSize" Value="12"/>
                 <Setter Property="FontAttributes" Value="Bold"/>
             </Style>
             
@@ -76,7 +76,7 @@
 
                     <Grid ColumnDefinitions="215,10*" ColumnSpacing="8">
                         <material:TextField Grid.Column="0" Title="Unit Price"
-                                    x:Name="UnitPrice"
+                                    x:Name="UnitPrice" Focused="UnitPrice_Focused"
                                     TextChanged="UnitPrice_TextChanged"
                                     Text="{Binding SingleExpenditureDetails.UnitPrice}" Keyboard="Numeric" >
 
