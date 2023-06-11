@@ -5,8 +5,9 @@
              xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
              x:Class="FlowHub.Main.PopUpPages.InputCurrencyForPrintPopUpPage"
              CanBeDismissedByTappingOutsideOfPopup="false"
-             Size="300,200"
-             Color="Transparent">
+             Size="360,190"
+             Color="Transparent" 
+             x:Name="PopupPage">
     <Border
         Stroke="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=White}"
         StrokeThickness="0"
@@ -24,15 +25,17 @@
                 </ResourceDictionary>
             </VerticalStackLayout.Resources>
 
-            <Label FontSize="19" TextColor="{AppThemeBinding Dark=white, Light=black}"
+            <Label FontSize="21" TextColor="{AppThemeBinding Dark=white, Light=black}"
             Text="Confirm Share PDF"
+                   FontAttributes="Bold"
             VerticalOptions="Start" 
-            HorizontalOptions="Start" />
+            HorizontalOptions="Center" />
+            
 
             <Label x:Name="DisplayAlertText"  FontSize="18"/>
 
-            <HorizontalStackLayout>
-                <material:CheckBox Text="Change Currency" x:Name="ChangeCurrencyCheckBox" Margin="5,0"/>
+            <HorizontalStackLayout Spacing="8"> 
+                <material:CheckBox Text="Change Currency" x:Name="ChangeCurrencyCheckBox" Margin="5,0" CheckChanged="ChangeCurrencyCheckBox_CheckChanged"/>
                 
                 <Picker x:Name="CurrencyPicker" Title="Select a Currency" IsVisible="{Binding IsChecked, Source={x:Reference ChangeCurrencyCheckBox}}"/>
             </HorizontalStackLayout>

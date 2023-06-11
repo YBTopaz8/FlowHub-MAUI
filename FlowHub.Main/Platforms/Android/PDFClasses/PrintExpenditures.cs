@@ -11,7 +11,7 @@ namespace FlowHub.Main.PDF_Classes;
 //Printing on Android
 public class PrintExpenditures
 {
-    public void SaveExpenditureToPDF(ObservableCollection<ExpendituresModel> expList, string userCurrency)
+    public Task SaveExpenditureToPDF(ObservableCollection<ExpendituresModel> expList, string userCurrency)
     {
      //   PermissionStatus statusread = await Permissions.RequestAsync<Permissions.StorageRead>();
      //   PermissionStatus statuswrite = await Permissions.RequestAsync<Permissions.StorageWrite>();
@@ -24,6 +24,8 @@ public class PrintExpenditures
 
         CreatePdfDoc(expList, PathFile, userCurrency);
         SharePdfFile(PdfTitle, PathFile);
+        //TODO : add the task.run method for CreatePdfDoc
+        return null;
     }
 
     void CreatePdfDoc(ObservableCollection<ExpendituresModel> expList, string PathFile, string userCurrency)

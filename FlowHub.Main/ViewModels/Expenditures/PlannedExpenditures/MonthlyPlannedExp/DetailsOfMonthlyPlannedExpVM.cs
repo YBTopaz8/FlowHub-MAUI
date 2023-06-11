@@ -172,7 +172,7 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
     async Task PrintPDFandShare()
     {
         PrintFunction  = new PrintDetailsMonthlyExpenditure();
-        string dialogueResponse =(string) await Shell.Current.ShowPopupAsync(new InputCurrencyForPrintPopUpPage("Share PDF File? (Requires Internet)", userCurrency));
+        string dialogueResponse =(string) await Shell.Current.ShowPopupAsync(new InputCurrencyForPrintPopUpPage("Share PDF File? (Requires Internet)", UserCurrency));
         if (dialogueResponse is not "Cancel" )
         {
             if (Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))

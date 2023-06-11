@@ -25,7 +25,7 @@ public class PrintExpenditures
 
         string PdfTitle = "Expenditures Report";
 
-        await Task.Run(() =>CreatePdfDoc(expList, PathFile, userCurrency));
+        await Task.Run(() => CreatePdfDoc(expList, PathFile, userCurrency));
     }
 
     static void CreatePdfDoc(ObservableCollection<ExpendituresModel> expList, string PathFile, string userCurrency)
