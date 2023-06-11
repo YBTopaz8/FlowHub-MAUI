@@ -4,7 +4,7 @@ namespace FlowHub.Main.PopUpPages;
 
 public partial class InputCurrencyForPrintPopUpPage : Popup
 {
-    public InputCurrencyForPrintPopUpPage(string DisplayText, string userCurrency)
+    public InputCurrencyForPrintPopUpPage(string DisplayText, string UserCurrency)
     {
         InitializeComponent();
         DisplayAlertText.Text = DisplayText;
@@ -13,7 +13,7 @@ public partial class InputCurrencyForPrintPopUpPage : Popup
         //TODO: Add more currencies
        List<string> ListOfCurrencies= new(){ "AUD", "BRL", "CAD", "CNY", "EUR", "GBP", "KES", "NGN", "TND", "USD", "XOF", "XAF", "ZAR"};
        CurrencyPicker.ItemsSource = ListOfCurrencies;
-       CurrencyPicker.SelectedItem = userCurrency;
+       CurrencyPicker.SelectedItem = UserCurrency;
     }
 
     void OnYesButtonClicked(object sender, EventArgs e)
