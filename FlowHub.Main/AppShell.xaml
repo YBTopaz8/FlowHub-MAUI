@@ -5,6 +5,7 @@
         x:Class="FlowHub.Main.AppShell"
         xmlns:views="clr-namespace:FlowHub.Main.Views.Desktop"
         xmlns:viewsExpenditures="clr-namespace:FlowHub.Main.Views.Desktop.Expenditures"
+        xmlns:viewsSettings="clr-namespace:FlowHub.Main.Views.Desktop.Settings"
         Shell.NavBarIsVisible="False"
         Shell.FlyoutBehavior="Disabled"
         CurrentItem ="{x:Reference login}">
@@ -22,7 +23,7 @@
             <ShellContent Title="Exit" />
         </Tab>
 
-        <Tab Title="Expenditures" >
+        <Tab Title="Flow Outs" >
             <ShellContent Title="Manage Expenditures"                          
                 ContentTemplate="{DataTemplate viewsExpenditures:ManageExpendituresD}"
                 Route="ManageExpenditures"/>
@@ -39,10 +40,10 @@
                />
 
         </Tab>
-        <Tab Title="Settings">
+        <Tab Title="Settings" Route="UserSettings">
 
             <ShellContent  Title="User Settings" 
-                
+                           ContentTemplate="{DataTemplate viewsSettings:UserSettingsPageD}"
                 Route="UserSettings"/>
 
             <ShellContent  Title="Application Settings"        
