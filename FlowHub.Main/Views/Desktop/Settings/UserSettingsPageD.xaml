@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlowHub.Main.Views.Desktop.Settings.UserSettingsPageD"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewModel="clr-namespace:FlowHub.Main.ViewModels.Settings"                   
+             x:DataType="viewModel:UserSettingsVM"
+             Title="My Profile">
+    <toolkit:DockLayout>
+        <VerticalStackLayout toolkit:DockLayout.DockPosition="Left" Margin="35,35,45,0" Spacing="20">
+            <Button Text="My Profile"/>
+            <Button Text="Security"/>
+            <Button Text="Data Export"/>
+        </VerticalStackLayout>
+        <VerticalStackLayout Margin="25,20,20,0" >
+        
+
+            <Image Source="{AppThemeBinding Dark=user_icon_d.png, Light=user_icon_l.png}" HeightRequest="80"/>
+            <Label Text="{Binding UserName}" FontSize="38" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+
+
+            <Border Margin="0,5" BackgroundColor="Transparent"
+                        StrokeThickness="0.7">
+                <toolkit:DockLayout Margin="10,10" >
+                    <Label Text="Finances" FontAttributes="Bold" FontSize="22" />
+                    <HorizontalStackLayout Spacing="80" HorizontalOptions="CenterAndExpand">
+
+                        <VerticalStackLayout HorizontalOptions="Start">
+                            <Label FontAttributes="Bold" FontSize="20" >
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{}{0:n3} {1}">
+                                        <Binding Path="TotalExpendituresAmount"/>
+                                        <Binding Path="UserCurrency"/>
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                            <Label Text="Total Flow Out" FontSize="13" HorizontalTextAlignment="Center"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout>
+                            <Label FontAttributes="Bold" FontSize="20">
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{} {0:n3} {1}">
+                                        <Binding Path="TotalIncomeAmount"/>
+                                        <Binding Path="UserCurrency"/>
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                            <Label Text="Total Flow In" FontSize="13" HorizontalTextAlignment="Center"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout>
+                            <Label FontAttributes="Bold" FontSize="20">
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{} XXX {0}">
+                                        <Binding Path="UserCurrency"/>
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                            <Label Text="Total Debts" FontSize="13" HorizontalTextAlignment="Center"/>
+                        </VerticalStackLayout>
+
+                    </HorizontalStackLayout>
+
+                    <Label HorizontalOptions="Center" Margin="0,10,0,5" FontSize="25" FontAttributes="Bold">
+                        <Label.Text>
+                            <MultiBinding StringFormat="{} Current Balance : {0:n3} {1}">
+                                <Binding Path="PocketMoney"/>
+                                <Binding Path="UserCurrency"/>
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                </toolkit:DockLayout>
+            </Border>
+
+
+            <Border Margin="0,5" BackgroundColor="Transparent"
+                        StrokeThickness="0.7">
+                <toolkit:DockLayout Margin="10,20" >
+                    <Button Text="Edit" toolkit:DockLayout.DockPosition="Right" VerticalOptions="Start"/>
+
+                    <Label Text="Personal Info" FontAttributes="Bold" FontSize="22" />
+                    <HorizontalStackLayout Spacing="80" HorizontalOptions="CenterAndExpand">
+
+                        <VerticalStackLayout>
+                            <Label Text="Name" FontSize="13"/>
+                            <Label Text="{Binding UserName}" FontSize="20"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout>
+                            <Label Text="Email" FontSize="13"/>
+                            <Label Text="{Binding UserEmail}" FontSize="20"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout>
+                            <Label Text="Country" FontSize="13"/>
+                            <Label Text="{Binding UserCountry}" FontSize="20"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout>
+                            <Label Text="Currency" FontSize="13"/>
+                            <Label Text="{Binding UserCurrency}" FontSize="20"/>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+                </toolkit:DockLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </toolkit:DockLayout>
+</ContentPage>
