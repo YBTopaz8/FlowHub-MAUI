@@ -171,7 +171,7 @@ public partial class UpSertExpenditureVM : ObservableObject
         TotalAmountSpent = SingleExpenditureDetails.AmountSpent;
         if (IsAddTaxesChecked)
         {
-            ApplyTaxes();
+            ApplyTax();
         }
         ResultingBalance = _initialUserPocketMoney - SingleExpenditureDetails.AmountSpent;
     }
@@ -185,39 +185,48 @@ public partial class UpSertExpenditureVM : ObservableObject
         if(!SingleExpenditureDetails.Taxes.Contains(tax))
         {
             SingleExpenditureDetails.Taxes.Add(tax);
+            tax.IsChecked = true;
+            ApplyTax(tax);
         }
     }
 
-    int _taxesCounter = 0;
-    public void ApplyTaxes()
+    public void ApplyTax(TaxModel specificTax=null)
     {
-        if (_taxesCounter < SingleExpenditureDetails.Taxes?.Count)
+        if (specificTax is not null)
         {
-            double totalTaxPercentage = SingleExpenditureDetails.Taxes.Sum(tax => tax.Rate);
-            var taxedAmount = SingleExpenditureDetails.AmountSpent * (totalTaxPercentage / 100);
-            TotalAmountSpent = SingleExpenditureDetails.AmountSpent + taxedAmount;
-            ResultingBalance -= TotalAmountSpent;
-            _taxesCounter++;
+            double taxAmount = (specificTax.Rate / 100) * SingleExpenditureDetails.AmountSpent;
+            TotalAmountSpent += taxAmount;
+            ResultingBalance -= taxAmount;
+            return;
         }
+        double totalTaxPercentage = SingleExpenditureDetails.Taxes?.Sum(tax => tax.Rate) ?? 0;
+        var taxedAmount = SingleExpenditureDetails.AmountSpent * (totalTaxPercentage / 100);
+        TotalAmountSpent = SingleExpenditureDetails.AmountSpent + taxedAmount;
+        ResultingBalance -= taxedAmount;
+          
     }
     public void RemoveTax(TaxModel tax)
     {
         if (SingleExpenditureDetails.Taxes?.Contains(tax) is true)
         {
-            
             SingleExpenditureDetails.Taxes.Remove(tax);
+            tax.IsChecked = false;
+            UnApplyTax(tax);
         }
     }
-    public void UnApplyTaxes()
+    public void UnApplyTax(TaxModel specificTax=null)
     {
-        if (_taxesCounter > 0)
+        if (specificTax is not null)
         {
+            double taxMount = (specificTax.Rate / 100) * SingleExpenditureDetails.AmountSpent;
+            TotalAmountSpent -= taxMount;
+            ResultingBalance += taxMount;
+            return;
+        }
             double totalTaxPercentage = SingleExpenditureDetails.Taxes.Sum(tax => tax.Rate);
             var taxedAmount = SingleExpenditureDetails.AmountSpent * (totalTaxPercentage / 100);
-            TotalAmountSpent = SingleExpenditureDetails.AmountSpent - taxedAmount;
-            ResultingBalance += TotalAmountSpent;
-            _taxesCounter++;
-        }
+            TotalAmountSpent -= taxedAmount;
+            ResultingBalance += taxedAmount;            
     }
 
     [RelayCommand]

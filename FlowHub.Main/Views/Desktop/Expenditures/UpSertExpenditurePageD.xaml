@@ -9,7 +9,8 @@
              xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Expenditures"
-             x:DataType="viewModels:UpSertExpenditureVM"                   
+             x:DataType="viewModels:UpSertExpenditureVM"         
+             x:Name="page"
              >
 
     <ContentPage.Resources>
@@ -29,7 +30,7 @@
                    FontSize="23" TextColor="White"  />
 
        
-        <Border HorizontalOptions="Center" WidthRequest="450" HeightRequest="400" VerticalOptions="Start"
+        <Border HorizontalOptions="Center" WidthRequest="450" HeightRequest="400" VerticalOptions="Start" x:Name="FlowForm"
                     Margin="10" Padding="10" BackgroundColor="{AppThemeBinding Dark=#29343E, Light=white}"
                     Stroke="DarkSlateBlue"
                     StrokeThickness="2"
@@ -117,7 +118,7 @@
                     <BoxView HeightRequest="0.8" Color="DarkSlateBlue"/>
 
                     <HorizontalStackLayout>
-                        <material:CheckBox Text="Taxes" BorderColor="Gray" Margin="0,0,10,0" IsChecked="{Binding IsAddTaxesChecked}" x:Name="AddTaxCheckBox" CheckChanged="AddTax_CheckChanged"/>
+                        <material:CheckBox Text="Taxes" BorderColor="Gray" Margin="5,0,10,0" IsChecked="{Binding IsAddTaxesChecked}" x:Name="AddTaxCheckBox" CheckChanged="AddTax_CheckChanged"/>
                     <ListView ItemsSource="{Binding ActiveUser.Taxes}" IsVisible="{Binding IsAddTaxesChecked}" x:Name="TaxesList">
                         <ListView.ItemTemplate >
                             <DataTemplate x:DataType="models:TaxModel">

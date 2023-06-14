@@ -85,7 +85,7 @@
 
         <ScrollView x:Name="DGScrollView" VerticalScrollBarVisibility="Never"
                     HorizontalOptions="FillAndExpand">
-            <material:DataGrid ItemsSource="{Binding ExpendituresList}" 
+            <material:DataGrid ItemsSource="{Binding ExpendituresList}"
                                     MaximumWidthRequest="1000" Padding="10" 
                                     HorizontalOptions="Center">
             <material:DataGrid.EmptyView>
