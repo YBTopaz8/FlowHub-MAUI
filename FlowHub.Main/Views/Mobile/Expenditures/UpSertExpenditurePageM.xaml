@@ -79,6 +79,7 @@
                         <validation:NumericValidation/>
                     </material:TextField.Validations>
                 </material:TextField>
+                
 
             </Grid>
             <material:TextField Title="Reason" Text="{Binding SingleExpenditureDetails.Reason}">
@@ -86,7 +87,7 @@
                     <validation:RequiredValidation/>
                 </material:TextField.Validations>
             </material:TextField>
-
+            
             <material:CheckBox IsChecked="{Binding AddAnotherExp}" IsVisible="{Binding IsAdd}"
                                    CheckChanged="CheckBox_CheckChanged"
                                    Text="Save and Add another" />

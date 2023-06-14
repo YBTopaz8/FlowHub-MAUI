@@ -63,7 +63,7 @@ public partial class ManageIncomesVM : ObservableObject
     {
         try
         {
-            isBusy = true;
+            IsBusy = true;
             double totalAmountFromList = 0;
             var incOfCurrentMonth = incomeService.OfflineIncomesList.FindAll(x => x.DateReceived.Month == DateTime.Today.Month)
                 .ToList();
@@ -100,7 +100,7 @@ public partial class ManageIncomesVM : ObservableObject
     {
         try
         {
-            isBusy = true;
+            IsBusy = true;
             double totalAmountFromList = 0;
             var AllIncomes = incomeService.OfflineIncomesList;
             if (AllIncomes?.Count > 0)
@@ -141,7 +141,7 @@ public partial class ManageIncomesVM : ObservableObject
     {
         try
         {
-            isBusy = true;
+            IsBusy = true;
             double totalAmountFromList = 0;
             var incOfToday = incomeService.OfflineIncomesList.FindAll(x => x.DateReceived.Day == DateTime.Today.Day)
                 .ToList();
@@ -178,7 +178,7 @@ public partial class ManageIncomesVM : ObservableObject
     {
         try
         {
-            isBusy = true;
+            IsBusy = true;
             double totalAmountFromList = 0;
             var incOfSpecificMonth = incomeService.OfflineIncomesList.FindAll(x => x.DateReceived.Month == specificDate.Month)
                 .ToList();

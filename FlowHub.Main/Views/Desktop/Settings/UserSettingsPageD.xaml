@@ -5,7 +5,18 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:viewModel="clr-namespace:FlowHub.Main.ViewModels.Settings"                   
              x:DataType="viewModel:UserSettingsVM"
-             Title="My Profile">
+             xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+             xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
+             xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
+             xmlns:converters="clr-namespace:FlowHub.Main.Utilities"
+             Title="My Profile"
+             x:Name="settingsPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <toolkit:DockLayout>
         <VerticalStackLayout toolkit:DockLayout.DockPosition="Left" Margin="35,35,45,0" Spacing="20">
             <Button Text="My Profile"/>
@@ -14,10 +25,8 @@
         </VerticalStackLayout>
         <VerticalStackLayout Margin="25,20,20,0" >
         
-
             <Image Source="{AppThemeBinding Dark=user_icon_d.png, Light=user_icon_l.png}" HeightRequest="80"/>
             <Label Text="{Binding UserName}" FontSize="38" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
-
 
             <Border Margin="0,5" BackgroundColor="Transparent"
                         StrokeThickness="0.7">
@@ -28,7 +37,7 @@
                         <VerticalStackLayout HorizontalOptions="Start">
                             <Label FontAttributes="Bold" FontSize="20" >
                                 <Label.Text>
-                                    <MultiBinding StringFormat="{}{0:n3} {1}">
+                                    <MultiBinding StringFormat="{}{0:n2} {1}">
                                         <Binding Path="TotalExpendituresAmount"/>
                                         <Binding Path="UserCurrency"/>
                                     </MultiBinding>
@@ -40,7 +49,7 @@
                         <VerticalStackLayout>
                             <Label FontAttributes="Bold" FontSize="20">
                                 <Label.Text>
-                                    <MultiBinding StringFormat="{} {0:n3} {1}">
+                                    <MultiBinding StringFormat="{} {0:n2} {1}">
                                         <Binding Path="TotalIncomeAmount"/>
                                         <Binding Path="UserCurrency"/>
                                     </MultiBinding>
@@ -64,7 +73,7 @@
 
                     <Label HorizontalOptions="Center" Margin="0,10,0,5" FontSize="25" FontAttributes="Bold">
                         <Label.Text>
-                            <MultiBinding StringFormat="{} Current Balance : {0:n3} {1}">
+                            <MultiBinding StringFormat="{} Current Balance : {0:n2} {1}">
                                 <Binding Path="PocketMoney"/>
                                 <Binding Path="UserCurrency"/>
                             </MultiBinding>
@@ -73,14 +82,15 @@
                 </toolkit:DockLayout>
             </Border>
 
-
             <Border Margin="0,5" BackgroundColor="Transparent"
                         StrokeThickness="0.7">
                 <toolkit:DockLayout Margin="10,20" >
-                    <Button Text="Edit" toolkit:DockLayout.DockPosition="Right" VerticalOptions="Start"/>
-
-                    <Label Text="Personal Info" FontAttributes="Bold" FontSize="22" />
-                    <HorizontalStackLayout Spacing="80" HorizontalOptions="CenterAndExpand">
+                    <Button Text="Edit" toolkit:DockLayout.DockPosition="Right" VerticalOptions="Start" x:Name="EditUserDetailsBtn" Clicked="EditUserDetailsBtn_Clicked" IsVisible="{Binding IsNotInEditingMode}"/>
+                    
+                    <Label Text="Personal Info" FontAttributes="Bold" FontSize="22" toolkit:DockLayout.DockPosition="Left"/>
+                    
+                    <HorizontalStackLayout Spacing="80" HorizontalOptions="CenterAndExpand" toolkit:DockLayout.DockPosition="Top" x:Name="UserDetailsView" 
+                                            IsVisible="{Binding IsNotInEditingMode}">
 
                         <VerticalStackLayout>
                             <Label Text="Name" FontSize="13"/>
@@ -101,6 +111,67 @@
                             <Label Text="Currency" FontSize="13"/>
                             <Label Text="{Binding UserCurrency}" FontSize="20"/>
                         </VerticalStackLayout>
+                        
+                        <VerticalStackLayout> 
+                            <Label Text="Taxes" FontSize="13" HorizontalOptions="Center"/>
+                            <ListView ItemsSource="{Binding Taxes}" >
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:DataType="models:TaxModel">
+                                        <ViewCell>
+                                            <HorizontalStackLayout Spacing="8">
+                                                <Label Text="{Binding Name}" FontSize="15"/>
+                                                <Label Text="{Binding Rate, StringFormat='{0} %'}" FontSize="15"/>
+                                            </HorizontalStackLayout>
+                                        </ViewCell>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+
+
+                    <HorizontalStackLayout HorizontalOptions="Center" toolkit:DockLayout.DockPosition="Top" IsVisible="{Binding IsVisible, Source={x:Reference UserDetailsView}, Converter={StaticResource InverseBoolConverter}}" >
+                        <input:FormView Orientation="Horizontal" Spacing="55" SubmitCommand="{Binding UpdateUserInformationCommand}">
+                            <material:TextField Title="User name" Text="{Binding ActiveUser.Username}">
+                                <validation:RequiredValidation Message="Please enter your Username"/>
+                            </material:TextField>
+
+                            <material:TextField Title="Email" Text="{Binding ActiveUser.Email}">
+                                <validation:RequiredValidation Message="Please enter your Email"/>
+                            </material:TextField>
+
+                            <material:PickerField Title="Country" ItemsSource="{Binding CountryNamesList}" AccentColor="White"
+                                      x:Name="CountryPicker" SelectedValueChanged="CountryPicker_SelectedValueChanged">
+                                <validation:RequiredValidation Message="Please Select a Country"/>
+                            </material:PickerField>
+
+                            <material:TextField Title="Currency" Text="{Binding SelectCountryCurrency}" IsEnabled="False"/>
+
+                            <VerticalStackLayout>
+                                <Label Text="Taxes" HorizontalTextAlignment="Center" FontSize="12"/>
+                                <ListView ItemsSource="{Binding Taxes}" >
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate x:DataType="models:TaxModel">
+                                            <ViewCell>                                                
+                                                <HorizontalStackLayout Spacing="8">
+                                                    <HorizontalStackLayout.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding Source={x:Reference settingsPage}, 
+                                                            Path=BindingContext.ViewEditDeleteTaxCommand}" 
+                                                                              CommandParameter="{Binding .}"/>
+                                                    </HorizontalStackLayout.GestureRecognizers>
+                                                    <Label Text="{Binding Name}" FontSize="15"/>
+                                                    <Label Text="{Binding Rate, StringFormat='{0} %'}" FontSize="15"/>
+                                                </HorizontalStackLayout>
+                                            </ViewCell>                                            
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                                <ImageButton Source="add_btn_d.png" Command="{Binding AddTaxCommand}" WidthRequest="35"/>
+                            </VerticalStackLayout>
+                            <ImageButton Source="save_icon_d.png" input:FormView.IsSubmitButton="True" />
+                        </input:FormView>
+                            
                     </HorizontalStackLayout>
                 </toolkit:DockLayout>
             </Border>

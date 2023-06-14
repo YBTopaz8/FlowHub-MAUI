@@ -26,7 +26,7 @@
                                       toolkit:DockLayout.DockPosition="Top"
                                       x:Name="CountryPicker" SelectedValueChanged="CountryPicker_SelectedValueChanged">
                     <validation:RequiredValidation Message="Please Select a Country"/>
-                </material:PickerField>
+            </material:PickerField>
             <Label Text="{Binding SelectCountryCurrency}" HorizontalTextAlignment="End" FontSize="16" FontAttributes="Bold"/>
             <ImageButton Source="save_icon_d" input:FormView.IsSubmitButton="True"/>
         </input:FormView>

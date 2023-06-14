@@ -1,4 +1,5 @@
 using FlowHub.Main.ViewModels.Expenditures;
+using FlowHub.Models;
 using System.Diagnostics;
 using UraniumUI.Material.Controls;
 
@@ -7,8 +8,6 @@ namespace FlowHub.Main.Views.Desktop.Expenditures;
 public partial class UpSertExpenditurePageD : ContentPage
 {
     private readonly UpSertExpenditureVM viewModel;
-    double CurrentBalance;
-    double InitialExpAmountSpent;
     public UpSertExpenditurePageD(UpSertExpenditureVM vm)
 	{
 		InitializeComponent();
@@ -20,36 +19,11 @@ public partial class UpSertExpenditurePageD : ContentPage
     {
         base.OnAppearing();
         viewModel.PageLoadedCommand.Execute(null);
-        InitialExpAmountSpent = viewModel.SingleExpenditureDetails.AmountSpent;
     }
 
     private void UnitPrice_TextChanged(object sender, TextChangedEventArgs e)
     {
-        //Custom validation
-        if (!string.IsNullOrWhiteSpace(e.NewTextValue))
-        {
-            bool isValid = double.TryParse(e.NewTextValue, out _);
-            ((TextField)sender).Text = isValid ? e.NewTextValue : e.OldTextValue;
-        }
-
-        CurrentBalance = viewModel.ActiveUser.PocketMoney;
-
-        double total = 0;
-        if (string.IsNullOrEmpty(UnitPrice.Text) || string.IsNullOrWhiteSpace(UnitPrice.Text))
-        {
-        }
-        if (!string.IsNullOrEmpty(Qty.Text) || !string.IsNullOrWhiteSpace(Qty.Text))
-        {
-        }
-        _ = double.TryParse(UnitPrice.Text, out double up);
-        _ = double.TryParse(Qty.Text, out double qty);
-
-        total = up * qty;
-
-        var diff = total - InitialExpAmountSpent;
-        CurrentBalance -= diff;
-
-        viewModel.ResultingBalance = CurrentBalance;
+        viewModel.UnitPriceOrQuantityChanged();
     }
 
     private void UnitPrice_Focused(object sender, FocusEventArgs e)
@@ -57,7 +31,46 @@ public partial class UpSertExpenditurePageD : ContentPage
         if (UnitPrice.Text == "0")
         {
             UnitPrice.Text = "";
-            //Debug.WriteLine("UnitPrice_Focused");
+        }
+    }
+
+    private void TaxCheckbox_CheckChanged(object sender, EventArgs e)
+    {
+        var s = sender as InputKit.Shared.Controls.CheckBox;
+        var tax = (TaxModel)s.BindingContext;
+        if (s.IsChecked)
+        {
+            tax.IsChecked = true;
+            viewModel.AddTax(tax);
+            viewModel.ApplyTaxes();
+        }
+        else
+        {
+            tax.IsChecked = false;
+            viewModel.RemoveTax(tax);
+            viewModel.UnApplyTaxes();
+        }
+    }
+
+    private void AddTax_CheckChanged(object sender, EventArgs e)
+    {
+        if (AddTaxCheckBox.IsChecked)
+        {
+            foreach (TaxModel tax in TaxesList.ItemsSource)
+            {
+                tax.IsChecked = true;                
+                viewModel.AddTax(tax);
+            }
+            viewModel.ApplyTaxes();
+        }
+        else
+        {
+            foreach (TaxModel tax in TaxesList.ItemsSource)
+            {
+                tax.IsChecked = false;
+                viewModel.RemoveTax(tax);
+            }
+            viewModel.UnApplyTaxes();
         }
     }
 }

@@ -29,7 +29,7 @@
                 Route="ManageExpenditures"/>
         </Tab>
 
-        <Tab Title="Incomes">
+        <Tab Title="Flow In">
             <ShellContent Title="Manage Incomes"/>
         </Tab>
         

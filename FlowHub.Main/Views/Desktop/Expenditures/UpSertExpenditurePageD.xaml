@@ -42,20 +42,32 @@
                 SubmitCommand="{Binding UpSertExpenditureCommand}">          
 
                     <VerticalStackLayout toolkit:DockLayout.DockPosition="Top" >
-                        
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding HardResetUserBalanceCommand}"/>
+                    </VerticalStackLayout.GestureRecognizers>
                         <Label HorizontalOptions="End" Margin="5" FontAttributes="Bold" FontSize="15">
                             <Label.Text>
-                                <MultiBinding StringFormat="{} Balance : {0:n3} {1}">
+                                <MultiBinding StringFormat="{} Balance : {0:n2} {1}">
                                     <Binding Path="ActiveUser.PocketMoney"/>
                                     <Binding Path="ActiveUser.UserCurrency"/>
                                 </MultiBinding>
                             </Label.Text>
                         </Label>
+                            
                         <Label HorizontalOptions="End" Margin="5,0,5,5" FontAttributes="Italic" FontSize="13"
-                   TextColor="AliceBlue">
+                                TextColor="AliceBlue">
                             <Label.Text>
-                                <MultiBinding StringFormat="{} Resulting Balance : {0:n3} {1}">
+                                <MultiBinding StringFormat="{} Resulting Balance : {0:n2} {1}">
                                     <Binding Path="ResultingBalance"/>
+                                    <Binding Path="ActiveUser.UserCurrency"/>
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
+                        <Label HorizontalOptions="End" Margin="5,0,5,5" FontAttributes="Italic" FontSize="13"
+                                TextColor="AliceBlue">
+                            <Label.Text>
+                                <MultiBinding StringFormat="{} Flow Out's Amount : {0:n2} {1}">
+                                    <Binding Path="TotalAmountSpent"/>
                                     <Binding Path="ActiveUser.UserCurrency"/>
                                 </MultiBinding>
                             </Label.Text>
@@ -80,16 +92,13 @@
                                     TextChanged="UnitPrice_TextChanged"
                                     Text="{Binding SingleExpenditureDetails.UnitPrice}" Keyboard="Numeric" >
 
-                            <material:TextField.Validations>
-                                <validation:RequiredValidation/>
-                                <validation:MinValueValidation MinValue="0.1" Message="The Unit Price cannot be 0 or Less" />
-                                <validation:NumericValidation/>
-                            </material:TextField.Validations>
+                        
                         </material:TextField>
 
                         <material:TextField Grid.Column="1" Title="Quantity"
                                     x:Name="Qty"
                                     TextChanged="UnitPrice_TextChanged"
+                                            
                                     Text="{Binding SingleExpenditureDetails.Quantity}"  Keyboard="Numeric" >
                             <material:TextField.Validations>
                                 <validation:RequiredValidation/>
@@ -107,6 +116,26 @@
                     </material:EditorField>
                     <BoxView HeightRequest="0.8" Color="DarkSlateBlue"/>
 
+                    <HorizontalStackLayout>
+                        <material:CheckBox Text="Taxes" BorderColor="Gray" Margin="0,0,10,0" IsChecked="{Binding IsAddTaxesChecked}" x:Name="AddTaxCheckBox" CheckChanged="AddTax_CheckChanged"/>
+                    <ListView ItemsSource="{Binding ActiveUser.Taxes}" IsVisible="{Binding IsAddTaxesChecked}" x:Name="TaxesList">
+                        <ListView.ItemTemplate >
+                            <DataTemplate x:DataType="models:TaxModel">
+                                <ViewCell>
+                                    <material:CheckBox BorderColor="Gray" Margin="0,2" IsChecked="{Binding IsChecked}" CheckChanged="TaxCheckbox_CheckChanged">
+                                        <material:CheckBox.Text>
+                                            <MultiBinding StringFormat="{} {0} : {1} %">
+                                                <Binding Path="Name"/>
+                                                <Binding Path="Rate"/>
+                                            </MultiBinding>
+                                        </material:CheckBox.Text>
+                                    </material:CheckBox>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    </HorizontalStackLayout>
+                    
 
                     <HorizontalStackLayout HorizontalOptions="Center" Margin="0,15,0,0" Spacing="15">
                         <Button input:FormView.IsSubmitButton="True"

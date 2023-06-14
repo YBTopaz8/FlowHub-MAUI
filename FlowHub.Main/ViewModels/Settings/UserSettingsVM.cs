@@ -9,6 +9,7 @@ using FlowHub.Main.Platforms.NavigationMethods;
 using FlowHub.Main.PopUpPages;
 using FlowHub.Main.Views.Mobile.Settings;
 using FlowHub.Models;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 namespace FlowHub.Main.ViewModels.Settings;
@@ -48,17 +49,24 @@ public partial class UserSettingsVM : ObservableObject
     [ObservableProperty]
     private UsersModel activeUser = new();
 
+    [ObservableProperty]
+    bool isNotInEditingMode;
+
+    [ObservableProperty]
+    private ObservableCollection<TaxModel> taxes;
+
     [RelayCommand]
     public void PageLoaded()
     {
-        activeUser = userService.OfflineUser;
-        PocketMoney = activeUser.PocketMoney;
-        UserCurrency = activeUser.UserCurrency;
-        UserCountry = activeUser.UserCountry;
-        UserEmail = activeUser.Email;
-        UserName = activeUser.Username;
+        ActiveUser = userService.OfflineUser;
+        PocketMoney = ActiveUser.PocketMoney;
+        UserCurrency = ActiveUser.UserCurrency;
+        UserCountry = ActiveUser.UserCountry;
+        UserEmail = ActiveUser.Email;
+        UserName = ActiveUser.Username;
+        Taxes = ActiveUser.Taxes is not null ? new ObservableCollection<TaxModel>(ActiveUser.Taxes) : new ObservableCollection<TaxModel>();
         TotalExpendituresAmount = expService.OfflineExpendituresList.Select(x => x.AmountSpent).Sum();
-
+        IsNotInEditingMode = true;
         SelectCountryCurrency = ActiveUser.UserCurrency;
     }
 
@@ -110,6 +118,10 @@ public partial class UserSettingsVM : ObservableObject
             ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
             ActiveUser.TotalExpendituresAmount = 0;
             ActiveUser.PocketMoney = 0;
+            if (Taxes is not null)
+            {
+                ActiveUser.Taxes = Taxes.ToList();
+            }
 
             await expService.GetAllExpendituresAsync();
             if (await userService.UpdateUserAsync(ActiveUser))
@@ -125,5 +137,44 @@ public partial class UserSettingsVM : ObservableObject
                 await Shell.Current.GoToAsync("..", true);
             }
         }
+        IsNotInEditingMode = true;
     }
+
+    [RelayCommand]
+    public async void AddTax()
+    {
+        List<string> fieldTitles = new() { "Tax Name", "Tax Percentage" };
+        PopUpCloseResult result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new InputPopUpPage(InputType.Numeric | InputType.Text, fieldTitles, "Add Tax info", IsDeleteBtnVisible: false));
+        if (result.Result == PopupResult.OK)
+        {
+            Dictionary<string, double> dict = (Dictionary<string, double>)result.Data;
+            TaxModel tax = new() { Name = dict.Keys.First(), Rate = dict.Values.First() };
+
+            Taxes ??= new ObservableCollection<TaxModel>();
+            Taxes.Add(tax);
+        }
+    }
+
+    [RelayCommand]
+    public async void ViewEditDeleteTax(TaxModel Selectedtax)
+    {
+        List<string> fieldTitles = new() { "Tax Name", "Tax Percentage" };
+        PopUpCloseResult result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new InputPopUpPage(InputType.Numeric | InputType.Text, fieldTitles, "Tax Info", Selectedtax, true));
+        if (result.Result == PopupResult.OK)
+        {
+            int indexOfTax = Taxes.IndexOf(Selectedtax);
+            if (indexOfTax != -1)
+            {
+                Dictionary<string, double> dict = (Dictionary<string, double>)result.Data;
+                TaxModel tax = new() { Name = dict.Keys.First(), Rate = dict.Values.First() };
+                Taxes[indexOfTax] = tax;
+            }
+        }
+        else if (result.Result == PopupResult.Delete)
+        {
+            Taxes.Remove(Selectedtax);
+        }
+    }
+
+
 }

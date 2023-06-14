@@ -72,14 +72,7 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
         InitialExpenditureAmount = SingleExpenditureDetails.AmountSpent;
         if(SingleExpenditureDetails.Comment is not null)
         {
-            if (SingleExpenditureDetails.Comment.Equals("None"))
-            {
-                HasComment = false;
-            }
-            else
-            {
-                hasComment = true;
-            }
+            HasComment = !SingleExpenditureDetails.Comment.Equals("None");
         }
     }
 

@@ -168,26 +168,6 @@ public partial class ManageExpendituresVM : ObservableObject
             TotalAmount = ExpendituresList.Count > 0 ? ExpendituresList.Count : 0;
             IsBusy = false;
 
-            //if (expOfCurrentMonth.Count > 0)
-            //{
-            //    IsBusy = false;
-            //    for (int i = 0; i < expOfCurrentMonth.Count; i++)
-            //    {
-            //        ExpendituresList.Add(expOfCurrentMonth[i]);
-            //        tot += expOfCurrentMonth[i].AmountSpent;
-            //    }
-
-            //    TotalAmount = tot;
-            //    TotalExpenditures = ExpendituresList.Count;
-            //    ExpTitle = $"Flow Outs For {DateTime.Now:MMM - yyyy}";
-            //}
-            //else
-            //{
-            //    IsBusy=false;
-            //    TotalExpenditures = ExpendituresList.Count;
-            //    ExpTitle = $"Flow Outs For {DateTime.Now:MMM - yyyy}";
-            //    TotalAmount = 0;
-            //}
             ShowStatisticBtn = expOfCurrentMonth.Count >= 3;
         }
         catch (Exception ex)
@@ -517,7 +497,6 @@ public partial class ManageExpendituresVM : ObservableObject
         }
 
         await prtt.SaveExpenditureToPDF(ExpendituresList, dialogueResponse);
-
     }
     [RelayCommand]
     public async void ShowFilterPopUpPage()

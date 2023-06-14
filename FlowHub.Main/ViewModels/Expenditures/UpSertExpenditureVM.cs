@@ -42,7 +42,7 @@ public partial class UpSertExpenditureVM : ObservableObject
     private bool addAnotherExp;
 
     [ObservableProperty]
-    public double totalss;
+    public double totalAmountSpent;
 
     [ObservableProperty]
     public double resultingBalance;
@@ -50,7 +50,7 @@ public partial class UpSertExpenditureVM : ObservableObject
     private int expCounter;
     private double _initialUserPocketMoney = 0;
     private double _initialExpenditureAmount= 0;
-    private double _finalPocketMoney = 0;
+
     private double _initialTotalExpAmount = 0;
 
     [RelayCommand]
@@ -59,6 +59,10 @@ public partial class UpSertExpenditureVM : ObservableObject
         _initialUserPocketMoney = ActiveUser.PocketMoney;
         _initialExpenditureAmount = SingleExpenditureDetails.AmountSpent;
         _initialTotalExpAmount = ActiveUser.TotalExpendituresAmount;
+        if (SingleExpenditureDetails.Taxes is not null)
+        {
+            IsAddTaxesChecked = true;
+        }
         expCounter = 1;
         ResultingBalance = ActiveUser.PocketMoney;
     }
@@ -158,17 +162,89 @@ public partial class UpSertExpenditureVM : ObservableObject
     [RelayCommand]
     public void CancelBtn()
     {
-        //bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You Want To Cancel Action?")))!;
-        //if (response)
-        //{
         NavFunctions.ReturnOnce();
-        //}
     }
-    void GetTotals()
+
+    public void UnitPriceOrQuantityChanged()
     {
         SingleExpenditureDetails.AmountSpent = SingleExpenditureDetails.UnitPrice * SingleExpenditureDetails.Quantity;
-        Totalss = SingleExpenditureDetails.AmountSpent;
-        Debug.WriteLine(SingleExpenditureDetails.AmountSpent);
+        TotalAmountSpent = SingleExpenditureDetails.AmountSpent;
+        if (IsAddTaxesChecked)
+        {
+            ApplyTaxes();
+        }
+        ResultingBalance = _initialUserPocketMoney - SingleExpenditureDetails.AmountSpent;
+    }
+
+    [ObservableProperty]
+    bool isAddTaxesChecked;
+
+    public void AddTax(TaxModel tax)
+    {
+        SingleExpenditureDetails.Taxes ??= new List<TaxModel>();
+        if(!SingleExpenditureDetails.Taxes.Contains(tax))
+        {
+            SingleExpenditureDetails.Taxes.Add(tax);
+        }
+    }
+
+    int _taxesCounter = 0;
+    public void ApplyTaxes()
+    {
+        if (_taxesCounter < SingleExpenditureDetails.Taxes?.Count)
+        {
+            double totalTaxPercentage = SingleExpenditureDetails.Taxes.Sum(tax => tax.Rate);
+            var taxedAmount = SingleExpenditureDetails.AmountSpent * (totalTaxPercentage / 100);
+            TotalAmountSpent = SingleExpenditureDetails.AmountSpent + taxedAmount;
+            ResultingBalance -= TotalAmountSpent;
+            _taxesCounter++;
+        }
+    }
+    public void RemoveTax(TaxModel tax)
+    {
+        if (SingleExpenditureDetails.Taxes?.Contains(tax) is true)
+        {
+            
+            SingleExpenditureDetails.Taxes.Remove(tax);
+        }
+    }
+    public void UnApplyTaxes()
+    {
+        if (_taxesCounter > 0)
+        {
+            double totalTaxPercentage = SingleExpenditureDetails.Taxes.Sum(tax => tax.Rate);
+            var taxedAmount = SingleExpenditureDetails.AmountSpent * (totalTaxPercentage / 100);
+            TotalAmountSpent = SingleExpenditureDetails.AmountSpent - taxedAmount;
+            ResultingBalance += TotalAmountSpent;
+            _taxesCounter++;
+        }
+    }
+
+    [RelayCommand]
+    public async void HardResetUserBalance()
+    {
+        PopUpCloseResult result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new InputPopUpPage(InputType.Numeric, new List<string>() { "Amount" }, "Enter New Pocket Money"));
+        if (result.Result == PopupResult.OK)
+        {
+            double amount = (double)result.Data;
+
+            if (amount != 0)
+            {
+                ActiveUser.PocketMoney = amount;
+                ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
+                userService.OfflineUser = ActiveUser;
+                await userService.UpdateUserAsync(ActiveUser);
+
+                CancellationTokenSource cancellationTokenSource = new();
+                const ToastDuration duration = ToastDuration.Short;
+                const double fontSize = 16;
+                string text = "User Balance Updated!";
+                var toast = Toast.Make(text, duration, fontSize);
+                await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
+
+                PageLoaded();
+            }
+        }
     }
 
     [RelayCommand]

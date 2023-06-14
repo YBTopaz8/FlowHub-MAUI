@@ -16,6 +16,7 @@ public partial class EditUserSettingsPageM : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
+        //viewmodel.PageLoaded();
         viewmodel.PageLoadedCommand.Execute(null);
         viewmodel.GetCountryNamesList();
         CountryPicker.SelectedItem = viewmodel.ActiveUser.UserCountry;

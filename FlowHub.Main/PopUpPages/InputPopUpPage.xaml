@@ -27,10 +27,10 @@
             </VerticalStackLayout.Resources>
 
             <Label FontSize="20" TextColor="{AppThemeBinding Dark=white, Light=black}"
-                Text="Value Edit"
+                Text="Value Edit" x:Name="PopUpTitle"
                 VerticalOptions="Start" 
                 HorizontalOptions="Start"/>
-
+            
             <material:TextField Title="Enter New Text" IsVisible="False" x:Name="InputText">
                 <material:TextField.Validations>
                     <validation:RequiredValidation/>
@@ -49,6 +49,8 @@
                         Clicked="OnOKButtonClicked"/>
                 <Button Text="Cancel"
                         Clicked="OnCancelButtonClicked"/>
+                <Button Text="Delete" x:Name="DeleteButton" IsVisible="false"
+                        Clicked="OnDeleteButton_Clicked"/>
             </HorizontalStackLayout>
         </VerticalStackLayout>
     </Border>
