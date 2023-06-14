@@ -8,8 +8,8 @@ Ideal for anyone who likes to keep track of their Financial Flow.
 This project is build on .NET CORE 7, .NET MAUI and LiteDB as its DataBase using iText 7 for PDF Generation.
 
 The Requirement to run use THIS project, you would need;
-- A Computer running Windows 10 at least.
-- An Android Device running Android 5 at least (API 21).
+- A PC running Windows 10 at least.
+- An Android Device running Android 11 at least (API 30).
 - Visual Studio 2019, 2022 or latest (It was built on VS 2022) with MAUI support.
 
 ## Installation
