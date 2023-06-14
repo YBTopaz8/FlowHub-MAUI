@@ -19,6 +19,15 @@ public partial class UpSertExpenditurePageD : ContentPage
     {
         base.OnAppearing();
         viewModel.PageLoadedCommand.Execute(null);
+        if (viewModel.IsAddTaxesChecked)
+        {
+            AddTaxCheckBox.IsChecked = true;
+        }
+    }
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        AddTaxCheckBox.IsChecked = false;
     }
 
     private void UnitPrice_TextChanged(object sender, TextChangedEventArgs e)
@@ -42,13 +51,13 @@ public partial class UpSertExpenditurePageD : ContentPage
         {
             tax.IsChecked = true;
             viewModel.AddTax(tax);
-            viewModel.ApplyTaxes();
+            
         }
         else
         {
             tax.IsChecked = false;
+            
             viewModel.RemoveTax(tax);
-            viewModel.UnApplyTaxes();
         }
     }
 
@@ -56,21 +65,22 @@ public partial class UpSertExpenditurePageD : ContentPage
     {
         if (AddTaxCheckBox.IsChecked)
         {
+            FlowForm.HeightRequest = 420;
             foreach (TaxModel tax in TaxesList.ItemsSource)
             {
-                tax.IsChecked = true;                
+                
                 viewModel.AddTax(tax);
             }
-            viewModel.ApplyTaxes();
+            
         }
         else
-        {
+        {            
+            
             foreach (TaxModel tax in TaxesList.ItemsSource)
             {
-                tax.IsChecked = false;
+                FlowForm.HeightRequest = 400;
                 viewModel.RemoveTax(tax);
             }
-            viewModel.UnApplyTaxes();
         }
     }
 }

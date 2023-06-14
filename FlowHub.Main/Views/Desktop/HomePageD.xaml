@@ -48,6 +48,7 @@
                     Grid.Row="0"
                 Margin="1"
                 Padding="5"
+                WidthRequest="430"
                 Stroke="DarkSlateBlue"
                 StrokeThickness="2"
                 StrokeShape="RoundRectangle 8">
