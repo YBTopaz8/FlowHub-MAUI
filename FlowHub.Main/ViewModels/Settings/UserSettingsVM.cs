@@ -176,5 +176,4 @@ public partial class UserSettingsVM : ObservableObject
         }
     }
 
-
 }

@@ -23,10 +23,11 @@ public class IncomeRepository : IIncomeRepository
         usersRepo= userRepository;
     }
 
-    void OpenDB()
+    async void OpenDB()
     {
         db = dataAccessRepo.GetDb();
         AllIncomes = db.GetCollection<IncomeModel>(incomesDataCollectionName);
+        await AllIncomes.EnsureIndexAsync(x => x.Id);
     }
 
     public async Task<List<IncomeModel>> GetAllIncomesAsync()
@@ -53,7 +54,6 @@ public class IncomeRepository : IIncomeRepository
         {
             if (await AllIncomes.InsertAsync(income) is not null)
             {
-                await AllIncomes.EnsureIndexAsync(x => x.Id);
                 db.Dispose();
                 return true;
             }

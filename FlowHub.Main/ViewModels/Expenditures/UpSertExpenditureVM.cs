@@ -203,7 +203,6 @@ public partial class UpSertExpenditureVM : ObservableObject
         var taxedAmount = SingleExpenditureDetails.AmountSpent * (totalTaxPercentage / 100);
         TotalAmountSpent = SingleExpenditureDetails.AmountSpent + taxedAmount;
         ResultingBalance -= taxedAmount;
-          
     }
     public void RemoveTax(TaxModel tax)
     {
@@ -226,7 +225,7 @@ public partial class UpSertExpenditureVM : ObservableObject
             double totalTaxPercentage = SingleExpenditureDetails.Taxes.Sum(tax => tax.Rate);
             var taxedAmount = SingleExpenditureDetails.AmountSpent * (totalTaxPercentage / 100);
             TotalAmountSpent -= taxedAmount;
-            ResultingBalance += taxedAmount;            
+            ResultingBalance += taxedAmount;
     }
 
     [RelayCommand]

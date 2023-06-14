@@ -34,11 +34,13 @@ public class ExpendituresRepository : IExpendituresRepository
         onlineDataAccessRepo = onlineRepository;
     }
 
-    void OpenDB()
+    async void OpenDB()
     {
         db = dataAccessRepo.GetDb();
         AllExpenditures = db.GetCollection<ExpendituresModel>(expendituresDataCollectionName);
         AllIDsToBeDeleted = db.GetCollection<IDsToBeDeleted>(IDsDataCollectionName);
+
+       await AllExpenditures.EnsureIndexAsync(x => x.Id);
     }
 
     public async Task<List<ExpendituresModel>> GetAllExpendituresAsync()
@@ -73,23 +75,28 @@ public class ExpendituresRepository : IExpendituresRepository
         try
         {
             OpenDB();
-            if (await AllExpenditures.InsertAsync(expenditure) is not null)
+
+            if (!await AllExpenditures.ExistsAsync(x => x.Id == expenditure.Id))
             {
-                await AllExpenditures.EnsureIndexAsync(x => x.Id);
-                db.Dispose();
-                return true;
+                if (await AllExpenditures.InsertAsync(expenditure) is not null)
+                {
+                    return true;
+                }
+                else
+                {
+                    Debug.WriteLine("Error while inserting Expenditure");
+                }
             }
-            else
-            {
-                Debug.WriteLine("Error while inserting Expenditure");
-            }
-            return true;
+            return false;
         }
         catch (Exception ex)
         {
-            db.Dispose();
-            Debug.WriteLine(ex.InnerException.Message);
+            Debug.WriteLine("Add ExpLocal "+ ex.InnerException.Message);
             return false;
+        }
+        finally
+        {
+            db.Dispose();
         }
     }
 
@@ -156,7 +163,6 @@ public class ExpendituresRepository : IExpendituresRepository
     {
         var filterUserCredentials = Builders<UsersModel>.Filter.Eq("Email", userEmail) &
                                     Builders<UsersModel>.Filter.Eq("Password", userPassword);
-
         if (DBOnline is null)
         {
             onlineDataAccessRepo.GetOnlineConnection();
@@ -165,16 +171,23 @@ public class ExpendituresRepository : IExpendituresRepository
 
         if (usersRepo.OnlineUser is null)
         {
-            usersRepo.OnlineUser = await DBOnline.GetCollection<UsersModel>("Users").Find(filterUserCredentials).FirstOrDefaultAsync();
+            try
+            {
+                usersRepo.OnlineUser = await DBOnline.GetCollection<UsersModel>("Users").Find(filterUserCredentials).FirstOrDefaultAsync();
 
-            if (usersRepo.OnlineUser is null)
-            {
-                Debug.WriteLine("Online User not found");
-                return false;
+                if (usersRepo.OnlineUser is null)
+                {
+                    Debug.WriteLine("Online User not found");
+                    return false;
+                }
+                else
+                {
+                    usersRepo.OfflineUser.UserIDOnline = usersRepo.OnlineUser.Id;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                usersRepo.OfflineUser.UserIDOnline = usersRepo.OnlineUser.Id;
+                Debug.WriteLine($"Exception Message {ex.Message}");
             }
         }
 
@@ -282,7 +295,7 @@ public class ExpendituresRepository : IExpendituresRepository
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("deleteOnline Ex msg :" + ex.Message);
             }
         }
         OpenDB();

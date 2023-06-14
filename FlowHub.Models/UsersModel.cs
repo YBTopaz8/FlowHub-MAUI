@@ -4,7 +4,7 @@ namespace FlowHub.Models;
 
 public class UsersModel
 {
-    public List<UsersModel> Documents { get; set; }
+    public List<UsersModel> documents { get; set; }
     [BsonId]
     public string Id { get; set; }
     public string? UserIDOnline { get; set; }

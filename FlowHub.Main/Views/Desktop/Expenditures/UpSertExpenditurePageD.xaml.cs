@@ -22,12 +22,14 @@ public partial class UpSertExpenditurePageD : ContentPage
         if (viewModel.IsAddTaxesChecked)
         {
             AddTaxCheckBox.IsChecked = true;
+            FlowForm.HeightRequest = 420;
         }
     }
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
         AddTaxCheckBox.IsChecked = false;
+        FlowForm.HeightRequest = 400;
     }
 
     private void UnitPrice_TextChanged(object sender, TextChangedEventArgs e)
@@ -51,12 +53,11 @@ public partial class UpSertExpenditurePageD : ContentPage
         {
             tax.IsChecked = true;
             viewModel.AddTax(tax);
-            
         }
         else
         {
             tax.IsChecked = false;
-            
+
             viewModel.RemoveTax(tax);
         }
     }
@@ -68,14 +69,11 @@ public partial class UpSertExpenditurePageD : ContentPage
             FlowForm.HeightRequest = 420;
             foreach (TaxModel tax in TaxesList.ItemsSource)
             {
-                
                 viewModel.AddTax(tax);
             }
-            
         }
         else
-        {            
-            
+        {
             foreach (TaxModel tax in TaxesList.ItemsSource)
             {
                 FlowForm.HeightRequest = 400;
