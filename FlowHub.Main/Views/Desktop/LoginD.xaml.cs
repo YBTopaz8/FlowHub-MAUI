@@ -77,12 +77,6 @@ public partial class LoginD : ContentPage
         }
     }
 
-    private void Picker_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        string selectedCountry = CountryPicker.SelectedItem.ToString();
-        viewModel.CurrencyFromCountryPickedCommand.Execute(selectedCountry);
-    }
-
     private void SwitchToLoginPageTapped(object sender, TappedEventArgs e)
     {
         LoginSignUpTab.IsVisible = true;
@@ -130,11 +124,5 @@ public partial class LoginD : ContentPage
     private void LoginOnlineBtn_Clicked(object sender, EventArgs e)
     {
         viewModel.IsLoginOnlineButtonClicked = true;
-    }
-
-    private void PickerField_SelectedValueChanged(object sender, object e)
-    {
-        string selectedCountry = CountryPicker.SelectedItem.ToString() ?? "";
-        viewModel.CurrencyFromCountryPickedCommand.Execute(selectedCountry);
     }
 }

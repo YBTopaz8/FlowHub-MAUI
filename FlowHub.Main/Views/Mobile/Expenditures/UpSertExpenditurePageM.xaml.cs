@@ -1,4 +1,5 @@
 using FlowHub.Main.ViewModels.Expenditures;
+using FlowHub.Models;
 using System.Diagnostics;
 
 namespace FlowHub.Main.Views.Mobile.Expenditures;
@@ -18,32 +19,63 @@ public partial class UpSertExpenditurePageM : ContentPage
     {
         base.OnAppearing();
         viewModel.PageLoadedCommand.Execute(null);
-        InitialExpAmountSpent = viewModel.SingleExpenditureDetails.AmountSpent;
+        if (viewModel.IsAddTaxesChecked)
+        {
+            AddTaxCheckBox.IsChecked = true;
+        }
     }
 
-    private void CheckBox_CheckChanged(object sender, EventArgs e)
+    protected override void OnDisappearing()
     {
+        base.OnDisappearing();
+        AddTaxCheckBox.IsChecked = false;
     }
 
     private void UnitPriceOrQty_TextChanged(object sender, TextChangedEventArgs e)
     {
-        CurrentBalance = viewModel.ActiveUser.PocketMoney;
+        viewModel.UnitPriceOrQuantityChanged();
+    }
 
-        double total = 0;
-        if (string.IsNullOrEmpty(UnitPrice.Text) || string.IsNullOrWhiteSpace(UnitPrice.Text))
+    private void UnitPrice_Focused(object sender, FocusEventArgs e)
+    {
+        if (UnitPrice.Text == "0")
         {
+            UnitPrice.Text = "";
         }
-        if (!string.IsNullOrEmpty(Qty.Text) || !string.IsNullOrWhiteSpace(Qty.Text))
+    }
+
+    private void TaxCheckbox_CheckChanged(object sender, EventArgs e)
+    {
+        var s = sender as InputKit.Shared.Controls.CheckBox;
+        var tax = (TaxModel)s.BindingContext;
+        if (s.IsChecked)
         {
+            tax.IsChecked = true;
+            viewModel.AddTax(tax);
         }
-        _ = double.TryParse(UnitPrice.Text, out double up);
-        _ = double.TryParse(Qty.Text, out double qty);
+        else
+        {
+            tax.IsChecked = false;
 
-        total = up * qty;
+            viewModel.RemoveTax(tax);
+        }
+    }
 
-        var diff = total - InitialExpAmountSpent;
-        CurrentBalance -= diff;
-
-        viewModel.ResultingBalance = CurrentBalance;
+    private void AddTax_CheckChanged(object sender, EventArgs e)
+    {
+        if (AddTaxCheckBox.IsChecked)
+        {
+            foreach (TaxModel tax in TaxesList.ItemsSource)
+            {
+                viewModel.AddTax(tax);
+            }
+        }
+        else
+        {
+            foreach (TaxModel tax in TaxesList.ItemsSource)
+            {
+                viewModel.RemoveTax(tax);
+            }
+        }
     }
 }

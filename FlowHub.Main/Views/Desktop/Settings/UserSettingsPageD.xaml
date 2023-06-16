@@ -118,10 +118,14 @@
                                 <ListView.ItemTemplate>
                                     <DataTemplate x:DataType="models:TaxModel">
                                         <ViewCell>
-                                            <HorizontalStackLayout Spacing="8">
-                                                <Label Text="{Binding Name}" FontSize="15"/>
-                                                <Label Text="{Binding Rate, StringFormat='{0} %'}" FontSize="15"/>
-                                            </HorizontalStackLayout>
+                                            <Label FontSize="15" FontAttributes="Bold">
+                                                <Label.Text>
+                                                    <MultiBinding StringFormat="{} {0} : {1} %">
+                                                        <Binding Path="Name"/>
+                                                        <Binding Path="Rate"/>
+                                                    </MultiBinding>
+                                                </Label.Text>
+                                            </Label>
                                         </ViewCell>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
@@ -130,7 +134,7 @@
                         </VerticalStackLayout>
                     </HorizontalStackLayout>
 
-
+<!--Section for what to show when editing user details-->
                     <HorizontalStackLayout HorizontalOptions="Center" toolkit:DockLayout.DockPosition="Top" IsVisible="{Binding IsVisible, Source={x:Reference UserDetailsView}, Converter={StaticResource InverseBoolConverter}}" >
                         <input:FormView Orientation="Horizontal" Spacing="55" SubmitCommand="{Binding UpdateUserInformationCommand}">
                             <material:TextField Title="User name" Text="{Binding ActiveUser.Username}">

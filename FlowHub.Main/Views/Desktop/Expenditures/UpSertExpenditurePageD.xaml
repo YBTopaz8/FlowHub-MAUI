@@ -91,9 +91,7 @@
                         <material:TextField Grid.Column="0" Title="Unit Price"
                                     x:Name="UnitPrice" Focused="UnitPrice_Focused"
                                     TextChanged="UnitPrice_TextChanged"
-                                    Text="{Binding SingleExpenditureDetails.UnitPrice}" Keyboard="Numeric" >
-
-                        
+                                    Text="{Binding SingleExpenditureDetails.UnitPrice}" Keyboard="Numeric" >                        
                         </material:TextField>
 
                         <material:TextField Grid.Column="1" Title="Quantity"
@@ -119,23 +117,23 @@
 
                     <HorizontalStackLayout>
                         <material:CheckBox Text="Taxes" BorderColor="Gray" Margin="5,0,10,0" IsChecked="{Binding IsAddTaxesChecked}" x:Name="AddTaxCheckBox" CheckChanged="AddTax_CheckChanged"/>
-                    <ListView ItemsSource="{Binding ActiveUser.Taxes}" IsVisible="{Binding IsAddTaxesChecked}" x:Name="TaxesList">
-                        <ListView.ItemTemplate >
-                            <DataTemplate x:DataType="models:TaxModel">
-                                <ViewCell>
-                                    <material:CheckBox BorderColor="Gray" Margin="0,2" IsChecked="{Binding IsChecked}" CheckChanged="TaxCheckbox_CheckChanged">
-                                        <material:CheckBox.Text>
-                                            <MultiBinding StringFormat="{} {0} : {1} %">
-                                                <Binding Path="Name"/>
-                                                <Binding Path="Rate"/>
-                                            </MultiBinding>
-                                        </material:CheckBox.Text>
-                                    </material:CheckBox>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                    </HorizontalStackLayout>
+                        <ListView ItemsSource="{Binding ActiveUser.Taxes}" IsVisible="{Binding IsAddTaxesChecked}" x:Name="TaxesList">
+                            <ListView.ItemTemplate >
+                                <DataTemplate x:DataType="models:TaxModel">
+                                    <ViewCell>
+                                        <material:CheckBox BorderColor="Gray" Margin="0,2" IsChecked="{Binding IsChecked}" CheckChanged="TaxCheckbox_CheckChanged">
+                                            <material:CheckBox.Text>
+                                                <MultiBinding StringFormat="{} {0} : {1} %">
+                                                    <Binding Path="Name"/>
+                                                    <Binding Path="Rate"/>
+                                                </MultiBinding>
+                                            </material:CheckBox.Text>
+                                        </material:CheckBox>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                </HorizontalStackLayout>
                     
 
                     <HorizontalStackLayout HorizontalOptions="Center" Margin="0,15,0,0" Spacing="15">

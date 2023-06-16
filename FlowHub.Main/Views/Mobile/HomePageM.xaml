@@ -8,7 +8,7 @@
     <VerticalStackLayout>
         <Label FontSize="21" HorizontalTextAlignment="Center" FontAttributes="Bold" Margin="10">
             <Label.Text>
-                <MultiBinding StringFormat="{} Pocket Allowance is {0:n3} {1}">
+                <MultiBinding StringFormat="{} Pocket Allowance is {0:n2} {1}">
                     <Binding Path="PocketMoney"/>
                     <Binding Path="UserCurrency"/>
                 </MultiBinding>
@@ -31,13 +31,13 @@
                         Fill="DarkSlateBlue"
                         HeightRequest="2"/>
                 <HorizontalStackLayout>
-                    <Label Text="{Binding ExpendituresDetails.Reason, StringFormat='Reason : {0}'}" FontSize="18"/>
+                    <Label Text="{Binding ExpendituresDetails.Reason, StringFormat='Reason : {0}'}" FontSize="16"/>
                     
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
-                    <Label FontSize="18">
+                    <Label FontSize="16">
                         <Label.Text>
-                            <MultiBinding StringFormat="{}Amount Spent : {0:n3} {1}">
+                            <MultiBinding StringFormat="{}Amount Spent : {0:n2} {1}">
                                 <Binding Path="ExpendituresDetails.AmountSpent"/>
                                 <Binding Path="UserCurrency"/>
                             </MultiBinding>
@@ -46,7 +46,7 @@
                 </HorizontalStackLayout>
                 <HorizontalStackLayout Margin="0,0,0,15">
                     <Label Text="{Binding ExpendituresDetails.DateSpent, StringFormat='Date Spent {0:dd MMMM, yyyy}'}" 
-                           FontSize="18"/>
+                           FontSize="16"/>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
 

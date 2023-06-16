@@ -239,20 +239,15 @@ public partial class ManageExpendituresVM : ObservableObject
             expList = expendituresService.OfflineExpendituresList.OrderByDescending(x => x.DateSpent).ToList();
             FilterTitle = "Date Spent Descending";
 
-            var tempList = await Task.Run(async () => new ObservableCollection<ExpendituresModel>(expList));
+            var tempList = await Task.Run(() => new ObservableCollection<ExpendituresModel>(expList));
             ExpendituresList = tempList;
 
             TotalAmount = ExpendituresList.Sum(x => x.AmountSpent);
             TotalExpenditures = ExpendituresList.Count;
 
             IsBusy = false;
-                //if (ActiveUser.TotalExpendituresAmount == 0)
-                //{
-                //    ActiveUser.TotalExpendituresAmount = tot;
-                //    await userService.UpdateUserAsync(ActiveUser);
-                //}
 
-                ExpTitle = "All Flow Outs";
+            ExpTitle = "All Flow Outs";
 
             ShowStatisticBtn = expList.Count >= 3;
         }

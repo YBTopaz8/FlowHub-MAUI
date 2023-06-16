@@ -13,7 +13,12 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style TargetType="material:TextField">
-                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#DBE1ED, Dark=#201F24}"/>
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+                <Setter Property="AccentColor" Value="{AppThemeBinding Dark=white, Light=darkslateblue}"/>
+                <Setter Property="BorderColor" Value="{AppThemeBinding Dark=darkslateblue, Light=darkslateblue}"/>
+            </Style>
+            <Style TargetType="material:PickerField">
+                <Setter Property="BackgroundColor" Value="Transparent"/>
                 <Setter Property="AccentColor" Value="{AppThemeBinding Dark=white, Light=darkslateblue}"/>
                 <Setter Property="BorderColor" Value="{AppThemeBinding Dark=darkslateblue, Light=darkslateblue}"/>
             </Style>
@@ -21,75 +26,86 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ScrollView>
-        <VerticalStackLayout Spacing="10" BackgroundColor="{AppThemeBinding Dark=#1A1A1A, Light=#EEF1F6}" >
-            
+        <VerticalStackLayout Spacing="5" BackgroundColor="{AppThemeBinding Dark=#1A1A1A, Light=#EEF1F6}" >
+
             <VerticalStackLayout BackgroundColor="{AppThemeBinding Dark=#201F24, Light=white}" >
                 
-                <Grid RowDefinitions="*,*" Margin="15">
-                <Image Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}" Grid.Row="0" HorizontalOptions="Center" HeightRequest="70"/>
-                <VerticalStackLayout Grid.Row="1" > 
-                    <Label Text="Hello." FontSize="Title" FontAttributes="Bold"/>
-                    <Label Text="Welcome to FlowHub" FontSize="Title" Margin="0,0,0,60" FontAttributes="Bold"/>
-                </VerticalStackLayout>
+                    <Image Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}" Grid.Row="0" 
+                           Margin="5"
+                           HorizontalOptions="Center" HeightRequest="70"/>
+                    <VerticalStackLayout Margin="8,0" >
+                        <Label Text="Hello." FontSize="Title" FontAttributes="Bold"/>
+                        <Label Text="Welcome to FlowHub" FontSize="Title" Margin="0,0,0,40" FontAttributes="Bold"/>
+                    </VerticalStackLayout>
                 
-            </Grid>
 
-                <Border x:Name="LoginSignUpTab" Grid.Row="2" Margin="20,0,20,10" 
-                        BackgroundColor="{AppThemeBinding Dark=#1A1A1A, Light=#EEF1F6}" 
-                        Stroke="transparent">
+                <Border x:Name="LoginSignUpTab" 
+                        BackgroundColor="{AppThemeBinding Dark=#1A1A1A, Light=#EEF1F6}"
+                        HeightRequest="85"
+                        Stroke="transparent"
+                        Margin="5,0,5,10">
 
-                <Grid ColumnDefinitions="*,*" RowDefinitions="*,*" >
-                    <Grid.Resources>
-                        <ResourceDictionary>
-                            <Style TargetType="Label">
-                                <Setter Property="FontSize" Value="23"/>
-                                <Setter Property="FontAttributes" Value="Bold"/>
-                                <Setter Property="HorizontalTextAlignment" Value="Center"/>
-                            </Style>
+                    <Grid ColumnSpacing="0" RowSpacing="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-                            <Style TargetType="Border">
-                                <Setter Property="WidthRequest" Value="180"/>
-                                <Setter Property="HeightRequest" Value="40"/>
-                                <Setter Property="Stroke" Value="Transparent"/>
-                            </Style>
-                        </ResourceDictionary>
-                    </Grid.Resources>
-                    
-                    <Border IsVisible="true" x:Name="LoginFocused" Grid.Column="0" Grid.Row="0" Margin="0,15,0,-7"
-                        BackgroundColor="{AppThemeBinding Dark=#201F24, Light=white}">
+                        <Grid.Resources>
+                            <ResourceDictionary>
+                                <Style TargetType="Border">
+                                    <Setter Property="WidthRequest" Value="180"/>
+                                    <Setter Property="Stroke" Value="Transparent"/>
+                                </Style>
+                                <Style TargetType="Label">
+                                    <Setter Property="FontSize" Value="23"/>
+                                    <Setter Property="FontAttributes" Value="Bold"/>
+                                    <Setter Property="HorizontalTextAlignment" Value="Center"/>
+                                </Style>
+                            </ResourceDictionary>
+                        </Grid.Resources>
 
-                        <Label Text="Login" TextColor="BlueViolet"/>
-                    </Border>
+                        <Border Grid.Column="0" IsVisible="True" x:Name="LoginFocused"
+                                BackgroundColor="{AppThemeBinding Dark=#201F24, Light=white}"
+                                HorizontalOptions="Center" WidthRequest="100" Margin="0,10">
 
-                    <Border IsVisible="true" x:Name="SignUpUnFocused" Grid.Column="1" Grid.Row="0" Margin="0,15,0,-7" 
-                        BackgroundColor="Transparent">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="SignUpUnFocused_Tapped"/>
-                        </Border.GestureRecognizers>
+                            <Label Text="Login" TextColor="BlueViolet" 
+                                   HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
 
-                            <Label Text="Sign Up" TextColor="{AppThemeBinding Light=#9FA3AE}"/>
+                        </Border>
 
-                    </Border>
+                        <Border IsVisible="false" Opacity="0" 
+                                x:Name="LoginUnFocused" BackgroundColor="Transparent"
+                                Grid.Column="0"  HorizontalOptions="Center" WidthRequest="100">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="LoginUnFocused_Tapped"/>
+                            </Border.GestureRecognizers>
+                            <Label Text="Login" TextColor="{AppThemeBinding Light=#9FA3AE}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
 
-                    <Border IsVisible="false"  Opacity="0" Grid.Column="1" x:Name="SignUpFocused" Grid.Row="1" Margin="0,-7,0,15" 
-                        BackgroundColor="{AppThemeBinding Dark=#201F24, Light=white}">
+                        </Border>
 
-                        <Label Text="Sign Up" TextColor="BlueViolet"/>
-                    </Border>
 
-                    <Border IsVisible="false"  Opacity="0" Grid.Column="0" x:Name="LoginUnFocused" Grid.Row="2"  Margin="0,-7,0,15"
-                        BackgroundColor="Transparent">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="LoginUnFocused_Tapped"/>
-                        </Border.GestureRecognizers>
+                        <Border IsVisible="True" Grid.Column="1"  
+                                x:Name="SignUpUnFocused"
+                                HorizontalOptions="Center" WidthRequest="100"
+                                BackgroundColor="Transparent">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="SignUpUnFocused_Tapped"/>
+                            </Border.GestureRecognizers>
+                            <Label Text="Sign Up" TextColor="{AppThemeBinding Light=#9FA3AE}"
+                                   HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                        </Border>
 
-                            <Label Text="Login" TextColor="{AppThemeBinding Light=#9FA3AE}"/>
+                        <Border IsVisible="false"  x:Name="SignUpFocused"
+                                Grid.Column="1" HorizontalOptions="Center" WidthRequest="120" Margin="0,10"
+                                BackgroundColor="{AppThemeBinding Dark=#201F24, Light=white}">
+                            <Label Text="Sign Up" TextColor="BlueViolet"
+                                   HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                        </Border>
+                    </Grid>
 
-                    </Border>
 
-                </Grid>
-            </Border>
-
+                </Border>
             </VerticalStackLayout>
 
             <VerticalStackLayout>
@@ -131,36 +147,43 @@
                 <!--Section for Registration begins below-->
                 <VerticalStackLayout x:Name="RegisterForm" Opacity="0" Margin="25">
                     <input:FormView SubmitCommand="{Binding GoToHomePageFromRegisterCommand}" Spacing="20">
-                       
-                        <material:TextField Title="User Name" Text="{Binding CurrentUser.Username}" Icon="{AppThemeBinding Dark= user_icon_d.png, Light=user_icon_l.png}">
+                        <material:TextField Title="User Name" Text="{Binding CurrentUser.Username}" 
+                                            Icon="{AppThemeBinding Dark= user_icon_d.png, Light=user_icon_l.png}">
                             <validation:RequiredValidation/>
                         </material:TextField>
 
-                        <material:TextField Title="Email" Text="{Binding CurrentUser.Email}" Icon="{AppThemeBinding Dark=email_icon_d.png, Light=email_icon_l.png}">
+                        <material:TextField Title="Email" Text="{Binding CurrentUser.Email}"
+                                            Icon="{AppThemeBinding Dark=email_icon_d.png, Light=email_icon_l.png}">
                             <material:TextField.Validations>
                                 <validation:RequiredValidation/>
                             </material:TextField.Validations>
                         </material:TextField>
-
-                        <material:TextField Title="Password" Text="{Binding CurrentUser.Password}" IsPassword="True" Icon="{AppThemeBinding Dark= password_d.png, Light=password_l.png}">
-                            <validation:RequiredValidation/>
+                        <material:TextField Title="Password" Text="{Binding CurrentUser.Password}"
+                                            Icon="{AppThemeBinding Dark=password_d.png, Light=password_l.png}">
+                            <validation:RequiredValidation/>                            
+                            <material:TextField.Attachments>
+                                <material:TextFieldPasswordShowHideAttachment/>
+                            </material:TextField.Attachments>                            
                         </material:TextField>
 
-                            <material:TextField Title="Pocket Allowance*" Text="{Binding PocketMoney}" Icon="{AppThemeBinding Dark=pocket_money_icon_d.png, Light=pocket_money_icon_l.png}" Keyboard="Numeric">
-                                <material:TextField.Validations>
-                                    <validation:MinValueValidation MinValue="0" Message="Pocket Allowance can not be less than 0"/>
-                                    <validation:RequiredValidation/>
-                                </material:TextField.Validations>
-                            </material:TextField>
-                            <Border BackgroundColor="{AppThemeBinding Dark= #201F24, Light=#DBE1ED}" StrokeThickness="1.1" Stroke="Darkslateblue" Padding="5">
-                                <Grid ColumnDefinitions="30,*">
-                                    <Image Source="{AppThemeBinding Dark=globe, Light=globe_l}" Grid.Column="0" HeightRequest="23"/>
-                                    <Picker Grid.Column="1" 
-                                        Title="Select your Country" ItemsSource="{Binding CountryNamesList}" x:Name="CountryPicker" SelectedIndexChanged="Picker_SelectedIndexChanged"/>
-                                </Grid>
+                        <material:TextField Title="Pocket Allowance*" Text="{Binding PocketMoney}" Icon="{AppThemeBinding Dark=pocket_money_icon_d.png, Light=pocket_money_icon_l.png}" Keyboard="Numeric">
+                            <material:TextField.Validations>
+                                <validation:MinValueValidation MinValue="1" Message="Pocket Allowance can not be less than 1"/>
+                                <validation:RequiredValidation/>
+                            </material:TextField.Validations>
+                        </material:TextField>
+
+                        <material:PickerField Grid.Column="1" Icon="{AppThemeBinding Dark=globe, Light=globe_l}"
+                                              AccentColor="DarkSlateBlue"
+                                              Title="Select Your Country" ItemsSource="{Binding CountryNamesList}"
+                                              SelectedItem="{Binding SelectedCountry}"
+                                              SelectedValueChangedCommand="{Binding CurrencyFromCountryPickedCommand}"
+                                              BackgroundColor="Transparent">
+                            <material:PickerField.Validations>
+                                <validation:RequiredValidation/>
+                            </material:PickerField.Validations>
+                        </material:PickerField>
                             
-                            </Border>
-                        <Label Text="Country is required!" TextColor="Red" IsVisible="{Binding ErrorMessagePicker}"/>
 
                         <Grid ColumnDefinitions="340,*" >
                             <material:CheckBox Grid.Column="0" TextFontSize="16"

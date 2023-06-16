@@ -19,6 +19,7 @@ public partial class EditUserSettingsPageM : ContentPage
         //viewmodel.PageLoaded();
         viewmodel.PageLoadedCommand.Execute(null);
         viewmodel.GetCountryNamesList();
+        //TODO : set this in binding instead of code behind
         CountryPicker.SelectedItem = viewmodel.ActiveUser.UserCountry;
     }
 
@@ -29,5 +30,10 @@ public partial class EditUserSettingsPageM : ContentPage
         {
             viewmodel.CurrencyFromCountryPickedCommand.Execute(pickedCountry.ToString());
         }
+    }
+
+    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        Debug.WriteLine("Tapped");
     }
 }

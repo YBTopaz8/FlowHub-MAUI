@@ -41,33 +41,30 @@ public partial class LoginVM : ObservableObject
     private string userCurrency;
 
     [ObservableProperty]
-    private bool errorMessageVisible = false;
-
-    [ObservableProperty]
-    private bool errorMessagePicker = false;
+    private bool errorMessageVisible;
 
     private string userId;
 
     [ObservableProperty]
-    private bool isLoginFormVisible = false;
+    private bool isLoginFormVisible;
 
     [ObservableProperty]
-    private bool isRegisterFormVisible = false;
+    private bool isRegisterFormVisible;
 
     [ObservableProperty]
-    private bool isQuickLoginVisible = false;
+    private bool isQuickLoginVisible;
 
     [ObservableProperty]
-    private bool registerAccountOnline = false;
+    private bool registerAccountOnline;
 
     [ObservableProperty]
-    private bool isBusy=false;
+    private bool isBusy;
 
     [ObservableProperty]
-    private bool showQuickLoginErrorMessage = false;
+    private bool showQuickLoginErrorMessage;
 
     [ObservableProperty]
-    private bool isLoginOnlineButtonClicked = false;
+    private bool isLoginOnlineButtonClicked;
 
     readonly string LoginDetectFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "QuickLogin.text");
 
@@ -105,60 +102,56 @@ public partial class LoginVM : ObservableObject
         }
     }
 
+    [ObservableProperty]
+    string selectedCountry;
+
     [RelayCommand]
-    public void CurrencyFromCountryPicked(string countryName)
+    public void CurrencyFromCountryPicked()
     {
         var dict = countryAndCurrency.LoadDictionaryWithCountryAndCurrency();
-        CurrentUser.UserCountry = countryName;
-        dict.TryGetValue(countryName, out userCurrency);
+        CurrentUser.UserCountry = SelectedCountry;
+        dict.TryGetValue(SelectedCountry, out userCurrency);
 
-        Debug.WriteLine($"The Country Name is {countryName}, and its currency is {userCurrency}");
+        Debug.WriteLine($"The Country Name is {SelectedCountry}, and its currency is {userCurrency}");
     }
 
     [RelayCommand]
     public async void GoToHomePageFromRegister()
     {
-        if (userCurrency is null) //currency is null b/c the country was not chosen
+        CurrentUser.Email = CurrentUser.Email.Trim();
+        CurrentUser.Id = Guid.NewGuid().ToString();
+        CurrentUser.UserCurrency = userCurrency;
+        CurrentUser.PocketMoney = PocketMoney;
+        CurrentUser.RememberLogin = true;
+        if (await userService.AddUserAsync(CurrentUser))
         {
-            ErrorMessagePicker = true;
+            await settingsService.SetPreference(nameof(CurrentUser.Id), CurrentUser.Id);
+            await settingsService.SetPreference("Username", CurrentUser.Username);
+            await settingsService.SetPreference(nameof(CurrentUser.UserCurrency), CurrentUser.UserCurrency);
+
+            if (!File.Exists(LoginDetectFile))
+            {
+                File.Create(LoginDetectFile).Close();
+            }
+
+            if (RegisterAccountOnline && Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
+            {
+                if (await userService.AddUserOnlineAsync(CurrentUser))
+                {
+                    await Shell.Current.DisplayAlert("User Registration", "Online Account Created !", "Ok");
+                    NavFunctions.GoToHomePage();
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert("User Registration", "Online Account Exists Already !", "Ok");
+                }
+            }
+
+            IsQuickLoginVisible = false;
         }
         else
         {
-            CurrentUser.Email = CurrentUser.Email.Trim();
-            CurrentUser.Id = Guid.NewGuid().ToString();
-            CurrentUser.UserCurrency = userCurrency;
-            CurrentUser.PocketMoney = PocketMoney;
-            CurrentUser.RememberLogin = true;
-            if (await userService.AddUserAsync(CurrentUser))
-            {
-                await settingsService.SetPreference(nameof(CurrentUser.Id), CurrentUser.Id);
-                await settingsService.SetPreference("Username", CurrentUser.Username);
-                await settingsService.SetPreference(nameof(CurrentUser.UserCurrency), CurrentUser.UserCurrency);
-
-                if (!File.Exists(LoginDetectFile))
-                {
-                    File.Create(LoginDetectFile).Close();
-                }
-
-                if (RegisterAccountOnline && Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
-                {
-                    if (await userService.AddUserOnlineAsync(CurrentUser))
-                    {
-                        await Shell.Current.DisplayAlert("User Registration", "Online Account Created !", "Ok");
-                        NavFunctions.GoToHomePage();
-                    }
-                    else
-                    {
-                        await Shell.Current.DisplayAlert("User Registration", "Online Account Exists Already !", "Ok");
-                    }
-                }
-
-                IsQuickLoginVisible = false;
-            }
-            else
-            {
-                Debug.WriteLine("Failed to add user");
-            }
+            Debug.WriteLine("Failed to add user");
         }
     }
 

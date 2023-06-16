@@ -34,6 +34,12 @@ public partial class UpSertExpenditurePageD : ContentPage
 
     private void UnitPrice_TextChanged(object sender, TextChangedEventArgs e)
     {
+        var s = sender as TextField;
+        if (s.Text?.Length == 0)
+        {
+            viewModel.SingleExpenditureDetails.UnitPrice = 0;
+        }
+        
         viewModel.UnitPriceOrQuantityChanged();
     }
 

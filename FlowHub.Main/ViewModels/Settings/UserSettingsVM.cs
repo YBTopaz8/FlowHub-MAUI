@@ -116,8 +116,8 @@ public partial class UserSettingsVM : ObservableObject
         if (dialogResult)
         {
             ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
-            ActiveUser.TotalExpendituresAmount = 0;
-            ActiveUser.PocketMoney = 0;
+            //ActiveUser.TotalExpendituresAmount = 0;
+            //ActiveUser.PocketMoney = 0;
             if (Taxes is not null)
             {
                 ActiveUser.Taxes = Taxes.ToList();
@@ -175,5 +175,4 @@ public partial class UserSettingsVM : ObservableObject
             Taxes.Remove(Selectedtax);
         }
     }
-
 }

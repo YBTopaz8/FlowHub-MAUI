@@ -15,8 +15,8 @@
         <Label FontSize="21" HorizontalOptions="Center" 
                    Margin="8"
                    toolkit:DockLayout.DockPosition="Top">
-                <Label.Text>
-                    <MultiBinding StringFormat="{} Current Balance is {0:n3} {1}">
+            <Label.Text>
+                    <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
                         <Binding Path="UserPocketMoney"/>
                         <Binding Path="UserCurrency"/>
                     </MultiBinding>
@@ -37,7 +37,7 @@
                                HorizontalOptions="Center">
             <Label FontSize="19" >
                 <Label.Text>
-                    <MultiBinding StringFormat="{} {2} Flow Outs worth {0:n3} {1}">
+                    <MultiBinding StringFormat="{} {2} Flow Outs worth {0:n2} {1}">
                         <Binding Path="TotalAmount"/>
                         <Binding Path="UserCurrency"/>
                         <Binding Path="TotalExpenditures"/>
@@ -127,7 +127,7 @@
                             <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
                                 <Label>
                                     <Label.Text>
-                                        <MultiBinding StringFormat="{} {0:n3} {1}">
+                                        <MultiBinding StringFormat="{} {0:n2} {1}">
                                             <Binding Path="AmountSpent"/>
                                             <Binding Path="Currency"/>
                                         </MultiBinding>

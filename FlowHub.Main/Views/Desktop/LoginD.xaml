@@ -26,6 +26,7 @@
                     
                 </VerticalStackLayout>
               
+                
                 <Border x:Name="LoginSignUpTab" 
                         BackgroundColor="{AppThemeBinding Dark=#1A1A1A, Light=#EEF1F6}" 
                         WidthRequest="655"
@@ -112,11 +113,14 @@
                             </material:TextField.Validations>
                         </material:TextField>
 
-                        <material:TextField Title="Password" Text="{Binding CurrentUser.Password}" Icon="{AppThemeBinding Dark= password_d.png, Light=password_l.png}" IsPassword="True">
-                            <material:TextField.Validations>
-                                <validation:RequiredValidation/>
-                            </material:TextField.Validations>
+                        <material:TextField Title="Password" Text="{Binding CurrentUser.Password}"
+                                            Icon="{AppThemeBinding Dark=password_d.png, Light=password_l.png}">
+                            <validation:RequiredValidation/>
+                            <material:TextField.Attachments>
+                                <material:TextFieldPasswordShowHideAttachment/>
+                            </material:TextField.Attachments>
                         </material:TextField>
+                        
                         <Button Text="Login" BackgroundColor="DarkSlateBlue" FontAttributes="Bold" 
                             FontSize="20"
                             TextColor="White" x:Name="LoginButton" input:FormView.IsSubmitButton="True"/>
@@ -154,19 +158,17 @@
                             </material:TextField.Validations>
                         </material:TextField>
 
-                        <material:PickerField Icon="{AppThemeBinding Dark=globe.png, Light=globe_l.png}" Title="Country" ItemsSource="{Binding CountryNamesList}"
-                                              x:Name="CountryPicker"
-                                              SelectedValueChanged="PickerField_SelectedValueChanged"/>
+                        <material:PickerField Grid.Column="1" Icon="{AppThemeBinding Dark=globe, Light=globe_l}"
+                                              AccentColor="DarkSlateBlue"
+                                              Title="Select Your Country" ItemsSource="{Binding CountryNamesList}"
+                                              SelectedItem="{Binding SelectedCountry}"
+                                              SelectedValueChangedCommand="{Binding CurrencyFromCountryPickedCommand}"
+                                              BackgroundColor="Transparent">
+                            <material:PickerField.Validations>
+                                <validation:RequiredValidation/>
+                            </material:PickerField.Validations>
+                        </material:PickerField>
 
-                        <Border BackgroundColor="{AppThemeBinding Dark= #201F24, Light=#DBE1ED}" StrokeThickness="1.1" Stroke="Darkslateblue" Padding="5" IsVisible="false">
-                            <Grid ColumnDefinitions="30,*">
-                                <Image Source="{AppThemeBinding Dark=globe.png, Light=globe_l.png}" Grid.Column="0" HeightRequest="23"/>
-                                <Picker Grid.Column="1"
-                                        Title="Select your Country" ItemsSource="{Binding CountryNamesList}" SelectedIndexChanged="Picker_SelectedIndexChanged"/>
-                            </Grid>
-
-                        </Border>
-                        <Label Text="Country is required!" TextColor="Red" IsVisible="{Binding ErrorMessagePicker}"/>
 
                         <Grid ColumnDefinitions="340,*" >
                             <material:CheckBox Grid.Column="0" TextFontSize="16"

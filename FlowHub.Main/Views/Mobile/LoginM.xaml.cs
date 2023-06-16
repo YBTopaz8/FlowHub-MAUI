@@ -1,6 +1,8 @@
+using CommunityToolkit.Maui.Core.Platform;
 using FlowHub.Main.ViewModels;
 using Microsoft.Maui.Controls.Platform;
 using System.Diagnostics;
+using UraniumUI.Material.Controls;
 
 namespace FlowHub.Main.Views.Mobile;
 
@@ -90,12 +92,6 @@ public partial class LoginM : ContentPage
         }
     }
 
-    private void Picker_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        string selectedCountry = CountryPicker.SelectedItem.ToString();
-        viewModel.CurrencyFromCountryPickedCommand.Execute(selectedCountry);
-    }
-
     private void SwitchToLoginPageTapped(object sender, TappedEventArgs e)
     {
         LoginSignUpTab.IsVisible = true;
@@ -112,6 +108,10 @@ public partial class LoginM : ContentPage
 
     private async void LoginUnFocused_Tapped(object sender, TappedEventArgs e)
     {
+        TextField s = new();
+        Entry ss = new();
+        Image sss = new();
+
         await ShowLoginForm();
     }
 

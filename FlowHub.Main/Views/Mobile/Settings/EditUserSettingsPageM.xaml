@@ -6,9 +6,11 @@
              xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
              xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
              xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
-             xmlns:viewModel="clr-namespace:FlowHub.Main.ViewModels.Settings"      
+             xmlns:viewModel="clr-namespace:FlowHub.Main.ViewModels.Settings"       
+             xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              x:DataType="viewModel:UserSettingsVM"
-             Title="Edit Profile">
+             Title="Edit Profile"
+             x:Name="settingsPage">
     <toolkit:DockLayout>
         <VerticalStackLayout toolkit:DockLayout.DockPosition="Top" >
             <Image Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}" HeightRequest="90"/>
@@ -22,12 +24,38 @@
             <material:TextField Title="Email" Text="{Binding ActiveUser.Email}">
                 <validation:RequiredValidation Message="Please enter your Email"/>
             </material:TextField>
-            <material:PickerField Title="Country" ItemsSource="{Binding CountryNamesList}"
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5">
+                <material:PickerField Title="Country" ItemsSource="{Binding CountryNamesList}" Grid.Column="0"
                                       toolkit:DockLayout.DockPosition="Top"
-                                      x:Name="CountryPicker" SelectedValueChanged="CountryPicker_SelectedValueChanged">
+                                      x:Name="CountryPicker"
+                                      SelectedValueChanged="CountryPicker_SelectedValueChanged">
                     <validation:RequiredValidation Message="Please Select a Country"/>
-            </material:PickerField>
-            <Label Text="{Binding SelectCountryCurrency}" HorizontalTextAlignment="End" FontSize="16" FontAttributes="Bold"/>
+                </material:PickerField>
+                <Label Text="{Binding SelectCountryCurrency}" Grid.Column="1" VerticalOptions="Center" FontSize="16" FontAttributes="Bold"/>
+            </Grid>
+
+            <ListView ItemsSource="{Binding Taxes}" Header="Taxes" SeparatorVisibility="None" VerticalScrollBarVisibility="Never">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="models:TaxModel">
+                        <ViewCell>
+                            <Label FontSize="15" FontAttributes="Bold">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={x:Reference settingsPage}, 
+                                                            Path=BindingContext.ViewEditDeleteTaxCommand}" 
+                                                                              CommandParameter="{Binding .}"/>
+                                </Label.GestureRecognizers>
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{}{0} : {1} %">
+                                        <Binding Path="Name"/>
+                                        <Binding Path="Rate"/>
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
             <ImageButton Source="save_icon_d" input:FormView.IsSubmitButton="True"/>
         </input:FormView>
         

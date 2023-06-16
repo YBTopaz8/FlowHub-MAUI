@@ -74,14 +74,14 @@
                             />
                     </HorizontalStackLayout>
                     <HorizontalStackLayout>
-                        <Label Text="Amount Spent:"
+                        <Label Text="Amount Spent :"
                            FontSize="18"
                             HorizontalOptions="Start"
                             />
                         <Label Text="{Binding ExpendituresDetails.AmountSpent, StringFormat='{0:n2}'} "
                            FontSize="18"
                             HorizontalOptions="Start"
-                           Margin="10,0,0,0"
+                           Margin="5,0,0,0"
                             />
                         <Label Text="{Binding UserCurrency}"
                            FontSize="18"

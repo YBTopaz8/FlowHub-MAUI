@@ -3,21 +3,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"       
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:viewModel="clr-namespace:FlowHub.Main.ViewModels.Settings"      
-             x:Class="FlowHub.Main.Views.Mobile.Settings.UserSettingsPageM"
+             x:Class="FlowHub.Main.Views.Mobile.Settings.UserSettingsPageM"             
+             xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              x:DataType="viewModel:UserSettingsVM"
              Title="My Profile">
 
     <toolkit:DockLayout>
         <Border toolkit:DockLayout.DockPosition="Top" Stroke="transparent" BackgroundColor="{AppThemeBinding Light=White, Dark=#171717}" StrokeShape="RoundRectangle 0,0,25,25">
             <VerticalStackLayout>
-
                 <Grid RowDefinitions="70,*" Margin="5">
-                    
-                    <HorizontalStackLayout Grid.Column="0" Spacing="15">  <!--Section to show User Image, Name and email-->
+
+                    <HorizontalStackLayout Grid.Column="0" Spacing="15">
+                        <!--Section to show User Image, Name and email-->
                         <Image Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}" HeightRequest="60"/>
                         <VerticalStackLayout Margin="3" Spacing="10">
                             <Label Text="{Binding UserName}" FontSize="20" FontAttributes="Bold"/>
-                            
+
                             <HorizontalStackLayout Spacing="5">
                                 <Image Source="{AppThemeBinding Light=email_dsb,Dark=email_dsb}" HeightRequest="20"/>
                                 <Label Text="{Binding UserEmail}"/>
@@ -26,7 +27,7 @@
 
                         </VerticalStackLayout>
                     </HorizontalStackLayout>
-                    
+
                     <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End">
                         <Border HeightRequest="40" WidthRequest="40"
                                 BackgroundColor="{AppThemeBinding Dark=#201F24}"
@@ -37,37 +38,29 @@
                                     Opacity="0.1"/>
                             </Border.Shadow>
                             <ImageButton HeightRequest="25" Source="{AppThemeBinding Dark=edit_d, Light=edit_l}" 
-                                         Command="{Binding GoToEditUserSettingsPageCommand}"/>
+                                            Command="{Binding GoToEditUserSettingsPageCommand}"/>
                         </Border>
                     </HorizontalStackLayout>
                 </Grid>
 
-                <Grid ColumnDefinitions="150,3,150,3,100" HeightRequest="50" ColumnSpacing="5" Margin="0,25,0,8">
-                    <Grid.Resources>
-                        <ResourceDictionary>
-                            <Style TargetType="Rectangle">
-                                <Setter Property="WidthRequest" Value="2"/>
-                            </Style>
-                            <Style TargetType="Label">
-                                <Setter Property="HorizontalTextAlignment" Value="Center"/>
-                            </Style>
-                        </ResourceDictionary>
-                    </Grid.Resources>
-                    
-                    <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center" Spacing="5"> <!--For total Expenditures-->
+                <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Spacing="10">
+                    <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
+                        <!--For total Expenditures-->
                         <Label FontAttributes="Bold">
                             <Label.Text>
-                                <MultiBinding StringFormat="{} {0:n3} {1}">
+                                <MultiBinding StringFormat="{} {0:n2} {1}">
                                     <Binding Path="TotalExpendituresAmount"/>
                                     <Binding Path="UserCurrency"/>
                                 </MultiBinding>
                             </Label.Text>
                         </Label>
-                        <Label Text="Total Flow Out" FontSize="13" />
+                        <Label Text="Total Flow Out" HorizontalOptions="Center" FontSize="13" />
                     </VerticalStackLayout>
+
                     <Rectangle Grid.Column="1" Fill="darkslateblue"/>
 
-                    <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center" Spacing="5"> <!--For Total Income-->
+                    <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
+                        <!--For Total Income-->
                         <Label FontAttributes="Bold" >
                             <Label.Text>
                                 <MultiBinding StringFormat="{} {0:n3} {1}">
@@ -78,57 +71,59 @@
                         </Label>
                         <Label Text="Total Flow In" />
                     </VerticalStackLayout>
-                    <Rectangle Grid.Column="3" Fill="darkslateblue"/>
 
-                    <VerticalStackLayout Grid.Column="4" HorizontalOptions="End" Spacing="5"> <!--For total debts-->
+                    <Rectangle Fill="darkslateblue"/>
+
+                    <VerticalStackLayout HorizontalOptions="End" Spacing="5">
+                        <!--For total debts-->
                         <Label FontAttributes="Bold" >
-                        <Label.Text>
-                            <MultiBinding StringFormat="{} XXX {0}">
-                                <Binding Path="UserCurrency"/>
-                            </MultiBinding>
-                        </Label.Text>
+                            <Label.Text>
+                                <MultiBinding StringFormat="{} XXX {0}">
+                                    <Binding Path="UserCurrency"/>
+                                </MultiBinding>
+                            </Label.Text>
                         </Label>
                         <Label Text="Total Debts" />
                     </VerticalStackLayout>
-                </Grid>
+                </HorizontalStackLayout>
 
                 <Label HorizontalOptions="Center" Margin="5" FontSize="15" FontAttributes="Bold">
                     <Label.Text>
-                        <MultiBinding StringFormat="{} Current Balance : {0:n3} {1}">
+                        <MultiBinding StringFormat="{} Current Balance : {0:n2} {1}">
                             <Binding Path="PocketMoney"/>
                             <Binding Path="UserCurrency"/>
                         </MultiBinding>
                     </Label.Text>
                 </Label>
-                
+
             </VerticalStackLayout>
         </Border>
-
-            <VerticalStackLayout  Padding="10" BackgroundColor="{AppThemeBinding Light=#EEF1F6}">
+        <ScrollView VerticalScrollBarVisibility="Always">
+            <VerticalStackLayout Padding="10" BackgroundColor="{AppThemeBinding Light=#EEF1F6}">
                 <VerticalStackLayout.Resources>
                     <ResourceDictionary>
                         <Style TargetType="Rectangle">
-                        <Setter Property="Fill" Value="{AppThemeBinding Light=#E7EBF4, Dark=#1E1E1E}"/>
+                            <Setter Property="Fill" Value="{AppThemeBinding Light=#E7EBF4, Dark=#1E1E1E}"/>
                             <Setter Property="HeightRequest" Value="3"/>
                         </Style>
-                        
+
                     </ResourceDictionary>
                 </VerticalStackLayout.Resources>
 
                 <VerticalStackLayout Margin="5,15" Spacing="10">
-                    <Label Text="Name" FontSize="11" />
+                    <Label Text="Name" FontSize="13" />
                     <Label Text="{Binding UserName}" FontSize="15" FontAttributes="Bold"/>
                 </VerticalStackLayout>
                 <Rectangle />
 
-            <VerticalStackLayout Margin="5,15" Spacing="10">
-                    <Label Text="Email" FontSize="11" />
+                <VerticalStackLayout Margin="5,15" Spacing="10">
+                    <Label Text="Email" FontSize="13" />
                     <Label Text="{Binding UserEmail}" FontSize="15" FontAttributes="Bold"/>
                 </VerticalStackLayout>
                 <Rectangle />
-
+                
                 <VerticalStackLayout Margin="5,15" Spacing="10">
-                    <Label Text="Country" FontSize="11" />
+                    <Label Text="Country" FontSize="13" />
                     <Label Text="{Binding UserCountry}" FontSize="15" FontAttributes="Bold"/>
                 </VerticalStackLayout>
                 <Rectangle/>
@@ -138,9 +133,30 @@
                     <Label Text="{Binding UserCurrency}" FontSize="15" FontAttributes="Bold"/>
                 </VerticalStackLayout>
                 <Rectangle />
-            <ImageButton Source="{AppThemeBinding Dark=logout_icon_d.png, Light=logout_icon_l.png}" HorizontalOptions="Center" HeightRequest="80" Command="{Binding LogOutUserCommand}"/>
 
-        </VerticalStackLayout>
+                <VerticalStackLayout Margin="5,15" Spacing="10">
+                    <Label Text="Taxes" FontSize="13"/>
+                    <ListView ItemsSource="{Binding ActiveUser.Taxes}" SelectionMode="None" SeparatorVisibility="None" VerticalScrollBarVisibility="Never">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="models:TaxModel">
+                                <ViewCell>
+                                    
+                                    <Label FontSize="15" FontAttributes="Bold">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{} {0} : {1} %">
+                                                <Binding Path="Name"/>
+                                                <Binding Path="Rate"/>
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </VerticalStackLayout>
+                <ImageButton Source="{AppThemeBinding Dark=logout_icon_d.png, Light=logout_icon_l.png}" HorizontalOptions="Center" HeightRequest="80" Command="{Binding LogOutUserCommand}"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
     </toolkit:DockLayout>
-
 </ContentPage>

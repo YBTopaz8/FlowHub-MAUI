@@ -10,13 +10,14 @@
              xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Expenditures"             
              x:DataType="viewModels:UpSertExpenditureVM"             
-             Title="{Binding PageTitle}">
+             Title="{Binding PageTitle}"
+             x:Name="page">
 
     <toolkit:DockLayout>
         <VerticalStackLayout toolkit:DockLayout.DockPosition="Top" >
             <Label HorizontalOptions="End" Margin="5" FontAttributes="Bold">
                 <Label.Text>
-                    <MultiBinding StringFormat="{} Balance : {0:n3} {1}">
+                    <MultiBinding StringFormat="{} Balance : {0:n2} {1}">
                         <Binding Path="ActiveUser.PocketMoney"/>
                         <Binding Path="ActiveUser.UserCurrency"/>
                     </MultiBinding>
@@ -25,13 +26,21 @@
             <Label HorizontalOptions="End" Margin="5,0,5,5" FontAttributes="Italic"
                    TextColor="AliceBlue">
                 <Label.Text>
-                    <MultiBinding StringFormat="{} Resulting Balance : {0:n3} {1}">
+                    <MultiBinding StringFormat="{} Resulting Balance : {0:n2} {1}">
                         <Binding Path="ResultingBalance"/>
                         <Binding Path="ActiveUser.UserCurrency"/>
                     </MultiBinding>
                 </Label.Text>
             </Label>
-
+            <Label HorizontalOptions="End" Margin="5,0,5,5" FontAttributes="Italic" FontSize="13"
+                                TextColor="AliceBlue">
+                <Label.Text>
+                    <MultiBinding StringFormat="{} Flow Out's Amount : {0:n2} {1}">
+                        <Binding Path="TotalAmountSpent"/>
+                        <Binding Path="ActiveUser.UserCurrency"/>
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
         </VerticalStackLayout>
         <HorizontalStackLayout toolkit:DockLayout.DockPosition="Bottom"
                     HorizontalOptions="Center" Margin="5">
@@ -55,13 +64,12 @@
 
             </VerticalStackLayout>
 
-            <Grid ColumnDefinitions="294,10*">
+            <Grid ColumnDefinitions="280,10*">
 
                 <material:TextField Grid.Column="0" Title="Unit Price"
-                                    x:Name="UnitPrice"
+                                    x:Name="UnitPrice" Focused="UnitPrice_Focused"
                                     TextChanged="UnitPriceOrQty_TextChanged"
-                                    Text="{Binding SingleExpenditureDetails.UnitPrice}" Keyboard="Numeric" >
-
+                                    Text="{Binding SingleExpenditureDetails.UnitPrice}" Keyboard="Numeric">
                     <material:TextField.Validations>
                         <validation:RequiredValidation/>
                         <validation:MinValueValidation MinValue="0.1" Message="The Unit Price cannot be 0 or Less"/>
@@ -82,14 +90,32 @@
                 
 
             </Grid>
-            <material:TextField Title="Reason" Text="{Binding SingleExpenditureDetails.Reason}">
-                <material:TextField.Validations>
+            <material:EditorField Title="Reason" Text="{Binding SingleExpenditureDetails.Reason}">
+                <material:EditorField.Validations>
                     <validation:RequiredValidation/>
-                </material:TextField.Validations>
-            </material:TextField>
+                </material:EditorField.Validations>
+            </material:EditorField>
+
+            <material:CheckBox Text="Taxes" BorderColor="Gray" Margin="5,0,10,0" IsChecked="{Binding IsAddTaxesChecked}" x:Name="AddTaxCheckBox" CheckChanged="AddTax_CheckChanged"/>
             
+            <ListView ItemsSource="{Binding ActiveUser.Taxes}" IsVisible="{Binding IsAddTaxesChecked}" x:Name="TaxesList">
+                <ListView.ItemTemplate >
+                    <DataTemplate x:DataType="models:TaxModel">
+                        <ViewCell>
+                            <material:CheckBox BorderColor="Gray" Margin="0,2" IsChecked="{Binding IsChecked}" CheckChanged="TaxCheckbox_CheckChanged">
+                                <material:CheckBox.Text>
+                                    <MultiBinding StringFormat="{} {0} : {1} %">
+                                        <Binding Path="Name"/>
+                                        <Binding Path="Rate"/>
+                                    </MultiBinding>
+                                </material:CheckBox.Text>
+                            </material:CheckBox>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
             <material:CheckBox IsChecked="{Binding AddAnotherExp}" IsVisible="{Binding IsAdd}"
-                                   CheckChanged="CheckBox_CheckChanged"
+                                   Margin="5,0,10,0"
                                    Text="Save and Add another" />
 
             
