@@ -4,6 +4,10 @@ using FlowHub.DataAccess.IRepositories;
 using FlowHub.Models;
 using FlowHub.Main.Platforms.NavigationMethods;
 using System.Diagnostics;
+using CommunityToolkit.Maui.Views;
+using FlowHub.Main.ViewModels.Expenditures;
+using FlowHub.Main.Views;
+using FlowHub.Main.Utilities;
 
 //This is the view model for the HOME PAGE
 namespace FlowHub.Main.ViewModels;
@@ -35,7 +39,7 @@ public partial class HomePageVM : ObservableObject
     [ObservableProperty]
     public string userCurrency;
     [ObservableProperty]
-    public double pocketMoney = 0;
+    public double pocketMoney;
 
     [ObservableProperty]
     private UsersModel activeUser = new ();
@@ -74,18 +78,25 @@ public partial class HomePageVM : ObservableObject
     {
         if (ActiveUser is null)
         {
+            Debug.WriteLine("Can't Open PopUp");
             await Shell.Current.DisplayAlert("Wait", "Cannot go", "Ok");
         }
         else
         {
-            Dictionary<string, object> navParam = new()
+            var newExpenditure = new ExpendituresModel() { DateSpent = DateTime.Now };
+            string pageTitle = "Add New Flow Out";
+            bool isAdd = true;
+
+            var NewUpSertVM = new UpSertExpenditureVM(_expendituresService, userService, newExpenditure, pageTitle, isAdd, ActiveUser);
+            var UpSertResult = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new UpSertExpendituresPopUp(NewUpSertVM));
+
+            if (UpSertResult.Result == PopupResult.OK)
             {
-                { "SingleExpenditureDetails", new ExpendituresModel { DateSpent = DateTime.Now } },
-                { "PageTitle", new string("Add New Flow Out") },
-                { "IsAdd", true },
-                { "ActiveUser", ActiveUser }
-            };
-            NavFunction.FromHomePageToUpsertExpenditure(navParam);
+                ExpendituresModel exp = (ExpendituresModel)UpSertResult.Data;
+                //add logic if this exp is the latest in terms of datetime
+                ExpendituresDetails = exp;
+                PocketMoney -= exp.AmountSpent;
+            }
         }
     }
 }

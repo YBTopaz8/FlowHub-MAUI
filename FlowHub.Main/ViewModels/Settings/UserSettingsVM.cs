@@ -7,6 +7,7 @@ using FlowHub.DataAccess.IRepositories;
 using FlowHub.Main.AdditionalResourcefulAPIClasses;
 using FlowHub.Main.Platforms.NavigationMethods;
 using FlowHub.Main.PopUpPages;
+using FlowHub.Main.Utilities;
 using FlowHub.Main.Views.Mobile.Settings;
 using FlowHub.Models;
 using System.Collections.ObjectModel;

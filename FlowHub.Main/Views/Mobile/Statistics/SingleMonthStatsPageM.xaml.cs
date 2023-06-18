@@ -25,7 +25,7 @@ public partial class SingleMonthStatsPageM : ContentPage
 		LineChart.Series = viewModel.LineSeries;
 		SelectedTitle.Text = "Biggest Flow Out Details";
 	}
-	ChartPoint obj = null;
+	ChartPoint obj;
     private void Chart_ChartPointPointerDown(IChartView chart, ChartPoint point)
     {
 		if (point is not null)

@@ -5,8 +5,7 @@
              x:Class="FlowHub.Main.PopUpPages.InputPopUpPage"
              xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"  
              xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
-             CanBeDismissedByTappingOutsideOfPopup="False"
-            
+             CanBeDismissedByTappingOutsideOfPopup="False"            
              Size="300,180"
              Color="Transparent">
     <Border

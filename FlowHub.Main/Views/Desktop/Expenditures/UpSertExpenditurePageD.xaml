@@ -18,8 +18,7 @@
             <Style TargetType="Label">
                 <Setter Property="FontSize" Value="12"/>
                 <Setter Property="FontAttributes" Value="Bold"/>
-            </Style>
-            
+            </Style>            
 
         </ResourceDictionary>
     </ContentPage.Resources>

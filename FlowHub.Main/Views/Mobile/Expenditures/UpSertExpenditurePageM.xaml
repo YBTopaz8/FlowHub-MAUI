@@ -114,9 +114,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <material:CheckBox IsChecked="{Binding AddAnotherExp}" IsVisible="{Binding IsAdd}"
-                                   Margin="5,0,10,0"
-                                   Text="Save and Add another" />
+        
 
             
             <ImageButton Source="{AppThemeBinding Dark=save_icon_d, Light=save_icon_l}" input:FormView.IsSubmitButton="True"/>

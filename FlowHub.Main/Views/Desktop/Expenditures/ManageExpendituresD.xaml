@@ -69,7 +69,7 @@
         <VerticalStackLayout HorizontalOptions="Start" toolkit:DockLayout.DockPosition="Right">
             <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png}" HeightRequest="60" 
                     BackgroundColor="Transparent"
-                    Command="{Binding GoToAddExpenditurePageCommand}"
+                    Command="{Binding ShowAddExpenditurePopUpCommand}"
                     ToolTipProperties.Text="Add New Income"/>
             <ImageButton Margin="10" Source="save_to_pdf_d.png" HeightRequest="60"
                         ToolTipProperties.Text="Click to Save to PDF" 
@@ -110,7 +110,9 @@
                         </material:DataGridColumn.TitleView>
                     <material:DataGridColumn.CellItemTemplate>
                         <DataTemplate>                            
-                            <Label Text="{Binding DateSpent, StringFormat='{0:MMMM dd, yyyy}'}"/>                            
+                            <Label Text="{Binding DateSpent, StringFormat='{0:MMMM dd, yyyy}'}"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"/>
                         </DataTemplate>
                     </material:DataGridColumn.CellItemTemplate>
                 </material:DataGridColumn>
@@ -120,7 +122,8 @@
                 <material:DataGridColumn Title="Amount Spent">
                     <material:DataGridColumn.CellItemTemplate>
                         <DataTemplate>
-                            <Label>
+                                <Label VerticalOptions="Center"
+                                   HorizontalOptions="Center">
                                 <Label.Text>
                                     <MultiBinding StringFormat="{} {0:n2} {1}">
                                         <Binding Path="AmountSpent"/>
@@ -138,7 +141,7 @@
                                 <HorizontalStackLayout >
                                     <ImageButton Source="{AppThemeBinding Light=edit_l.png, Dark=edit_d.png}" WidthRequest="50"
                                                  Command="{Binding Source={x:Reference page}, 
-                                            Path=BindingContext.GoToEditExpenditurePageCommand}"  
+                                            Path=BindingContext.ShowEditExpenditurePopUpCommand}"  
                                                    CommandParameter="{Binding .}" />
                                     <ImageButton Source="{AppThemeBinding Light=delete_l.png, Dark=delete_d.png}" WidthRequest="50" 
                                                  Command="{Binding Source={x:Reference page}, 

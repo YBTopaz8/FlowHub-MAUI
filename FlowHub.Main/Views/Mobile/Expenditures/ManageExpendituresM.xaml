@@ -134,7 +134,7 @@
             
         </Grid>
         
-        <Grid toolkit:DockLayout.DockPosition="Bottom" HeightRequest="65" Margin="10,10" >
+        <Grid toolkit:DockLayout.DockPosition="Bottom" HeightRequest="65" Margin="10,5" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -145,17 +145,18 @@
                          HorizontalOptions="Start" IsVisible="{Binding ShowStatisticBtn}"
                          Grid.Column="0" VerticalOptions="Start" Command="{Binding GoToSpecificStatsPageCommand}"/>
             <!--IsVisible="{Binding ShowStatisticBtn}"-->
-            <Label FontSize="17" Margin="5" Grid.Column="0" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="End">
+            <Label FontSize="17" Margin="3" Grid.Column="0" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="End">
                 <Label.Text>
-                    <MultiBinding StringFormat="{} {2} Flow Out(s) worth {0:n3} {1}">
+                    <MultiBinding StringFormat="{} {2} Flow Out(s) worth {0:n2} {1}">
                         <Binding Path="TotalAmount"/>
                         <Binding Path="UserCurrency"/>
                         <Binding Path="TotalExpenditures"/>
                     </MultiBinding>
                 </Label.Text>
             </Label>
+            
 
-            <ImageButton IsVisible="True" Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding GoToAddExpenditurePageCommand}"
+            <ImageButton IsVisible="True" Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding ShowAddExpenditurePopUpCommand}"
                          VerticalOptions="Start" HorizontalOptions="End" Margin="0,0,10,0" Grid.Column="2"/>
 
             <ImageButton IsVisible="False" IsEnabled="False" Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding DropCollectionCommand}"
@@ -180,7 +181,7 @@
                                 <SwipeView.LeftItems>                                    
                                     <SwipeItem 
                                         Command="{Binding Source={x:Reference Page}, 
-                                            Path=BindingContext.GoToEditExpenditurePageCommand}"  
+                                            Path=BindingContext.ShowEditExpenditurePopUpCommand}"  
                                                    CommandParameter="{Binding .}" 
                                             IconImageSource="{AppThemeBinding Dark= edit_d.png, Light= edit_l.png}" 
                                                BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>

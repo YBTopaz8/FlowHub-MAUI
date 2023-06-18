@@ -8,50 +8,57 @@ using CommunityToolkit.Maui.Core;
 using FlowHub.Main.Platforms.NavigationMethods;
 using CommunityToolkit.Maui.Views;
 using FlowHub.Main.PopUpPages;
+using FlowHub.Main.Utilities;
 
 namespace FlowHub.Main.ViewModels.Expenditures;
 
-[QueryProperty(nameof(SingleExpenditureDetails), "SingleExpenditureDetails")]
-[QueryProperty(nameof(PageTitle), nameof(PageTitle))]
-[QueryProperty(nameof(ActiveUser), "ActiveUser")]
-[QueryProperty(nameof(IsAdd), "IsAdd")]
+//[QueryProperty(nameof(SingleExpenditureDetails), "SingleExpenditureDetails")]
+//[QueryProperty(nameof(PageTitle), nameof(PageTitle))]
+//[QueryProperty(nameof(ActiveUser), "ActiveUser")]
+//[QueryProperty(nameof(IsAdd), "IsAdd")]
 public partial class UpSertExpenditureVM : ObservableObject
 {
     private readonly IExpendituresRepository _expenditureService;
     private readonly IUsersRepository userService;
     private readonly ManageExpendituresNavs NavFunctions = new();
-    public UpSertExpenditureVM(IExpendituresRepository expendituresRepository, IUsersRepository usersRepository)
+    public UpSertExpenditureVM(IExpendituresRepository expendituresRepository, IUsersRepository usersRepository, ExpendituresModel singleExpendituresDetails, string pageTitle, bool isAdd, UsersModel activeUser)
     {
         _expenditureService = expendituresRepository;
         userService = usersRepository;
+        SingleExpenditureDetails = singleExpendituresDetails;
+        PageTitle = pageTitle;
+        IsAdd = isAdd;
+        ActiveUser = activeUser;
     }
 
     [ObservableProperty]
-    private ExpendituresModel _SingleExpenditureDetails = new(){ DateSpent = DateTime.Now };
+    ExpendituresModel singleExpenditureDetails = new(){ DateSpent = DateTime.Now };
 
     [ObservableProperty]
-    private string _pageTitle;
+    string _pageTitle;
 
     [ObservableProperty]
-    private UsersModel _activeUser;
+    UsersModel _activeUser;
 
     [ObservableProperty]
-    private bool isAdd;
+    bool isAdd;
 
     [ObservableProperty]
-    private bool addAnotherExp;
+    double totalAmountSpent;
 
     [ObservableProperty]
-    public double totalAmountSpent;
+    double resultingBalance;
 
     [ObservableProperty]
-    public double resultingBalance;
+    PopupResult thisPopUpResult;
+    [ObservableProperty]
+    bool closePopUp;
 
-    private int expCounter;
     private double _initialUserPocketMoney;
     private double _initialExpenditureAmount;
 
     private double _initialTotalExpAmount;
+
 
     [RelayCommand]
     public void PageLoaded()
@@ -63,7 +70,7 @@ public partial class UpSertExpenditureVM : ObservableObject
         {
             IsAddTaxesChecked = true;
         }
-        expCounter = 1;
+        
         ResultingBalance = ActiveUser.PocketMoney;
         TotalAmountSpent = SingleExpenditureDetails.AmountSpent;
     }
@@ -73,41 +80,27 @@ public partial class UpSertExpenditureVM : ObservableObject
     {
         if (ResultingBalance < 0)
         {
+
+            ThisPopUpResult = PopupResult.Cancel;
+            ClosePopUp = true;
             await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Not Enough balance to save"));
             return;
         }
-
-        bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You Want To Save?")))!;
-        if (!response)
-        {
-            Debug.WriteLine("Action cancelled by user");
-            return;
-        }
-
         CancellationTokenSource cancellationTokenSource = new();
 
         if (SingleExpenditureDetails.Id is not null)
         {
             UpdateExpenditureAsync(14, cancellationTokenSource);
-            return;
         }
-
-        string ToastNotifMessage = (await AddExpenditureAsync(SingleExpenditureDetails)) ? "Flow Out Added" : "Nothing was added";
-
-        IToast toast = Toast.Make(ToastNotifMessage, ToastDuration.Short, 14);
-        await toast.Show(cancellationTokenSource.Token);
-
-        if (!AddAnotherExp)
+        else
         {
-            NavFunctions.ReturnOnce();
-            return;
+            await AddExpenditureAsync(14, cancellationTokenSource);
         }
-
-        expCounter++;
-        PageTitle = $"Add Flow Out N° {expCounter}";
-        SingleExpenditureDetails = new() { DateSpent = DateTime.Now };
-        AddAnotherExp = false;
+        ThisPopUpResult = PopupResult.OK;
+        ClosePopUp = true;
     }
+
+
     private async void UpdateExpenditureAsync( double fontsize, CancellationTokenSource tokenSource)
     {
         double difference = TotalAmountSpent - _initialExpenditureAmount;
@@ -124,28 +117,31 @@ public partial class UpSertExpenditureVM : ObservableObject
 
             await UpdateUserAsync(FinalTotalExp);
 
-            const string toastNotifMessage = "Expenditure Updated";
+            const string toastNotifMessage = "Flow Out Updated";
             var toast = Toast.Make(toastNotifMessage, ToastDuration.Short, fontsize);
             await toast.Show(tokenSource.Token);
 
-            NavFunctions.ReturnOnce();
+            ClosePopUp = true;
         }
     }
 
-    private async Task<bool> AddExpenditureAsync(ExpendituresModel expenditure)
+    private async Task<bool> AddExpenditureAsync(double fontSize, CancellationTokenSource tokenSource)
     {
-        expenditure.Currency = ActiveUser.UserCurrency;
+        SingleExpenditureDetails.Currency = ActiveUser.UserCurrency;
+        SingleExpenditureDetails.AmountSpent = TotalAmountSpent;
+        SingleExpenditureDetails.Id = Guid.NewGuid().ToString();
+        SingleExpenditureDetails.AddedDateTime = DateTime.UtcNow;
+        SingleExpenditureDetails.UserId = userService.OfflineUser.UserIDOnline;
 
-        expenditure.AmountSpent = TotalAmountSpent;
-        expenditure.Id = Guid.NewGuid().ToString();
-        expenditure.AddedDateTime = DateTime.UtcNow;
-
-        expenditure.UserId = userService.OfflineUser.UserIDOnline;
-
-        if (!await _expenditureService.AddExpenditureAsync(expenditure))
+        if (!await _expenditureService.AddExpenditureAsync(SingleExpenditureDetails))
+        {
             return false;
+        }
         await UpdateUserAsync(TotalAmountSpent);
 
+        const string toastNotifMessage = "Flow Out Added";
+        var toast = Toast.Make(toastNotifMessage, ToastDuration.Short, fontSize);
+        await toast.Show(tokenSource.Token);
         return true;
     }
 
@@ -160,7 +156,9 @@ public partial class UpSertExpenditureVM : ObservableObject
     [RelayCommand]
     public void CancelBtn()
     {
-        NavFunctions.ReturnOnce();
+        Debug.WriteLine("Action cancelled by user");
+        ThisPopUpResult = PopupResult.Cancel;
+        ClosePopUp = true;
     }
 
     public void UnitPriceOrQuantityChanged()
@@ -177,38 +175,6 @@ public partial class UpSertExpenditureVM : ObservableObject
     [ObservableProperty]
     bool isAddTaxesChecked;
 
-    public void AddTax(TaxModel tax)
-    {
-        SingleExpenditureDetails.Taxes ??= new List<TaxModel>();
-
-        tax.IsChecked = true;
-        if (!SingleExpenditureDetails.Taxes.Exists(t => t.Name == tax.Name))
-        {
-            double taxAmount = (tax.Rate / 100) * SingleExpenditureDetails.AmountSpent;
-            TotalAmountSpent += taxAmount;
-            ResultingBalance -= taxAmount;
-            SingleExpenditureDetails.Taxes.Add(tax);
-        }
-    }
-
-    public void ApplyTax()
-    {
-        double totalTaxPercentage = SingleExpenditureDetails.Taxes?.Sum(tax => tax.Rate) ?? 0;
-        var taxedAmount = SingleExpenditureDetails.AmountSpent * (totalTaxPercentage / 100);
-        TotalAmountSpent = SingleExpenditureDetails.AmountSpent + taxedAmount;
-        ResultingBalance -= taxedAmount;
-    }
-    public void RemoveTax(TaxModel tax)
-    {
-        tax.IsChecked = false;
-        if (SingleExpenditureDetails.Taxes.Any(t => t.Name == tax.Name))
-        {
-            double taxMount = (tax.Rate / 100) * SingleExpenditureDetails.AmountSpent;
-            TotalAmountSpent -= taxMount;
-            ResultingBalance += taxMount;
-            SingleExpenditureDetails.Taxes.RemoveAll(t=>t.Name == tax.Name);
-        }
-    }
 
     [RelayCommand]
     public async void HardResetUserBalance()
@@ -241,5 +207,38 @@ public partial class UpSertExpenditureVM : ObservableObject
     public void GoToManageExpenditures()
     {
         NavFunctions.ReturnOnce();
+    }
+
+    public void AddTax(TaxModel tax)
+    {
+        SingleExpenditureDetails.Taxes ??= new List<TaxModel>();
+
+        tax.IsChecked = true;
+        if (!SingleExpenditureDetails.Taxes.Exists(t => t.Name == tax.Name))
+        {
+            double taxAmount = (tax.Rate / 100) * SingleExpenditureDetails.AmountSpent;
+            TotalAmountSpent += taxAmount;
+            ResultingBalance -= taxAmount;
+            SingleExpenditureDetails.Taxes.Add(tax);
+        }
+    }
+
+    public void ApplyTax()
+    {
+        double totalTaxPercentage = SingleExpenditureDetails.Taxes?.Sum(tax => tax.Rate) ?? 0;
+        var taxedAmount = SingleExpenditureDetails.AmountSpent * (totalTaxPercentage / 100);
+        TotalAmountSpent = SingleExpenditureDetails.AmountSpent + taxedAmount;
+        ResultingBalance -= taxedAmount;
+    }
+    public void RemoveTax(TaxModel tax)
+    {
+        tax.IsChecked = false;
+        if (SingleExpenditureDetails.Taxes.Any(t => t.Name == tax.Name))
+        {
+            double taxMount = (tax.Rate / 100) * SingleExpenditureDetails.AmountSpent;
+            TotalAmountSpent -= taxMount;
+            ResultingBalance += taxMount;
+            SingleExpenditureDetails.Taxes.RemoveAll(t => t.Name == tax.Name);
+        }
     }
 }

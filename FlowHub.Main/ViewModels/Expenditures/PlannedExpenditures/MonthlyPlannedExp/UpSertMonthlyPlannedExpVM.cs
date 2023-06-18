@@ -53,15 +53,15 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
     private UsersModel activeUser;
 
     [ObservableProperty]
-    bool hasComment = false;
+    bool hasComment;
 
     [ObservableProperty]
     private bool addAnotherExp;
 
     int expCounter;
 
-    double InitialSingleMonthlyPlannedExp = 0;
-    double InitialExpenditureAmount = 0;
+    double InitialSingleMonthlyPlannedExp;
+    double InitialExpenditureAmount;
 
     [RelayCommand]
     public void PageLoaded()

@@ -35,9 +35,9 @@ public partial class UpSertIncomeVM : ObservableObject
     [ObservableProperty]
     private UsersModel activeUser;
 
-    double InitialUserPockerMoney = 0;
-    double InitialIncomeAmout = 0;
-    double _initialTotalIncAmount = 0;
+    double InitialUserPockerMoney;
+    double InitialIncomeAmout;
+    double _initialTotalIncAmount;
 
     [RelayCommand]
     public void PageLoaded()

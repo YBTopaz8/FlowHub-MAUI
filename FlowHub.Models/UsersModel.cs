@@ -7,10 +7,10 @@ namespace FlowHub.Models;
 public class UsersModel : INotifyPropertyChanged
 {
     private string? email;
-    private double totalExpendituresAmount = 0;
-    private double totalIncomeAmount = 0;
-    private double totalInDebtAmount = 0;
-    private double totalOutDebtAmount = 0;
+    private double totalExpendituresAmount;
+    private double totalIncomeAmount;
+    private double totalInDebtAmount;
+    private double totalOutDebtAmount;
 
     public List<UsersModel> documents { get; set; }
     [BsonId]
