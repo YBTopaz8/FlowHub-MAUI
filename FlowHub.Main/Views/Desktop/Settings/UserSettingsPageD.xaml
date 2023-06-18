@@ -23,8 +23,7 @@
             <Button Text="Security"/>
             <Button Text="Data Export"/>
         </VerticalStackLayout>
-        <VerticalStackLayout Margin="25,20,20,0" >
-        
+        <VerticalStackLayout Margin="25,20,20,0">        
             <Image Source="{AppThemeBinding Dark=user_icon_d.png, Light=user_icon_l.png}" HeightRequest="80"/>
             <Label Text="{Binding UserName}" FontSize="38" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
 
@@ -33,7 +32,6 @@
                 <toolkit:DockLayout Margin="10,10" >
                     <Label Text="Finances" FontAttributes="Bold" FontSize="22" />
                     <HorizontalStackLayout Spacing="80" HorizontalOptions="CenterAndExpand">
-
                         <VerticalStackLayout HorizontalOptions="Start">
                             <Label FontAttributes="Bold" FontSize="20" >
                                 <Label.Text>

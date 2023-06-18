@@ -34,7 +34,7 @@
                 <Label Text="{Binding SelectCountryCurrency}" Grid.Column="1" VerticalOptions="Center" FontSize="16" FontAttributes="Bold"/>
             </Grid>
 
-            <ListView ItemsSource="{Binding Taxes}" Header="Taxes" SeparatorVisibility="None" VerticalScrollBarVisibility="Never">
+            <ListView ItemsSource="{Binding Taxes}" Header="Taxes" IsVisible="false" SeparatorVisibility="None" VerticalScrollBarVisibility="Never">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="models:TaxModel">
                         <ViewCell>

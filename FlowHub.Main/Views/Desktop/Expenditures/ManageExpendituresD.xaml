@@ -7,11 +7,18 @@
              xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"             
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Expenditures"
+             xmlns:utilities="clr-namespace:FlowHub.Main.Utilities"
              x:DataType="viewModels:ManageExpendituresVM"
              x:Name="page"
              Title="Manage Expenditures">
 
     <toolkit:DockLayout>
+        <toolkit:DockLayout.Resources>
+            <ResourceDictionary>
+                <utilities:EnumHelper x:Key="EnumHelper"/>
+            </ResourceDictionary>
+        </toolkit:DockLayout.Resources>
+        
         <Label FontSize="21" HorizontalOptions="Center" 
                    Margin="8"
                    toolkit:DockLayout.DockPosition="Top">
@@ -118,6 +125,8 @@
                 </material:DataGridColumn>
                 
                 <material:DataGridColumn Binding="{Binding Reason}" Title="Reason"/>
+                    <material:DataGridColumn Binding="{Binding Category, Converter={StaticResource EnumHelper}}" Title="Reason"/>
+                
 
                 <material:DataGridColumn Title="Amount Spent">
                     <material:DataGridColumn.CellItemTemplate>
