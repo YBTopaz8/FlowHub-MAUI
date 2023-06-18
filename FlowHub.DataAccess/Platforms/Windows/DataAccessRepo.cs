@@ -7,7 +7,7 @@ namespace FlowHub.DataAccess;
 
 public class DataAccessRepo : IDataAccessRepo
 {
-    LiteDatabaseAsync db = null;
+    LiteDatabaseAsync db;
     public LiteDatabaseAsync GetDb() //this function returns the path where the db file is saved
     {
         string path;

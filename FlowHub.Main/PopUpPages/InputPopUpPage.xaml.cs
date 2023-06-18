@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Views;
+using FlowHub.Main.Utilities;
 using FlowHub.Models;
 using System.Diagnostics;
 
@@ -84,17 +85,6 @@ public partial class InputPopUpPage : Popup
     }
 }
 
-public class PopUpCloseResult
-{
-    public object Data { get; set; }
-    public PopupResult Result { get; set; }
-}
-public enum PopupResult
-{
-    OK,
-    Cancel,
-    Delete
-}
 [Flags]
 public enum InputType
 {

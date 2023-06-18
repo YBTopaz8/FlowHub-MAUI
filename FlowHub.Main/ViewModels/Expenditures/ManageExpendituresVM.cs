@@ -7,6 +7,8 @@ using FlowHub.DataAccess.IRepositories;
 using FlowHub.Main.PDF_Classes;
 using FlowHub.Main.Platforms.NavigationMethods;
 using FlowHub.Main.PopUpPages;
+using FlowHub.Main.Utilities;
+using FlowHub.Main.Views;
 using FlowHub.Models;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -52,10 +54,10 @@ public partial class ManageExpendituresVM : ObservableObject
     private bool activ;
 
     [ObservableProperty]
-    private bool showDayFilter = false;
+    private bool showDayFilter;
 
     [ObservableProperty]
-    private bool showStatisticBtn = false;
+    private bool showStatisticBtn;
 
     [ObservableProperty]
     private int dayFilterMonth ;
@@ -70,13 +72,13 @@ public partial class ManageExpendituresVM : ObservableObject
     private string filterTitle;
 
     [ObservableProperty]
-    private bool showClearDayButton = false;
+    private bool showClearDayButton;
 
     [ObservableProperty]
-    private bool isExpanderExpanded = false;
+    private bool isExpanderExpanded;
 
     [ObservableProperty]
-    private bool isSyncing = false;
+    private bool isSyncing;
 
     private string filterOption;
     private int GlobalSortNamePosition = 1;
@@ -95,9 +97,8 @@ public partial class ManageExpendituresVM : ObservableObject
         UserCurrency = ActiveUser.UserCurrency;
         await expendituresService.GetAllExpendituresAsync();
         filterOption = "Filter_Curr_Month";
-        //FilterGetExpOfToday(GlobalSortNamePosition);        
+
         FilterGetAllExp();
-      //  FilterGetAllExp();
     }
 
     [RelayCommand]
@@ -360,39 +361,43 @@ public partial class ManageExpendituresVM : ObservableObject
     }
 
     [RelayCommand]
-    public async void GoToAddExpenditurePage()
+    public async void ShowAddExpenditurePopUp()
     {
         if (ActiveUser is null)
         {
-            Debug.WriteLine("Can't go");
+            Debug.WriteLine("Can't Open PopUp");
            await Shell.Current.DisplayAlert("Wait", "Cannot go", "Ok");
         }
         else
         {
-            Dictionary<string, object> navParam = new()
-            {
-                { "SingleExpenditureDetails", new ExpendituresModel { DateSpent = DateTime.Now } },
-                { "PageTitle", new string("Add New Flow Out") },
-                { "IsAdd", true },
-                { "ActiveUser", ActiveUser }
-            };
+            var newExpenditure = new ExpendituresModel() { DateSpent = DateTime.Now };
+            string pageTitle = "Add New Flow Out";
+            bool isAdd = true;
 
-            NavFunction.FromManageExpToUpsertExpenditures(navParam);
+            await AddEditExpediture(newExpenditure, pageTitle, isAdd);
         }
     }
 
-    [RelayCommand]
-    public void GoToEditExpenditurePage(ExpendituresModel expenditure)
-    {
-        var navParam = new Dictionary<string, object>
-        {
-            { "SingleExpenditureDetails", expenditure },
-            { "PageTitle", new string("Edit Flow Out") },
-            { "IsAdd", false },
-            { "ActiveUser", ActiveUser }
-        };
 
-        NavFunction.FromManageExpToUpsertExpenditures(navParam);
+    [RelayCommand]
+    public async void ShowEditExpenditurePopUp(ExpendituresModel expenditure)
+    {
+        await AddEditExpediture(expenditure, "Edit Flow Out", false);
+    }
+    private async Task AddEditExpediture(ExpendituresModel newExpenditure, string pageTitle, bool isAdd)
+    {
+        ExpendituresModel nExp = newExpenditure;
+        var NewUpSertVM = new UpSertExpenditureVM(expendituresService, userService, nExp, pageTitle, isAdd, ActiveUser);
+        var UpSertResult = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new UpSertExpendituresPopUp(NewUpSertVM));
+
+        if (UpSertResult.Result == PopupResult.OK)
+        {
+            ExpendituresModel exp = (ExpendituresModel)UpSertResult.Data;
+            ExpendituresList.Add(exp);
+            expendituresService.OfflineExpendituresList.Add(exp);
+            TotalAmount += exp.AmountSpent;
+            TotalExpenditures++;
+        }
     }
 
     [RelayCommand]
@@ -439,7 +444,7 @@ public partial class ManageExpendituresVM : ObservableObject
         const ToastDuration duration = ToastDuration.Short;
         const double fontSize = 14;
         string text;
-        bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You want to delete?")))!;
+        bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You want to DELETE?")))!;
         if (response)
         {
             IsBusy = true;

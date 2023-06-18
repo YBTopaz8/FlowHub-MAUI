@@ -112,18 +112,24 @@
                 <!--Section for Login begins below-->
                 <VerticalStackLayout x:Name="LoginForm" Margin="25">
 
-                    <input:FormView SubmitCommand="{Binding GoToHomePageFromLoginCommand}" Spacing="25">
+                    <input:FormView SubmitCommand="{Binding GoToHomePageFromLoginCommand}" Spacing="25" >
                         <Label Text="User does not exist!" x:Name="NoUserFoundText" HorizontalOptions="Center" TextColor="Red" 
                                FontAttributes="Bold" FontSize="23" IsVisible="{Binding ErrorMessageVisible}" />
                         <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
 
-                        <material:TextField Title="Email" Text="{Binding CurrentUser.Email}" AllowClear="True" Icon="{AppThemeBinding Dark=email_icon_d.png, Light=email_icon_l.png}">
+                        <material:TextField Title="Email" Text="{Binding CurrentUser.Email}" AllowClear="True" 
+                                            IsTextPredictionEnabled="True"
+                                            Icon="{AppThemeBinding Dark=email_icon_d.png, Light=email_icon_l.png}">
                             <material:TextField.Validations>
                                 <validation:RequiredValidation/>
                             </material:TextField.Validations>
                         </material:TextField>
 
-                        <material:TextField Title="Password" Text="{Binding CurrentUser.Password}" Icon="{AppThemeBinding Dark= password_d.png, Light=password_l.png}" IsPassword="True">
+                        <material:TextField Title="Password" Text="{Binding CurrentUser.Password}" 
+                                            Icon="{AppThemeBinding Dark= password_d.png, Light=password_l.png}" IsPassword="True">
+                            <material:TextField.Attachments>
+                                <material:TextFieldPasswordShowHideAttachment/>
+                            </material:TextField.Attachments>
                             <material:TextField.Validations>
                                 <validation:RequiredValidation/>
                             </material:TextField.Validations>
@@ -132,13 +138,7 @@
 
                         <ImageButton Source="{AppThemeBinding Dark=login_online_d, Light=login_online_l}"
                                      Clicked="LoginOnlineBtn_Clicked" x:Name="LoginButton" input:FormView.IsSubmitButton="True"/>
-                        <Button Text="Login" BackgroundColor="DarkSlateBlue" FontAttributes="Bold" 
-                            FontSize="20" IsVisible="false"
-                            TextColor="White" input:FormView.IsSubmitButton="True"/>
                         
-                        <Button Text="Login Online" BackgroundColor="BlueViolet" FontAttributes="Bold" 
-                            FontSize="20" IsVisible="false" Clicked="LoginOnlineBtn_Clicked"
-                            TextColor="White" input:FormView.IsSubmitButton="True"/>
 
                     </input:FormView>
 

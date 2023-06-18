@@ -19,7 +19,7 @@
             </Label.GestureRecognizers>
             <Label.Text>
                 <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
-                    <Binding Path="UserPockerMoney"/>
+                    <Binding Path="UserPocketMoney"/>
                     <Binding Path="UserCurrency"/>
                 </MultiBinding>
             </Label.Text>
