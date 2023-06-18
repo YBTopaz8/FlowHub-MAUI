@@ -12,12 +12,12 @@
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Expenditures"
              x:DataType="viewModels:UpSertExpenditureVM" 
              CanBeDismissedByTappingOutsideOfPopup="False"            
-             Size="{OnPlatform Android ='350,400', WinUI='400,400'} "
+             
              Color="Transparent"
              x:Name="page">
 
     
-    <Border Margin="8,0"
+    <Border Margin="13,10"
         Stroke="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=White}"
         StrokeThickness="0"
         StrokeShape="RoundRectangle 12">

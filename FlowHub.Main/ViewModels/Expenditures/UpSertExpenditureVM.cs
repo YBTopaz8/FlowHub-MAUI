@@ -70,7 +70,7 @@ public partial class UpSertExpenditureVM : ObservableObject
         {
             IsAddTaxesChecked = true;
         }
-        
+
         ResultingBalance = ActiveUser.PocketMoney;
         TotalAmountSpent = SingleExpenditureDetails.AmountSpent;
     }

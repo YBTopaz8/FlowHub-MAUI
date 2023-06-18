@@ -15,18 +15,32 @@ public partial class UpSertExpendituresPopUp : Popup
         this.BindingContext = vm;
         viewModel.PageLoadedCommand.Execute(null);
 
-#if ANDROID
-        var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
-        var orientation = mainDisplayInfo.Orientation;  
-        var width = mainDisplayInfo.Width;
-        var height = mainDisplayInfo.Height;
-        var density = mainDisplayInfo.Density;
-        var smallestWidth = Math.Min(width, height) * density;
-        var popupWidth = smallestWidth * 0.115;
-        
-        var popupHeight = (smallestWidth * 0.13) > 401 ? 350 : smallestWidth * 0.13;
-        Size = new Size(popupWidth, popupHeight);
-#elif WINDOWS
+        //#if ANDROID
+        //        var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
+        //        var orientation = mainDisplayInfo.Orientation;
+        //        var width = mainDisplayInfo.Width;
+        //        var height = mainDisplayInfo.Height;
+        //        var density = mainDisplayInfo.Density;
+        //        var smallestWidth = Math.Min(width, height) / density;
+        //        var popupWidth = smallestWidth * 0.9;
+
+        //        double popupHeight = 0;
+        //        if (smallestWidth < 415)
+        //        {
+        //            if ((smallestWidth * 0.13) > 401)
+        //            {
+        //                popupHeight = 350;
+        //            }
+        //            else
+        //            {
+        //                popupHeight = (double)(smallestWidth * 0.92);
+        //            }
+
+        //        }
+        //        //else if(smallestWidth)
+
+        //        Size = new Size(popupWidth, popupHeight);
+#if WINDOWS
         this.Size = new Size(400, 400);
 #endif
         viewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -46,7 +60,6 @@ public partial class UpSertExpendituresPopUp : Popup
         }
     }
 
-    
 
     private void UnitPrice_TextChanged(object sender, TextChangedEventArgs e)
     {

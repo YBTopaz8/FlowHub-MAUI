@@ -133,8 +133,8 @@
                     <Label Text="{Binding UserCurrency}" FontSize="15" FontAttributes="Bold"/>
                 </VerticalStackLayout>
                 <Rectangle />
-
-                <VerticalStackLayout Margin="5,15" Spacing="10">
+                
+                <VerticalStackLayout Margin="5,15" Spacing="10" IsVisible="false">
                     <Label Text="Taxes" FontSize="13"/>
                     <ListView ItemsSource="{Binding ActiveUser.Taxes}" SelectionMode="None" SeparatorVisibility="None" VerticalScrollBarVisibility="Never">
                         <ListView.ItemTemplate>
