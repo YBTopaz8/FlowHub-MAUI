@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlowHub.Main.Views.Desktop.Incomes.ManageIncomesD"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"    
+             xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
+             xmlns:viewModel="clr-namespace:FlowHub.Main.ViewModels.Incomes"
+             x:DataType="viewModel:ManageIncomesVM"
+             Title="ManageIncomesD"
+             x:Name="page">
+    <toolkit:DockLayout>
+        <Label FontSize="21" HorizontalOptions="Center"
+               Margin="8"
+               toolkit:DockLayout.DockPosition="Top">
+            <Label.Text>
+                <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
+                    <Binding Path="UserPocketMoney"/>
+                    <Binding Path="UserCurrency"/>
+                </MultiBinding>
+            </Label.Text>
+        </Label>
+
+        <ScrollView x:Name="DGScrollView" VerticalScrollBarVisibility="Never"
+                    HorizontalOptions="FillAndExpand">
+            <material:DataGrid ItemsSource="{Binding IncomesList}"
+                               MaximumWidthRequest="1000" Padding="10"
+                               HorizontalOptions="Center">
+                <material:DataGrid.EmptyView>
+                    <VerticalStackLayout Margin="40,20" MinimumWidthRequest="400">
+                        <Image WidthRequest="70"
+                                        HeightRequest="60"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Center"
+                                        Source="search_property.png"/>
+                        <Label Text="No Flow Out Available..." FontSize="21" HorizontalOptions="Center" Margin="30"/>
+                    </VerticalStackLayout>
+                </material:DataGrid.EmptyView>
+                <material:DataGrid.Columns>
+                    <material:DataGridColumn Title="Date Received">
+                        <material:DataGridColumn.CellItemTemplate>
+                            <DataTemplate>
+                                <Label Text="{Binding DateReceived, StringFormat='{0:MMMM dd, yyyy}'}"/>
+                            </DataTemplate>
+                        </material:DataGridColumn.CellItemTemplate>
+                    </material:DataGridColumn>
+
+                    <material:DataGridColumn Binding="{Binding Reason}" Title="Reason"/>
+
+                    <material:DataGridColumn Title="Amount Spent">
+                        <material:DataGridColumn.CellItemTemplate>
+                            <DataTemplate>
+                                <Label>
+                                    <Label.Text>
+                                        <MultiBinding StringFormat="{} {0:n2} {1}">
+                                            <Binding Path="AmountReceived"/>
+                                            <Binding Path="Currency"/>
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
+                            </DataTemplate>
+                        </material:DataGridColumn.CellItemTemplate>
+                    </material:DataGridColumn>
+
+                    <material:DataGridColumn Title="Actions">
+                        <material:DataGridColumn.CellItemTemplate>
+                            <DataTemplate>
+                                <HorizontalStackLayout >
+                                    <ImageButton Source="{AppThemeBinding Light=edit_l.png, Dark=edit_d.png}" WidthRequest="50"
+                                                 Command="{Binding Source={x:Reference page},
+                                            Path=BindingContext.GoToEditIncomePageCommand}"
+                                               CommandParameter="{Binding .}" />
+                                    <ImageButton Source="{AppThemeBinding Light=delete_l.png, Dark=delete_d.png}" WidthRequest="50" 
+                                                 Command="{Binding Source={x:Reference page},
+                                            Path=BindingContext.DeleteIncomeBtnCommand}"
+                                               CommandParameter="{Binding .}"  />
+                                </HorizontalStackLayout>
+                            </DataTemplate>
+                        </material:DataGridColumn.CellItemTemplate>
+                    </material:DataGridColumn>
+                </material:DataGrid.Columns>
+            </material:DataGrid>
+        </ScrollView>
+    </toolkit:DockLayout>
+</ContentPage>

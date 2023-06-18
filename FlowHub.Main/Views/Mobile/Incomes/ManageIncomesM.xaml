@@ -18,7 +18,7 @@
                 <TapGestureRecognizer NumberOfTapsRequired="2" Tapped="TapGestureRecognizer_Tapped"/>
             </Label.GestureRecognizers>
             <Label.Text>
-                <MultiBinding StringFormat="{} Current Balance is {0:n3} {1}">
+                <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
                     <Binding Path="UserPockerMoney"/>
                     <Binding Path="UserCurrency"/>
                 </MultiBinding>
@@ -52,7 +52,7 @@
             
             <Label FontSize="17" Grid.ColumnSpan="2" HorizontalOptions="Center" VerticalOptions="End" Margin="5">
                 <Label.Text>
-                    <MultiBinding StringFormat="{} {2} Flow In(s) worth {0:n3} {1}">
+                    <MultiBinding StringFormat="{} {2} Flow In(s) worth {0:n2} {1}">
                         <Binding Path="TotalAmount"/>
                         <Binding Path="UserCurrency"/>
                         <Binding Path="TotalIncomes"/>
@@ -74,7 +74,7 @@
                                     <SwipeItem Command="{Binding Source={x:Reference page},
                                             Path=BindingContext.GoToEditIncomePageCommand}"
                                                CommandParameter="{Binding .}"
-                                            IconImageSource="{AppThemeBinding Dark= edit_d.png, Light= edit_l.png}" 
+                                                IconImageSource="{AppThemeBinding Dark= edit_d.png, Light= edit_l.png}" 
                                                BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
                                 </SwipeView.LeftItems>
 

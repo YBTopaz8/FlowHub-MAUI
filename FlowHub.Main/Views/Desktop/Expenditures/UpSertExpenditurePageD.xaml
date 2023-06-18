@@ -30,7 +30,7 @@
                    FontSize="23" TextColor="White"  />
 
        
-        <Border HorizontalOptions="Center" WidthRequest="450" HeightRequest="400" VerticalOptions="Start" x:Name="FlowForm"
+        <Border HorizontalOptions="Center" WidthRequest="400" HeightRequest="350" VerticalOptions="Start" x:Name="FlowForm"
                     Margin="10" Padding="10" BackgroundColor="{AppThemeBinding Dark=#29343E, Light=white}"
                     Stroke="DarkSlateBlue"
                     StrokeThickness="2"
@@ -40,8 +40,21 @@
                             Opacity="0.4"/>
             </Border.Shadow>
             <input:FormView Spacing="5"
-                SubmitCommand="{Binding UpSertExpenditureCommand}">          
-
+                SubmitCommand="{Binding UpSertExpenditureCommand}">
+                <input:FormView.Resources>
+                    <ResourceDictionary>
+                        <Style TargetType="material:TextField">
+                            <Setter Property="BorderColor" Value="DarkSlateBlue"/>
+                        </Style>
+                        <Style TargetType="material:EditorField">
+                            <Setter Property="BorderColor" Value="DarkSlateBlue"/>
+                        </Style>
+                        <Style TargetType="material:DatePickerField">
+                            <Setter Property="BorderColor" Value="DarkSlateBlue"/>
+                        </Style>
+                    </ResourceDictionary>
+                </input:FormView.Resources>
+    
                     <VerticalStackLayout toolkit:DockLayout.DockPosition="Top" >
                     <VerticalStackLayout.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding HardResetUserBalanceCommand}"/>
@@ -84,17 +97,16 @@
                         </material:DatePickerField.Validations>
                     </material:DatePickerField>
                     
-                    <BoxView HeightRequest="0.8" Color="DarkSlateBlue" />
 
-
-                    <Grid ColumnDefinitions="215,10*" ColumnSpacing="8">
+                    <!--<Grid ColumnDefinitions="215,10*" ColumnSpacing="8">-->
+                    <Grid ColumnDefinitions="*" ColumnSpacing="8">
                         <material:TextField Grid.Column="0" Title="Unit Price"
                                     x:Name="UnitPrice" Focused="UnitPrice_Focused"
                                     TextChanged="UnitPrice_TextChanged"
                                     Text="{Binding SingleExpenditureDetails.UnitPrice}" Keyboard="Numeric" >                        
                         </material:TextField>
 
-                        <material:TextField Grid.Column="1" Title="Quantity"
+                        <material:TextField Grid.Column="1" Title="Quantity" IsVisible="false" IsEnabled="False"
                                     x:Name="Qty"
                                     TextChanged="UnitPrice_TextChanged"
                                             
@@ -106,16 +118,15 @@
                             </material:TextField.Validations>
                         </material:TextField>
 
-                    </Grid>
+                </Grid>
 
-                    <material:EditorField Title="Reason" Text="{Binding SingleExpenditureDetails.Reason}">
+                <material:EditorField Title="Reason" Text="{Binding SingleExpenditureDetails.Reason}" IsTextPredictionEnabled="True">
                         <material:EditorField.Validations>
                             <validation:RequiredValidation/>
                         </material:EditorField.Validations>
                     </material:EditorField>
-                    <BoxView HeightRequest="0.8" Color="DarkSlateBlue"/>
 
-                    <HorizontalStackLayout>
+                    <HorizontalStackLayout IsVisible="false">
                         <material:CheckBox Text="Taxes" BorderColor="Gray" Margin="5,0,10,0" IsChecked="{Binding IsAddTaxesChecked}" x:Name="AddTaxCheckBox" CheckChanged="AddTax_CheckChanged"/>
                         <ListView ItemsSource="{Binding ActiveUser.Taxes}" IsVisible="{Binding IsAddTaxesChecked}" x:Name="TaxesList">
                             <ListView.ItemTemplate >

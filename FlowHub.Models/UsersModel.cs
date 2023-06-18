@@ -1,25 +1,91 @@
 ﻿using LiteDB;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace FlowHub.Models;
 
-public class UsersModel
+public class UsersModel : INotifyPropertyChanged
 {
+    private string? email;
+    private double totalExpendituresAmount = 0;
+    private double totalIncomeAmount = 0;
+    private double totalInDebtAmount = 0;
+    private double totalOutDebtAmount = 0;
+
     public List<UsersModel> documents { get; set; }
     [BsonId]
     public string Id { get; set; }
     public string? UserIDOnline { get; set; }
     public string Username { get; set; }
     public string Password { get; set; }
-    public string? Email { get; set; }
+    public string? Email
+    {
+        get => email;
+        set
+        {
+            if (email != value)
+            {
+                email = value;
+                OnPropertyChanged(nameof(Email));
+            }
+        }
+    }
+
     public double? Savings { get; set; }
     public double PocketMoney { get; set; }
-    public double TotalExpendituresAmount { get; set; } = 0;
-    public double TotalIncomeAmount { get; set; } = 0;
-    public double TotalInDebtAmount { get; set; } = 0;
-    public double TotalOutDebtAmount { get; set; } = 0;
+    public double TotalExpendituresAmount {
+        get => totalExpendituresAmount;
+        set
+        {
+            if (totalExpendituresAmount != value)
+            {
+                totalExpendituresAmount = value;
+                OnPropertyChanged(nameof(TotalExpendituresAmount));
+            }
+        }
+    }
+    public double TotalIncomeAmount {
+        get => totalIncomeAmount;
+        set
+        {
+            if (totalIncomeAmount != value)
+            {
+                totalIncomeAmount = value;
+                OnPropertyChanged(nameof(TotalIncomeAmount));
+            }
+        }
+    }
+    public double TotalInDebtAmount {
+        get => totalInDebtAmount;
+        set
+        {
+            if (totalInDebtAmount != value)
+            {
+                totalInDebtAmount = value;
+                OnPropertyChanged(nameof(TotalInDebtAmount));
+            }
+        }
+    }
+    public double TotalOutDebtAmount {
+        get => totalOutDebtAmount;
+        set
+        {
+            if (totalOutDebtAmount != value)
+            {
+                totalOutDebtAmount = value;
+                OnPropertyChanged(nameof(TotalOutDebtAmount));
+            }
+        }
+    }
     public DateTime DateTimeOfPocketMoneyUpdate { get; set; }
-    public string UserCountry { get; set; }
-    public string UserCurrency { get; set; }
-    public List<TaxModel> Taxes { get; set; }
+    public string UserCountry { get; set; } = null!;
+    public string UserCurrency { get; set; } = null!;
+    public List<TaxModel> Taxes { get; set; } = null!;
     public bool RememberLogin { get; set; }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    protected virtual void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 }

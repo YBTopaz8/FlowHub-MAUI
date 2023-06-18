@@ -177,6 +177,9 @@
 	  <MauiXaml Update="Views\Desktop\HomePageD.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Desktop\Incomes\ManageIncomesD.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Desktop\LoginD.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

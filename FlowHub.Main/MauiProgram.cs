@@ -10,6 +10,7 @@ using FlowHub.Main.ViewModels.Settings;
 using FlowHub.Main.ViewModels.Statistics;
 using FlowHub.Main.Views.Desktop;
 using FlowHub.Main.Views.Desktop.Expenditures;
+using FlowHub.Main.Views.Desktop.Incomes;
 using FlowHub.Main.Views.Desktop.Settings;
 using FlowHub.Main.Views.Mobile;
 using FlowHub.Main.Views.Mobile.Expenditures;
@@ -91,7 +92,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<ManageExpendituresD>();
 
         /*-- Section for Incomes --*/
-
+        builder.Services.AddSingleton<ManageIncomesD>();
         /*-- Section for Settings --*/
         builder.Services.AddSingleton<UserSettingsPageD>();
 /*-------------------------------REGISTERING MOBILE VIEWS ---------------------------------------------------------------*/

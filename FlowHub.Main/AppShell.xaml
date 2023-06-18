@@ -5,6 +5,7 @@
         x:Class="FlowHub.Main.AppShell"
         xmlns:views="clr-namespace:FlowHub.Main.Views.Desktop"
         xmlns:viewsExpenditures="clr-namespace:FlowHub.Main.Views.Desktop.Expenditures"
+        xmlns:viewsIncomes="clr-namespace:FlowHub.Main.Views.Desktop.Incomes"
         xmlns:viewsSettings="clr-namespace:FlowHub.Main.Views.Desktop.Settings"
         Shell.NavBarIsVisible="False"
         Shell.FlyoutBehavior="Disabled"
@@ -30,7 +31,9 @@
         </Tab>
 
         <Tab Title="Flow In">
-            <ShellContent Title="Manage Incomes"/>
+            <ShellContent Title="Manage Incomes"
+                          ContentTemplate="{DataTemplate viewsIncomes:ManageIncomesD}"
+                          Route="ManageIncomes"/>
         </Tab>
         
         <Tab Title="Planning">

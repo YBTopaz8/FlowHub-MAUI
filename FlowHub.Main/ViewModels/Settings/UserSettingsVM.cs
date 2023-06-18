@@ -66,6 +66,7 @@ public partial class UserSettingsVM : ObservableObject
         UserName = ActiveUser.Username;
         Taxes = ActiveUser.Taxes is not null ? new ObservableCollection<TaxModel>(ActiveUser.Taxes) : new ObservableCollection<TaxModel>();
         TotalExpendituresAmount = expService.OfflineExpendituresList.Select(x => x.AmountSpent).Sum();
+        TotalIncomeAmount = ActiveUser.TotalIncomeAmount;
         IsNotInEditingMode = true;
         SelectCountryCurrency = ActiveUser.UserCurrency;
     }

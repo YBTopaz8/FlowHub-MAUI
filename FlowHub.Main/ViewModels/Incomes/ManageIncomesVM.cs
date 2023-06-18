@@ -37,7 +37,7 @@ public partial class ManageIncomesVM : ObservableObject
     private string userCurrency;
 
     [ObservableProperty]
-    private double userPockerMoney;
+    private double userPocketMoney;
 
     [ObservableProperty]
     private bool isBusy;
@@ -52,10 +52,11 @@ public partial class ManageIncomesVM : ObservableObject
     {
         var user = userService.OfflineUser;
         ActiveUser = user;
-        UserPockerMoney = ActiveUser.PocketMoney;
+        UserPocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
         await incomeService.GetAllIncomesAsync();
-        FilterGetIncOfCurrentMonth();
+        //FilterGetIncOfCurrentMonth();
+        FilterGetAllIncomes();
     }
 
     [RelayCommand]
@@ -260,7 +261,7 @@ public partial class ManageIncomesVM : ObservableObject
             {
                 ActiveUser.TotalIncomeAmount -= income.AmountReceived;
                 ActiveUser.PocketMoney -= income.AmountReceived;
-                UserPockerMoney -= income.AmountReceived;
+                UserPocketMoney -= income.AmountReceived;
 
                 await userService.UpdateUserAsync(ActiveUser);
                 incomeService.OfflineIncomesList.Remove(income);

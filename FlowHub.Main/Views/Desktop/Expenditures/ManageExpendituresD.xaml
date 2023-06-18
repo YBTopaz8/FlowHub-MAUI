@@ -29,10 +29,9 @@
             <ActivityIndicator IsRunning="{Binding IsBusy}" HeightRequest="30" IsVisible="{Binding IsBusy}"/>
         </HorizontalStackLayout>
 
-        <Label toolkit:DockLayout.DockPosition="Top" Text="{Binding ExpTitle}" FontSize="20" Margin="5" FontAttributes="Bold" HorizontalOptions="Center"/>
+        <Label toolkit:DockLayout.DockPosition="Top" Text="{Binding ExpTitle}" FontSize="20" 
+               Margin="5" FontAttributes="Bold" HorizontalOptions="Center"/>
 
-      
-        
         <HorizontalStackLayout toolkit:DockLayout.DockPosition="Bottom" Margin="10"
                                HorizontalOptions="Center">
             <Label FontSize="19" >
@@ -46,7 +45,6 @@
             </Label>
         </HorizontalStackLayout>
         <VerticalStackLayout toolkit:DockLayout.DockPosition="Left" x:Name="dockLeft" >
-
             
             <material:RadioButtonGroupView Spacing="16" Margin="8">
                     <material:RadioButtonGroupView.Resources>
@@ -111,10 +109,8 @@
                             </HorizontalStackLayout>
                         </material:DataGridColumn.TitleView>
                     <material:DataGridColumn.CellItemTemplate>
-                        <DataTemplate>
-                            <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
-                                <Label Text="{Binding DateSpent, StringFormat='{0:MMMM dd, yyyy}'}"/>
-                            </HorizontalStackLayout>
+                        <DataTemplate>                            
+                            <Label Text="{Binding DateSpent, StringFormat='{0:MMMM dd, yyyy}'}"/>                            
                         </DataTemplate>
                     </material:DataGridColumn.CellItemTemplate>
                 </material:DataGridColumn>
@@ -124,16 +120,14 @@
                 <material:DataGridColumn Title="Amount Spent">
                     <material:DataGridColumn.CellItemTemplate>
                         <DataTemplate>
-                            <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
-                                <Label>
-                                    <Label.Text>
-                                        <MultiBinding StringFormat="{} {0:n2} {1}">
-                                            <Binding Path="AmountSpent"/>
-                                            <Binding Path="Currency"/>
-                                        </MultiBinding>
-                                    </Label.Text>
-                                </Label>
-                            </HorizontalStackLayout>
+                            <Label>
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{} {0:n2} {1}">
+                                        <Binding Path="AmountSpent"/>
+                                        <Binding Path="Currency"/>
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
                         </DataTemplate>
                     </material:DataGridColumn.CellItemTemplate>
                 </material:DataGridColumn>

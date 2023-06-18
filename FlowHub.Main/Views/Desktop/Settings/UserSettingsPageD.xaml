@@ -84,7 +84,7 @@
 
             <Border Margin="0,5" BackgroundColor="Transparent"
                         StrokeThickness="0.7">
-                <toolkit:DockLayout Margin="10,20" >
+                <toolkit:DockLayout Margin="10,20">
                     <Button Text="Edit" toolkit:DockLayout.DockPosition="Right" VerticalOptions="Start" x:Name="EditUserDetailsBtn" Clicked="EditUserDetailsBtn_Clicked" IsVisible="{Binding IsNotInEditingMode}"/>
                     
                     <Label Text="Personal Info" FontAttributes="Bold" FontSize="22" toolkit:DockLayout.DockPosition="Left"/>
@@ -112,7 +112,7 @@
                             <Label Text="{Binding UserCurrency}" FontSize="20"/>
                         </VerticalStackLayout>
                         
-                        <VerticalStackLayout> 
+                        <VerticalStackLayout IsVisible="false"> 
                             <Label Text="Taxes" FontSize="13" HorizontalOptions="Center"/>
                             <ListView ItemsSource="{Binding Taxes}" >
                                 <ListView.ItemTemplate>
@@ -152,7 +152,7 @@
 
                             <material:TextField Title="Currency" Text="{Binding SelectCountryCurrency}" IsEnabled="False"/>
 
-                            <VerticalStackLayout>
+                            <VerticalStackLayout IsVisible="false">
                                 <Label Text="Taxes" HorizontalTextAlignment="Center" FontSize="12"/>
                                 <ListView ItemsSource="{Binding Taxes}" >
                                     <ListView.ItemTemplate>

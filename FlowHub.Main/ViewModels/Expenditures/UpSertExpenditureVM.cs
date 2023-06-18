@@ -186,7 +186,7 @@ public partial class UpSertExpenditureVM : ObservableObject
         {
             double taxAmount = (tax.Rate / 100) * SingleExpenditureDetails.AmountSpent;
             TotalAmountSpent += taxAmount;
-            ResultingBalance -= taxAmount;            
+            ResultingBalance -= taxAmount;
             SingleExpenditureDetails.Taxes.Add(tax);
         }
     }
@@ -200,7 +200,6 @@ public partial class UpSertExpenditureVM : ObservableObject
     }
     public void RemoveTax(TaxModel tax)
     {
-
         tax.IsChecked = false;
         if (SingleExpenditureDetails.Taxes.Any(t => t.Name == tax.Name))
         {
