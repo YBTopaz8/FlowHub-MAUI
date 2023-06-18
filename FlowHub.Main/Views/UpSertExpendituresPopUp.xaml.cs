@@ -15,6 +15,20 @@ public partial class UpSertExpendituresPopUp : Popup
         this.BindingContext = vm;
         viewModel.PageLoadedCommand.Execute(null);
 
+#if ANDROID
+        var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
+        var orientation = mainDisplayInfo.Orientation;  
+        var width = mainDisplayInfo.Width;
+        var height = mainDisplayInfo.Height;
+        var density = mainDisplayInfo.Density;
+        var smallestWidth = Math.Min(width, height) * density;
+        var popupWidth = smallestWidth * 0.115;
+        
+        var popupHeight = (smallestWidth * 0.13) > 401 ? 350 : smallestWidth * 0.13;
+        Size = new Size(popupWidth, popupHeight);
+#elif WINDOWS
+        this.Size = new Size(400, 400);
+#endif
         viewModel.PropertyChanged += ViewModel_PropertyChanged;
 	}
 

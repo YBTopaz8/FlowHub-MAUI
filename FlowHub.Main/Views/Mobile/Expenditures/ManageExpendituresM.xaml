@@ -162,8 +162,8 @@
             <ImageButton IsVisible="False" IsEnabled="False" Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding DropCollectionCommand}"
                          VerticalOptions="Start" HorizontalOptions="Center" Margin="0,0,10,0" Grid.Column="2"/>
         </Grid>
-
-        <CollectionView x:Name="ColView" IsVisible="true" ItemsSource="{Binding ExpendituresList}"
+        
+        <CollectionView x:Name="ColView" IsVisible="true" ItemsSource="{Binding ExpendituresList}"                        
                         HorizontalOptions="Center">
             <CollectionView.EmptyView>
                 <ContentView>
@@ -175,8 +175,8 @@
             </CollectionView.EmptyView>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:ExpendituresModel">
-                    <ScrollView Margin="5,1.3">
-                        <VerticalStackLayout HorizontalOptions="Center">
+                    <ScrollView Margin="0,2">
+                        <VerticalStackLayout HorizontalOptions="Center"> <!--set to fill and expand for it to take the whole width of the screen-->
                             <SwipeView >
                                 <SwipeView.LeftItems>                                    
                                     <SwipeItem 
@@ -195,10 +195,10 @@
                                                BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
                                 </SwipeView.RightItems>
 
-                                <Border Padding="10" HeightRequest="83" HorizontalOptions="Center" 
-                                        MinimumWidthRequest="370" MaximumWidthRequest="400">
+                                <Border Padding="10" HeightRequest="83" 
+                                        MinimumWidthRequest="370">
 
-                                    <VerticalStackLayout>
+                                    <VerticalStackLayout HorizontalOptions="FillAndExpand">
                                         <Label HorizontalOptions="Center" Text="{Binding DateSpent, StringFormat='{0:MMMM dd, yyyy}'}"/>
                                         <VerticalStackLayout>
                                             <Label Margin="3,0" Text="{Binding Reason, StringFormat='Reason: {0}'}"/>
