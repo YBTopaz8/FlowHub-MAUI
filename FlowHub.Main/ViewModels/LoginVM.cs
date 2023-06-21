@@ -74,6 +74,11 @@ public partial class LoginVM : ObservableObject
         if (IsQuickLoginDetectionFilePresent())
         {
             Username = await settingsService.GetPreference<string>("Username", null);
+            if (Username is null)
+            {
+                File.Delete(LoginDetectFile);
+                PageLoaded();
+            }
             userId = await settingsService.GetPreference<string>(nameof(CurrentUser.Id), null);
             IsQuickLoginVisible = true;
         }
