@@ -237,7 +237,7 @@ public partial class ManageExpendituresVM : ObservableObject
             filterOption = "Filter_All";
             List<ExpendituresModel> expList = new ();
 
-            expList = expendituresService.OfflineExpendituresList.OrderByDescending(x => x.DateSpent).ToList();
+            expList = ExpendituresList is not null ? ExpendituresList.OrderByDescending(x => x.DateSpent).ToList() : expendituresService.OfflineExpendituresList.OrderByDescending(x => x.DateSpent).ToList();
             FilterTitle = "Date Spent Descending";
 
             var tempList = await Task.Run(() => new ObservableCollection<ExpendituresModel>(expList));
@@ -393,10 +393,22 @@ public partial class ManageExpendituresVM : ObservableObject
         if (UpSertResult.Result == PopupResult.OK)
         {
             ExpendituresModel exp = (ExpendituresModel)UpSertResult.Data;
-            ExpendituresList.Add(exp);
-            expendituresService.OfflineExpendituresList.Add(exp);
-            TotalAmount += exp.AmountSpent;
-            TotalExpenditures++;
+            if (isAdd)
+            {
+                ExpendituresList.Add(exp);
+                TotalAmount += exp.AmountSpent;
+                TotalExpenditures++;
+                FilterGetAllExp();
+            }
+            else
+            {
+                // Get the old expenditure before replacing it
+                var oldExp = ExpendituresList[ExpendituresList.IndexOf(nExp)];
+                ExpendituresList[ExpendituresList.IndexOf(nExp)] = exp;
+
+                // Adjust total amount and total expenditures
+                TotalAmount = TotalAmount - oldExp.AmountSpent + exp.AmountSpent;
+            }
         }
     }
 
@@ -444,7 +456,7 @@ public partial class ManageExpendituresVM : ObservableObject
         const ToastDuration duration = ToastDuration.Short;
         const double fontSize = 14;
         string text;
-        bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You want to DELETE?")))!;
+        bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You want to Delete?")))!;
         if (response)
         {
             IsBusy = true;
@@ -469,6 +481,7 @@ public partial class ManageExpendituresVM : ObservableObject
             await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
             Sorting(GlobalSortNamePosition);
             IsBusy = false;
+            
         }
     }
 
