@@ -452,7 +452,7 @@ public partial class ManageExpendituresVM : ObservableObject
 
             if (deleteResponse)
             {
-                text = "Expenditure Deleted";
+                text = "Flow Out Deleted";
                 expendituresService.OfflineExpendituresList.Remove(expenditure);
                 ExpendituresList.Remove(expenditure);
 
@@ -463,7 +463,7 @@ public partial class ManageExpendituresVM : ObservableObject
             }
             else
             {
-                 text = "Expenditure Not Deleted";
+                 text = "Flow Out Not Deleted";
             }
             var toast = Toast.Make(text, duration, fontSize);
             await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion

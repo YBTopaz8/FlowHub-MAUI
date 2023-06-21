@@ -87,21 +87,21 @@ public partial class UpSertExpenditureVM : ObservableObject
             return;
         }
         CancellationTokenSource cancellationTokenSource = new();
-
+        ToastDuration duration = ToastDuration.Short;
         if (SingleExpenditureDetails.Id is not null)
         {
-            UpdateExpenditureAsync(14, cancellationTokenSource);
+            UpdateExpenditureAsync(14, cancellationTokenSource, duration);
         }
         else
         {
-            await AddExpenditureAsync(14, cancellationTokenSource);
+            await AddExpenditureAsync(14, cancellationTokenSource, duration);
         }
         ThisPopUpResult = PopupResult.OK;
         ClosePopUp = true;
     }
 
 
-    private async void UpdateExpenditureAsync( double fontsize, CancellationTokenSource tokenSource)
+    private async void UpdateExpenditureAsync(double fontsize, CancellationTokenSource tokenSource, ToastDuration toastDuration)
     {
         double difference = TotalAmountSpent - _initialExpenditureAmount;
 
@@ -111,21 +111,22 @@ public partial class UpSertExpenditureVM : ObservableObject
 
         SingleExpenditureDetails.UpdateOnSync = true;
         SingleExpenditureDetails.AmountSpent = TotalAmountSpent;
-        if (await _expenditureService.UpdateExpenditureAsync(SingleExpenditureDetails))
+        if (!await _expenditureService.UpdateExpenditureAsync(SingleExpenditureDetails))
         {
-            await _expenditureService.GetAllExpendituresAsync();
-
-            await UpdateUserAsync(FinalTotalExp);
-
-            const string toastNotifMessage = "Flow Out Updated";
-            var toast = Toast.Make(toastNotifMessage, ToastDuration.Short, fontsize);
-            await toast.Show(tokenSource.Token);
-
-            ClosePopUp = true;
+            return;
         }
+
+        await _expenditureService.GetAllExpendituresAsync();
+        await UpdateUserAsync(FinalTotalExp);
+
+        const string toastNotifMessage = "Flow Out Updated";
+        var toast = Toast.Make(toastNotifMessage, toastDuration, fontsize);
+        await toast.Show(tokenSource.Token);
+
+        ClosePopUp = true;
     }
 
-    private async Task<bool> AddExpenditureAsync(double fontSize, CancellationTokenSource tokenSource)
+    private async Task<bool> AddExpenditureAsync(double fontSize, CancellationTokenSource tokenSource, ToastDuration toastDuration)
     {
         SingleExpenditureDetails.Currency = ActiveUser.UserCurrency;
         SingleExpenditureDetails.AmountSpent = TotalAmountSpent;
@@ -140,7 +141,7 @@ public partial class UpSertExpenditureVM : ObservableObject
         await UpdateUserAsync(TotalAmountSpent);
 
         const string toastNotifMessage = "Flow Out Added";
-        var toast = Toast.Make(toastNotifMessage, ToastDuration.Short, fontSize);
+        var toast = Toast.Make(toastNotifMessage, toastDuration, fontSize);
         await toast.Show(tokenSource.Token);
         return true;
     }
