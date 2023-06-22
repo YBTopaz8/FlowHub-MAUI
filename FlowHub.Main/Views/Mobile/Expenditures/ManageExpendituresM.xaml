@@ -20,7 +20,7 @@
         <Label toolkit:DockLayout.DockPosition="Top" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center">
             
             <Label.Text>
-                <MultiBinding StringFormat="{} Current Balance is {0:n3} {1}">
+                <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
                     <Binding Path="UserPocketMoney"/>
                     <Binding Path="UserCurrency"/>
                 </MultiBinding>
@@ -205,7 +205,7 @@
                                             
                                             <Label>
                                                 <Label.Text>
-                                                    <MultiBinding StringFormat="{} Amount: {0:n3} {1}">
+                                                    <MultiBinding StringFormat="{} Amount: {0:n2} {1}">
                                                         <Binding Path="AmountSpent"/>
                                                         <Binding Path="Currency"/>
                                                     </MultiBinding>

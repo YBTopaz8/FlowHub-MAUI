@@ -481,7 +481,7 @@ public partial class ManageExpendituresVM : ObservableObject
             await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
             Sorting(GlobalSortNamePosition);
             IsBusy = false;
-            
+
         }
     }
 

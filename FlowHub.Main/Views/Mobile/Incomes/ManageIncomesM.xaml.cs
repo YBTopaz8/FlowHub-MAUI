@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui.Views;
 using FlowHub.Main.PopUpPages;
+using FlowHub.Main.Utilities;
 using FlowHub.Main.ViewModels.Incomes;
 using System.Diagnostics;
 
@@ -39,8 +40,11 @@ public partial class ManageIncomesM : ContentPage
     }
     private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
-        double NewAmount = (double) await Shell.Current.ShowPopupAsync(new InputPopUpPage(InputType.Numeric, new List<string>() { "Amount" }, "Enter New Pocket Money"));
-
-        viewModel.ResetUserPocketMoneyCommand.Execute(NewAmount);
+        PopUpCloseResult result = (PopUpCloseResult) await Shell.Current.ShowPopupAsync(new InputPopUpPage(InputType.Numeric, new List<string>() { "Amount" }, "Enter New Pocket Money"));
+        if (result.Result is PopupResult.OK)
+        {
+            double NewAmount = (double)result.Data;
+            viewModel.ResetUserPocketMoneyCommand.Execute(NewAmount);
+        }
     }
 }

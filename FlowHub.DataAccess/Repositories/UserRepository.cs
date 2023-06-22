@@ -197,33 +197,23 @@ public class UserRepository : IUsersRepository
 
     public async Task UpdateUserOnlineEditAsync(UsersModel user)
     {
-        if (DBOnline is null)
-        {
-            onlineDataAccessRepo.GetOnlineConnection();
-            DBOnline = onlineDataAccessRepo.OnlineMongoDatabase;
-        }
-        OnlineUserCollection ??= DBOnline.GetCollection<UsersModel>(userDataCollectionName);
+        EnsureOnlineConnection();
         UsersModel userToUpdate= user;
         userToUpdate.Id = user.UserIDOnline;
-        var s = await OnlineUserCollection.ReplaceOneAsync(u => u.Id == userToUpdate.Id, userToUpdate);
+        _ = await OnlineUserCollection.ReplaceOneAsync(u => u.Id == userToUpdate.Id, userToUpdate);
     }
 
     public async Task<bool> UpdateUserOnlineGetSetLatestValues(UsersModel user)
     {
-        FilterDefinition<UsersModel> filterUserCredentials = Builders<UsersModel>.Filter.Eq("Email", user.Email) &
-                                    Builders<UsersModel>.Filter.Eq("Password", user.Password);
-
-        if (DBOnline is null)
-        {
-            onlineDataAccessRepo.GetOnlineConnection();
-            DBOnline = onlineDataAccessRepo.OnlineMongoDatabase;
-        }
-        OnlineUserCollection ??= DBOnline.GetCollection<UsersModel>(userDataCollectionName);
+        EnsureOnlineConnection();
+        FilterDefinition<UsersModel> filterUserCredentials = Builders<UsersModel>.Filter.Eq(nameof(user.Email), user.Email) &
+                                    Builders<UsersModel>.Filter.Eq(nameof(user.Password), user.Password);
 
         var OnlineUser = await OnlineUserCollection.Find(filterUserCredentials).FirstOrDefaultAsync();
         if (OnlineUser.DateTimeOfPocketMoneyUpdate > OfflineUser.DateTimeOfPocketMoneyUpdate)
         {
             _ = await UpdateUserAsync(OnlineUser);
+            OfflineUser = OnlineUser;
             return true;
         }
         else
@@ -231,6 +221,17 @@ public class UserRepository : IUsersRepository
             await UpdateUserOnlineEditAsync(OfflineUser);
             return true;
         }
+    }
+
+    public void EnsureOnlineConnection()
+    {
+        if (DBOnline is null)
+        {
+            onlineDataAccessRepo.GetOnlineConnection();
+            DBOnline = onlineDataAccessRepo.OnlineMongoDatabase;
+        }
+
+        OnlineUserCollection ??= DBOnline.GetCollection<UsersModel>(userDataCollectionName);
     }
 
     public async Task DropCollection()

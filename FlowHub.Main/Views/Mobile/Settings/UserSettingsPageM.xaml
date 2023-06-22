@@ -63,7 +63,7 @@
                         <!--For Total Income-->
                         <Label FontAttributes="Bold" >
                             <Label.Text>
-                                <MultiBinding StringFormat="{} {0:n3} {1}">
+                                <MultiBinding StringFormat="{} {0:n2} {1}">
                                     <Binding Path="TotalIncomeAmount"/>
                                     <Binding Path="UserCurrency"/>
                                 </MultiBinding>
