@@ -15,7 +15,7 @@
     <toolkit:DockLayout>
         <toolkit:DockLayout.Resources>
             <ResourceDictionary>
-                <utilities:EnumHelper x:Key="EnumHelper"/>
+                
             </ResourceDictionary>
         </toolkit:DockLayout.Resources>
         
@@ -23,14 +23,14 @@
                    Margin="8"
                    toolkit:DockLayout.DockPosition="Top">
             <Label.Text>
-                    <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
-                        <Binding Path="UserPocketMoney"/>
-                        <Binding Path="UserCurrency"/>
-                    </MultiBinding>
-                </Label.Text>
-            </Label>
+                <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
+                    <Binding Path="UserPocketMoney"/>
+                    <Binding Path="UserCurrency"/>
+                </MultiBinding>
+            </Label.Text>
+        </Label>
         
-        <HorizontalStackLayout toolkit:DockLayout.DockPosition="Top"  Spacing="2"
+        <HorizontalStackLayout toolkit:DockLayout.DockPosition="Top" Spacing="2"
                                HorizontalOptions="Center" x:Name="SyncIndicator">
             <Label Text="Syncing..." IsVisible="{Binding IsBusy}" Margin="0,0,0,0" FontSize="13" />
             <ActivityIndicator IsRunning="{Binding IsBusy}" HeightRequest="30" IsVisible="{Binding IsBusy}"/>
@@ -39,8 +39,8 @@
         <Label toolkit:DockLayout.DockPosition="Top" Text="{Binding ExpTitle}" FontSize="20" 
                Margin="5" FontAttributes="Bold" HorizontalOptions="Center"/>
 
-        <HorizontalStackLayout toolkit:DockLayout.DockPosition="Bottom" Margin="10"
-                               HorizontalOptions="Center">
+        <HorizontalStackLayout toolkit:DockLayout.DockPosition="Bottom" 
+                               Margin="10" HorizontalOptions="Center">
             <Label FontSize="19" >
                 <Label.Text>
                     <MultiBinding StringFormat="{} {2} Flow Outs worth {0:n2} {1}">
@@ -125,8 +125,7 @@
                 </material:DataGridColumn>
                 
                 <material:DataGridColumn Binding="{Binding Reason}" Title="Reason"/>
-                    <material:DataGridColumn Binding="{Binding Category, Converter={StaticResource EnumHelper}}" Title="Reason"/>
-                
+                <material:DataGridColumn Binding="{Binding Category, Converter={StaticResource EnumHelper}}" Title="Category"/>                
 
                 <material:DataGridColumn Title="Amount Spent">
                     <material:DataGridColumn.CellItemTemplate>

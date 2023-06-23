@@ -1,6 +1,7 @@
 using CommunityToolkit.Maui.Views;
 using FlowHub.Main.Utilities;
 using FlowHub.Main.ViewModels.Expenditures;
+using System.Diagnostics;
 using UraniumUI.Material.Controls;
 
 namespace FlowHub.Main.Views;
@@ -41,7 +42,7 @@ public partial class UpSertExpendituresPopUp : Popup
 
         //        Size = new Size(popupWidth, popupHeight);
 #if WINDOWS
-        this.Size = new Size(400, 400);
+        this.Size = new Size(400, 420);
 #endif
         viewModel.PropertyChanged += ViewModel_PropertyChanged;
 	}
@@ -78,5 +79,5 @@ public partial class UpSertExpendituresPopUp : Popup
             UnitPrice.Text = "";
         }
     }
-}
 
+}

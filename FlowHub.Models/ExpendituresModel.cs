@@ -19,45 +19,76 @@ public class ExpendituresModel
     public DateTime UpdatedDateTime { get; set; } = DateTime.UtcNow;
     public string? Comment { get; set; }
     public string Currency { get; set; } = string.Empty;
-    public ExpenditureCategory Category { get; set; }
+    public ExpenditureCategory Category { get; set; } = ExpenditureCategory.None;
     public string? PlatformModel { get; set; }
     public bool UpdateOnSync { get; set; } = false;
     public string UserId { get; set; }
+
+
 }
 
 public enum ExpenditureCategory
 {
-    [Description("Transportation")]
-    Transportation,
-    [Description("Food and Dining")]
-    FoodAndDining,
-    [Description("Entertainment")]
-    Entertainment,
-    [Description("Shopping")]
-    Shopping,
-    [Description("Utilities")]
-    Utilities,
-    [Description("Rent")]
-    Rent,
-    [Description("Health and Fitness")]
-    HealthAndFitness,
-    [Description("Travel")]
-    Travel,
     [Description("Education")]
-    Education,
-    [Description("Gifts and Transfers")]
-    GiftsAndDonations,
-    [Description("Other")]
-    Other
-    //[Description("Taxes")]
-    //Taxes,
-    //[Description("Insurance")]
-    //Insurance,
-    //[Description("Fees and Charges")]
-    //FeesAndCharges,
-    //[Description("Personal Care")]
-    //PersonalCare,
-    //[Description("Mortgage")]
-    //Mortgage,
+    Education = 0,
 
+    [Description("Entertainment")]
+    Entertainment = 1,
+
+    [Description("Food")]
+    Food = 2,
+
+    [Description("Health")]
+    Health = 3,
+
+    [Description("None")]
+    None = 4,
+
+    [Description("Other")]
+    Other = 5,
+
+    [Description("Rent")]
+    Rent = 6,
+
+    [Description("Shopping")]
+    Shopping = 7,
+
+    [Description("Transfers")]
+    Transfers = 8,
+
+    [Description("Transportation")]
+    Transportation = 9,
+
+    [Description("Travel")]
+    Travel = 10,
+
+    [Description("Utilities")]
+    Utilities = 11
+}
+
+public static class ExpenditureCategoryDescriptions
+{
+    public static List<string> Descriptions { get; }
+    static ExpenditureCategoryDescriptions() => Descriptions = GetEnumDescriptions<ExpenditureCategory>();
+
+    private static List<string>? GetEnumDescriptions<T>()
+    {
+        Type type = typeof(T);
+        if (!type.IsEnum)
+        {
+            throw new ArgumentException("Type must be an enum");
+        }
+
+        var descriptions = new List<string>();
+        foreach (var field in type.GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static))
+        {
+            if (Attribute.IsDefined(field, typeof(DescriptionAttribute)))
+            {
+                var attribute = Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) as DescriptionAttribute;
+                descriptions.Add(attribute?.Description ?? string.Empty);
+            }
+        }
+
+        return descriptions;
+    }
 }
