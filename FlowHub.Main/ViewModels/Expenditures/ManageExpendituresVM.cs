@@ -25,6 +25,8 @@ public partial class ManageExpendituresVM : ObservableObject
     {
         expendituresService = expendituresRepository;
         userService = usersRepository;
+        ExpendituresCat = ExpenditureCategoryDescriptions.Descriptions;
+        
     }
 
     [ObservableProperty]
@@ -79,6 +81,9 @@ public partial class ManageExpendituresVM : ObservableObject
 
     [ObservableProperty]
     private bool isSyncing;
+
+    [ObservableProperty]
+    List<string> expendituresCat;
 
     private string filterOption;
     private int GlobalSortNamePosition = 1;

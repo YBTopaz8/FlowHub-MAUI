@@ -22,8 +22,6 @@
                     <Label Text="Hello." FontSize="Title" FontAttributes="Bold"/>
                     <Label Text="Welcome to FlowHub" FontSize="Title" Margin="0,0,0,20" FontAttributes="Bold"/>
                     
-                    
-                    
                 </VerticalStackLayout>
               
                 

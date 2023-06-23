@@ -12,10 +12,6 @@ using FlowHub.Main.Utilities;
 
 namespace FlowHub.Main.ViewModels.Expenditures;
 
-//[QueryProperty(nameof(SingleExpenditureDetails), "SingleExpenditureDetails")]
-//[QueryProperty(nameof(PageTitle), nameof(PageTitle))]
-//[QueryProperty(nameof(ActiveUser), "ActiveUser")]
-//[QueryProperty(nameof(IsAdd), "IsAdd")]
 public partial class UpSertExpenditureVM : ObservableObject
 {
     private readonly IExpendituresRepository _expenditureService;
@@ -29,6 +25,8 @@ public partial class UpSertExpenditureVM : ObservableObject
         PageTitle = pageTitle;
         IsAdd = isAdd;
         ActiveUser = activeUser;
+        ExpenditureCategory = Enum.GetValues(typeof(ExpenditureCategory)).Cast<ExpenditureCategory>().ToList();
+        
     }
 
     [ObservableProperty]
@@ -51,13 +49,16 @@ public partial class UpSertExpenditureVM : ObservableObject
 
     [ObservableProperty]
     PopupResult thisPopUpResult;
+
     [ObservableProperty]
     bool closePopUp;
 
-    private double _initialUserPocketMoney;
-    private double _initialExpenditureAmount;
+    [ObservableProperty]
+    List<ExpenditureCategory> expenditureCategory;
 
-    private double _initialTotalExpAmount;
+    double _initialUserPocketMoney;
+    double _initialExpenditureAmount;
+    double _initialTotalExpAmount;
 
 
     [RelayCommand]
@@ -80,7 +81,6 @@ public partial class UpSertExpenditureVM : ObservableObject
     {
         if (ResultingBalance < 0)
         {
-
             ThisPopUpResult = PopupResult.Cancel;
             ClosePopUp = true;
             await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Not Enough balance to save"));
@@ -88,6 +88,8 @@ public partial class UpSertExpenditureVM : ObservableObject
         }
         CancellationTokenSource cancellationTokenSource = new();
         ToastDuration duration = ToastDuration.Short;
+
+        
         if (SingleExpenditureDetails.Id is not null)
         {
             UpdateExpenditureAsync(14, cancellationTokenSource, duration);
