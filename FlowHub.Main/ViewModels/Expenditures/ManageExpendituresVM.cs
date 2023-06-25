@@ -32,6 +32,9 @@ public partial class ManageExpendituresVM : ObservableObject
     ObservableCollection<ExpendituresModel> expendituresList;
 
     [ObservableProperty]
+    ObservableCollection<DateGroup> groupedExpenditures;
+
+    [ObservableProperty]
     private double totalAmount;
 
     [ObservableProperty]
@@ -233,28 +236,40 @@ public partial class ManageExpendituresVM : ObservableObject
 
     [RelayCommand]
     //Function to show very single expenditure from DB
-    public async void FilterGetAllExp()
+    public void FilterGetAllExp()
     {
         try
         {
             ShowDayFilter = false;
             filterOption = "Filter_All";
+            ExpTitle = "All Flow Outs";
+            FilterTitle = "Date Spent Descending";
             List<ExpendituresModel> expList = new ();
 
-            expList = ExpendituresList is not null ? ExpendituresList.OrderByDescending(x => x.DateSpent).ToList() : expendituresService.OfflineExpendituresList.OrderByDescending(x => x.DateSpent).ToList();
-            FilterTitle = "Date Spent Descending";
+            if (ExpendituresList is not null)
+            {
+                expList = ExpendituresList.OrderByDescending(x => x.DateSpent).ToList();
+            }
+            else
+            {
+                expList = expendituresService.OfflineExpendituresList.OrderByDescending(x => x.DateSpent).ToList();
+            }
+            var groupedData = expList.GroupBy(e => e.DateSpent.Date)
+                .Select(g => new DateGroup(g.Key, g.ToList()))
+                .ToList();
+            GroupedExpenditures = new ObservableCollection<DateGroup>(groupedData);
 
-            var tempList = await Task.Run(() => new ObservableCollection<ExpendituresModel>(expList));
-            ExpendituresList = tempList;
+#if WINDOWS
+            ExpendituresList = new ObservableCollection<ExpendituresModel>(expList);
+#endif
 
-            TotalAmount = ExpendituresList.Sum(x => x.AmountSpent);
-            TotalExpenditures = ExpendituresList.Count;
+            TotalAmount = expList.AsParallel().Sum(x => x.AmountSpent);
+            TotalExpenditures = expList.Count;
 
             IsBusy = false;
 
-            ExpTitle = "All Flow Outs";
-
             ShowStatisticBtn = expList.Count >= 3;
+            OnPropertyChanged(nameof(GroupedExpenditures));
         }
         catch (Exception ex)
         {
@@ -387,31 +402,17 @@ public partial class ManageExpendituresVM : ObservableObject
     {
         await AddEditExpediture(expenditure, "Edit Flow Out", false);
     }
-    private async Task AddEditExpediture(ExpendituresModel newExpenditure, string pageTitle, bool isAdd)
+    private async Task AddEditExpediture(ExpendituresModel expenditure, string pageTitle, bool isAdd)
     {
-        ExpendituresModel nExp = newExpenditure;
+        ExpendituresModel nExp = expenditure;
         var NewUpSertVM = new UpSertExpenditureVM(expendituresService, userService, nExp, pageTitle, isAdd, ActiveUser);
         var UpSertResult = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new UpSertExpendituresPopUp(NewUpSertVM));
 
         if (UpSertResult.Result == PopupResult.OK)
         {
-            ExpendituresModel exp = (ExpendituresModel)UpSertResult.Data;
-            if (isAdd)
-            {
-                ExpendituresList.Add(exp);
-                TotalAmount += exp.AmountSpent;
-                TotalExpenditures++;
-                FilterGetAllExp();
-            }
-            else
-            {
-                // Get the old expenditure before replacing it
-                var oldExp = ExpendituresList[ExpendituresList.IndexOf(nExp)];
-                ExpendituresList[ExpendituresList.IndexOf(nExp)] = exp;
-
-                // Adjust total amount and total expenditures
-                TotalAmount = TotalAmount - oldExp.AmountSpent + exp.AmountSpent;
-            }
+           IsBusy = true;
+           ExpendituresList = null;
+           FilterGetAllExp();
         }
     }
 
@@ -469,8 +470,8 @@ public partial class ManageExpendituresVM : ObservableObject
             {
                 text = "Flow Out Deleted";
                 expendituresService.OfflineExpendituresList.Remove(expenditure);
-                ExpendituresList.Remove(expenditure);
 
+                FilterGetAllExp();
                 ActiveUser.TotalExpendituresAmount -= expenditure.AmountSpent;
                 ActiveUser.PocketMoney += expenditure.AmountSpent;
                 UserPocketMoney += expenditure.AmountSpent;
@@ -482,7 +483,7 @@ public partial class ManageExpendituresVM : ObservableObject
             }
             var toast = Toast.Make(text, duration, fontSize);
             await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
-            Sorting(GlobalSortNamePosition);
+          //  Sorting(GlobalSortNamePosition);
             IsBusy = false;
         }
     }
@@ -583,5 +584,20 @@ public partial class ManageExpendituresVM : ObservableObject
     public async void DropCollection()
     {
         await expendituresService.DropExpendituresCollection();
+    }
+}
+
+public class DateGroup : List<ExpendituresModel>
+{
+    public DateTime Date { get; set; }
+    public double TotalAmount { get; set; }
+    public int TotalCount { get; set; }
+    public string Currency { get; }
+    public DateGroup(DateTime date, List<ExpendituresModel> expenditures) : base(expenditures)
+    {
+       Date = date;
+       TotalAmount = expenditures.Sum(x => x.AmountSpent);
+       TotalCount = expenditures.Count;
+       Currency = expenditures[0].Currency;
     }
 }

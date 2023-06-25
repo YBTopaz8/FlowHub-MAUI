@@ -137,6 +137,8 @@ public partial class UpSertExpenditureVM : ObservableObject
         {
             return false;
         }
+
+        await _expenditureService.GetAllExpendituresAsync();
         await UpdateUserAsync(TotalAmountSpent);
 
         const string toastNotifMessage = "Flow Out Added";

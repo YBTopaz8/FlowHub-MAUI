@@ -33,7 +33,7 @@
                     <Image Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}" Grid.Row="0" 
                            Margin="5"
                            HorizontalOptions="Center" HeightRequest="70"/>
-                    <VerticalStackLayout Margin="8,0" >
+                    <VerticalStackLayout Margin="8,0" HorizontalOptions="Center">
                         <Label Text="Hello." FontSize="Title" FontAttributes="Bold"/>
                         <Label Text="Welcome to FlowHub" FontSize="Title" Margin="0,0,0,40" FontAttributes="Bold"/>
                     </VerticalStackLayout>

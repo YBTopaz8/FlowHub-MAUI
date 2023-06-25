@@ -163,7 +163,8 @@
                          VerticalOptions="Start" HorizontalOptions="Center" Margin="0,0,10,0" Grid.Column="2"/>
         </Grid>
         
-        <CollectionView x:Name="ColView" IsVisible="true" ItemsSource="{Binding ExpendituresList}"                        
+        <CollectionView x:Name="ColView" IsVisible="true" ItemsSource="{Binding GroupedExpenditures}"
+                        IsGrouped="True"
                         HorizontalOptions="Center">
             <CollectionView.EmptyView>
                 <ContentView>
@@ -173,12 +174,33 @@
                     </VerticalStackLayout>
                 </ContentView>
             </CollectionView.EmptyView>
+
+            <CollectionView.GroupHeaderTemplate>
+                <DataTemplate x:DataType="viewModels:DateGroup">
+                    <Label Text="{Binding Date, StringFormat='{0:ddd, MMMM dd, yyyy}'}" 
+                           BackgroundColor="#404040"
+                           FontAttributes="Bold" FontSize="12" Padding="10,3"/>
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>
+            <CollectionView.GroupFooterTemplate>
+                <DataTemplate x:DataType="viewModels:DateGroup">
+                    <Label FontAttributes="Bold" FontSize="10" Margin="10,5" HorizontalOptions="End">
+                        <Label.Text>
+                            <MultiBinding StringFormat="{}{0} Flows, Total : {1:n2} {2}">
+                                <Binding Path="TotalCount"/>
+                                <Binding Path="TotalAmount"/>
+                                <Binding Path="Currency"/>
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>                    
+                </DataTemplate>
+            </CollectionView.GroupFooterTemplate>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:ExpendituresModel">
                     <ScrollView Margin="0,2">
-                        <VerticalStackLayout HorizontalOptions="Center"> <!--set to fill and expand for it to take the whole width of the screen-->
-                            <SwipeView >
-                                <SwipeView.LeftItems>                                    
+                            <!--set to fill and expand for it to take the whole width of the screen-->
+                            <SwipeView HorizontalOptions="FillAndExpand" >
+                                <SwipeView.LeftItems>
                                     <SwipeItem 
                                         Command="{Binding Source={x:Reference Page}, 
                                             Path=BindingContext.ShowEditExpenditurePopUpCommand}"  
@@ -194,33 +216,30 @@
                                             IconImageSource="{AppThemeBinding Dark= delete_d.png, Light = delete_l.png}" 
                                                BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
                                 </SwipeView.RightItems>
-
-                                <Border Padding="10" HeightRequest="110" 
-                                        MinimumWidthRequest="370">
-                                    <Border.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding Source={x:Reference Page}, Path=BindingContext.CopyToClipboardCommand}"
+                                <VerticalStackLayout HorizontalOptions="FillAndExpand">
+                                    <VerticalStackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer NumberOfTapsRequired="2" Command="{Binding Source={x:Reference Page}, Path=BindingContext.CopyToClipboardCommand}"
                                                               CommandParameter="{Binding .}"/>
-                                    </Border.GestureRecognizers>
-                                    <VerticalStackLayout HorizontalOptions="FillAndExpand">
-                                        <Label HorizontalOptions="Center" Text="{Binding DateSpent, StringFormat='{0:MMMM dd, yyyy}'}"/>
+                                    </VerticalStackLayout.GestureRecognizers>
+                                    
+                                    <FlexLayout JustifyContent="SpaceBetween" Direction="Row" Margin="10,5">
                                         <VerticalStackLayout>
-                                            <Label Margin="3,0" Text="{Binding Reason, StringFormat='Reason: {0}'}"/>
-                                            <Label Margin="3,0" Text="{Binding Category, StringFormat='Category: {0}'}"/>
-                                            <Label>
-                                                <Label.Text>
-                                                    <MultiBinding StringFormat="{} Amount: {0:n2} {1}">
-                                                        <Binding Path="AmountSpent"/>
-                                                        <Binding Path="Currency"/>
-                                                    </MultiBinding>
-                                                </Label.Text>
-                                            </Label>
+                                            <Label Text="{Binding Reason}" FontAttributes="Bold"/>
+
+                                            <Label Text="{Binding Category}" Margin="0,0" FontAttributes="Italic"/>
                                         </VerticalStackLayout>
-                                    </VerticalStackLayout>
-                                </Border>
-
+                                        <Label FontAttributes="Bold">
+                                            <Label.Text>
+                                                <MultiBinding StringFormat="{}{0:n2} {1}">
+                                                    <Binding Path="AmountSpent"/>
+                                                    <Binding Path="Currency"/>
+                                                </MultiBinding>
+                                            </Label.Text>
+                                        </Label>
+                                    </FlexLayout>
+                                    <Rectangle Fill="#404040" HeightRequest="2"/>
+                                </VerticalStackLayout>
                             </SwipeView>
-
-                        </VerticalStackLayout>
                     </ScrollView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
