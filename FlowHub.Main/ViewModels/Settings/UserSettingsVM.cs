@@ -142,6 +142,12 @@ public partial class UserSettingsVM : ObservableObject
     }
 
     [RelayCommand]
+    public async void DeleteIdsCollection()
+    {
+        await expService.DropCollectionIDsToDelete();
+    }
+
+    [RelayCommand]
     public async void AddTax()
     {
         List<string> fieldTitles = new() { "Tax Name", "Tax Percentage" };

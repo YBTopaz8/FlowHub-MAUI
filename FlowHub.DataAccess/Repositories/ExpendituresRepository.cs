@@ -55,7 +55,7 @@ public class ExpendituresRepository : IExpendituresRepository
                 userId = usersRepo.OfflineUser.UserIDOnline;
             }
             OfflineExpendituresList = await AllExpenditures.Query().Where(x => x.UserId == userId && x.Currency == userCurrency).ToListAsync();
-
+            
             db.Dispose();
 
             return OfflineExpendituresList;
@@ -349,5 +349,15 @@ public class ExpendituresRepository : IExpendituresRepository
         await db.DropCollectionAsync(expendituresDataCollectionName);
         db.Dispose();
         Debug.WriteLine("Expenditures Collection dropped!");
+    }
+
+    public async Task DropCollectionIDsToDelete()
+    {
+        OpenDB();
+        await db.DropCollectionAsync(IDsDataCollectionName);
+        db.Dispose();
+        Debug.WriteLine("IDs Collection dropped!");
+        //Display alert saying that the collection was dropped
+        await Shell.Current.DisplayAlert("Alert", "Collection dropped!", "OK");
     }
 }

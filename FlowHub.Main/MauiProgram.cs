@@ -89,7 +89,9 @@ public static class MauiProgram
 
         /*-- Section for Expenditures --*/
         builder.Services.AddSingleton<UpSertExpenditurePageD>();
-        builder.Services.AddSingleton<ManageExpendituresD>();
+        builder.Services.AddSingleton<ManageExpendituresPageD>();
+
+        builder.Services.AddSingleton<ManageExpendituresD>();//depreciated
 
         /*-- Section for Incomes --*/
         builder.Services.AddSingleton<ManageIncomesD>();

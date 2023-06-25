@@ -22,7 +22,6 @@
                             <HorizontalStackLayout Spacing="5">
                                 <Image Source="{AppThemeBinding Light=email_dsb,Dark=email_dsb}" HeightRequest="20"/>
                                 <Label Text="{Binding UserEmail}"/>
-
                             </HorizontalStackLayout>
 
                         </VerticalStackLayout>
@@ -75,6 +74,9 @@
                     <Rectangle Fill="darkslateblue"/>
 
                     <VerticalStackLayout HorizontalOptions="End" Spacing="5">
+                        <VerticalStackLayout.GestureRecognizers>
+                            <TapGestureRecognizer NumberOfTapsRequired="2" Command="{Binding DeleteIdsCollectionCommand}"/>
+                        </VerticalStackLayout.GestureRecognizers>
                         <!--For total debts-->
                         <Label FontAttributes="Bold" >
                             <Label.Text>
@@ -129,6 +131,7 @@
                 <Rectangle/>
 
                 <VerticalStackLayout Margin="5,15" Spacing="10">
+                    
                     <Label Text="Currency" FontSize="11" />
                     <Label Text="{Binding UserCurrency}" FontSize="15" FontAttributes="Bold"/>
                 </VerticalStackLayout>

@@ -22,8 +22,8 @@ public partial class ManageExpendituresD : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        viewModel.PageloadedAsyncCommand.Execute(null);
-        dateSort.CommandParameter = 0;
+        //viewModel.PageloadedAsyncCommand.Execute(null);
+        //dateSort.CommandParameter = 0;
     }
     private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {

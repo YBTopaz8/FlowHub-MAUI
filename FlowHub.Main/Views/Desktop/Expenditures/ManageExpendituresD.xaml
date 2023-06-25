@@ -32,8 +32,9 @@
         
         <HorizontalStackLayout toolkit:DockLayout.DockPosition="Top" Spacing="2"
                                HorizontalOptions="Center" x:Name="SyncIndicator">
-            <Label Text="Syncing..." IsVisible="{Binding IsBusy}" Margin="0,0,0,0" FontSize="13" />
-            <ActivityIndicator IsRunning="{Binding IsBusy}" HeightRequest="30" IsVisible="{Binding IsBusy}"/>
+            <!--<Label Text="Syncing..." IsVisible="{Binding IsBusy}" Margin="0,0,0,0" FontSize="13" />-->
+            <!--<ActivityIndicator IsRunning="{Binding IsBusy}" HeightRequest="30" IsVisible="{Binding IsBusy}"/>-->
+            
         </HorizontalStackLayout>
 
         <Label toolkit:DockLayout.DockPosition="Top" Text="{Binding ExpTitle}" FontSize="20" 
@@ -89,7 +90,7 @@
         </VerticalStackLayout>
 
 
-        <ScrollView x:Name="DGScrollView" VerticalScrollBarVisibility="Never"
+        <ScrollView x:Name="DGScrollView" VerticalScrollBarVisibility="Never" IsVisible="false" IsEnabled="False"
                     HorizontalOptions="FillAndExpand">
             <material:DataGrid ItemsSource="{Binding ExpendituresList}"
                                     MaximumWidthRequest="1000" Padding="10" 

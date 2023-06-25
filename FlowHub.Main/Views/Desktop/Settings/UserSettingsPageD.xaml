@@ -22,6 +22,7 @@
             <Button Text="My Profile"/>
             <Button Text="Security"/>
             <Button Text="Data Export"/>
+            <Button Text="Log Out" BackgroundColor="DarkRed" Command="{Binding LogOutUserCommand}"/>
         </VerticalStackLayout>
         <VerticalStackLayout Margin="25,20,20,0">        
             <Image Source="{AppThemeBinding Dark=user_icon_d.png, Light=user_icon_l.png}" HeightRequest="80"/>
@@ -57,6 +58,9 @@
                         </VerticalStackLayout>
 
                         <VerticalStackLayout>
+                            <VerticalStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer NumberOfTapsRequired="2" Command="{Binding DeleteIdsCollectionCommand}"/>
+                            </VerticalStackLayout.GestureRecognizers>
                             <Label FontAttributes="Bold" FontSize="20">
                                 <Label.Text>
                                     <MultiBinding StringFormat="{} XXX {0}">

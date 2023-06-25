@@ -17,4 +17,5 @@ public interface IExpendituresRepository
     Task<bool> SynchronizeExpendituresAsync(string userEmail, string userPassword);
 
     Task DropExpendituresCollection();
+    Task DropCollectionIDsToDelete();
 }

@@ -71,7 +71,7 @@ public static class PrintExpenditures
             table.AddCell(new Paragraph($"{item.Reason}")
                 .SetTextAlignment(TextAlignment.CENTER));
 
-            table.AddCell(new Paragraph($"{item.AmountSpent:n2} {printDisplayCurrency}")
+            table.AddCell(new Paragraph($"{amount:n2} {printDisplayCurrency}")
                 .SetTextAlignment(TextAlignment.CENTER));
 
             table.AddCell(new Paragraph($"{item.DateSpent.ToShortDateString()}")

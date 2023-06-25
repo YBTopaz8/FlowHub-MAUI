@@ -14,7 +14,9 @@ public partial class AppShell : Shell
 		Routing.RegisterRoute(nameof(HomePageD), typeof(HomePageD));
 		Routing.RegisterRoute(nameof(LoginD), typeof(LoginD));
 
-		Routing.RegisterRoute(nameof(ManageExpendituresD), typeof(ManageExpendituresD));
+		Routing.RegisterRoute(nameof(ManageExpendituresPageD), typeof(ManageExpendituresPageD));
+		
+		Routing.RegisterRoute(nameof(ManageExpendituresD), typeof(ManageExpendituresD)); //deprecated
 		Routing.RegisterRoute(nameof(UpSertExpenditurePageD), typeof(UpSertExpenditurePageD));
 
 		Routing.RegisterRoute(nameof(ManageIncomesD), typeof(ManageIncomesD));

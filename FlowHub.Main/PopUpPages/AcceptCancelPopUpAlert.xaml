@@ -4,10 +4,10 @@
              xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
              x:Class="FlowHub.Main.PopUpPages.AcceptCancelPopUpAlert"
              CanBeDismissedByTappingOutsideOfPopup="False"
-             Size="330,185"
+             Size="330,180"
              Color="Transparent">
 
-    <Border
+    <Border Margin="30"
         Stroke="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=White}"
         StrokeThickness="0"
         StrokeShape="RoundRectangle 8">
@@ -16,8 +16,7 @@
             <VerticalStackLayout.Resources>
                 <ResourceDictionary>
                     <Style TargetType="Label">
-                        <Setter Property="TextColor" Value="{AppThemeBinding Dark=white, Light=black}"/>
-                        <Setter Property="FontSize" Value="19"/>
+                        <Setter Property="TextColor" Value="{AppThemeBinding Dark=white, Light=black}"/>                        
                     </Style>
                     <Style TargetType="Button">
                         <Setter Property="BackgroundColor" Value="Transparent"/>
@@ -25,8 +24,8 @@
                 </ResourceDictionary>
             </VerticalStackLayout.Resources>
 
-            <Label FontSize="20" TextColor="{AppThemeBinding Dark=white, Light=black}"
-            Text="Confirm Action" x:Name="DisplayAlertTitle"
+            <Label FontSize="23" TextColor="{AppThemeBinding Dark=white, Light=black}"
+            Text="Confirm Action" x:Name="DisplayAlertTitle" FontAttributes="Bold"
             VerticalOptions="Start" 
             HorizontalOptions="Start" />
 
@@ -34,9 +33,9 @@
 
             <HorizontalStackLayout HorizontalOptions="EndAndExpand" Spacing="8">
                 
-                <Button Text="Yes" FontSize="20"
+                <Button Text="Yes" FontSize="20" BackgroundColor="DarkSlateBlue" FontAttributes="Bold"
                         Clicked="OnYesButtonClicked"/>
-                <Button Text="Cancel" FontSize="20"
+                <Button Text="Cancel" FontSize="18" BackgroundColor="DarkRed"
                         Clicked="OnNoButtonClicked"/>
             </HorizontalStackLayout>
         </VerticalStackLayout>

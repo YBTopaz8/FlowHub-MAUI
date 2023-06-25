@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -103,7 +104,7 @@ public partial class ManageExpendituresVM : ObservableObject
         UserPocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
         await expendituresService.GetAllExpendituresAsync();
-        filterOption = "Filter_Curr_Month";
+      //  filterOption = "Filter_Curr_Month";
 
         FilterGetAllExp();
     }
@@ -257,10 +258,12 @@ public partial class ManageExpendituresVM : ObservableObject
             var groupedData = expList.GroupBy(e => e.DateSpent.Date)
                 .Select(g => new DateGroup(g.Key, g.ToList()))
                 .ToList();
-            GroupedExpenditures = new ObservableCollection<DateGroup>(groupedData);
 
 #if WINDOWS
             ExpendituresList = new ObservableCollection<ExpendituresModel>(expList);
+#elif ANDROID
+            GroupedExpenditures = new ObservableCollection<DateGroup>(groupedData);
+            OnPropertyChanged(nameof(GroupedExpenditures));
 #endif
 
             TotalAmount = expList.AsParallel().Sum(x => x.AmountSpent);
@@ -269,7 +272,6 @@ public partial class ManageExpendituresVM : ObservableObject
             IsBusy = false;
 
             ShowStatisticBtn = expList.Count >= 3;
-            OnPropertyChanged(nameof(GroupedExpenditures));
         }
         catch (Exception ex)
         {
@@ -411,7 +413,7 @@ public partial class ManageExpendituresVM : ObservableObject
         if (UpSertResult.Result == PopupResult.OK)
         {
            IsBusy = true;
-           ExpendituresList = null;
+          
            FilterGetAllExp();
         }
     }
@@ -492,6 +494,9 @@ public partial class ManageExpendituresVM : ObservableObject
     public async Task PrintExpendituresBtn()
     {
         Activ = true;
+#if ANDROID
+        ExpendituresList = GroupedExpenditures.SelectMany(x => x).ToObservableCollection();
+#endif
 
         if (ExpendituresList?.Count < 1 || ExpendituresList is null)
         {

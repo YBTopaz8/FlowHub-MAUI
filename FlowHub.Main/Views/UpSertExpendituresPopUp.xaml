@@ -85,7 +85,7 @@
                 </material:DatePickerField>
 
                 <Grid ColumnDefinitions="*" ColumnSpacing="8">
-                    <material:TextField Grid.Column="0" Title="Unit Price"
+                    <material:TextField Grid.Column="0" Title="Price"
                                         x:Name="UnitPrice" Focused="UnitPrice_Focused"
                                         TextChanged="UnitPrice_TextChanged"
                                         AccentColor="Gray"
@@ -94,6 +94,10 @@
                     </material:TextField>
                 </Grid>
 
+                <material:PickerField Title="Category" ItemsSource="{Binding ExpenditureCategory}" SelectedItem="{Binding SingleExpenditureDetails.Category}"
+                                      ItemDisplayBinding="{Binding Converter={StaticResource EnumConverter}}"
+                                      AccentColor="Gray"/>
+                
                 <material:EditorField Title="Reason" Text="{Binding SingleExpenditureDetails.Reason}" IsTextPredictionEnabled="True"
                                       AccentColor="Gray"
                                       TitleColor="White">
@@ -102,13 +106,11 @@
                     </material:EditorField.Validations>
                 </material:EditorField>
 
-                <material:PickerField Title="Category" ItemsSource="{Binding ExpenditureCategory}" SelectedItem="{Binding SingleExpenditureDetails.Category}"
-                                      ItemDisplayBinding="{Binding Converter={StaticResource EnumConverter}}"
-                                      AccentColor="Gray"/>
+                
 
                 <HorizontalStackLayout HorizontalOptions="Center" Margin="0,15,0,0" Spacing="15">
                     <Button input:FormView.IsSubmitButton="True"
-                                            Text="Save Expenditure" BackgroundColor="{StaticResource SaveBtnColor}" TextColor="White" 
+                                            Text="Save Flow Out" BackgroundColor="{StaticResource SaveBtnColor}" TextColor="White" 
                                             FontSize="20" FontAttributes="Bold"/>
 
                     <Button Command="{Binding CancelBtnCommand}"

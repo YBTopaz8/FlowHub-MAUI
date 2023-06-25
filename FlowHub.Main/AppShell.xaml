@@ -25,6 +25,11 @@
         </Tab>
 
         <Tab Title="Flow Outs" >
+            <ShellContent Title="Manage Flow Outs"                          
+                ContentTemplate="{DataTemplate viewsExpenditures:ManageExpendituresPageD}"
+                Route="ManageExpenditures"/>
+        </Tab>
+        <Tab Title="Flow Outs Depreciated" >
             <ShellContent Title="Manage Expenditures"                          
                 ContentTemplate="{DataTemplate viewsExpenditures:ManageExpendituresD}"
                 Route="ManageExpenditures"/>

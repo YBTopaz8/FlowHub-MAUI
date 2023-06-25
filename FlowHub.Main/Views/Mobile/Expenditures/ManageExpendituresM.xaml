@@ -16,9 +16,8 @@
         <ToolbarItem IconImageSource="filter_d" Command="{Binding ShowFilterPopUpPageCommand}"/>
     </ContentPage.ToolbarItems>
 
-    <toolkit:DockLayout>
-        <Label toolkit:DockLayout.DockPosition="Top" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center">
-            
+    <toolkit:DockLayout Margin="5,0">
+        <Label toolkit:DockLayout.DockPosition="Top" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,5">            
             <Label.Text>
                 <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
                     <Binding Path="UserPocketMoney"/>
@@ -54,8 +53,9 @@
 
         <Label toolkit:DockLayout.DockPosition="Top" Text="{Binding ExpTitle}" FontSize="20" Margin="5" FontAttributes="Bold" HorizontalOptions="Center"/>
         
-        <Grid ColumnDefinitions="*,*" toolkit:DockLayout.DockPosition="Top">            
-            <toolkit:Expander Grid.Column="0" HorizontalOptions="Start" x:Name="filterExpander">
+        <Grid ColumnDefinitions="*,*" toolkit:DockLayout.DockPosition="Top">   <!--This section contains the sorting buttons on the left and date filter on the right-->
+            
+            <toolkit:Expander Grid.Column="0" HorizontalOptions="Start" x:Name="filterExpander" IsVisible="false">
                 <toolkit:Expander.Header>
                     <HorizontalStackLayout>
                         <Border WidthRequest="40" HorizontalOptions="Start"
@@ -141,9 +141,9 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <ImageButton x:Name="pie_chart" Source="{AppThemeBinding Dark=pie_chart, Light=pie_chart_l}" 
+            <!--<ImageButton x:Name="pie_chart" Source="{AppThemeBinding Dark=pie_chart, Light=pie_chart_l}" 
                          HorizontalOptions="Start" IsVisible="{Binding ShowStatisticBtn}"
-                         Grid.Column="0" VerticalOptions="Start" Command="{Binding GoToSpecificStatsPageCommand}"/>
+                         Grid.Column="0" VerticalOptions="Start" Command="{Binding GoToSpecificStatsPageCommand}"/>-->
             <!--IsVisible="{Binding ShowStatisticBtn}"-->
             <Label FontSize="17" Margin="3" Grid.Column="0" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="End">
                 <Label.Text>
@@ -237,7 +237,7 @@
                                             </Label.Text>
                                         </Label>
                                     </FlexLayout>
-                                    <Rectangle Fill="#404040" HeightRequest="2"/>
+                                    <Rectangle Fill="#404040" HeightRequest="0.8"/>
                                 </VerticalStackLayout>
                             </SwipeView>
                     </ScrollView>

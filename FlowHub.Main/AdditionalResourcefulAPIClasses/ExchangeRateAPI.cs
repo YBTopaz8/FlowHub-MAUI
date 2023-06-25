@@ -74,5 +74,26 @@ public class ExchangeRateAPI
         public double HUF { get; set; }
         public double BGN { get; set; }
         public double PKR { get; set; }
+        public double QAR { get; set; } // Qatar Riyal
+        public double KRW { get; set; } // South Korean Won
+        public double BDT { get; set; } // Bangladesh Taka
+        public double VND { get; set; } // Vietnamese Dong
+        public double UAH { get; set; } // Ukrainian Hryvnia
+        public double PEN { get; set; } // Peruvian Sol
+        public double RON { get; set; } // Romanian Leu
+        public double CLP { get; set; } // Chilean Peso
+        public double COP { get; set; } // Colombian Peso
+        public double ZMW { get; set; } // Zambian Kwacha
+        public double MUR { get; set; } // Mauritian Rupee
+        public double LKR { get; set; } // Sri Lankan Rupee
+        public double NPR { get; set; } // Nepalese Rupee
+        public double MDL { get; set; } // Moldovan Leu
+        public double GHS { get; set; } // Ghanaian Cedi
+        public double JMD { get; set; } // Jamaican Dollar
+        public double TTD { get; set; } // Trinidad and Tobago Dollar
+        public double CRC { get; set; } // Costa Rican Colón
+        public double UYU { get; set; } // Uruguayan Peso
+        public double DOP { get; set; } // Dominican Peso
+        public double KZT { get; set; } // Kazakhstani Tenge
     }
 }
