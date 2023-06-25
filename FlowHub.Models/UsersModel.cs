@@ -47,7 +47,6 @@ public class UsersModel : INotifyPropertyChanged
     public double TotalIncomeAmount {
         get => totalIncomeAmount;
         set => SetProperty(ref totalIncomeAmount, value);
-
     }
     public double TotalInDebtAmount {
         get => totalInDebtAmount;
@@ -57,7 +56,6 @@ public class UsersModel : INotifyPropertyChanged
     public double TotalOutDebtAmount {
         get => totalOutDebtAmount;
         set => SetProperty(ref totalOutDebtAmount, value);
-
     }
     public DateTime DateTimeOfPocketMoneyUpdate { get; set; }
     public string UserCountry { get; set; } = null!;

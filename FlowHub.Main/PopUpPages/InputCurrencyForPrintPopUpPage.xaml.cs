@@ -10,9 +10,52 @@ public partial class InputCurrencyForPrintPopUpPage : Popup
         DisplayAlertText.Text = DisplayText;
         //TODO: Pass the user currency in th title of the popup page and remove this display text
 
-        //TODO: Add more currencies
-       List<string> ListOfCurrencies= new(){ "AUD", "BRL", "CAD", "CNY", "EUR", "GBP", "KES", "NGN", "TND", "USD", "XOF", "XAF", "ZAR"};
-       CurrencyPicker.ItemsSource = ListOfCurrencies;
+        
+        List<string> ListOfCurrencies = new()
+        {
+            "AUD", // Australian Dollar
+            "BRL", // Brazilian Real
+            "CAD", // Canadian Dollar
+            "CNY", // Chinese Yuan
+            "EUR", // Euro
+            "GBP", // British Pound
+            "KES", // Kenyan Shilling
+            "NGN", // Nigerian Naira
+            "TND", // Tunisian Dinar
+            "USD", // US Dollar
+            "XOF", // West African CFA Franc
+            "XAF", // Central African CFA Franc
+            "ZAR", // South African Rand
+            "JPY", // Japanese Yen
+            "INR", // Indian Rupee
+            "RUB", // Russian Ruble
+            "NZD", // New Zealand Dollar
+            "CHF", // Swiss Franc
+            "SEK", // Swedish Krona
+            "NOK", // Norwegian Krone
+            "DKK", // Danish Krone
+            "MXN", // Mexican Peso
+            "SGD", // Singapore Dollar
+            "HKD", // Hong Kong Dollar
+            "TRY", // Turkish Lira
+            "BHD", // Bahraini Dinar
+            "SAR", // Saudi Riyal
+            "AED", // United Arab Emirates Dirham
+            "ARS", // Argentine Peso
+            "ILS", // Israeli New Shekel
+            "EGP", // Egyptian Pound
+            "MYR", // Malaysian Ringgit
+            "THB", // Thai Baht
+            "IDR", // Indonesian Rupiah
+            "PHP", // Philippine Peso
+            "PLN", // Polish Zloty
+            "CZK", // Czech Koruna
+            "HUF", // Hungarian Forint
+            "BGN", // Bulgarian Lev
+            "PKR", // Pakistani Rupee
+        };
+
+        CurrencyPicker.ItemsSource = ListOfCurrencies;
        CurrencyPicker.SelectedItem = UserCurrency;
     }
 

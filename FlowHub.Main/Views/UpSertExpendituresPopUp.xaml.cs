@@ -61,7 +61,6 @@ public partial class UpSertExpendituresPopUp : Popup
         }
     }
 
-
     private void UnitPrice_TextChanged(object sender, TextChangedEventArgs e)
     {
         var s = sender as TextField;
@@ -79,5 +78,4 @@ public partial class UpSertExpendituresPopUp : Popup
             UnitPrice.Text = "";
         }
     }
-
 }

@@ -26,7 +26,6 @@ public partial class UpSertExpenditureVM : ObservableObject
         IsAdd = isAdd;
         ActiveUser = activeUser;
         ExpenditureCategory = Enum.GetValues(typeof(ExpenditureCategory)).Cast<ExpenditureCategory>().ToList();
-        
     }
 
     [ObservableProperty]
@@ -59,7 +58,6 @@ public partial class UpSertExpenditureVM : ObservableObject
     double _initialUserPocketMoney;
     double _initialExpenditureAmount;
     double _initialTotalExpAmount;
-
 
     [RelayCommand]
     public void PageLoaded()
@@ -101,7 +99,6 @@ public partial class UpSertExpenditureVM : ObservableObject
         ThisPopUpResult = PopupResult.OK;
         ClosePopUp = true;
     }
-
 
     private async void UpdateExpenditureAsync(double fontsize, CancellationTokenSource tokenSource, ToastDuration toastDuration)
     {
@@ -177,7 +174,6 @@ public partial class UpSertExpenditureVM : ObservableObject
 
     [ObservableProperty]
     bool isAddTaxesChecked;
-
 
     [RelayCommand]
     public async void HardResetUserBalance()

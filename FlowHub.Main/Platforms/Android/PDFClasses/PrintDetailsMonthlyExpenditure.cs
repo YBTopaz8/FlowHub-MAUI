@@ -4,12 +4,9 @@ using iText.Layout.Element;
 using FlowHub.Models;
 using iText.Kernel.Colors;
 using Color = iText.Kernel.Colors.Color;
-using System.Collections.ObjectModel;
 using FlowHub.Main.AdditionalResourcefulApiClasses;
 using static FlowHub.Main.AdditionalResourcefulApiClasses.ExchangeRateAPI;
-using iText.Layout.Properties;
 using TextAlignment = iText.Layout.Properties.TextAlignment;
-using System.Diagnostics;
 using iText.Kernel.Pdf.Canvas.Draw;
 
 namespace FlowHub.Main.PDF_Classes;
@@ -53,7 +50,7 @@ public class PrintDetailsMonthlyExpenditure
         await Task.Run(()=> CreatePDFDocOfMultipleLists(expLists, PathFile, ListOfTitles, userName, userCurrency, printDisplayCurrency,  ObjectWithRate.result, ObjectWithRate.date));
     }
 
-    void CreatePDFDoc(List<ExpendituresModel> expList, string pathFile, string userCurrency, string printDisplayCurrency, double rate, DateTime dateOfRateUpdate, string pdfTitle, string username)
+    static void CreatePDFDoc(List<ExpendituresModel> expList, string pathFile, string userCurrency, string printDisplayCurrency, double rate, DateTime dateOfRateUpdate, string pdfTitle, string username)
     {
         Color HeaderColor = WebColors.GetRGBColor("DarkSlateBlue");
 
@@ -84,9 +81,8 @@ public class PrintDetailsMonthlyExpenditure
             .SetTextAlignment(TextAlignment.CENTER);
 
         double totalOfAllExp = 0;
-        for (int i = 0; i < expList.Count; i++)
+        foreach (ExpendituresModel item in expList)
         {
-            ExpendituresModel item = expList[i];
             double amount = item.AmountSpent * rate;
 
             table.AddCell(new Paragraph($"{expList.IndexOf(item) + 1}")
@@ -95,7 +91,7 @@ public class PrintDetailsMonthlyExpenditure
             table.AddCell(new Paragraph($"{item.Reason}")
                 .SetTextAlignment(TextAlignment.CENTER));
 
-            table.AddCell(new Paragraph($"{amount:n3} {printDisplayCurrency}")
+            table.AddCell(new Paragraph($"{amount:n2} {printDisplayCurrency}")
                 .SetTextAlignment(TextAlignment.CENTER));
             table.AddCell(new Paragraph($"{item.Comment}")
                 .SetTextAlignment(TextAlignment.CENTER));
@@ -269,7 +265,7 @@ public class PrintDetailsMonthlyExpenditure
         SharePdfFile("Report of Multiple Months", pathFile);
     }
 
-    async void SharePdfFile(string PdfTitle, string PathFile)
+    static async void SharePdfFile(string PdfTitle, string PathFile)
     {
         await Share.Default.RequestAsync(new ShareFileRequest
         {

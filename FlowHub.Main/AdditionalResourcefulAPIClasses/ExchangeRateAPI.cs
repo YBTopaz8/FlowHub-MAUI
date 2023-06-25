@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace FlowHub.Main.AdditionalResourcefulApiClasses;
 
@@ -7,13 +8,21 @@ public class ExchangeRateAPI
     public ConvertedRate GetConvertedRate(string UserCurrency, string DestinationCurrency)
     {
         //string url_str = $"https://api.exchangerate.host/latest?places=5&&base={CurrencySymbol}"; string to get base
-        string url_str = $"https://api.exchangerate.host/convert?from={UserCurrency}&to={DestinationCurrency}";
+        try
+        {
+            string url_str = $"https://api.exchangerate.host/convert?from={UserCurrency}&to={DestinationCurrency}";
 
-        using var webClient = new HttpClient();
-        var json = webClient.GetStringAsync(url_str).Result;
-        ConvertedRate JsonObject = JsonConvert.DeserializeObject<ConvertedRate>(json);
+            using var webClient = new HttpClient();
+            var json = webClient.GetStringAsync(url_str).Result;
+            ConvertedRate JsonObject = JsonConvert.DeserializeObject<ConvertedRate>(json);
 
-        return JsonObject;
+            return JsonObject;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            return null;
+        }
     }
 
     public class ConvertedRate
@@ -38,5 +47,32 @@ public class ExchangeRateAPI
         public double XOF { get; set; }
         public double XAF { get; set; }
         public double ZAR { get; set; }
+        public double JPY { get; set; }
+        public double INR { get; set; }
+        public double RUB { get; set; }
+        public double NZD { get; set; }
+        public double CHF { get; set; }
+        public double SEK { get; set; }
+        public double NOK { get; set; }
+        public double DKK { get; set; }
+        public double MXN { get; set; }
+        public double SGD { get; set; }
+        public double HKD { get; set; }
+        public double TRY { get; set; }
+        public double BHD { get; set; }
+        public double SAR { get; set; }
+        public double AED { get; set; }
+        public double ARS { get; set; }
+        public double ILS { get; set; }
+        public double EGP { get; set; }
+        public double MYR { get; set; }
+        public double THB { get; set; }
+        public double IDR { get; set; }
+        public double PHP { get; set; }
+        public double PLN { get; set; }
+        public double CZK { get; set; }
+        public double HUF { get; set; }
+        public double BGN { get; set; }
+        public double PKR { get; set; }
     }
 }

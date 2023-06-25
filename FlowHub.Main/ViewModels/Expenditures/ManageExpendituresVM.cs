@@ -26,7 +26,6 @@ public partial class ManageExpendituresVM : ObservableObject
         expendituresService = expendituresRepository;
         userService = usersRepository;
         ExpendituresCat = ExpenditureCategoryDescriptions.Descriptions;
-        
     }
 
     [ObservableProperty]
@@ -383,7 +382,6 @@ public partial class ManageExpendituresVM : ObservableObject
         }
     }
 
-
     [RelayCommand]
     public async void ShowEditExpenditurePopUp(ExpendituresModel expenditure)
     {
@@ -486,7 +484,6 @@ public partial class ManageExpendituresVM : ObservableObject
             await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
             Sorting(GlobalSortNamePosition);
             IsBusy = false;
-
         }
     }
 
@@ -500,8 +497,6 @@ public partial class ManageExpendituresVM : ObservableObject
             await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Cannot save an Empty list to PDF"));
             return;
         }
-        PrintExpenditures prtt = new();
-
         string dialogueResponse = (string)await Shell.Current.ShowPopupAsync(new InputCurrencyForPrintPopUpPage("Please Select Currency", UserCurrency));
         if (dialogueResponse is "Cancel")
         {
@@ -513,8 +508,7 @@ public partial class ManageExpendituresVM : ObservableObject
             await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("No Internet !\nPlease Connect to the Internet in order to save in other currencies"));
             return;
         }
-
-        await prtt.SaveExpenditureToPDF(ExpendituresList, dialogueResponse);
+        await PrintExpenditures.SaveExpenditureToPDF(ExpendituresList, ActiveUser.UserCurrency, dialogueResponse, ActiveUser.Username);
     }
     [RelayCommand]
     public async void ShowFilterPopUpPage()
@@ -568,9 +562,21 @@ public partial class ManageExpendituresVM : ObservableObject
                 const double fontSize = 16;
                 string text = "All Synchronized!";
                 var toast = Toast.Make(text, duration, fontSize);
-                await toast.Show(cancellationTokenSource.Token); //toast a notification about Sync Success0!
+                await toast.Show(cancellationTokenSource.Token); //toast a notification about Sync Success !
             }
         }
+    }
+
+    [RelayCommand]
+    public static async void CopyToClipboard(ExpendituresModel singlExp)
+    {
+        await Clipboard.SetTextAsync($"{singlExp.Reason} : {singlExp.AmountSpent}");
+        CancellationTokenSource cancellationTokenSource = new();
+        const ToastDuration duration = ToastDuration.Short;
+        const double fontSize = 14;
+        string text = "Flow Out Details Copied to Clipboard";
+        var toast = Toast.Make(text, duration, fontSize);
+        await toast.Show(cancellationTokenSource.Token); //toast a notification about exp being copied to clipboard
     }
 
     [RelayCommand]
