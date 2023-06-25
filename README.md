@@ -4,6 +4,9 @@ Time Spent So Far... [![wakatime](https://wakatime.com/badge/user/20225675-04f6-
 An Application used to manage Savings, Expenditures, Incomes, Debts, Financial plannings etc.
 
 Ideal for anyone who likes to keep track of their Financial Flow.
+
+##Screenshots
+
 ## Requirements
 This project is build on .NET CORE 7, .NET MAUI and LiteDB as its DataBase using iText 7 for PDF Generation.
 
@@ -38,9 +41,10 @@ Build and run your app and that's it!
 - Official Android and Windows Alpha Versions
 - Expenditures Management (CRUD operations)
 - Income Management on Android (CRUD Operations)
-- Report Printing for Expenditures : on mobile Only for now
+- Report Printing for Flow Outs on both Windows and Android
 - Monthly Expenditures Management (CRUD Operations): on mobile Only for now 
 - Login feature and Account Management.
+- Support for probably all currencies 
 > More Coming Soon...
 
 ## Roadmap (Upcoming features)
