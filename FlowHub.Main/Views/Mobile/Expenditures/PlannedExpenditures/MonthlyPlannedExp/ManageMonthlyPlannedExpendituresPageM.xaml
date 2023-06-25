@@ -115,7 +115,7 @@
                                     <Rectangle Fill="darkslateblue" WidthRequest="2"/>
                                     <Label>
                                         <Label.Text>
-                                            <MultiBinding StringFormat="{}Total Amount: {0:n3} {1}">
+                                            <MultiBinding StringFormat="{}Total Amount: {0:n2} {1}">
                                                 <Binding Path="TotalAmount" />
                                                 <Binding Path="Currency"/>
                                             </MultiBinding>

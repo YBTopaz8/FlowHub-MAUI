@@ -1,3 +1,5 @@
+using CommunityToolkit.Maui.Views;
+using FlowHub.Main.PopUpPages;
 using FlowHub.Main.ViewModels.Expenditures;
 using System.Diagnostics;
 
@@ -15,24 +17,6 @@ public partial class ManageExpendituresD : ContentPage
 
         rotation = new Animation(v => SyncButton.Rotation = v,
             0, 360, Easing.Linear);
-       // viewModel.PropertyChanged += ViewModel_PropertyChanged;
-
-        SizeChanged += ManageExpendituresD_SizeChanged;
-    }
-
-    private void ManageExpendituresD_SizeChanged(object sender, EventArgs e)
-    {
-        //if (page.Width > 1280)
-        //{
-        //    dockLeft.WidthRequest = 400;
-        //    DGScrollView.Margin = new Thickness(0, 0, 300, 0);
-        //}
-        //else
-        //{
-        //    dockLeft.WidthRequest = 210;
-        //    DGScrollView.Margin = new Thickness(0, 0, 130, 0);
-
-        //}
     }
 
     protected override void OnAppearing()
@@ -50,12 +34,10 @@ public partial class ManageExpendituresD : ContentPage
                 rotation.Commit(this, "RotateSyncButton", 16, 1000, Easing.Linear,
                     (value, b) => SyncButton.Rotation = 0,
                     () => true);
-                //  ColView.IsVisible = false;
             }
             else
             {
                 this.AbortAnimation("RotateSyncButton");
-               // ColView.IsVisible = true;
             }
         }
     }
@@ -95,6 +77,23 @@ public partial class ManageExpendituresD : ContentPage
 
             upBtn.IsVisible = true;
             downBtn.IsVisible = false;
+        }
+    }
+
+    private async void ExportToPDFImageButton_Clicked(object sender, EventArgs e)
+    {
+        if (viewModel.ExpendituresList?.Count < 1)
+        {
+            await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Cannot Save an Empty List to PDF"));
+        }
+        else
+        {
+            PrintProgressBarIndic.IsVisible = true;
+            PrintProgressBarIndic.Progress = 0;
+            await PrintProgressBarIndic.ProgressTo(1, 1000, easing: Easing.Linear);
+
+            await viewModel.PrintExpendituresBtnCommand.ExecuteAsync(null);
+            PrintProgressBarIndic.IsVisible = false;
         }
     }
 }

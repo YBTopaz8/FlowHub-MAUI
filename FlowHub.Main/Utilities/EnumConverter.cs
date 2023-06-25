@@ -11,7 +11,6 @@ namespace FlowHub.Main.Utilities;
 
 public class EnumConverter : IValueConverter
 {
-
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         if (value is Enum enumValue)

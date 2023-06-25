@@ -195,14 +195,17 @@
                                                BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
                                 </SwipeView.RightItems>
 
-                                <Border Padding="10" HeightRequest="83" 
+                                <Border Padding="10" HeightRequest="110" 
                                         MinimumWidthRequest="370">
-
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={x:Reference Page}, Path=BindingContext.CopyToClipboardCommand}"
+                                                              CommandParameter="{Binding .}"/>
+                                    </Border.GestureRecognizers>
                                     <VerticalStackLayout HorizontalOptions="FillAndExpand">
                                         <Label HorizontalOptions="Center" Text="{Binding DateSpent, StringFormat='{0:MMMM dd, yyyy}'}"/>
                                         <VerticalStackLayout>
                                             <Label Margin="3,0" Text="{Binding Reason, StringFormat='Reason: {0}'}"/>
-                                            
+                                            <Label Margin="3,0" Text="{Binding Category, StringFormat='Category: {0}'}"/>
                                             <Label>
                                                 <Label.Text>
                                                     <MultiBinding StringFormat="{} Amount: {0:n2} {1}">

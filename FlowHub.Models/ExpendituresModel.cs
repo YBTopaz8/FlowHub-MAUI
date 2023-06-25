@@ -24,7 +24,6 @@ public class ExpendituresModel
     public bool UpdateOnSync { get; set; } = false;
     public string UserId { get; set; }
 
-
 }
 
 public enum ExpenditureCategory

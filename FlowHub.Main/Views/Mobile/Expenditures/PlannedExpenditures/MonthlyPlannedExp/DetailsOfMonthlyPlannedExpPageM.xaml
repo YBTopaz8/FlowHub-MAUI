@@ -34,7 +34,7 @@
         <VerticalStackLayout toolkit:DockLayout.DockPosition="Bottom" HeightRequest="30" HorizontalOptions="CenterAndExpand">
             <Label FontSize="17" Margin="5,1">
                 <Label.Text>
-                    <MultiBinding StringFormat="{} {1} Planned Flow Out(s) worth {0:n3} {2}">
+                    <MultiBinding StringFormat="{} {1} Planned Flow Out(s) worth {0:n2} {2}">
                         <Binding Path="TotalAmount"/>
                         <Binding Path="TotalExpenditures"/>
                         <Binding Path="UserCurrency"/>
@@ -73,7 +73,7 @@
                                         <Label Text="{Binding Reason, StringFormat='Description : {0}'}"/>
                                         <Label>
                                             <Label.Text>
-                                                <MultiBinding StringFormat="{}Amount {0:n3} {1}">
+                                                <MultiBinding StringFormat="{}Amount {0:n2} {1}">
                                                     <Binding Path="AmountSpent"/>
                                                     <Binding Path="Currency"/>
                                                 </MultiBinding>

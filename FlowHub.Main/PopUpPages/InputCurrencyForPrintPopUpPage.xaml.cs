@@ -10,9 +10,52 @@ public partial class InputCurrencyForPrintPopUpPage : Popup
         DisplayAlertText.Text = DisplayText;
         //TODO: Pass the user currency in th title of the popup page and remove this display text
 
-        //TODO: Add more currencies
-       List<string> ListOfCurrencies= new(){ "AUD", "BRL", "CAD", "CNY", "EUR", "GBP", "KES", "NGN", "TND", "USD", "XOF", "XAF", "ZAR"};
-       CurrencyPicker.ItemsSource = ListOfCurrencies;
+        
+        List<string> ListOfCurrencies = new()
+        {
+            "AED", // United Arab Emirates Dirham
+            "AUD", // Australian Dollar
+            "ARS", // Argentine Peso
+            "BGN", // Bulgarian Lev
+            "BHD", // Bahraini Dinar
+            "BRL", // Brazilian Real
+            "CAD", // Canadian Dollar
+            "CHF", // Swiss Franc
+            "CNY", // Chinese Yuan
+            "CZK", // Czech Koruna
+            "DKK", // Danish Krone
+            "EGP", // Egyptian Pound
+            "EUR", // Euro
+            "GBP", // British Pound
+            "HKD", // Hong Kong Dollar
+            "HUF", // Hungarian Forint
+            "IDR", // Indonesian Rupiah
+            "ILS", // Israeli New Shekel
+            "INR", // Indian Rupee
+            "JPY", // Japanese Yen
+            "KES", // Kenyan Shilling
+            "MXN", // Mexican Peso
+            "MYR", // Malaysian Ringgit
+            "NGN", // Nigerian Naira
+            "NOK", // Norwegian Krone
+            "NZD", // New Zealand Dollar
+            "PHP", // Philippine Peso
+            "PKR", // Pakistani Rupee
+            "PLN", // Polish Zloty
+            "RUB", // Russian Ruble
+            "SAR", // Saudi Riyal
+            "SEK", // Swedish Krona
+            "SGD", // Singapore Dollar
+            "THB", // Thai Baht
+            "TND", // Tunisian Dinar
+            "TRY", // Turkish Lira
+            "USD", // US Dollar
+            "XAF", // Central African CFA Franc
+            "XOF", // West African CFA Franc
+            "ZAR", // South African Rand
+        };
+
+        CurrencyPicker.ItemsSource = ListOfCurrencies;
        CurrencyPicker.SelectedItem = UserCurrency;
     }
 

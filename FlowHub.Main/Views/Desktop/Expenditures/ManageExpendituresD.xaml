@@ -80,7 +80,8 @@
                     ToolTipProperties.Text="Add New Income"/>
             <ImageButton Margin="10" Source="save_to_pdf_d.png" HeightRequest="60"
                         ToolTipProperties.Text="Click to Save to PDF" 
-                        Command="{Binding PrintExpendituresBtnCommand}"/>
+                        Clicked="ExportToPDFImageButton_Clicked"/>
+            <ProgressBar IsVisible="false" x:Name="PrintProgressBarIndic" ProgressColor="DarkSlateBlue" WidthRequest="50"/>
             <ImageButton Source="{AppThemeBinding Dark=sync_icon_d.png, Light=sync_icon_l.png}" 
                          HeightRequest="55"
                              x:Name="SyncButton"
@@ -104,6 +105,7 @@
                     </VerticalStackLayout>
                 </material:DataGrid.EmptyView>
             <material:DataGrid.Columns>
+                
                 <material:DataGridColumn Title="Date Spent">
                     <material:DataGridColumn.TitleView>
                             <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
@@ -123,15 +125,19 @@
                         </DataTemplate>
                     </material:DataGridColumn.CellItemTemplate>
                 </material:DataGridColumn>
-                
-                <material:DataGridColumn Binding="{Binding Reason}" Title="Reason"/>
-                <material:DataGridColumn Binding="{Binding Category, Converter={StaticResource EnumHelper}}" Title="Category"/>                
+
+                    <material:DataGridColumn Binding="{Binding Reason}" Title="Reason"/>
+
+                    <material:DataGridColumn Binding="{Binding Category, Converter={StaticResource EnumHelper}}" Title="Category"/>                
 
                 <material:DataGridColumn Title="Amount Spent">
                     <material:DataGridColumn.CellItemTemplate>
                         <DataTemplate>
                                 <Label VerticalOptions="Center"
                                    HorizontalOptions="Center">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer NumberOfTapsRequired="2" Command="{Binding Source={x:Reference page}, Path=BindingContext.CopyToClipboardCommand}" CommandParameter="{Binding .}"/>
+                                    </Label.GestureRecognizers>
                                 <Label.Text>
                                     <MultiBinding StringFormat="{} {0:n2} {1}">
                                         <Binding Path="AmountSpent"/>

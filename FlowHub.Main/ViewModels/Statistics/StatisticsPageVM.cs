@@ -165,7 +165,7 @@ public partial class StatisticsPageVM : ObservableObject
         {
             Name = $"Graph of {listOfExpDec.Length} Flow Outs For November 2022",
             TooltipLabelFormatter = (point) =>
-			$"{point.Model.Reason} : {point.Model.AmountSpent:n3} {point.Model.Currency}\n" +
+			$"{point.Model.Reason} : {point.Model.AmountSpent:n2} {point.Model.Currency}\n" +
 			$"{point.Model.DateSpent:dd-MMM-yy}",
             Values = listOfExpDec,
             Mapping = (testt,  point) =>
