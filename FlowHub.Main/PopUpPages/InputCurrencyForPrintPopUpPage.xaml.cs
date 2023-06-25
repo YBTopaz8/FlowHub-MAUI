@@ -13,46 +13,46 @@ public partial class InputCurrencyForPrintPopUpPage : Popup
         
         List<string> ListOfCurrencies = new()
         {
+            "AED", // United Arab Emirates Dirham
             "AUD", // Australian Dollar
+            "ARS", // Argentine Peso
+            "BGN", // Bulgarian Lev
+            "BHD", // Bahraini Dinar
             "BRL", // Brazilian Real
             "CAD", // Canadian Dollar
+            "CHF", // Swiss Franc
             "CNY", // Chinese Yuan
+            "CZK", // Czech Koruna
+            "DKK", // Danish Krone
+            "EGP", // Egyptian Pound
             "EUR", // Euro
             "GBP", // British Pound
-            "KES", // Kenyan Shilling
-            "NGN", // Nigerian Naira
-            "TND", // Tunisian Dinar
-            "USD", // US Dollar
-            "XOF", // West African CFA Franc
-            "XAF", // Central African CFA Franc
-            "ZAR", // South African Rand
-            "JPY", // Japanese Yen
-            "INR", // Indian Rupee
-            "RUB", // Russian Ruble
-            "NZD", // New Zealand Dollar
-            "CHF", // Swiss Franc
-            "SEK", // Swedish Krona
-            "NOK", // Norwegian Krone
-            "DKK", // Danish Krone
-            "MXN", // Mexican Peso
-            "SGD", // Singapore Dollar
             "HKD", // Hong Kong Dollar
-            "TRY", // Turkish Lira
-            "BHD", // Bahraini Dinar
-            "SAR", // Saudi Riyal
-            "AED", // United Arab Emirates Dirham
-            "ARS", // Argentine Peso
-            "ILS", // Israeli New Shekel
-            "EGP", // Egyptian Pound
-            "MYR", // Malaysian Ringgit
-            "THB", // Thai Baht
-            "IDR", // Indonesian Rupiah
-            "PHP", // Philippine Peso
-            "PLN", // Polish Zloty
-            "CZK", // Czech Koruna
             "HUF", // Hungarian Forint
-            "BGN", // Bulgarian Lev
+            "IDR", // Indonesian Rupiah
+            "ILS", // Israeli New Shekel
+            "INR", // Indian Rupee
+            "JPY", // Japanese Yen
+            "KES", // Kenyan Shilling
+            "MXN", // Mexican Peso
+            "MYR", // Malaysian Ringgit
+            "NGN", // Nigerian Naira
+            "NOK", // Norwegian Krone
+            "NZD", // New Zealand Dollar
+            "PHP", // Philippine Peso
             "PKR", // Pakistani Rupee
+            "PLN", // Polish Zloty
+            "RUB", // Russian Ruble
+            "SAR", // Saudi Riyal
+            "SEK", // Swedish Krona
+            "SGD", // Singapore Dollar
+            "THB", // Thai Baht
+            "TND", // Tunisian Dinar
+            "TRY", // Turkish Lira
+            "USD", // US Dollar
+            "XAF", // Central African CFA Franc
+            "XOF", // West African CFA Franc
+            "ZAR", // South African Rand
         };
 
         CurrencyPicker.ItemsSource = ListOfCurrencies;
