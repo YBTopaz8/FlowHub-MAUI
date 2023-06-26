@@ -16,7 +16,7 @@ public partial class UpSertExpenditureVM : ObservableObject
 {
     private readonly IExpendituresRepository _expenditureService;
     private readonly IUsersRepository userService;
-    private readonly ManageExpendituresNavs NavFunctions = new();
+    
     public UpSertExpenditureVM(IExpendituresRepository expendituresRepository, IUsersRepository usersRepository, ExpendituresModel singleExpendituresDetails, string pageTitle, bool isAdd, UsersModel activeUser)
     {
         _expenditureService = expendituresRepository;
@@ -204,11 +204,6 @@ public partial class UpSertExpenditureVM : ObservableObject
         }
     }
 
-    [RelayCommand]
-    public void GoToManageExpenditures()
-    {
-        NavFunctions.ReturnOnce();
-    }
 
     public void AddTax(TaxModel tax)
     {

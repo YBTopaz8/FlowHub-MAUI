@@ -18,17 +18,19 @@ public partial class ManageExpendituresM : ContentPage
         rotation = new Animation(v => SyncButton.Rotation = v,
             0, 360, Easing.Linear);
 
-        Microsoft.Maui.Handlers.DatePickerHandler.Mapper.AppendToMapping("MyCustomDatePicker", (handler, view) =>
-        {
-            if (view is DatePicker)
+        Microsoft.Maui.Handlers
+            .DatePickerHandler.Mapper
+            .AppendToMapping("MyCustomDatePicker", (handler, view) =>
             {
+                if (view is DatePicker)
+                {
 #if ANDROID
-                Android.Graphics.Drawables.GradientDrawable gd = new();
-                gd.SetColor(global::Android.Graphics.Color.Transparent);
-                handler.PlatformView.SetBackground(gd);
+                    Android.Graphics.Drawables.GradientDrawable gd = new();
+                    gd.SetColor(global::Android.Graphics.Color.Transparent);
+                    handler.PlatformView.SetBackground(gd);
 #endif
-            }
-        });
+                }
+            });
 
         viewModel.PropertyChanged += ViewModel_PropertyChanged;
     }
