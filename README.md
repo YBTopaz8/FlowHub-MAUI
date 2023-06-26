@@ -60,6 +60,7 @@ Build and run your app and that's it!
 - [enisn](https://github.com/enisn) for their incredible [UraniumUI](https://github.com/enisn/UraniumUI) and [InputKit](https://github.com/enisn/Xamarin.Forms.InputKit) That I HEAVILY use in this project ❤️
 - [Beto Rodriguez](https://github.com/beto-rodriguez) for the charts & graph library : [LiveCharts2](https://github.com/beto-rodriguez/LiveCharts2)
 
+![Alt](https://repobeats.axiom.co/api/embed/9f66776dfcc618bcce106e6feadda612410967ca.svg "Repobeats analytics image")
 
 ## Authors
 
