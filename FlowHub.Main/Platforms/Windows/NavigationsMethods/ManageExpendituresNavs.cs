@@ -2,22 +2,22 @@
 
 namespace FlowHub.Main.Platforms.NavigationMethods;
 
-public class ManageExpendituresNavs
+public static class ManageExpendituresNavs
 {
-    public async void FromManageExpToUpsertExpenditures(Dictionary<string, object> navParams)
+    public static async Task FromManageExpToUpsertExpenditures(Dictionary<string, object> navParams)
     {
         await Shell.Current.GoToAsync(nameof(UpSertExpenditurePageD),true, navParams);
     }
-    public async void FromUpsertExpToManageExpenditures(Dictionary<string, object> navParams)
+    public static async Task FromUpsertExpToManageExpenditures(Dictionary<string, object> navParams)
     {
-        await Shell.Current.GoToAsync(nameof(ManageExpendituresD), true, navParams);
+        await Shell.Current.GoToAsync(nameof(ManageExpendituresPageD), true, navParams);
     }
-    public void FromManageExpToSingleMonthStats(Dictionary<string, object> navParams)
+    public static async Task FromManageExpToSingleMonthStats(Dictionary<string, object> navParams)
     {
         //await Shell.Current.GoToAsync(nameof(SingleMonthStatsPageM), true, navParams);
     }
 
-    public async void ReturnOnce()
+    public static async Task ReturnOnce()
     {
         await Shell.Current.GoToAsync("..", true);
     }

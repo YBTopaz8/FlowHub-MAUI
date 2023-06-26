@@ -21,7 +21,7 @@ public partial class ManageExpendituresVM : ObservableObject
     public readonly IExpendituresRepository expendituresService;
     private readonly IUsersRepository userService;
 
-    private readonly ManageExpendituresNavs NavFunction = new();
+    
     public ManageExpendituresVM(IExpendituresRepository expendituresRepository, IUsersRepository usersRepository)
     {
         expendituresService = expendituresRepository;
@@ -247,14 +247,10 @@ public partial class ManageExpendituresVM : ObservableObject
             FilterTitle = "Date Spent Descending";
             List<ExpendituresModel> expList = new ();
 
-            if (ExpendituresList is not null)
-            {
-                expList = ExpendituresList.OrderByDescending(x => x.DateSpent).ToList();
-            }
-            else
-            {
-                expList = expendituresService.OfflineExpendituresList.OrderByDescending(x => x.DateSpent).ToList();
-            }
+            expList = expendituresService.OfflineExpendituresList
+                .OrderByDescending(x => x.DateSpent).ToList();
+
+
             var groupedData = expList.GroupBy(e => e.DateSpent.Date)
                 .Select(g => new DateGroup(g.Key, g.ToList()))
                 .ToList();
@@ -404,6 +400,16 @@ public partial class ManageExpendituresVM : ObservableObject
     {
         await AddEditExpediture(expenditure, "Edit Flow Out", false);
     }
+
+    int count = 0;
+    [RelayCommand]
+    public void SamepleAdd()
+    {
+        ExpendituresModel ss = new() { DateSpent = DateTime.Now, Reason = $"Test {count}", AmountSpent = 2 };
+        ExpendituresList.Add(ss);
+        count++;
+        TotalExpenditures = ExpendituresList.Count;
+    }
     private async Task AddEditExpediture(ExpendituresModel expenditure, string pageTitle, bool isAdd)
     {
         ExpendituresModel nExp = expenditure;
@@ -419,7 +425,7 @@ public partial class ManageExpendituresVM : ObservableObject
     }
 
     [RelayCommand]
-    public void GoToSpecificStatsPage()
+    public async Task GoToSpecificStatsPage()
     {
         int monthNumb = DayFilterMonth;
         int YearNumb = DayFilterYear;
@@ -452,7 +458,7 @@ public partial class ManageExpendituresVM : ObservableObject
                 break;
         }
 
-        NavFunction.FromManageExpToSingleMonthStats(navParam);
+        await ManageExpendituresNavs.FromManageExpToSingleMonthStats(navParam);
     }
 
     [RelayCommand]
