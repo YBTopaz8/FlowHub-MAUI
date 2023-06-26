@@ -21,7 +21,7 @@
                 <Setter Property="BackgroundColor" Value="Transparent"/>
                 <Setter Property="AccentColor" Value="{AppThemeBinding Dark=white, Light=darkslateblue}"/>
                 <Setter Property="BorderColor" Value="{AppThemeBinding Dark=darkslateblue, Light=darkslateblue}"/>
-            </Style>
+			</Style>
             
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -115,6 +115,7 @@
                     <input:FormView SubmitCommand="{Binding GoToHomePageFromLoginCommand}" Spacing="25" >
                         <Label Text="Press the Online login button again" x:Name="NoUserFoundText" HorizontalOptions="Center" TextColor="CadetBlue" 
                                FontAttributes="Bold" FontSize="23" IsVisible="{Binding ErrorMessageVisible}" />
+                        <Label Text="Syncing Up Your Flows" IsVisible="{Binding IsBusy}"/>
                         <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
 
                         <material:TextField Title="Email" Text="{Binding CurrentUser.Email}" AllowClear="True" 
@@ -134,7 +135,7 @@
                                 <validation:RequiredValidation/>
                             </material:TextField.Validations>
                         </material:TextField>
-                        <ImageButton Source="{AppThemeBinding Dark=login_d, Light=login_l}" input:FormView.IsSubmitButton="True"/>
+                        <ImageButton IsVisible="false" Source="{AppThemeBinding Dark=login_d, Light=login_l}" input:FormView.IsSubmitButton="True"/>
 
                         <ImageButton Source="{AppThemeBinding Dark=login_online_d, Light=login_online_l}"
                                      Clicked="LoginOnlineBtn_Clicked" x:Name="LoginButton" input:FormView.IsSubmitButton="True"/>
