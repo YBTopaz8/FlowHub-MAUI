@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FlowHub.Main.Views.Mobile.HomePageM"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels"
+             xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              x:DataType="viewModels:HomePageVM"
              >
     <VerticalStackLayout>
@@ -21,35 +22,53 @@
             <Border.Shadow>
                 <Shadow Offset="15,20" Opacity="0.1"/>
             </Border.Shadow>
-            <VerticalStackLayout Spacing="10" Margin="6">
-                <Label Text="Latest Flow Out"
-                            FontSize="25"
-                            HorizontalOptions="Center"
-                            Margin="90,0,0,0"
-                            WidthRequest="320"/>
-                <Rectangle
-                        Fill="DarkSlateBlue"
-                        HeightRequest="2"/>
-                <HorizontalStackLayout>
-                    <Label Text="{Binding ExpendituresDetails.Reason, StringFormat='Reason : {0}'}" FontSize="16"/>
-                    
-                </HorizontalStackLayout>
-                <HorizontalStackLayout>
-                    <Label FontSize="16">
-                        <Label.Text>
-                            <MultiBinding StringFormat="{}Amount Spent : {0:n2} {1}">
-                                <Binding Path="ExpendituresDetails.AmountSpent"/>
-                                <Binding Path="UserCurrency"/>
-                            </MultiBinding>
-                        </Label.Text>
-                    </Label>
-                </HorizontalStackLayout>
-                <HorizontalStackLayout Margin="0,0,0,15">
-                    <Label Text="{Binding ExpendituresDetails.DateSpent, StringFormat='Date Spent {0:dd MMMM, yyyy}'}" 
-                           FontSize="16"/>
-                </HorizontalStackLayout>
-            </VerticalStackLayout>
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Latest Flow Outs" FontSize="22" HorizontalOptions="Center" Padding="10,0,0,0"/>
+                <BoxView
+                        Color="DarkSlateBlue"
+                        HeightRequest="2"
+                        HorizontalOptions="Fill"/>
+                <CollectionView x:Name="ColView" ItemsSource="{Binding LatestExpenditures}" HorizontalOptions="FillAndExpand">
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout VerticalOptions="Center">
+                            <Image Source="nothing_found.png" MaximumHeightRequest="50"/>
+                            <Label Text="No Flow Outs Available..." HorizontalOptions="Center" VerticalOptions="Center" />
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:ExpendituresModel">
+                            <Grid Margin="10,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
 
+                                <StackLayout Grid.Column="0">
+                                    <Label Text="{Binding Reason}" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Category}" FontSize="10" FontAttributes="Italic"/>
+                                </StackLayout>
+
+                                <StackLayout Grid.Column="1" HorizontalOptions="End">
+                                    <Label FontAttributes="Bold">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{}{0:n2} {1}">
+                                                <Binding Path="AmountSpent"/>
+                                                <Binding Path="Currency"/>
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+                                    <Label Text="{Binding DateSpent, StringFormat='{0:MM/dd/yyyy}'}" FontSize="10"
+                                   HorizontalTextAlignment="End" FontAttributes="Italic"
+                                   />
+                                </StackLayout>
+                            </Grid>
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+            
         </Border>
         <VerticalStackLayout HorizontalOptions="Center">
             <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}"

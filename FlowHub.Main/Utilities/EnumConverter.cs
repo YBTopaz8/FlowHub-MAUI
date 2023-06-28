@@ -20,7 +20,7 @@ public class EnumConverter : IValueConverter
         return null;
     }
 
-    private object GetDescription(Enum enumValue)
+    public static string GetDescription(Enum enumValue)
     {
         FieldInfo fieldInfo = enumValue.GetType().GetField(enumValue.ToString());
         var attribute = (DescriptionAttribute)fieldInfo.GetCustomAttribute(typeof(DescriptionAttribute));

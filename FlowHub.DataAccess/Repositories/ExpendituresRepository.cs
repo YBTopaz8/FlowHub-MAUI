@@ -14,6 +14,9 @@ public class ExpendituresRepository : IExpendituresRepository
 
     public List<ExpendituresModel> OfflineExpendituresList { get; set; }
 
+    bool isBatchUpdate;
+    public event Action OfflineExpendituresListChanged;
+
     private IMongoCollection<ExpendituresModel> AllOnlineExpenditures;
     private IMongoCollection<IDsToBeDeleted> AllOnlineIDsToBeDeleted;
 
@@ -55,7 +58,7 @@ public class ExpendituresRepository : IExpendituresRepository
                 userId = usersRepo.OfflineUser.UserIDOnline;
             }
             OfflineExpendituresList = await AllExpenditures.Query().Where(x => x.UserId == userId && x.Currency == userCurrency).ToListAsync();
-            
+
             db.Dispose();
 
             return OfflineExpendituresList;
@@ -80,7 +83,12 @@ public class ExpendituresRepository : IExpendituresRepository
             {
                 if (await AllExpenditures.InsertAsync(expenditure) is not null)
                 {
-                    return true;
+                    OfflineExpendituresList.Add(expenditure);
+                    if (!isBatchUpdate)
+                    {
+                        OfflineExpendituresListChanged?.Invoke();
+                    }
+                    return true;                    
                 }
                 else
                 {
@@ -109,6 +117,12 @@ public class ExpendituresRepository : IExpendituresRepository
             if (await AllExpenditures.UpdateAsync(expenditure))
             {
                 db.Dispose();
+                int index = OfflineExpendituresList.FindIndex(x => x.Id == expenditure.Id);
+                OfflineExpendituresList[index] = expenditure;
+                if (!isBatchUpdate)
+                {
+                    OfflineExpendituresListChanged?.Invoke();
+                }
                 return true;
             }
             else
@@ -142,6 +156,11 @@ public class ExpendituresRepository : IExpendituresRepository
 
                 await AllIDsToBeDeleted.InsertAsync(idToBeDeleted);
                 db.Dispose();
+                OfflineExpendituresList.Remove(OfflineExpendituresList.Where(x => x.Id == id).FirstOrDefault());
+                if (!isBatchUpdate)
+                {
+                    OfflineExpendituresListChanged?.Invoke();
+                }
                 return true;
             }
             else
@@ -232,6 +251,7 @@ public class ExpendituresRepository : IExpendituresRepository
 
     private async Task UpdateLocalDBWithOnlineData(List<ExpendituresModel> tempExpList)
     {
+        isBatchUpdate = true;
         foreach (var expOnline in OnlineExpendituresList)
         {
             if (tempExpList.Exists(x => x.Id == expOnline.Id) && expOnline.UpdateOnSync &&
@@ -250,6 +270,8 @@ public class ExpendituresRepository : IExpendituresRepository
                 await AddExpenditureAsync(expOnline);
             }
         }
+        isBatchUpdate = false;
+        OfflineExpendituresListChanged?.Invoke();
     }
 
     private async Task UpdateOnlineDBWithLocalData(List<ExpendituresModel> tempExpList)

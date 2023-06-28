@@ -7,8 +7,7 @@ namespace FlowHub.Main.Views.Mobile.Expenditures;
 public partial class UpSertExpenditurePageM : ContentPage
 {
     private readonly UpSertExpenditureVM viewModel;
-    double CurrentBalance;
-    double InitialExpAmountSpent;
+
     public UpSertExpenditurePageM(UpSertExpenditureVM vm)
     {
         InitializeComponent();

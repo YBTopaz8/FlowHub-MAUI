@@ -54,6 +54,7 @@ public partial class ManageExpendituresM : ContentPage
         }
     }
 
+    
     protected override void OnAppearing()
     {
         base.OnAppearing();
@@ -79,14 +80,14 @@ public partial class ManageExpendituresM : ContentPage
 
     private async void FilterOption_Clicked(object sender, EventArgs e)
     {
-        var FadeOut = filterOptionsContainer.FadeTo(0, 350, easing: Easing.Linear);
-        var MoveUp = filterOptionsContainer.TranslateTo(0, -30,350, Easing.Linear);
-        var MoveColViewUp = ColView.TranslateTo(0, -30,350, Easing.Linear);
-        _ = await Task.WhenAll(FadeOut, MoveUp, MoveColViewUp);
-        filterExpander.IsExpanded = false;
-        filterOptionsContainer.TranslationY= 0;
-        ColView.TranslationY= 0;
-        await filterOptionsContainer.FadeTo(1, 0);
+        //var FadeOut = filterOptionsContainer.FadeTo(0, 350, easing: Easing.Linear);
+        //var MoveUp = filterOptionsContainer.TranslateTo(0, -30,350, Easing.Linear);
+        //var MoveColViewUp = ColView.TranslateTo(0, -30,350, Easing.Linear);
+        //_ = await Task.WhenAll(FadeOut, MoveUp, MoveColViewUp);
+        //filterExpander.IsExpanded = false;
+        //filterOptionsContainer.TranslationY= 0;
+        //ColView.TranslationY= 0;
+        //await filterOptionsContainer.FadeTo(1, 0);
     }
 
     /*

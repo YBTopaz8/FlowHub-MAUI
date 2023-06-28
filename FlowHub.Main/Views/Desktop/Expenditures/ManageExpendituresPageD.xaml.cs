@@ -14,14 +14,15 @@ public partial class ManageExpendituresPageD : ContentPage
 		InitializeComponent();
 		viewModel = vm;
 		this.BindingContext = vm;
-
-	}
+        rotation = new Animation(v => SyncButton.Rotation = v,
+            0, 360, Easing.Linear);
+    }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
 		viewModel.PageloadedAsyncCommand.Execute(null);
-        
+
         //ExpDG.SortedColumnIndex = 0;
     }
 
@@ -41,9 +42,6 @@ public partial class ManageExpendituresPageD : ContentPage
             }
         }
     }
-
-
-
 
     private async void ExportToPDFImageButton_Clicked(object sender, EventArgs e)
     {

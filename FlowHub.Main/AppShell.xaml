@@ -7,6 +7,7 @@
         xmlns:viewsExpenditures="clr-namespace:FlowHub.Main.Views.Desktop.Expenditures"
         xmlns:viewsIncomes="clr-namespace:FlowHub.Main.Views.Desktop.Incomes"
         xmlns:viewsSettings="clr-namespace:FlowHub.Main.Views.Desktop.Settings"
+        xmlns:viewsStatistics="clr-namespace:FlowHub.Main.Views.Desktop.Statistics"
         Shell.NavBarIsVisible="False"
         Shell.FlyoutBehavior="Disabled"
         CurrentItem ="{x:Reference login}">
@@ -34,6 +35,12 @@
             <ShellContent Title="Manage Incomes"
                           ContentTemplate="{DataTemplate viewsIncomes:ManageIncomesD}"
                           Route="ManageIncomes"/>
+        </Tab>
+
+        <Tab Title="Flow Insights">
+            <ShellContent Title="Flow Insights"
+                          ContentTemplate="{DataTemplate viewsStatistics:StatisticsPageD}"
+                          Route="Statistics"/>
         </Tab>
         
         <Tab Title="Planning">

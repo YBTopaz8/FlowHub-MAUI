@@ -160,7 +160,6 @@ public partial class LoginVM : ObservableObject
         }
     }
 
-
     [RelayCommand]
     public async void GoToHomePageFromLogin()
     {

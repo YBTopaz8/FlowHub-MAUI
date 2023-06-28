@@ -10,7 +10,6 @@ public partial class InputCurrencyForPrintPopUpPage : Popup
         DisplayAlertText.Text = DisplayText;
         //TODO: Pass the user currency in th title of the popup page and remove this display text
 
-        
         List<string> ListOfCurrencies = new()
         {
             "AED", // United Arab Emirates Dirham

@@ -8,6 +8,8 @@ using CommunityToolkit.Maui.Views;
 using FlowHub.Main.ViewModels.Expenditures;
 using FlowHub.Main.Views;
 using FlowHub.Main.Utilities;
+using System.Collections.ObjectModel;
+using CommunityToolkit.Maui.Core.Extensions;
 
 //This is the view model for the HOME PAGE
 namespace FlowHub.Main.ViewModels;
@@ -29,7 +31,9 @@ public partial class HomePageVM : ObservableObject
     }
 
     [ObservableProperty]
-    private ExpendituresModel _expendituresDetails = new() { DateSpent = DateTime.Now };
+    ObservableCollection<ExpendituresModel> _latestExpenditures;
+    [ObservableProperty]
+    ObservableCollection<IncomeModel> _latestIncomes;
 
     [ObservableProperty]
     public int totalExp;
@@ -57,7 +61,11 @@ public partial class HomePageVM : ObservableObject
         UserCurrency = ActiveUser.UserCurrency;
         var ListOfExp = await _expendituresService.GetAllExpendituresAsync();
 
-        ExpendituresDetails = ListOfExp.Count != 0 ? ListOfExp.OrderByDescending(s => s.DateSpent).First() : (new() { DateSpent = DateTime.Now });
+        LatestExpenditures = ListOfExp.Count != 0 
+            ? ListOfExp.OrderByDescending(s => s.DateSpent).Take(5).ToObservableCollection() 
+            : new ObservableCollection<ExpendituresModel>();
+
+        
     }
 
     [RelayCommand]
@@ -94,7 +102,8 @@ public partial class HomePageVM : ObservableObject
             {
                 ExpendituresModel exp = (ExpendituresModel)UpSertResult.Data;
                 //add logic if this exp is the latest in terms of datetime
-                ExpendituresDetails = exp;
+                LatestExpenditures.Add(exp);
+                LatestExpenditures = LatestExpenditures.OrderByDescending(s => s.DateSpent).Take(5).ToObservableCollection();
                 PocketMoney -= exp.AmountSpent;
             }
         }

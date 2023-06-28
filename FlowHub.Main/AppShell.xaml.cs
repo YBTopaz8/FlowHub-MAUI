@@ -2,6 +2,7 @@ using FlowHub.Main.Views.Desktop;
 using FlowHub.Main.Views.Desktop.Expenditures;
 using FlowHub.Main.Views.Desktop.Incomes;
 using FlowHub.Main.Views.Desktop.Settings;
+using FlowHub.Main.Views.Desktop.Statistics;
 
 namespace FlowHub.Main;
 
@@ -15,10 +16,12 @@ public partial class AppShell : Shell
 		Routing.RegisterRoute(nameof(LoginD), typeof(LoginD));
 
 		Routing.RegisterRoute(nameof(ManageExpendituresPageD), typeof(ManageExpendituresPageD));
-		
+
 		Routing.RegisterRoute(nameof(UpSertExpenditurePageD), typeof(UpSertExpenditurePageD));
 
 		Routing.RegisterRoute(nameof(ManageIncomesD), typeof(ManageIncomesD));
+
+		Routing.RegisterRoute(nameof(StatisticsPageD), typeof(StatisticsPageD));
 
 		Routing.RegisterRoute(nameof(UserSettingsPageD), typeof(UserSettingsPageD));
 	}

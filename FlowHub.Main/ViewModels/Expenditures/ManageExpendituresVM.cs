@@ -18,16 +18,17 @@ using System.Diagnostics;
 namespace FlowHub.Main.ViewModels.Expenditures;
 public partial class ManageExpendituresVM : ObservableObject
 {
-    public readonly IExpendituresRepository expendituresService;
-    private readonly IUsersRepository userService;
+    readonly IExpendituresRepository expendituresService;
+    readonly IUsersRepository userService;
 
-    
     public ManageExpendituresVM(IExpendituresRepository expendituresRepository, IUsersRepository usersRepository)
     {
         expendituresService = expendituresRepository;
         userService = usersRepository;
         ExpendituresCat = ExpenditureCategoryDescriptions.Descriptions;
+        expendituresService.OfflineExpendituresListChanged += HandleExpendituresListUpdated;
     }
+
 
     [ObservableProperty]
     ObservableCollection<ExpendituresModel> expendituresList;
@@ -36,62 +37,62 @@ public partial class ManageExpendituresVM : ObservableObject
     ObservableCollection<DateGroup> groupedExpenditures;
 
     [ObservableProperty]
-    private double totalAmount;
+    double totalAmount;
 
     [ObservableProperty]
-    private int totalExpenditures;
+    int totalExpenditures;
 
     [ObservableProperty]
-    private string userCurrency;
+    string userCurrency;
 
     [ObservableProperty]
-    private double userPocketMoney;
+    double userPocketMoney;
 
     [ObservableProperty]
-    private bool isBusy = true;
+    bool isBusy = true;
 
     [ObservableProperty]
-    private string expTitle;
+    string expTitle;
 
-    private UsersModel ActiveUser = new();
-
-    [ObservableProperty]
-    private bool activ;
+    UsersModel ActiveUser = new();
 
     [ObservableProperty]
-    private bool showDayFilter;
+    bool activ;
 
     [ObservableProperty]
-    private bool showStatisticBtn;
+    bool showDayFilter;
 
     [ObservableProperty]
-    private int dayFilterMonth ;
+    bool showStatisticBtn;
 
     [ObservableProperty]
-    private int dayFilterYear;
+    int dayFilterMonth ;
 
     [ObservableProperty]
-    private int dayFilterDay;
+    int dayFilterYear;
 
     [ObservableProperty]
-    private string filterTitle;
+    int dayFilterDay;
 
     [ObservableProperty]
-    private bool showClearDayButton;
+    string filterTitle;
 
     [ObservableProperty]
-    private bool isExpanderExpanded;
+    bool showClearDayButton;
 
     [ObservableProperty]
-    private bool isSyncing;
+    bool isExpanderExpanded;
+
+    [ObservableProperty]
+    bool isSyncing;
 
     [ObservableProperty]
     List<string> expendituresCat;
 
-    private string filterOption;
-    private int GlobalSortNamePosition = 1;
+    string filterOption;
+    int GlobalSortNamePosition = 1;
 
-    private string monthName;
+    string monthName;
     [RelayCommand]
     public async void PageloadedAsync()
     {
@@ -235,44 +236,78 @@ public partial class ManageExpendituresVM : ObservableObject
         }
     }
 
+    static bool loaded = false;
     [RelayCommand]
     //Function to show very single expenditure from DB
     public void FilterGetAllExp()
     {
         try
         {
-            ShowDayFilter = false;
-            filterOption = "Filter_All";
-            ExpTitle = "All Flow Outs";
-            FilterTitle = "Date Spent Descending";
-            List<ExpendituresModel> expList = new ();
+            if (!loaded)
+            {
+                ShowDayFilter = false;
+                filterOption = "Filter_All";
+                ExpTitle = "All Flow Outs";
+                FilterTitle = "Date Spent Descending";
+                List<ExpendituresModel> expList = new();
 
-            expList = expendituresService.OfflineExpendituresList
-                .OrderByDescending(x => x.DateSpent).ToList();
+                expList = expendituresService.OfflineExpendituresList
+                    .OrderByDescending(x => x.DateSpent).ToList();
 
+                var groupedData = expList.GroupBy(e => e.DateSpent.Date)
+                    .Select(g => new DateGroup(g.Key, g.ToList()))
+                    .ToList();
 
-            var groupedData = expList.GroupBy(e => e.DateSpent.Date)
-                .Select(g => new DateGroup(g.Key, g.ToList()))
-                .ToList();
-
+                GroupedExpenditures = new ObservableCollection<DateGroup>(groupedData);
+                OnPropertyChanged(nameof(GroupedExpenditures));
 #if WINDOWS
-            ExpendituresList = new ObservableCollection<ExpendituresModel>(expList);
-#elif ANDROID
-            GroupedExpenditures = new ObservableCollection<DateGroup>(groupedData);
-            OnPropertyChanged(nameof(GroupedExpenditures));
+                ExpendituresList = new ObservableCollection<ExpendituresModel>(expList);
 #endif
 
-            TotalAmount = expList.AsParallel().Sum(x => x.AmountSpent);
-            TotalExpenditures = expList.Count;
+                TotalAmount = expList.AsParallel().Sum(x => x.AmountSpent);
+                TotalExpenditures = expList.Count;
 
-            IsBusy = false;
+                IsBusy = false;
 
-            ShowStatisticBtn = expList.Count >= 3;
+                ShowStatisticBtn = expList.Count >= 3;
+                loaded = true;
+            }
+            
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"Exception MESSAGE: {ex.Message}");
         }
+    }
+
+    private void HandleExpendituresListUpdated()
+    {
+        // Update expList
+        var expList = expendituresService.OfflineExpendituresList
+            .OrderByDescending(x => x.DateSpent).ToList();
+
+        // Update groupedData
+        var groupedData = expList.GroupBy(e => e.DateSpent.Date)
+            .Select(g => new DateGroup(g.Key, g.ToList()))
+            .ToList();
+
+        // Update GroupedExpenditures
+        GroupedExpenditures = new ObservableCollection<DateGroup>(groupedData);
+        OnPropertyChanged(nameof(GroupedExpenditures));
+
+#if WINDOWS
+        // Update ExpendituresList
+        ExpendituresList = new ObservableCollection<ExpendituresModel>(expList);
+#endif
+
+        // Update TotalAmount
+        TotalAmount = expList.AsParallel().Sum(x => x.AmountSpent);
+
+        // Update TotalExpenditures
+        TotalExpenditures = expList.Count;
+
+        // Update ShowStatisticBtn
+        ShowStatisticBtn = expList.Count >= 3;
     }
 
     [RelayCommand]
@@ -400,28 +435,18 @@ public partial class ManageExpendituresVM : ObservableObject
     {
         await AddEditExpediture(expenditure, "Edit Flow Out", false);
     }
-
-    int count = 0;
-    [RelayCommand]
-    public void SamepleAdd()
-    {
-        ExpendituresModel ss = new() { DateSpent = DateTime.Now, Reason = $"Test {count}", AmountSpent = 2 };
-        ExpendituresList.Add(ss);
-        count++;
-        TotalExpenditures = ExpendituresList.Count;
-    }
     private async Task AddEditExpediture(ExpendituresModel expenditure, string pageTitle, bool isAdd)
     {
         ExpendituresModel nExp = expenditure;
         var NewUpSertVM = new UpSertExpenditureVM(expendituresService, userService, nExp, pageTitle, isAdd, ActiveUser);
         var UpSertResult = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new UpSertExpendituresPopUp(NewUpSertVM));
 
-        if (UpSertResult.Result == PopupResult.OK)
-        {
-           IsBusy = true;
-          
-           FilterGetAllExp();
-        }
+        //if (UpSertResult.Result == PopupResult.OK)
+        //{
+        //   IsBusy = true;
+
+        //   FilterGetAllExp();
+        //}
     }
 
     [RelayCommand]
@@ -432,31 +457,8 @@ public partial class ManageExpendituresVM : ObservableObject
 
         var navParam = new Dictionary<string, object>
         {
-            { "MonthNumber",  monthNumb },
-            { "YearNumber",  YearNumb},
-            { "ExpendituresList", ExpendituresList }
+            { "GroupedExpList", GroupedExpenditures }
         };
-        switch (filterOption)
-        {
-            case "Filter_All":
-                navParam.Add("PageTitle", new string("Statistics of All Flow Outs"));
-                break;
-            case "Filter_Today":
-                navParam.Add("PageTitle", new string("Statistics of Today's Flow Outs"));
-                break;
-            case "Filter_Curr_Month":
-                navParam.Add("PageTitle", new string("Statistics of this Month's Flow Outs"));
-                break;
-            case "Filter_Spec_Month":
-                navParam.Add("PageTitle", new string($"Statistics of Flow Outs for {monthNumb} - {YearNumb}"));
-                break;
-            case "Filter_Spec_Day_Month":
-                navParam.Add("PageTitle", new string($"Statistics of date {DayFilterDay}-{DayFilterMonth}-{DayFilterYear}"));
-                break;
-            default:
-                //Debug.WriteLine("Cancelled");
-                break;
-        }
 
         await ManageExpendituresNavs.FromManageExpToSingleMonthStats(navParam);
     }
@@ -477,9 +479,9 @@ public partial class ManageExpendituresVM : ObservableObject
             if (deleteResponse)
             {
                 text = "Flow Out Deleted";
-                expendituresService.OfflineExpendituresList.Remove(expenditure);
+                //expendituresService.OfflineExpendituresList.Remove(expenditure);
 
-                FilterGetAllExp();
+                //FilterGetAllExp();
                 ActiveUser.TotalExpendituresAmount -= expenditure.AmountSpent;
                 ActiveUser.PocketMoney += expenditure.AmountSpent;
                 UserPocketMoney += expenditure.AmountSpent;

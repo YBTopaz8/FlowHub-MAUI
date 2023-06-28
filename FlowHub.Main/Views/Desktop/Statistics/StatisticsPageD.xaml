@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlowHub.Main.Views.Desktop.Statistics.StatisticsPageD"
+             xmlns:viewModel="clr-namespace:FlowHub.Main.ViewModels.Statistics"
+             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"             
+             xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
+             xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
+             x:DataType="viewModel:StatisticsPageVM"
+             x:Name="page"
+             Title="Statistics Page">
+    <toolkit:DockLayout>
+        <Label toolkit:DockLayout.DockPosition="Top"
+            FontSize="21"
+            Text="Graphs and Charts!"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+        <HorizontalStackLayout HorizontalOptions="Center" Spacing="15">
+            <material:PickerField ItemsSource="{Binding MonthNames}" SelectedItem="{Binding SelectedMonthName}" BorderColor="DarkSlateGray"
+                                  SelectedValueChangedCommand="{Binding PopulateDataGridWithSelectedMonthDataCommand}"
+                                  Title="Month"/>
+            <material:PickerField ItemsSource="{Binding YearNames}" SelectedItem="{Binding SelectedYearValue}" BorderColor="DarkSlateGray" x:Name="YearPicker"
+                                  SelectedValueChangedCommand="{Binding PopulateDataGridWithSelectedMonthDataCommand}"
+                                  Title="Year"/>
+        </HorizontalStackLayout>
+        <Label Text="test total" IsVisible="False" toolkit:DockLayout.DockPosition="Bottom" HorizontalOptions="Center"/>
+
+        <HorizontalStackLayout Spacing="15" toolkit:DockLayout.DockPosition="Top" HorizontalOptions="CenterAndExpand">
+            <HorizontalStackLayout.Resources>
+                <ResourceDictionary>
+                    <Style TargetType="Border">
+                        <Setter Property="WidthRequest" Value="210"/>
+                        <Setter Property="HeightRequest" Value="65"/>
+                        <Setter Property="Padding" Value="0,3"/>
+                        <Setter Property="Margin" Value="0,10"/>
+                        <Setter Property="Stroke" Value="DarkSlateGray"/>
+                    </Style>
+                    <Style TargetType="VerticalStackLayout">
+                        <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>                        
+                    </Style>
+                </ResourceDictionary>
+            </HorizontalStackLayout.Resources>
+            <Border WidthRequest="240">
+                <VerticalStackLayout>
+                    <Label Text="Total Number of Flows" FontSize="20" />
+                    <Label Text="{Binding TotalNumberOfExpenditures, StringFormat='{0} Flows'}" HorizontalTextAlignment="Center"/>
+                </VerticalStackLayout>             
+            </Border>
+            <Border>
+                <VerticalStackLayout>
+                    <Label Text="Total Flows Amount" FontSize="20"/>
+                    <Label HorizontalTextAlignment="Center">
+                        <Label.Text>
+                            <MultiBinding StringFormat="{}{0:n2} {1}">
+                                <Binding Path="TotalMonthlyAmount"/>
+                                <Binding Path="Currency"/>
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                </VerticalStackLayout>             
+            </Border>
+            <Border>
+                <VerticalStackLayout>
+                    <Label Text="Average Daily Flow" FontSize="20"/>
+                    <Label HorizontalTextAlignment="Center">
+                        <Label.Text>
+                            <MultiBinding StringFormat="{}{0:n2} {1}">
+                                <Binding Path="AverageDailyAmountInAMonth"/>
+                                <Binding Path="Currency"/>
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                </VerticalStackLayout>
+            </Border>
+            <Border>
+                <VerticalStackLayout>
+                    <Label Text="Highest Flow Cost" FontSize="20"/>
+                    <Label HorizontalTextAlignment="Center">
+                        <Label.Text>
+                            <MultiBinding StringFormat="{}{0:n2} {1}">
+                                <Binding Path="BiggestAmountInAMonth"/>
+                                <Binding Path="Currency"/>
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                </VerticalStackLayout>
+            </Border>
+            <Border>
+                <VerticalStackLayout>
+                    <Label Text="Lowest Flow Cost" FontSize="20"/>
+                    <Label HorizontalTextAlignment="Center">
+                        <Label.Text>
+                            <MultiBinding StringFormat="{}{0:n2} {1}">
+                                <Binding Path="SmallestAmountInAMonth"/>
+                                <Binding Path="Currency"/>
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                </VerticalStackLayout>
+            </Border>
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout toolkit:DockLayout.DockPosition="Top" HorizontalOptions="Center" Spacing="10" Margin="10">
+            <Border StrokeThickness="0">
+
+                <lvc:CartesianChart HeightRequest="350" WidthRequest="750"
+                    Series="{Binding MySeries}"
+                    XAxes="{Binding XAxes}"
+                    x:Name="DateTimeExpGraph"
+                />
+            </Border>
+            <Border StrokeThickness="0">
+                <lvc:PieChart HeightRequest="350" WidthRequest="400" x:Name="myPieChart"
+                              Title="{Binding MyPieCategoriesTitle}"
+                              Series="{Binding MyPieSeries}"
+                              LegendPosition="Right"/>
+            </Border>
+            
+        </HorizontalStackLayout>
+
+        <dg:DataGrid ItemsSource="{Binding ExpendituresForSelectedMonth}" BackgroundColor="#201F24"
+                         HorizontalOptions="Center"
+                         MinimumHeightRequest="360"                         
+                         WidthRequest="1200"
+                         RowHeight="50"
+                         HeaderHeight="40"
+                         BorderColor="Transparent"
+                         HeaderBackground="DarkSlateGray"
+                         VerticalOptions="Fill">
+            <dg:DataGrid.NoDataView>
+                <VerticalStackLayout Margin="40,20" MinimumWidthRequest="400">
+                    <Image WidthRequest="70"
+                                        HeightRequest="60"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Center"
+                                        Source="search_property.png"/>
+                    <Label Text="No Flow Out Available..." FontSize="21" HorizontalOptions="Center" Margin="30"/>
+                </VerticalStackLayout>
+            </dg:DataGrid.NoDataView>
+            <!--Equivalent of emptyview-->
+            <dg:DataGrid.Columns>
+                <dg:DataGridColumn Title="Date Spent" PropertyName="DateSpent" SortingEnabled="True">
+                    <dg:DataGridColumn.CellTemplate>
+                        <DataTemplate x:DataType="models:ExpendituresModel">
+                            <Label Text="{Binding ., StringFormat='{0:ddd, MMMM dd, yyyy}'}" TextColor="White" 
+                                   HorizontalTextAlignment="Center"
+                                   VerticalTextAlignment="Center" BackgroundColor="#201F24"/>
+                        </DataTemplate>
+                    </dg:DataGridColumn.CellTemplate>
+                </dg:DataGridColumn>
+                <dg:DataGridColumn Title="Description" PropertyName="Reason" Width="300">
+                    <dg:DataGridColumn.CellTemplate>
+                        <DataTemplate x:DataType="models:ExpendituresModel">
+                            <Label Text="{Binding .}" TextColor="White" BackgroundColor="#201F24" 
+                                    VerticalTextAlignment="Center" HorizontalTextAlignment="Center" HorizontalOptions="FillAndExpand"/>
+                        </DataTemplate>
+                    </dg:DataGridColumn.CellTemplate>
+                </dg:DataGridColumn>
+                <dg:DataGridColumn Title="Category" PropertyName="Category">
+                    <dg:DataGridColumn.CellTemplate>
+                        <DataTemplate x:DataType="models:ExpendituresModel">
+                            <Label Text="{Binding .}" TextColor="White" BackgroundColor="#201F24" 
+                                    VerticalTextAlignment="Center" HorizontalTextAlignment="Center" HorizontalOptions="FillAndExpand"/>
+                        </DataTemplate>
+                    </dg:DataGridColumn.CellTemplate>
+                </dg:DataGridColumn>
+                <dg:DataGridColumn Title="Amount Spent" SortingEnabled="False">
+                    <dg:DataGridColumn.CellTemplate>
+                        <DataTemplate x:DataType="models:ExpendituresModel">
+                            <Label TextColor="White" BackgroundColor="#201F24" 
+                                    VerticalTextAlignment="Center" HorizontalTextAlignment="Center" HorizontalOptions="FillAndExpand">
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{} {0:n2} {1}">
+                                        <Binding Path="AmountSpent"/>
+                                        <Binding Path="Currency"/>
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                        </DataTemplate>
+                    </dg:DataGridColumn.CellTemplate>
+                </dg:DataGridColumn>
+            </dg:DataGrid.Columns>
+        </dg:DataGrid>
+
+
+    </toolkit:DockLayout>
+</ContentPage>

@@ -12,9 +12,9 @@
              x:DataType="viewModels:ManageExpendituresVM"             
              x:Name="Page"
              >
-    <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="filter_d" Command="{Binding ShowFilterPopUpPageCommand}"/>
-    </ContentPage.ToolbarItems>
+    <!--<ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="filter_d" Command="{Binding ShowFilterPopUpPageCommand}" />
+    </ContentPage.ToolbarItems>-->
 
     <toolkit:DockLayout Margin="5,0">
         <Label toolkit:DockLayout.DockPosition="Top" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,5">            
@@ -141,9 +141,9 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!--<ImageButton x:Name="pie_chart" Source="{AppThemeBinding Dark=pie_chart, Light=pie_chart_l}" 
+            <ImageButton x:Name="pie_chart" Source="{AppThemeBinding Dark=pie_chart, Light=pie_chart_l}" 
                          HorizontalOptions="Start" IsVisible="{Binding ShowStatisticBtn}"
-                         Grid.Column="0" VerticalOptions="Start" Command="{Binding GoToSpecificStatsPageCommand}"/>-->
+                         Grid.Column="0" VerticalOptions="Start" Command="{Binding GoToSpecificStatsPageCommand}"/>
             <!--IsVisible="{Binding ShowStatisticBtn}"-->
             <Label FontSize="17" Margin="3" Grid.Column="0" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="End">
                 <Label.Text>
@@ -163,7 +163,7 @@
                          VerticalOptions="Start" HorizontalOptions="Center" Margin="0,0,10,0" Grid.Column="2"/>
         </Grid>
         
-        <CollectionView x:Name="ColView" IsVisible="true" ItemsSource="{Binding GroupedExpenditures}"
+        <CollectionView x:Name="ColView" IsVisible="true" ItemsSource="{Binding GroupedExpenditures}" 
                         IsGrouped="True"
                         HorizontalOptions="Center">
             <CollectionView.EmptyView>
@@ -197,9 +197,9 @@
             </CollectionView.GroupFooterTemplate>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:ExpendituresModel">
-                    <ScrollView Margin="0,2">
+                    
                             <!--set to fill and expand for it to take the whole width of the screen-->
-                            <SwipeView HorizontalOptions="FillAndExpand" >
+                            <SwipeView HorizontalOptions="FillAndExpand" Margin="0,2">
                                 <SwipeView.LeftItems>
                                     <SwipeItem 
                                         Command="{Binding Source={x:Reference Page}, 
@@ -240,7 +240,7 @@
                                     <Rectangle Fill="#404040" HeightRequest="0.8"/>
                                 </VerticalStackLayout>
                             </SwipeView>
-                    </ScrollView>
+                    
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

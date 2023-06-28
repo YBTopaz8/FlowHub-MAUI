@@ -16,7 +16,7 @@ public partial class UpSertExpenditureVM : ObservableObject
 {
     private readonly IExpendituresRepository _expenditureService;
     private readonly IUsersRepository userService;
-    
+
     public UpSertExpenditureVM(IExpendituresRepository expendituresRepository, IUsersRepository usersRepository, ExpendituresModel singleExpendituresDetails, string pageTitle, bool isAdd, UsersModel activeUser)
     {
         _expenditureService = expendituresRepository;
@@ -87,7 +87,6 @@ public partial class UpSertExpenditureVM : ObservableObject
         CancellationTokenSource cancellationTokenSource = new();
         ToastDuration duration = ToastDuration.Short;
 
-        
         if (SingleExpenditureDetails.Id is not null)
         {
             UpdateExpenditureAsync(14, cancellationTokenSource, duration);
@@ -203,7 +202,6 @@ public partial class UpSertExpenditureVM : ObservableObject
             }
         }
     }
-
 
     public void AddTax(TaxModel tax)
     {

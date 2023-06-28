@@ -81,13 +81,20 @@
                          HeightRequest="55"
                              x:Name="SyncButton"
                              Command="{Binding SyncExpTestCommand}"/>
+
+            <ImageButton x:Name="pie_chart" Source="{AppThemeBinding Dark=pie_chart.png, Light=pie_chart_l.png}" 
+                         HeightRequest="55"
+                         IsVisible="{Binding ShowStatisticBtn}"
+                         Command="{Binding GoToSpecificStatsPageCommand}"/>
         </VerticalStackLayout>
 
         <dg:DataGrid ItemsSource="{Binding ExpendituresList}"  BackgroundColor="#201F24" 
                      WidthRequest="1000"
                      HeaderBackground="DarkSlateBlue"
                      RowHeight="50"
+                     HeaderHeight="40"
                      BorderColor="Transparent"
+                     
                      HorizontalOptions="CenterAndExpand" x:Name="ExpDG" >
             <dg:DataGrid.NoDataView>
                 <VerticalStackLayout Margin="40,20" MinimumWidthRequest="400">
@@ -125,7 +132,7 @@
                         </DataTemplate>
                     </dg:DataGridColumn.CellTemplate>
                 </dg:DataGridColumn>
-                <dg:DataGridColumn Title="Amount Spent">
+                <dg:DataGridColumn Title="Amount Spent" SortingEnabled="False">
                     <dg:DataGridColumn.CellTemplate>
                         <DataTemplate x:DataType="models:ExpendituresModel">
                             <Label TextColor="White" BackgroundColor="#201F24" 

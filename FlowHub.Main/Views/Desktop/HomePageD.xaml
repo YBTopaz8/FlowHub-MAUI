@@ -48,61 +48,56 @@
                     Grid.Row="0"
                 Margin="1"
                 Padding="5"
-                WidthRequest="430"
-                
+                WidthRequest="450"                
                 Stroke="DarkSlateBlue"
                 StrokeThickness="2"
                 StrokeShape="RoundRectangle 8">
-                <VerticalStackLayout Spacing="10" Margin="6">
-                    <Label Text="Latest Flow Out"
-                            FontSize="25"
-                            HorizontalOptions="Center"
-                           Margin="90,0,0,0"
-                            WidthRequest="300"/>
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Latest Flow Outs" FontSize="25" HorizontalOptions="Center" Padding="10,0,0,0"/>
                     <BoxView
                         Color="DarkSlateBlue"
-                        HeightRequest="2"
+                        HeightRequest="3"
                         HorizontalOptions="Fill"/>
-                    <HorizontalStackLayout>
-                        <Label Text="Reason: "
-                           FontSize="18"
-                            HorizontalOptions="Start"
-                            />
-                        <Label Text="{Binding ExpendituresDetails.Reason} "
-                           FontSize="18"
-                            HorizontalOptions="Start"
-                           Margin="10,0,0,0"
-                            />
-                    </HorizontalStackLayout>
-                    <HorizontalStackLayout>
-                        <Label Text="Amount Spent :"
-                           FontSize="18"
-                            HorizontalOptions="Start"
-                            />
-                        <Label Text="{Binding ExpendituresDetails.AmountSpent, StringFormat='{0:n2}'} "
-                           FontSize="18"
-                            HorizontalOptions="Start"
-                           Margin="5,0,0,0"
-                            />
-                        <Label Text="{Binding UserCurrency}"
-                           FontSize="18"
-                            HorizontalOptions="Start"
-                           Margin="5,0,0,0"
-                            />
-                    </HorizontalStackLayout>
-                    <HorizontalStackLayout Margin="0,0,0,15">
-                        <Label Text="Date Spent:"
-                           FontSize="18"
-                            HorizontalOptions="Start"
-                            />
-                        <Label Text="{Binding ExpendituresDetails.DateSpent, StringFormat='{0:dd MMMM, yyyy}'}"
-                           FontSize="18"
-                            HorizontalOptions="Start"
-                           Margin="10,0,0,0"
-                            />
-                    </HorizontalStackLayout>
+                    
+                    <CollectionView ItemsSource="{Binding LatestExpenditures}" HorizontalOptions="FillAndExpand">
+                        <CollectionView.EmptyView>
+                            <Label Text="No Flow Outs Available..." HorizontalOptions="Center" VerticalOptions="Center" />
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:ExpendituresModel">
+                                <VerticalStackLayout>
+                                    <Grid Margin="10,5">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
 
+                                        <StackLayout Grid.Column="0">
+                                            <Label Text="{Binding Reason}" FontAttributes="Bold"/>
+                                            <Label Text="{Binding Category}" FontSize="11" FontAttributes="Italic"/>
+                                        </StackLayout>
+
+                                        <StackLayout Grid.Column="1" HorizontalOptions="End">
+                                            <Label FontAttributes="Bold">
+                                                <Label.Text>
+                                                    <MultiBinding StringFormat="{}{0:n2} {1}">
+                                                        <Binding Path="AmountSpent"/>
+                                                        <Binding Path="Currency"/>
+                                                    </MultiBinding>
+                                                </Label.Text>
+                                            </Label>
+                                            <Label Text="{Binding DateSpent, StringFormat='{0:ddd, MMM dd}'}" FontSize="11" HorizontalTextAlignment="End" FontAttributes="Italic"/>
+                                        </StackLayout>
+                                    </Grid>
+                                    <BoxView  Color="DarkSlateBlue" HeightRequest="0.5" HorizontalOptions="Fill"/>
+                                </VerticalStackLayout>
+                               
+
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
                 </VerticalStackLayout>
+
 
             </Border>
             <!-- End Section for Expenditure display-->
@@ -114,33 +109,23 @@
                 Margin="1"
                 Padding="5"
                 Stroke="DarkSlateBlue"
+                WidthRequest="450"
                 StrokeThickness="2"
                 StrokeShape="RoundRectangle 8">
-                <VerticalStackLayout Spacing="10" Margin="6">
-                    <Label Text="Latest Flow In"
-                            FontSize="25"
-                            HorizontalOptions="Center"
-                           Margin="90,0,0,0"
-                           Padding="10,0,0,0"
-                            WidthRequest="300"/>
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Latest Flow Ins" FontSize="25" HorizontalOptions="Center" Padding="10,0,0,0"/>
                     <BoxView
                         Color="DarkSlateBlue"
-                        HeightRequest="2"
+                        HeightRequest="3"
                         HorizontalOptions="Fill"/>
-                    <Label Text="Reason: "
-                           FontSize="18"
-                            HorizontalOptions="Start"
-                            WidthRequest="300"/>
-
-
-                    <Label Text="Amount Received:"
-                           FontSize="18"
-                            HorizontalOptions="StartAndExpand"
-                            WidthRequest="300"/>
-                    <Label Text="Date Received:"
-                           FontSize="18"
-                            HorizontalOptions="StartAndExpand"
-                            WidthRequest="300"/>
+                    <CollectionView ItemsSource="{Binding LatestIncomes}">
+                        <CollectionView.EmptyView>
+                            <VerticalStackLayout VerticalOptions="Center">
+                                <Image Source="nothing_found.png" MaximumHeightRequest="50"/>
+                                <Label Text="No Flow Outs Available..." HorizontalOptions="Center" VerticalOptions="Center" />
+                            </VerticalStackLayout>
+                        </CollectionView.EmptyView>
+                    </CollectionView>
 
                 </VerticalStackLayout>
 

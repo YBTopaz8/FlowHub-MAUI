@@ -187,6 +187,9 @@
 	  <MauiXaml Update="Views\Desktop\Settings\UserSettingsPageD.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Desktop\Statistics\StatisticsPageD.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Mobile\Expenditures\ManageExpendituresM.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

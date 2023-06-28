@@ -12,6 +12,7 @@ using FlowHub.Main.Views.Desktop;
 using FlowHub.Main.Views.Desktop.Expenditures;
 using FlowHub.Main.Views.Desktop.Incomes;
 using FlowHub.Main.Views.Desktop.Settings;
+using FlowHub.Main.Views.Desktop.Statistics;
 using FlowHub.Main.Views.Mobile;
 using FlowHub.Main.Views.Mobile.Expenditures;
 using FlowHub.Main.Views.Mobile.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
@@ -120,6 +121,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<UpSertMonthlyPlannedExpPageM>();
 
         /* -- Section For Statistics --*/
+        builder.Services.AddTransient<StatisticsPageD>();
+
         builder.Services.AddTransient<StatisticsPageM>();
         builder.Services.AddSingleton<SingleMonthStatsPageM>();
 /*--------------------------------------------------------------------------------------------------------------------------------*/

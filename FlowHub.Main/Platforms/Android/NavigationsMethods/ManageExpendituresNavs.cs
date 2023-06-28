@@ -17,7 +17,7 @@ public static class ManageExpendituresNavs
 
     public static async Task FromManageExpToSingleMonthStats(Dictionary<string, object> navParams)
     {
-        await Shell.Current.GoToAsync(nameof(SingleMonthStatsPageM), true, navParams);
+        await Shell.Current.GoToAsync(nameof(StatisticsPageM), true, navParams);
     }
     public static async Task ReturnOnce()
     {

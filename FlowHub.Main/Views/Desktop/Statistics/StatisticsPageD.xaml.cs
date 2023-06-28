@@ -1,17 +1,15 @@
 using FlowHub.Main.ViewModels.Statistics;
-using LiveChartsCore.Kernel.Sketches;
-using LiveChartsCore.Kernel;
-using System.Diagnostics;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
+using System.Diagnostics;
+using LiveChartsCore;
 
+namespace FlowHub.Main.Views.Desktop.Statistics;
 
-namespace FlowHub.Main.Views.Mobile.Statistics;
-
-public partial class StatisticsPageM
+public partial class StatisticsPageD : ContentPage
 {
-	private readonly StatisticsPageVM viewModel;
-	public StatisticsPageM(StatisticsPageVM vm)
+    readonly StatisticsPageVM viewModel;
+    public StatisticsPageD(StatisticsPageVM vm)
 	{
 		InitializeComponent();
 		viewModel = vm;
@@ -28,14 +26,13 @@ public partial class StatisticsPageM
 
         myPieChart.LegendTextPaint = new SolidColorPaint(SKColors.White);
     }
-    protected override bool OnBackButtonPressed()
+    int count;
+
+    private void DateTimeExpGraph_ChartPointPointerDown(LiveChartsCore.Kernel.Sketches.IChartView chart, LiveChartsCore.Kernel.ChartPoint point)
     {
-        Debug.WriteLine("Back button pressed");
-        return base.OnBackButtonPressed();
-        
-    }
-    private void BarChart_ChartPointPointerDown(IChartView chart, ChartPoint point)
-    {
-        
+        //if (point is not null)
+        //{
+        //    Debug.WriteLine(new DateTime((long) point.SecondaryValue));
+        //}
     }
 }

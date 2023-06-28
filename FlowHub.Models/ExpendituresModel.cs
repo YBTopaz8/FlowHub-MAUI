@@ -23,7 +23,6 @@ public class ExpendituresModel
     public string? PlatformModel { get; set; }
     public bool UpdateOnSync { get; set; } = false;
     public string UserId { get; set; }
-
 }
 
 public enum ExpenditureCategory

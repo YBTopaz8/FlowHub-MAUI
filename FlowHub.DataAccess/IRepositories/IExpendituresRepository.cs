@@ -5,6 +5,7 @@ namespace FlowHub.DataAccess.IRepositories;
 public interface IExpendituresRepository
 {
     //   Task<List<ExpendituresModel>> GetAllExpendituresAsync();
+    event Action OfflineExpendituresListChanged;
     Task<List<ExpendituresModel>> GetAllExpendituresAsync();
    // List<ExpendituresModel> OnlineExpendituresList { get; set; }
 
