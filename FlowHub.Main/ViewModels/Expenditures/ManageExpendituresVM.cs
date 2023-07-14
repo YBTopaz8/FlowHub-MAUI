@@ -93,8 +93,8 @@ public partial class ManageExpendituresVM : ObservableObject
     int GlobalSortNamePosition = 1;
 
     string monthName;
-    [RelayCommand]
-    public async void PageloadedAsync()
+    
+    public async Task PageloadedAsync()
     {
         DayFilterYear = DateTime.UtcNow.Year;
         DayFilterMonth = DateTime.UtcNow.Month;
@@ -413,7 +413,7 @@ public partial class ManageExpendituresVM : ObservableObject
     }
 
     [RelayCommand]
-    public async void ShowAddExpenditurePopUp()
+    public async Task ShowAddExpenditurePopUp()
     {
         if (ActiveUser is null)
         {
@@ -431,7 +431,7 @@ public partial class ManageExpendituresVM : ObservableObject
     }
 
     [RelayCommand]
-    public async void ShowEditExpenditurePopUp(ExpendituresModel expenditure)
+    public async Task ShowEditExpenditurePopUp(ExpendituresModel expenditure)
     {
         await AddEditExpediture(expenditure, "Edit Flow Out", false);
     }
@@ -452,8 +452,15 @@ public partial class ManageExpendituresVM : ObservableObject
     [RelayCommand]
     public async Task GoToSpecificStatsPage()
     {
+        
         int monthNumb = DayFilterMonth;
         int YearNumb = DayFilterYear;
+
+        if (GroupedExpenditures is null)
+        {
+            await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("No Data to visualize"));
+            return;
+        }
 
         var navParam = new Dictionary<string, object>
         {
@@ -464,7 +471,7 @@ public partial class ManageExpendituresVM : ObservableObject
     }
 
     [RelayCommand]
-    public async void DeleteExpenditureBtn(ExpendituresModel expenditure)
+    public async Task DeleteExpenditureBtn(ExpendituresModel expenditure)
     {
         CancellationTokenSource cancellationTokenSource = new();
         const ToastDuration duration = ToastDuration.Short;
@@ -498,7 +505,7 @@ public partial class ManageExpendituresVM : ObservableObject
         }
     }
 
-    [RelayCommand]
+    
     public async Task PrintExpendituresBtn()
     {
         Activ = true;
@@ -525,7 +532,7 @@ public partial class ManageExpendituresVM : ObservableObject
         await PrintExpenditures.SaveExpenditureToPDF(ExpendituresList, ActiveUser.UserCurrency, dialogueResponse, ActiveUser.Username);
     }
     [RelayCommand]
-    public async void ShowFilterPopUpPage()
+    public async Task ShowFilterPopUpPage()
     {
         List<string> FilterResult = new();
 
@@ -561,7 +568,7 @@ public partial class ManageExpendituresVM : ObservableObject
     }
 
     [RelayCommand]
-    public async void SyncExpTest()
+    public async Task SyncExpTest()
     {
         bool response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do you want to Sync data?"));
         if (response)
@@ -569,7 +576,7 @@ public partial class ManageExpendituresVM : ObservableObject
             IsBusy = true;
             if (await expendituresService.SynchronizeExpendituresAsync(ActiveUser.Email, ActiveUser.Password))
             {
-                PageloadedAsync();
+                await PageloadedAsync();
                 IsBusy = false;
                 CancellationTokenSource cancellationTokenSource = new();
                 const ToastDuration duration = ToastDuration.Short;
@@ -582,7 +589,7 @@ public partial class ManageExpendituresVM : ObservableObject
     }
 
     [RelayCommand]
-    public static async void CopyToClipboard(ExpendituresModel singlExp)
+    public static async Task CopyToClipboard(ExpendituresModel singlExp)
     {
         await Clipboard.SetTextAsync($"{singlExp.Reason} : {singlExp.AmountSpent}");
         CancellationTokenSource cancellationTokenSource = new();
@@ -594,7 +601,7 @@ public partial class ManageExpendituresVM : ObservableObject
     }
 
     [RelayCommand]
-    public async void DropCollection()
+    public async Task DropCollection()
     {
         await expendituresService.DropExpendituresCollection();
     }

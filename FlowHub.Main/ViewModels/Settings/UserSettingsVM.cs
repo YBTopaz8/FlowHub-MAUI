@@ -78,7 +78,7 @@ public partial class UserSettingsVM : ObservableObject
     }
 
     [RelayCommand]
-    public async void LogOutUser()
+    public async Task LogOutUser()
     {
         bool response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You want to Log Out?"));
         if (response)
@@ -88,7 +88,7 @@ public partial class UserSettingsVM : ObservableObject
 
             await userService.DropCollection();
 
-            NavFunctions.GoToLoginInPage();
+            await NavFunctions.GoToLoginInPage();
         }
     }
 
@@ -106,13 +106,13 @@ public partial class UserSettingsVM : ObservableObject
     }
 
     [RelayCommand]
-    public async void GoToEditUserSettingsPage()
+    public async Task GoToEditUserSettingsPage()
     {
         await Shell.Current.GoToAsync(nameof(EditUserSettingsPageM), true);
     }
 
     [RelayCommand]
-    public async void UpdateUserInformation()
+    public async Task UpdateUserInformation()
     {
         bool dialogResult = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Save Profile?"));
         if (dialogResult)
@@ -142,13 +142,13 @@ public partial class UserSettingsVM : ObservableObject
     }
 
     [RelayCommand]
-    public async void DeleteIdsCollection()
+    public async Task DeleteIdsCollection()
     {
         await expService.DropCollectionIDsToDelete();
     }
 
     [RelayCommand]
-    public async void AddTax()
+    public async Task AddTax()
     {
         List<string> fieldTitles = new() { "Tax Name", "Tax Percentage" };
         PopUpCloseResult result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new InputPopUpPage(InputType.Numeric | InputType.Text, fieldTitles, "Add Tax info", IsDeleteBtnVisible: false));
@@ -163,7 +163,7 @@ public partial class UserSettingsVM : ObservableObject
     }
 
     [RelayCommand]
-    public async void ViewEditDeleteTax(TaxModel Selectedtax)
+    public async Task ViewEditDeleteTax(TaxModel Selectedtax)
     {
         List<string> fieldTitles = new() { "Tax Name", "Tax Percentage" };
         PopUpCloseResult result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new InputPopUpPage(InputType.Numeric | InputType.Text, fieldTitles, "Tax Info", Selectedtax, true));

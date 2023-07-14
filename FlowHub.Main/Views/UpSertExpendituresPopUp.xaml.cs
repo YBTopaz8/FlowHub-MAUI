@@ -13,8 +13,8 @@ public partial class UpSertExpendituresPopUp : Popup
 	{
 		InitializeComponent();
 		viewModel = vm;
-        this.BindingContext = vm;
-        viewModel.PageLoadedCommand.Execute(null);
+        BindingContext = vm;
+        viewModel.PageLoaded();
 
         //#if ANDROID
         //        var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;

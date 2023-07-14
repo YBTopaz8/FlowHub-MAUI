@@ -47,9 +47,8 @@ public partial class HomePageVM : ObservableObject
 
     [ObservableProperty]
     private UsersModel activeUser = new ();
-
-    [RelayCommand]
-    public async void DisplayInfo()
+        
+    public async Task DisplayInfo()
     {
         string Id = await settingsService.GetPreference<string>("Id", "error");
 
@@ -82,7 +81,7 @@ public partial class HomePageVM : ObservableObject
         }
     }
     [RelayCommand]
-    public async void GoToAddExpenditurePage()
+    public async Task GoToAddExpenditurePage()
     {
         if (ActiveUser is null)
         {

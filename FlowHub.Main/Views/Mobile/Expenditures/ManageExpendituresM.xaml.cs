@@ -55,10 +55,10 @@ public partial class ManageExpendituresM : ContentPage
     }
 
     
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
-        viewModel.PageloadedAsyncCommand.Execute(null);
+        await viewModel.PageloadedAsync();
     }
 
     private async void ExportToPDFImageButton_Clicked(object sender, EventArgs e)
@@ -73,12 +73,12 @@ public partial class ManageExpendituresM : ContentPage
             PrintProgressBarIndic.Progress = 0;
             await PrintProgressBarIndic.ProgressTo(1, 1000, easing: Easing.Linear);
 
-            await viewModel.PrintExpendituresBtnCommand.ExecuteAsync(null);
+            await viewModel.PrintExpendituresBtn();
             PrintProgressBarIndic.IsVisible = false;
         }
     }
 
-    private async void FilterOption_Clicked(object sender, EventArgs e)
+    private void FilterOption_Clicked(object sender, EventArgs e)
     {
         //var FadeOut = filterOptionsContainer.FadeTo(0, 350, easing: Easing.Linear);
         //var MoveUp = filterOptionsContainer.TranslateTo(0, -30,350, Easing.Linear);

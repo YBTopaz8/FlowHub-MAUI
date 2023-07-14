@@ -3,16 +3,16 @@ namespace FlowHub.Main.Platforms.NavigationMethods;
 
 public class MonthlyExpendituresNavs
 {
-    //public async void FromManageMonthlyPlannedToDetailsSingleMonthPlan(Dictionary<string, object> navParams)
+    //public async Task FromManageMonthlyPlannedToDetailsSingleMonthPlan(Dictionary<string, object> navParams)
     //{
 
     //}
-    //public async void NavigateToUpsertMonthlyPlannedExpenditure(Dictionary<string, object> navParams)
+    //public async Task NavigateToUpsertMonthlyPlannedExpenditure(Dictionary<string, object> navParams)
     //{
 
     //}
 
-    public async void ReturnOnce()
+    public async Task ReturnOnce()
     {
         await Shell.Current.GoToAsync("..", true);
     }

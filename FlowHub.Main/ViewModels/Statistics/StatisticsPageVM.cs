@@ -1,7 +1,10 @@
-﻿using CommunityToolkit.Maui.Core.Extensions;
+﻿using CommunityToolkit.Diagnostics;
+using CommunityToolkit.Maui.Core.Extensions;
+using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FlowHub.DataAccess.IRepositories;
+using FlowHub.Main.PopUpPages;
 using FlowHub.Main.Utilities;
 using FlowHub.Main.ViewModels.Expenditures;
 using FlowHub.Models;
@@ -85,60 +88,99 @@ public partial class StatisticsPageVM : ObservableObject
 	[ObservableProperty]
 	double smallestAmountInAMonth;
 
-	static bool loaded;
-	[RelayCommand]
-	public void PageLoaded()
-	{
-		if (!loaded)
-		{
-            SelectedMonthName = DateTime.Now.ToString("MMMM");
-            SelectedYearValue = DateTime.Now.Year;
-            MonthNames = GroupedExpenditures.Select(g => new DateTime(g.Date.Year, g.Date.Month, 1))
-                .Distinct()
-                .Order()
-                .Select(date => date.ToString("MMMM"))
-                .ToArray();
-            YearNames = GroupedExpenditures.Select(g => g.Date.Year)
-                .Distinct()
-                .OrderBy(y => y)
-                .ToArray();
-            Currency = GroupedExpenditures.First().Currency;
+	SolidColorPaint LegentTextPaint = new (SKColors.White);
 
-            PopulateDataGridWithSelectedMonthData();
-            DisplayAllMonthsExpensesChart();
-			loaded = true;
-        }
+	[ObservableProperty]
+	string biggestExpenditureTooltipText;
+	[ObservableProperty]
+	string smallestExpenditureTooltipText;
+
+	
+	public async Task PageLoaded()
+    {
+		if (!IsLoaded)
+		{
+			CalculateMonthNames();
+			CalculateYearNames();
+			SelectedMonthName = DateTime.Now.ToString("MMMM");
+			SelectedYearValue = DateTime.Now.Year;//.ToString();
+			Currency = GroupedExpenditures.First().Currency;
+
+			await PopulateDataGridWithSelectedMonthData();
+			DisplayAllMonthsExpensesChart();
+			IsLoaded = true;
+
+		}
+    }
+
+    private void CalculateYearNames()
+    {
+
+        var s = GroupedExpenditures.Select(g => g.Date.Year)
+                    .Distinct()
+                    .OrderBy(y => y)
+                    .ToArray();
+        YearNames = s;
+    }
+
+    private void CalculateMonthNames()
+    {
+        MonthNames = GroupedExpenditures.Select(g => new DateTime(g.Date.Year, g.Date.Month, 1))
+                        .Distinct()
+                        .Order()
+                        .Select(date => date.ToString("MMMM"))
+                        .ToArray();
     }
 
     ObservableCollection<ExpendituresModel> OriginalExpForSelectedMonth = new();
-    [RelayCommand]
-	public void PopulateDataGridWithSelectedMonthData()
-	{
-		if (SelectedYearValue == 0)
-		{
-			SelectedYearValue = DateTime.Now.Year;
-		}
-		SelectedMonthName ??= DateTime.Now.ToString("MMMM");
 
-		DateTime targetDate = new(SelectedYearValue, DateTime.ParseExact(SelectedMonthName, "MMMM", CultureInfo.CurrentCulture).Month, 1);
-		SelectedMonthValue = targetDate.Month;
+	[RelayCommand]
+	async Task PopulateDataGridWithSelectedMonthData()
+    {
 
-		ExpendituresForSelectedMonth = GroupedExpenditures
+		
+			if (SelectedYearValue == 0)
+			{
+				SelectedYearValue = DateTime.Now.Year;
+			}
+			SelectedMonthName ??= DateTime.Now.ToString("MMMM");
+
+			DateTime targetDate = new(SelectedYearValue, DateTime.ParseExact(SelectedMonthName, "MMMM", CultureInfo.CurrentCulture).Month, 1);
+			SelectedMonthValue = targetDate.Month;
+
+
+			ExpendituresForSelectedMonth = GroupedExpenditures
 			.Where(g => g.Date.Month == targetDate.Month && g.Date.Year == SelectedYearValue)
 			.SelectMany(g => g)
 			.ToObservableCollection();
 
-        OriginalExpForSelectedMonth = ExpendituresForSelectedMonth;
-        TotalNumberOfExpenditures = ExpendituresForSelectedMonth.Count;
-		TotalMonthlyAmount = ExpendituresForSelectedMonth.Sum(e => e.AmountSpent);
-		AverageDailyAmountInAMonth = TotalMonthlyAmount / DateTime.DaysInMonth(targetDate.Year, targetDate.Month);
-		BiggestAmountInAMonth = ExpendituresForSelectedMonth.Max(e => e.AmountSpent);
-		SmallestAmountInAMonth = ExpendituresForSelectedMonth.Min(e => e.AmountSpent);
 
-		DisplaySpecificMonthCategoriesPieChart();
-	}
+			OriginalExpForSelectedMonth = ExpendituresForSelectedMonth;
+			TotalNumberOfExpenditures = ExpendituresForSelectedMonth.Count;
+			TotalMonthlyAmount = ExpendituresForSelectedMonth.Sum(e => e.AmountSpent);
+			AverageDailyAmountInAMonth = TotalMonthlyAmount / DateTime.DaysInMonth(targetDate.Year, targetDate.Month);
+			BiggestAmountInAMonth = ExpendituresForSelectedMonth.Max(e => e.AmountSpent);
+			SmallestAmountInAMonth = ExpendituresForSelectedMonth.Min(e => e.AmountSpent);
 
-	private void DisplayAllMonthsExpensesChart()
+			var expWithBiggestAmount = ExpendituresForSelectedMonth
+			.Aggregate((maxExp, nextExp) => nextExp.AmountSpent > maxExp.AmountSpent ? nextExp : maxExp);
+
+			if (expWithBiggestAmount != null)
+			{
+				BiggestExpenditureTooltipText = $"  {expWithBiggestAmount.Reason} \n{expWithBiggestAmount.DateSpent:d}";
+			}
+			var expWithSmallestAmount = ExpendituresForSelectedMonth
+			.Aggregate((minExp, nextExp) => nextExp.AmountSpent < minExp.AmountSpent ? nextExp : minExp);
+
+			if (expWithSmallestAmount != null)
+			{
+				SmallestExpenditureTooltipText = $"  {expWithSmallestAmount.Reason} \n{expWithSmallestAmount.DateSpent:d}";
+			}
+			DisplaySpecificMonthCategoriesPieChart(); 
+		
+    }
+
+    private void DisplayAllMonthsExpensesChart()
 	{
 		var groupedData = GroupedExpenditures
 								.GroupBy(g => new DateTime(g.Date.Year, g.Date.Month, 1))
@@ -173,7 +215,7 @@ public partial class StatisticsPageVM : ObservableObject
 			}
 		};
 	}
-	
+
 	private List<PieChartData> listOfPieSeries;
     private void DisplaySpecificMonthCategoriesPieChart()
 	{
@@ -210,7 +252,7 @@ public partial class StatisticsPageVM : ObservableObject
 
     int? lastIndex = null;
 	[RelayCommand]
-	public void BarChartPointHover(ChartPoint point)
+	public async Task BarChartPointHover(ChartPoint point)
     {
         if (point is null)
 		{
@@ -234,10 +276,10 @@ public partial class StatisticsPageVM : ObservableObject
 		SelectedYearValue = selectedDate.Year;
 		SelectedMonthName = selectedDate.ToString("MMMM");
 		SelectedCategoryName = string.Empty;
-	 	UpdateExpForSelectedMonthCollection();
+	 	await UpdateExpForSelectedMonthCollection();
     }
 
-	private async void UpdateExpForSelectedMonthCollection()
+	private async Task UpdateExpForSelectedMonthCollection()
 	{
 		await Task.Delay(50);
 		ExpendituresForSelectedMonth = GroupedExpenditures
@@ -249,7 +291,7 @@ public partial class StatisticsPageVM : ObservableObject
 
 	string? lastPieCategory = null;
 	[RelayCommand]
-	public async void PieChartClick(ChartPoint point)
+	public async Task PieChartClick(ChartPoint point)
     {
         await Task.Delay(50);
         if (point is null)
@@ -269,15 +311,61 @@ public partial class StatisticsPageVM : ObservableObject
 
 		SelectedCategoryName = currentCategory;
 
-		UpdateExpForSelectedMonthToShowOnlyCategories();
+		await UpdateExpForSelectedMonthToShowOnlyCategories();
     }
 
-    private async void UpdateExpForSelectedMonthToShowOnlyCategories()
+    private async Task UpdateExpForSelectedMonthToShowOnlyCategories()
     {
         await Task.Delay(50);
         ExpendituresForSelectedMonth = OriginalExpForSelectedMonth.Where(e => e.Category.ToString() == SelectedCategoryName)
             .ToObservableCollection();
     }
+
+
+	//section for state management
+    public bool IsLoaded;
+
+    public static Dictionary<string, object> ViewModelStateCache = new Dictionary<string, object>();
+
+    public void SaveState()
+    {
+        ViewModelStateCache["SelectedMonthName"] = SelectedMonthName;
+        ViewModelStateCache["SelectedYearValue"] = SelectedYearValue;
+        ViewModelStateCache["MonthNames"] = MonthNames;
+        ViewModelStateCache["YearNames"] = YearNames;
+        ViewModelStateCache["Currency"] = Currency;
+        //... add all properties that you want to persist
+    }
+
+    public void LoadState()
+    {
+        if (ViewModelStateCache.ContainsKey("SelectedMonthName"))
+		{
+            SelectedMonthName = (string)ViewModelStateCache["SelectedMonthName"];
+		}
+        if (ViewModelStateCache.ContainsKey("SelectedYearValue"))
+		{
+            SelectedYearValue = (int)ViewModelStateCache["SelectedYearValue"];
+		}
+        if (ViewModelStateCache.ContainsKey("MonthNames"))
+		{
+            MonthNames = (string[])ViewModelStateCache["MonthNames"];
+		}
+		if (ViewModelStateCache.ContainsKey("YearNames"))
+		{
+			YearNames = (int[])ViewModelStateCache["YearNames"];
+		}
+        if (ViewModelStateCache.ContainsKey("Currency"))
+        {
+            Currency = (string)ViewModelStateCache["Currency"];
+        }
+    }
+
+
+
+
+
+    //old code below
     public List<ExpendituresModel> listOfExp { get; set; }
     public ExpendituresModel[] listOfExpDec { get; set; }
 
@@ -296,6 +384,9 @@ public partial class StatisticsPageVM : ObservableObject
 	//public SolidColorPaint LegendBGPaint { get; set; } = new SolidColorPaint(new SkiaSharp.SKColor(240, 240, 240));
 
 	public ObservableCollection<ISeries> LineSeries { get; set; }
+
+
+
 
 	[RelayCommand]
 	//public void PageLoaded()

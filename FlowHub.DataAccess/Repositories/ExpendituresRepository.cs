@@ -37,7 +37,7 @@ public class ExpendituresRepository : IExpendituresRepository
         onlineDataAccessRepo = onlineRepository;
     }
 
-    async void OpenDB()
+    async Task OpenDB()
     {
         db = dataAccessRepo.GetDb();
         AllExpenditures = db.GetCollection<ExpendituresModel>(expendituresDataCollectionName);
@@ -50,7 +50,7 @@ public class ExpendituresRepository : IExpendituresRepository
     {
         try
         {
-            OpenDB();
+            await OpenDB();
             string userId = usersRepo.OfflineUser.Id;
             string userCurrency = usersRepo.OfflineUser.UserCurrency;
             if (usersRepo.OfflineUser.UserIDOnline != string.Empty)
@@ -77,7 +77,7 @@ public class ExpendituresRepository : IExpendituresRepository
 
         try
         {
-            OpenDB();
+            await OpenDB();
 
             if (!await AllExpenditures.ExistsAsync(x => x.Id == expenditure.Id))
             {
@@ -113,7 +113,7 @@ public class ExpendituresRepository : IExpendituresRepository
         expenditure.PlatformModel = DeviceInfo.Current.Model;
         try
         {
-            OpenDB();
+            await OpenDB();
             if (await AllExpenditures.UpdateAsync(expenditure))
             {
                 db.Dispose();
@@ -144,7 +144,7 @@ public class ExpendituresRepository : IExpendituresRepository
     {
         try
         {
-            OpenDB();
+            await OpenDB();
             if (await AllExpenditures.DeleteAsync(id))
             {
                 IDsToBeDeleted idToBeDeleted = new()
@@ -298,7 +298,7 @@ public class ExpendituresRepository : IExpendituresRepository
 
     private async Task<bool> DeleteAllExpOnline()
     {
-        OpenDB();
+        await OpenDB();
         var AllOfflineIDsToBeDeleted = await AllIDsToBeDeleted.Query().ToListAsync();
         db.Dispose();
         var idsFilter = Builders<IDsToBeDeleted>.Filter.Eq("UserID", usersRepo.OnlineUser.Id);
@@ -320,7 +320,7 @@ public class ExpendituresRepository : IExpendituresRepository
                 Debug.WriteLine("deleteOnline Ex msg :" + ex.Message);
             }
         }
-        OpenDB();
+        await OpenDB();
             await AllIDsToBeDeleted.DeleteAllAsync();
         db.Dispose();
         return true;
@@ -367,7 +367,7 @@ public class ExpendituresRepository : IExpendituresRepository
 
     public async Task DropExpendituresCollection()
     {
-        OpenDB();
+        await OpenDB();
         await db.DropCollectionAsync(expendituresDataCollectionName);
         db.Dispose();
         Debug.WriteLine("Expenditures Collection dropped!");
@@ -375,7 +375,7 @@ public class ExpendituresRepository : IExpendituresRepository
 
     public async Task DropCollectionIDsToDelete()
     {
-        OpenDB();
+        await OpenDB();
         await db.DropCollectionAsync(IDsDataCollectionName);
         db.Dispose();
         Debug.WriteLine("IDs Collection dropped!");

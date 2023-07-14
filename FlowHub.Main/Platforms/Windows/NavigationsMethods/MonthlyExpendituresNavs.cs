@@ -10,7 +10,7 @@ public class MonthlyExpendituresNavs
     {
     }
 
-    public async void ReturnOnce()
+    public async Task ReturnOnce()
     {
         await Shell.Current.GoToAsync("..", true);
     }

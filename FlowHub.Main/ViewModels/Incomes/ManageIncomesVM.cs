@@ -48,7 +48,7 @@ public partial class ManageIncomesVM : ObservableObject
     private UsersModel ActiveUser = new();
 
     [RelayCommand]
-    public async void PageLoaded()
+    public async Task PageLoaded()
     {
         var user = userService.OfflineUser;
         ActiveUser = user;
@@ -56,7 +56,7 @@ public partial class ManageIncomesVM : ObservableObject
         UserCurrency = ActiveUser.UserCurrency;
         await incomeService.GetAllIncomesAsync();
         //FilterGetIncOfCurrentMonth();
-        FilterGetAllIncomes();
+        await FilterGetAllIncomes();
     }
 
     [RelayCommand]
@@ -97,7 +97,7 @@ public partial class ManageIncomesVM : ObservableObject
     }
 
     [RelayCommand]
-    public async void FilterGetAllIncomes()
+    public async Task FilterGetAllIncomes()
     {
         try
         {
@@ -212,12 +212,12 @@ public partial class ManageIncomesVM : ObservableObject
     }
 
     [RelayCommand]
-    public void GoToAddIncomePage()
+    public async Task GoToAddIncomePage()
     {
         if (ActiveUser is null)
         {
             Debug.WriteLine("Can't go because Active User is Null");
-            Shell.Current.DisplayAlert("Wait", "Please Wait", "OK");
+            await Shell.Current.DisplayAlert("Wait", "Please Wait", "OK");
         }
         else
         {
@@ -227,12 +227,12 @@ public partial class ManageIncomesVM : ObservableObject
                 {"PageTitle", new string("Add New Income")},
                 {"ActiveUser",ActiveUser }
             };
-            NavFunctions.FromManageIncToUpsertIncome(navParam);
+            await NavFunctions.FromManageIncToUpsertIncome(navParam);
         }
     }
 
     [RelayCommand]
-    public void GoToEditIncomePage(IncomeModel income)
+    public async Task GoToEditIncomePage(IncomeModel income)
     {
         var navParam = new Dictionary<string, object>
         {
@@ -240,11 +240,11 @@ public partial class ManageIncomesVM : ObservableObject
                 {"PageTitle", new string("Edit Income")},
                 {"ActiveUser",ActiveUser }
         };
-        NavFunctions.FromManageIncToUpsertIncome(navParam);
+        await NavFunctions.FromManageIncToUpsertIncome(navParam);
     }
 
     [RelayCommand]
-    public async void DeleteIncomeBtn(IncomeModel income)
+    public async Task DeleteIncomeBtn(IncomeModel income)
     {
         CancellationTokenSource cancellationTokenSource = new();
         ToastDuration duration = ToastDuration.Short;
@@ -287,7 +287,7 @@ public partial class ManageIncomesVM : ObservableObject
     }
 
     [RelayCommand]
-    public async void ResetUserPocketMoney(double amount)
+    public async Task ResetUserPocketMoney(double amount)
     {
         if (amount != 0)
         {
@@ -303,7 +303,7 @@ public partial class ManageIncomesVM : ObservableObject
             var toast = Toast.Make(text, duration, fontSize);
             await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
 
-            PageLoaded();
+            await PageLoaded();
         }
     }
 

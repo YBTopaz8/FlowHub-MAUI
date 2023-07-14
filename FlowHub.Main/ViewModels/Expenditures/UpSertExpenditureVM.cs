@@ -58,8 +58,6 @@ public partial class UpSertExpenditureVM : ObservableObject
     double _initialUserPocketMoney;
     double _initialExpenditureAmount;
     double _initialTotalExpAmount;
-
-    [RelayCommand]
     public void PageLoaded()
     {
         _initialUserPocketMoney = ActiveUser.PocketMoney;
@@ -75,7 +73,7 @@ public partial class UpSertExpenditureVM : ObservableObject
     }
 
     [RelayCommand]
-    public async void UpSertExpenditure()
+    public async Task UpSertExpenditure()
     {
         if (ResultingBalance < 0)
         {
@@ -89,7 +87,7 @@ public partial class UpSertExpenditureVM : ObservableObject
 
         if (SingleExpenditureDetails.Id is not null)
         {
-            UpdateExpenditureAsync(14, cancellationTokenSource, duration);
+            await UpdateExpenditureAsync(14, cancellationTokenSource, duration);
         }
         else
         {
@@ -99,7 +97,7 @@ public partial class UpSertExpenditureVM : ObservableObject
         ClosePopUp = true;
     }
 
-    private async void UpdateExpenditureAsync(double fontsize, CancellationTokenSource tokenSource, ToastDuration toastDuration)
+    private async Task UpdateExpenditureAsync(double fontsize, CancellationTokenSource tokenSource, ToastDuration toastDuration)
     {
         double difference = TotalAmountSpent - _initialExpenditureAmount;
 
@@ -177,7 +175,7 @@ public partial class UpSertExpenditureVM : ObservableObject
     bool isAddTaxesChecked;
 
     [RelayCommand]
-    public async void HardResetUserBalance()
+    public async Task HardResetUserBalance()
     {
         PopUpCloseResult result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new InputPopUpPage(InputType.Numeric, new List<string>() { "Amount" }, "Enter New Pocket Money"));
         if (result.Result == PopupResult.OK)

@@ -17,7 +17,7 @@ public partial class UpSertExpenditurePageM : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        viewModel.PageLoadedCommand.Execute(null);
+        viewModel.PageLoaded();
         if (viewModel.IsAddTaxesChecked)
         {
             AddTaxCheckBox.IsChecked = true;

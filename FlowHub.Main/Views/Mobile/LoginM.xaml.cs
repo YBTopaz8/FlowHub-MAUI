@@ -23,15 +23,17 @@ public partial class LoginM : ContentPage
             {
 #if ANDROID
                 Android.Graphics.Drawables.GradientDrawable gd = new();
-                gd.SetColor(global::Android.Graphics.Color.Transparent);
+                gd.SetColor(Android.Graphics.Color.Transparent);
+                
                 handler.PlatformView.SetBackground(gd);
+                
 #endif
             }
         });
     }
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
-        viewModel.PageLoadedCommand.Execute(null);
+        await viewModel.PageLoaded();
         base.OnAppearing();
         bool HasLoginRemembered = viewModel.HasLoginRemembered;
         bool isLoginFormVisible = viewModel.IsLoginFormVisible;
@@ -100,10 +102,10 @@ public partial class LoginM : ContentPage
         QuickLogin.IsVisible = false;
     }
 
-    private void QuickLoginBtn_Clicked(object sender, EventArgs e)
+    private async void QuickLoginBtn_Clicked(object sender, EventArgs e)
     {
         QuickLoginBtn.IsEnabled = false;
-        viewModel.QuickLoginCommand.Execute(null);
+        await viewModel.QuickLogin();
     }
 
     private async void LoginUnFocused_Tapped(object sender, TappedEventArgs e)

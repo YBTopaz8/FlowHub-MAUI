@@ -69,7 +69,7 @@ public partial class LoginVM : ObservableObject
     readonly string LoginDetectFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "QuickLogin.text");
 
     [RelayCommand]
-    public async void PageLoaded()
+    public async Task PageLoaded()
     {
         if (IsQuickLoginDetectionFilePresent())
         {
@@ -77,7 +77,7 @@ public partial class LoginVM : ObservableObject
             if (Username is null)
             {
                 File.Delete(LoginDetectFile);
-                PageLoaded();
+                await PageLoaded();
             }
             userId = await settingsService.GetPreference<string>(nameof(CurrentUser.Id), null);
             IsQuickLoginVisible = true;
@@ -121,7 +121,7 @@ public partial class LoginVM : ObservableObject
     }
 
     [RelayCommand]
-    public async void GoToHomePageFromRegister()
+    public async Task GoToHomePageFromRegister()
     {
         CurrentUser.Email = CurrentUser.Email.Trim();
         CurrentUser.Id = Guid.NewGuid().ToString();
@@ -144,7 +144,7 @@ public partial class LoginVM : ObservableObject
                 if (await userService.AddUserOnlineAsync(CurrentUser))
                 {
                     await Shell.Current.DisplayAlert("User Registration", "Online Account Created !", "Ok");
-                    NavFunctions.GoToHomePage();
+                    await NavFunctions.GoToHomePage();
                 }
                 else
                 {
@@ -161,7 +161,7 @@ public partial class LoginVM : ObservableObject
     }
 
     [RelayCommand]
-    public async void GoToHomePageFromLogin()
+    public async Task GoToHomePageFromLogin()
     {
         ErrorMessageVisible = false;
         IsBusy = true;
@@ -197,18 +197,18 @@ public partial class LoginVM : ObservableObject
             IsBusy = false;
 
             IsQuickLoginVisible = true;
-            NavFunctions.GoToHomePage();
+            await NavFunctions.GoToHomePage();
         }
     }
 
-    [RelayCommand]
-    public async void QuickLogin()
+    
+    public async Task QuickLogin()
     {
         if (File.Exists(LoginDetectFile))
         {
             IsQuickLoginVisible = false;
             userService.OfflineUser = await userService.GetUserAsync(userId); //initialized user to be used by the entire app                                
-            NavFunctions.GoToHomePage();
+            await NavFunctions.GoToHomePage();
         }
         else
         {

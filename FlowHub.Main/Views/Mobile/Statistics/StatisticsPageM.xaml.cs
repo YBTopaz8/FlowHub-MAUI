@@ -18,15 +18,21 @@ public partial class StatisticsPageM
 		this.BindingContext = vm;
 	}
 
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
-        viewModel.PageLoadedCommand.Execute(null);
+        viewModel.LoadState();
 
-        YearPicker.SelectedItem = DateTime.Now.Year.ToString();
-        viewModel.SelectedMonthName = DateTime.Now.ToString("MMMM");
-
-        myPieChart.LegendTextPaint = new SolidColorPaint(SKColors.White);
+        if (!viewModel.IsLoaded)
+        {
+            await viewModel.PageLoaded();
+            YearPicker.SelectedItem = DateTime.Now.Year.ToString();
+        }
+    }
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        viewModel.SaveState();
     }
     protected override bool OnBackButtonPressed()
     {

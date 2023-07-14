@@ -18,10 +18,11 @@ public partial class ManageExpendituresPageD : ContentPage
             0, 360, Easing.Linear);
     }
 
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
-		viewModel.PageloadedAsyncCommand.Execute(null);
+        await viewModel.PageloadedAsync();
+
 
         //ExpDG.SortedColumnIndex = 0;
     }
@@ -55,7 +56,7 @@ public partial class ManageExpendituresPageD : ContentPage
             PrintProgressBarIndic.Progress = 0;
             await PrintProgressBarIndic.ProgressTo(1, 1000, easing: Easing.Linear);
 
-            await viewModel.PrintExpendituresBtnCommand.ExecuteAsync(null);
+            await viewModel.PrintExpendituresBtn();
             PrintProgressBarIndic.IsVisible = false;
         }
     }

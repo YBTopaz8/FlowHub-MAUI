@@ -14,10 +14,10 @@ public partial class ManageMonthlyPlannedExpendituresPageM : ContentPage
 		this.BindingContext = vm;
     }
 
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
-        viewModel.PageLoadedCommand.Execute(null);
+        await viewModel.PageLoaded();
     }
 
     private void MultiSelectToggle_CheckChanged(object sender, EventArgs e)

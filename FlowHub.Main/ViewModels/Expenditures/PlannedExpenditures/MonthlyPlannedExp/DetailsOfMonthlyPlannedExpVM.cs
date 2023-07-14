@@ -54,8 +54,8 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
 
     [ObservableProperty]
     List<ExpendituresModel> tempList = new();
-    [RelayCommand]
-    void PageLoaded()
+    
+    public void PageLoaded()
     {
        // UsersModel user = ActiveUser;
         UserCurrency = ActiveUser.UserCurrency;
@@ -97,7 +97,7 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
     }
 
     [RelayCommand]
-    void AddNewPlannedExpToMonthlyP()
+    async Task AddNewPlannedExpToMonthlyP()
     {
         Dictionary<string, object> navParam = new()
         {
@@ -110,7 +110,7 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
             { "ActiveUser" , ActiveUser }
         };
 
-        NavFunctions.ToUpSertMonthlyPlanned(navParam);
+        await NavFunctions.ToUpSertMonthlyPlanned(navParam);
     }
     void GetTotals()
     {
@@ -127,8 +127,8 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
         //NumberOfExpInReport= TempList.Where(x => x.IncludeInReport == true).Count();
     }
 
-    [RelayCommand]
-    void GoToEditExpInMonthP(ExpendituresModel model)
+    
+    public async Task GoToEditExpInMonthP(ExpendituresModel model)
     {
         Dictionary<string, object> navParam = new()
         {
@@ -138,11 +138,10 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
             { "IsAdd", false },
             { "ActiveUser" , ActiveUser }
         };
-        NavFunctions.ToUpSertMonthlyPlanned(navParam);
+        await NavFunctions.ToUpSertMonthlyPlanned(navParam);
     }
-
-    [RelayCommand]
-    async void DeleteExpFromMonthlyP(ExpendituresModel model)
+        
+    public async Task DeleteExpFromMonthlyP(ExpendituresModel model)
     {
         bool dialogResult = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Delete Flow Out?"));
         if (dialogResult)
@@ -168,8 +167,7 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
         }
     }
 
-    [RelayCommand]
-    async Task PrintPDFandShare()
+    public async Task PrintPDFandShare()
     {
         PrintFunction  = new PrintDetailsMonthlyExpenditure();
         string dialogueResponse =(string) await Shell.Current.ShowPopupAsync(new InputCurrencyForPrintPopUpPage("Share PDF File? (Requires Internet)", UserCurrency));

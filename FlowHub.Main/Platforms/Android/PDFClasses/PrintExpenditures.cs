@@ -34,7 +34,7 @@ public static class PrintExpenditures
         await Task.Run(() => CreatePdfDoc(expList, PathFile, userCurrency, printDisplayCurrency, ObjectWithRate.result, ObjectWithRate.date, PdfTitle, userName));
     }
 
-    static void CreatePdfDoc(ObservableCollection<ExpendituresModel> expList, string PathFile, string userCurrency, string printDisplayCurrency, double rate, DateTime dateOfRateUpdate, string pdfTitle, string username)
+    static async Task CreatePdfDoc(ObservableCollection<ExpendituresModel> expList, string PathFile, string userCurrency, string printDisplayCurrency, double rate, DateTime dateOfRateUpdate, string pdfTitle, string username)
     {
         Color HeaderTextColor = WebColors.GetRGBColor("darkslateblue");
 
@@ -124,10 +124,10 @@ public static class PrintExpenditures
         }
 
         document.Close();
-        SharePdfFile(pdfTitle, PathFile);
+        await SharePdfFile(pdfTitle, PathFile);
     }
 
-    static async void SharePdfFile(string PdfTitle, string FilePath)
+    static async Task SharePdfFile(string PdfTitle, string FilePath)
     {
         await Share.Default.RequestAsync(new ShareFileRequest
         {

@@ -14,10 +14,10 @@ public partial class LoginD : ContentPage
         viewModel = vm;
         this.BindingContext = vm;
     }
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
-        viewModel.PageLoadedCommand.Execute(null);
+        await viewModel.PageLoaded();
         bool HasLoginRemembered = viewModel.HasLoginRemembered;
         bool isLoginFormVisible = viewModel.IsLoginFormVisible;
 
@@ -85,10 +85,10 @@ public partial class LoginD : ContentPage
         QuickLogin.IsVisible = false;
     }
 
-    private void QuickLoginBtn_Clicked(object sender, EventArgs e)
+    private async void QuickLoginBtn_Clicked(object sender, EventArgs e)
     {
         QuickLoginBtn.IsEnabled = false;
-        viewModel.QuickLoginCommand.Execute(null);
+        await viewModel.QuickLogin();
     }
 
     private async void LoginUnFocused_Tapped(object sender, TappedEventArgs e)

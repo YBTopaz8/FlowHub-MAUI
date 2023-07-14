@@ -40,7 +40,7 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
     public List<string> ListOfExpTitles;
 
     [RelayCommand]
-    public async void PageLoaded()
+    public async Task PageLoaded()
     {
         var user = userService.OfflineUser;
         ActiveUser = user;
@@ -78,7 +78,7 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
     }
 
     [RelayCommand]
-    public async void ShowInputMonthYearPopupPage()
+    public async Task ShowInputMonthYearPopupPage()
     {
         var monthYear = (string)await Shell.Current.ShowPopupAsync(new InputMonthAndYearPopUp());
         if (monthYear.Equals("Cancel"))
@@ -105,13 +105,13 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
                     {"ActiveUser" , ActiveUser }
                 };
 
-                NavFunctions.ToUpSertMonthlyPlanned(navParam);
+                await NavFunctions.ToUpSertMonthlyPlanned(navParam);
             }
         }
     }
 
     [RelayCommand]
-    public void GoToViewMonthlyPlannedExp(PlannedExpendituresModel monthlyPlannedExp)
+    public async Task GoToViewMonthlyPlannedExp(PlannedExpendituresModel monthlyPlannedExp)
     {
         var navParam = new Dictionary<string, object>
         {
@@ -119,11 +119,11 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
             {"PageTitle", new string($"View {monthlyPlannedExp.Title}") },
             { "ActiveUser", ActiveUser }
         };
-        NavFunctions.ToDetailsMonthlyPlanned(navParam);
+        await NavFunctions.ToDetailsMonthlyPlanned(navParam);
     }
 
     [RelayCommand]
-    public async void DeleteMonthlyPlannedExp(PlannedExpendituresModel monthlyPlannedExp)
+    public async Task DeleteMonthlyPlannedExp(PlannedExpendituresModel monthlyPlannedExp)
     {
         bool dialogResult = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Delete Monthly Planned Flow?"));
         if (dialogResult)
@@ -143,13 +143,13 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
     }
 
     [RelayCommand]
-    public async void SyncPlannedExpTest()
+    public async Task SyncPlannedExpTest()
     {
         IsBusy = true;
         Debug.WriteLine("Begin Sync");
         if (await monthlyPlannedExpService.SynchronizePlannedExpendituresAsync(ActiveUser.Email, ActiveUser.Password))
         {
-            PageLoaded();
+            await PageLoaded();
 
             IsBusy = false;
         }

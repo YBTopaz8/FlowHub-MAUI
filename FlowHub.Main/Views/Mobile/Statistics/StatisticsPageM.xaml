@@ -19,10 +19,12 @@
                 HorizontalOptions="Center" />
         
 
-        <HorizontalStackLayout IsVisible="false" Spacing="15" toolkit:DockLayout.DockPosition="Top"
+        <HorizontalStackLayout IsVisible="true" Spacing="5" toolkit:DockLayout.DockPosition="Top"
+                               Margin="0,5,0,0"
                               VerticalOptions="Center"                    
                             HorizontalOptions="Center" >
-                <material:PickerField ItemsSource="{Binding MonthNames}" SelectedItem="{Binding SelectedMonthName}" BorderColor="DarkSlateGray"
+            
+            <material:PickerField ItemsSource="{Binding MonthNames}" SelectedItem="{Binding SelectedMonthName}" BorderColor="DarkSlateGray"
                                   SelectedValueChangedCommand="{Binding PopulateDataGridWithSelectedMonthDataCommand}"
                                   Title="Month"/>
                 <material:PickerField ItemsSource="{Binding YearNames}" SelectedItem="{Binding SelectedYearValue}" BorderColor="DarkSlateGray" x:Name="YearPicker"
@@ -68,40 +70,43 @@
                             </Label>
                         </VerticalStackLayout>
                     </Border>
-                    <Border>
+
+                <Border 
+                    ToolTipProperties.Text="{Binding BiggestExpenditureTooltipText}">
+                    <VerticalStackLayout>
+                        <Label Text="Highest Flow Cost" FontSize="16" 
+                                   HorizontalTextAlignment="Center"/>
+                        <Label HorizontalTextAlignment="Center" FontSize="13">
+                            <Label.Text>
+                                <MultiBinding StringFormat="{}{0:n2} {1}">
+                                    <Binding Path="BiggestAmountInAMonth"/>
+                                    <Binding Path="Currency"/>
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
+                    </VerticalStackLayout>
+                </Border>
+                <Border 
+                    ToolTipProperties.Text="{Binding SmallestExpenditureTooltipText}">
+                    <VerticalStackLayout>
+                        <Label Text="Lowest Flow Cost" FontSize="16"/>
+                        <Label HorizontalTextAlignment="Center">
+                            <Label.Text>
+                                <MultiBinding StringFormat="{}{0:n2} {1}">
+                                    <Binding Path="SmallestAmountInAMonth"/>
+                                    <Binding Path="Currency"/>
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
+                    </VerticalStackLayout>
+                </Border>
+                <Border>
                         <VerticalStackLayout>
                             <Label Text="Average Daily Flow" FontSize="16"/>
                             <Label HorizontalTextAlignment="Center">
                                 <Label.Text>
                                     <MultiBinding StringFormat="{}{0:n2} {1}">
                                         <Binding Path="AverageDailyAmountInAMonth"/>
-                                        <Binding Path="Currency"/>
-                                    </MultiBinding>
-                                </Label.Text>
-                            </Label>
-                        </VerticalStackLayout>
-                    </Border>
-                    <Border>
-                        <VerticalStackLayout>
-                            <Label Text="Highest Flow Cost" FontSize="16" 
-                                   HorizontalTextAlignment="Center"/>
-                            <Label HorizontalTextAlignment="Center" FontSize="13">
-                                <Label.Text>
-                                    <MultiBinding StringFormat="{}{0:n2} {1}">
-                                        <Binding Path="BiggestAmountInAMonth"/>
-                                        <Binding Path="Currency"/>
-                                    </MultiBinding>
-                                </Label.Text>
-                            </Label>
-                        </VerticalStackLayout>
-                    </Border>
-                    <Border>
-                        <VerticalStackLayout>
-                            <Label Text="Lowest Flow Cost" FontSize="16"/>
-                            <Label HorizontalTextAlignment="Center">
-                                <Label.Text>
-                                    <MultiBinding StringFormat="{}{0:n2} {1}">
-                                        <Binding Path="SmallestAmountInAMonth"/>
                                         <Binding Path="Currency"/>
                                     </MultiBinding>
                                 </Label.Text>

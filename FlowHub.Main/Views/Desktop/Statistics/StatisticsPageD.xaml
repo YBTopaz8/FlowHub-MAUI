@@ -48,6 +48,34 @@
                     <Label Text="{Binding TotalNumberOfExpenditures, StringFormat='{0} Flows'}" HorizontalTextAlignment="Center"/>
                 </VerticalStackLayout>             
             </Border>
+            <Border
+                ToolTipProperties.Text="{Binding BiggestExpenditureTooltipText}">
+                <VerticalStackLayout>
+                    <Label Text="Highest Flow Cost" FontSize="20"/>
+                    <Label HorizontalTextAlignment="Center">
+                        <Label.Text>
+                            <MultiBinding StringFormat="{}{0:n2} {1}">
+                                <Binding Path="BiggestAmountInAMonth"/>
+                                <Binding Path="Currency"/>
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                </VerticalStackLayout>
+            </Border>
+            <Border 
+                ToolTipProperties.Text="{Binding SmallestExpenditureTooltipText}">
+                <VerticalStackLayout>
+                    <Label Text="Lowest Flow Cost" FontSize="20"/>
+                    <Label HorizontalTextAlignment="Center">
+                        <Label.Text>
+                            <MultiBinding StringFormat="{}{0:n2} {1}">
+                                <Binding Path="SmallestAmountInAMonth"/>
+                                <Binding Path="Currency"/>
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                </VerticalStackLayout>
+            </Border>
             <Border>
                 <VerticalStackLayout>
                     <Label Text="Total Flows Amount" FontSize="20"/>
@@ -74,32 +102,7 @@
                     </Label>
                 </VerticalStackLayout>
             </Border>
-            <Border>
-                <VerticalStackLayout>
-                    <Label Text="Highest Flow Cost" FontSize="20"/>
-                    <Label HorizontalTextAlignment="Center">
-                        <Label.Text>
-                            <MultiBinding StringFormat="{}{0:n2} {1}">
-                                <Binding Path="BiggestAmountInAMonth"/>
-                                <Binding Path="Currency"/>
-                            </MultiBinding>
-                        </Label.Text>
-                    </Label>
-                </VerticalStackLayout>
-            </Border>
-            <Border>
-                <VerticalStackLayout>
-                    <Label Text="Lowest Flow Cost" FontSize="20"/>
-                    <Label HorizontalTextAlignment="Center">
-                        <Label.Text>
-                            <MultiBinding StringFormat="{}{0:n2} {1}">
-                                <Binding Path="SmallestAmountInAMonth"/>
-                                <Binding Path="Currency"/>
-                            </MultiBinding>
-                        </Label.Text>
-                    </Label>
-                </VerticalStackLayout>
-            </Border>
+            
         </HorizontalStackLayout>
 
         <HorizontalStackLayout toolkit:DockLayout.DockPosition="Top" HorizontalOptions="Center" Spacing="10" Margin="10">
@@ -115,20 +118,17 @@
                 <lvc:PieChart HeightRequest="350" WidthRequest="400" x:Name="myPieChart"
                               Title="{Binding MyPieCategoriesTitle}"
                               Series="{Binding MyPieSeries}"
-                              LegendPosition="Right"/>
+                              LegendPosition="Right"
+                              LegendTextPaint="{Binding LegendTextPaint}"/>
             </Border>
             
         </HorizontalStackLayout>
 
         <dg:DataGrid ItemsSource="{Binding ExpendituresForSelectedMonth}" BackgroundColor="#201F24"
-                         HorizontalOptions="Center"
-                         MinimumHeightRequest="360"                         
-                         WidthRequest="1200"
-                         RowHeight="50"
-                         HeaderHeight="40"
-                         BorderColor="Transparent"
-                         HeaderBackground="DarkSlateGray"
-                         VerticalOptions="Fill">
+                         HorizontalOptions="Center" MinimumHeightRequest="360" 
+                         WidthRequest="1200" RowHeight="50"
+                         HeaderHeight="40" BorderColor="Transparent"
+                         HeaderBackground="DarkSlateGray" VerticalOptions="Fill">
             <dg:DataGrid.NoDataView>
                 <VerticalStackLayout Margin="40,20" MinimumWidthRequest="400">
                     <Image WidthRequest="70"
@@ -163,6 +163,7 @@
                         <DataTemplate x:DataType="models:ExpendituresModel">
                             <Label Text="{Binding .}" TextColor="White" BackgroundColor="#201F24" 
                                     VerticalTextAlignment="Center" HorizontalTextAlignment="Center" HorizontalOptions="FillAndExpand"/>
+
                         </DataTemplate>
                     </dg:DataGridColumn.CellTemplate>
                 </dg:DataGridColumn>

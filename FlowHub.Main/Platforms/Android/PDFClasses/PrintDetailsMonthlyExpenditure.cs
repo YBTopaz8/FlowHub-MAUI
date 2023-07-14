@@ -50,7 +50,7 @@ public class PrintDetailsMonthlyExpenditure
         await Task.Run(()=> CreatePDFDocOfMultipleLists(expLists, PathFile, ListOfTitles, userName, userCurrency, printDisplayCurrency,  ObjectWithRate.result, ObjectWithRate.date));
     }
 
-    static void CreatePDFDoc(List<ExpendituresModel> expList, string pathFile, string userCurrency, string printDisplayCurrency, double rate, DateTime dateOfRateUpdate, string pdfTitle, string username)
+    static async Task CreatePDFDoc(List<ExpendituresModel> expList, string pathFile, string userCurrency, string printDisplayCurrency, double rate, DateTime dateOfRateUpdate, string pdfTitle, string username)
     {
         Color HeaderColor = WebColors.GetRGBColor("DarkSlateBlue");
 
@@ -146,10 +146,10 @@ public class PrintDetailsMonthlyExpenditure
 
         document.Close();
 
-        SharePdfFile(pdfTitle, pathFile);
+        await SharePdfFile(pdfTitle, pathFile);
     }
 
-    void CreatePDFDocOfMultipleLists(List<List<ExpendituresModel>> expLists, string pathFile, List<string> ListOfTitles, string username, string userCurrency, string printDisplayCurrency, double rate, DateTime dateOfRateUpdate)
+    async Task CreatePDFDocOfMultipleLists(List<List<ExpendituresModel>> expLists, string pathFile, List<string> ListOfTitles, string username, string userCurrency, string printDisplayCurrency, double rate, DateTime dateOfRateUpdate)
     {
         Color HeaderColor = WebColors.GetRGBColor("DarkSlateBlue");
 
@@ -262,10 +262,10 @@ public class PrintDetailsMonthlyExpenditure
 
         document.Close();
 
-        SharePdfFile("Report of Multiple Months", pathFile);
+        await SharePdfFile("Report of Multiple Months", pathFile);
     }
 
-    static async void SharePdfFile(string PdfTitle, string PathFile)
+    static async Task SharePdfFile(string PdfTitle, string PathFile)
     {
         await Share.Default.RequestAsync(new ShareFileRequest
         {

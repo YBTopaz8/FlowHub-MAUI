@@ -23,7 +23,7 @@ public class IncomeRepository : IIncomeRepository
         usersRepo= userRepository;
     }
 
-    async void OpenDB()
+    async Task OpenDB()
     {
         db = dataAccessRepo.GetDb();
         AllIncomes = db.GetCollection<IncomeModel>(incomesDataCollectionName);
@@ -34,7 +34,7 @@ public class IncomeRepository : IIncomeRepository
     {
         try
         {
-            OpenDB();
+            await OpenDB();
             OfflineIncomesList = await AllIncomes.Query().ToListAsync();
             db.Dispose();
             return OfflineIncomesList;
@@ -49,7 +49,7 @@ public class IncomeRepository : IIncomeRepository
     public async Task<bool> AddIncomeAsync(IncomeModel income)
     {
         income.PlatformModel = DeviceInfo.Current.Model;
-        OpenDB();
+        await OpenDB();
         try
         {
             if (await AllIncomes.InsertAsync(income) is not null)
@@ -74,7 +74,7 @@ public class IncomeRepository : IIncomeRepository
 
     public async Task<bool> DeleteIncomeAsync(BsonValue incomeId)
     {
-        OpenDB();
+        await OpenDB();
         try
         {
             if (await AllIncomes.DeleteAsync(incomeId))
@@ -102,7 +102,7 @@ public class IncomeRepository : IIncomeRepository
         income.PlatformModel = DeviceInfo.Current.Model;
         try
         {
-            OpenDB();
+            await OpenDB();
             if (await AllIncomes.UpdateAsync(income))
             {
                 db.Dispose();

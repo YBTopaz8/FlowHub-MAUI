@@ -47,7 +47,7 @@ public partial class UpSertIncomeVM : ObservableObject
         _initialTotalIncAmount = ActiveUser.TotalIncomeAmount;
     }
     [RelayCommand]
-    public async void UpSertIncome()
+    public async Task UpSertIncome()
     {
         CancellationTokenSource cancellationTokenSource = new();
         ToastDuration duration = ToastDuration.Short;
@@ -57,11 +57,11 @@ public partial class UpSertIncomeVM : ObservableObject
         {
             if (SingleIncomeDetails.Id is null)
             {
-                AddIncFxnAsync(duration, fontsize, cancellationTokenSource);
+                await AddIncFxnAsync(duration, fontsize, cancellationTokenSource);
             }
             else
             {
-                UpdateIncFxnAsync(duration, fontsize, cancellationTokenSource);
+                await UpdateIncFxnAsync(duration, fontsize, cancellationTokenSource);
             }
         }
         else
@@ -70,7 +70,7 @@ public partial class UpSertIncomeVM : ObservableObject
         }
     }
 
-    async void UpdateIncFxnAsync(ToastDuration duration, double fontSize, CancellationTokenSource tokenSource)
+    async Task UpdateIncFxnAsync(ToastDuration duration, double fontSize, CancellationTokenSource tokenSource)
     {
         double difference = SingleIncomeDetails.AmountReceived - InitialIncomeAmout;
 
@@ -93,12 +93,12 @@ public partial class UpSertIncomeVM : ObservableObject
                 var toastObj = Toast.Make(toastNotifMessage, duration, fontSize);
                 await toastObj.Show(tokenSource.Token);
 
-                NavFunctions.ReturnOnce();
+                await NavFunctions.ReturnOnce();
             }
         }
     }
 
-     async void AddIncFxnAsync(ToastDuration duration, double fontSize, CancellationTokenSource tokenSource)
+     async Task AddIncFxnAsync(ToastDuration duration, double fontSize, CancellationTokenSource tokenSource)
      {
         SingleIncomeDetails.Currency = ActiveUser.UserCurrency;
         if (SingleIncomeDetails.AmountReceived <= 0)
@@ -126,18 +126,18 @@ public partial class UpSertIncomeVM : ObservableObject
                 var toast = Toast.Make(toastNotifMessage, duration, fontSize);
                 await toast.Show(tokenSource.Token);
 
-                NavFunctions.ReturnOnce();
+                await NavFunctions.ReturnOnce();
             }
         }
     }
 
     [RelayCommand]
-    public async void CancelBtn()
+    public async Task CancelBtn()
     {
         bool response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You Want To Cancel Action?"));
         if(response)
         {
-            NavFunctions.ReturnOnce();
+            await NavFunctions.ReturnOnce();
         }
     }
 }

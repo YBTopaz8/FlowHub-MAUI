@@ -18,30 +18,30 @@ public partial class DetailsOfMonthlyPlannedExpPageM : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-		viewModel.PageLoadedCommand.Execute(null);
+		viewModel.PageLoaded();
 		ExpList.ItemsSource = null;
 		ExpList.ItemsSource = viewModel.TempList;
     }
 
-    private void RightSwipeDelete_Clicked(object sender, EventArgs e)
+    private async void RightSwipeDelete_Clicked(object sender, EventArgs e)
     {
 		if (sender is SwipeItem swipeItem)
 		{
 			var expItem = (ExpendituresModel) swipeItem.BindingContext;
 
-			viewModel.DeleteExpFromMonthlyPCommand.Execute(expItem);
+			await viewModel.DeleteExpFromMonthlyP(expItem);
 
 			ExpList.ItemsSource = null;
             ExpList.ItemsSource = viewModel.TempList;
         }
     }
-	private void LeftSwipeEdit_Clicked(object sender, EventArgs e)
+	private async void LeftSwipeEdit_Clicked(object sender, EventArgs e)
     {
 		if (sender is SwipeItem swipeItem)
 		{
 			var expItem = (ExpendituresModel) swipeItem.BindingContext;
-
-			viewModel.GoToEditExpInMonthPCommand.Execute(expItem);
+			//redo this as a command
+			await viewModel.GoToEditExpInMonthP(expItem);
         }
     }
 
@@ -51,7 +51,7 @@ public partial class DetailsOfMonthlyPlannedExpPageM : ContentPage
 		PrintProgressBarIndic.Progress = 0;
 		await PrintProgressBarIndic.ProgressTo(1, 1000, Easing.Linear);
 
-		await viewModel.PrintPDFandShareCommand.ExecuteAsync(null);
+		await viewModel.PrintPDFandShare();
 
 		PrintProgressBarIndic.IsVisible = false;
     }

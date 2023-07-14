@@ -77,7 +77,7 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
     }
 
     [RelayCommand]
-    public async void UpSertMonthlyPlanned()
+    public async Task UpSertMonthlyPlanned()
     {
         if (SingleExpenditureDetails.Comment is null)
         {
@@ -108,7 +108,7 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
                 }
                 else
                 {
-                    NavFunctions.ReturnToDetailsMonthlyPlanned(navParam);
+                    await NavFunctions.ReturnToDetailsMonthlyPlanned(navParam);
                 }
             }
             else
@@ -131,7 +131,7 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
                     }
                     else
                     {
-                        NavFunctions.ReturnToDetailsMonthlyPlanned(navParam);
+                        await NavFunctions.ReturnToDetailsMonthlyPlanned(navParam);
                     }
                 }
                 else
@@ -143,7 +143,7 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
             {
                 if (await EditExpInExistingMonthlyPlanned(duration, fontSize, cancellationTokenSource))
                 {
-                    NavFunctions.ReturnOnce(navParam);
+                    await NavFunctions.ReturnOnce(navParam);
                 }
                 else
                 {

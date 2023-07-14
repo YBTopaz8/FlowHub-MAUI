@@ -16,8 +16,8 @@
              Color="Transparent"
              x:Name="page">
 
-    
     <Border Margin="13,10"
+        
         Stroke="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=White}"
         StrokeThickness="0"
         StrokeShape="RoundRectangle 12">
@@ -95,8 +95,8 @@
                 </Grid>
 
                 <material:PickerField Title="Category" ItemsSource="{Binding ExpenditureCategory}" SelectedItem="{Binding SingleExpenditureDetails.Category}"
-                                      ItemDisplayBinding="{Binding Converter={StaticResource EnumConverter}}"
-                                      AccentColor="Gray"/>
+                                      
+                                      AccentColor="Gray"/> 
                 
                 <material:EditorField Title="Reason" Text="{Binding SingleExpenditureDetails.Reason}" IsTextPredictionEnabled="True"
                                       AccentColor="Gray"
@@ -105,8 +105,6 @@
                         <validation:RequiredValidation/>
                     </material:EditorField.Validations>
                 </material:EditorField>
-
-                
 
                 <HorizontalStackLayout HorizontalOptions="Center" Margin="0,15,0,0" Spacing="15">
                     <Button input:FormView.IsSubmitButton="True"
@@ -121,7 +119,8 @@
 
 
             </input:FormView>
-        </VerticalStackLayout>
-    </Border>
         
+        </VerticalStackLayout>
+  
+    </Border>
 </mct:Popup>

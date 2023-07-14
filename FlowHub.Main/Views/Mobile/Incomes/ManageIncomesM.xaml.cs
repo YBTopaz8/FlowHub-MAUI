@@ -17,10 +17,10 @@ public partial class ManageIncomesM : ContentPage
         this.BindingContext = vm;
     }
 
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
-        viewModel.PageLoadedCommand.Execute(null);
+       await viewModel.PageLoaded();
     }
     private async void ExportToPDFImageButton_Clicked(object sender, EventArgs e)
     {
@@ -34,7 +34,7 @@ public partial class ManageIncomesM : ContentPage
             PrintProgressBarIndic.Progress = 0;
             await PrintProgressBarIndic.ProgressTo(1, 1000, easing: Easing.Linear);
 
-            await viewModel.PrintIncomesBtnCommand.ExecuteAsync(null);
+            await viewModel.PrintIncomesBtn();
             PrintProgressBarIndic.IsVisible = false;
         }
     }
@@ -44,7 +44,7 @@ public partial class ManageIncomesM : ContentPage
         if (result.Result is PopupResult.OK)
         {
             double NewAmount = (double)result.Data;
-            viewModel.ResetUserPocketMoneyCommand.Execute(NewAmount);
+            await viewModel.ResetUserPocketMoney(NewAmount);
         }
     }
 }

@@ -79,7 +79,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<UpSertMonthlyPlannedExpVM>();
 
         /*-- Section for Statistics --*/
-        builder.Services.AddTransient<StatisticsPageVM>();
+        builder.Services.AddSingleton<StatisticsPageVM>();
         builder.Services.AddSingleton<SingleMonthStatsPageVM>();
 
 /*------------------------REGISTERING DESKTOP VIEWS ----------------------------------------------------------------------------*/

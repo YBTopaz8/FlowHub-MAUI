@@ -4,7 +4,7 @@ namespace FlowHub.Main.PopUpPages;
 
 public partial class ErrorNotificationPopUpAlert : Popup
 {
-	public ErrorNotificationPopUpAlert(string ErrorText)
+	public ErrorNotificationPopUpAlert(string ErrorText="Nothing")
 	{
 		InitializeComponent();
 		DisplayErrorText.Text = ErrorText;

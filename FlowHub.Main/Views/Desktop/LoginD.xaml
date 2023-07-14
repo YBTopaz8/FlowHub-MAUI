@@ -156,8 +156,9 @@
                             </material:TextField.Validations>
                         </material:TextField>
 
-                        <material:PickerField Grid.Column="1" Icon="{AppThemeBinding Dark=globe, Light=globe_l}"
+                        <material:PickerField Grid.Column="1" Icon="{AppThemeBinding Dark=globe.png, Light=globe_l.png}"
                                               AccentColor="DarkSlateBlue"
+                                              
                                               Title="Select Your Country" ItemsSource="{Binding CountryNamesList}"
                                               SelectedItem="{Binding SelectedCountry}"
                                               SelectedValueChangedCommand="{Binding CurrencyFromCountryPickedCommand}"
