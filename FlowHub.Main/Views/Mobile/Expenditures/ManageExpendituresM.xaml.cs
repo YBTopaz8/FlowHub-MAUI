@@ -1,7 +1,4 @@
-﻿using CommunityToolkit.Maui.Views;
-using FlowHub.Main.PopUpPages;
-using FlowHub.Main.ViewModels.Expenditures;
-using Microsoft.Maui.Controls.Platform;
+﻿using Microsoft.Maui.Controls.Platform;
 
 namespace FlowHub.Main.Views.Mobile.Expenditures;
 
@@ -88,6 +85,7 @@ public partial class ManageExpendituresM : ContentPage
         //ColView.TranslationY= 0;
         //await filterOptionsContainer.FadeTo(1, 0);
     }
+
 
     /*
      * This snippet can be used if i ever want to allow multi selection

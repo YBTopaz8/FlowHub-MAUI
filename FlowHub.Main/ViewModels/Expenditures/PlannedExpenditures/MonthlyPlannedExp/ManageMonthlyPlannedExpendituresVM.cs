@@ -1,18 +1,4 @@
-﻿using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Core;
-using CommunityToolkit.Maui.Views;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using FlowHub.DataAccess.IRepositories;
-using FlowHub.Main.PDF_Classes;
-using FlowHub.Main.Platforms.NavigationsMethods;
-using FlowHub.Main.PopUpPages;
-using FlowHub.Models;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Globalization;
-
-namespace FlowHub.Main.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
+﻿namespace FlowHub.Main.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
 
 public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObject
 {

@@ -1,6 +1,3 @@
-using FlowHub.Main.ViewModels.Expenditures;
-using FlowHub.Models;
-using System.Diagnostics;
 using UraniumUI.Material.Controls;
 
 namespace FlowHub.Main.Views.Desktop.Expenditures;

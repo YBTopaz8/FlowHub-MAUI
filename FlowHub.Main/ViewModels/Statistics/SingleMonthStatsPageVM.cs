@@ -1,11 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using FlowHub.DataAccess.IRepositories;
-using FlowHub.Models;
-using LiveChartsCore;
+﻿using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
-using System.Collections.ObjectModel;
 using SkiaSharp;
 
 namespace FlowHub.Main.ViewModels.Statistics;

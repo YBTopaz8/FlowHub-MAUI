@@ -1,9 +1,3 @@
-using FlowHub.Main.ViewModels.Statistics;
-using LiveChartsCore.SkiaSharpView.Painting;
-using SkiaSharp;
-using System.Diagnostics;
-using LiveChartsCore;
-
 namespace FlowHub.Main.Views.Desktop.Statistics;
 
 public partial class StatisticsPageD : ContentPage

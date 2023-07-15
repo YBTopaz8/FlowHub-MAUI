@@ -1,8 +1,3 @@
-using CommunityToolkit.Maui.Views;
-using FlowHub.Main.Utilities;
-using FlowHub.Models;
-using System.Diagnostics;
-
 namespace FlowHub.Main.PopUpPages;
 
 public partial class InputPopUpPage : Popup

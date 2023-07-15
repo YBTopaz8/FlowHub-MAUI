@@ -1,5 +1,3 @@
-using FlowHub.Main.ViewModels.Incomes;
-
 namespace FlowHub.Main.Views.Desktop.Incomes;
 
 public partial class ManageIncomesD : ContentPage
@@ -10,10 +8,10 @@ public partial class ManageIncomesD : ContentPage
 		InitializeComponent();
 		viewModel = vm;
 		this.BindingContext = vm;
-	}
+        viewModel.PageLoaded();
+    }
     protected override void OnAppearing()
     {
         base.OnAppearing();
-		viewModel.PageLoaded();
     }
 }

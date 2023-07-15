@@ -1,7 +1,4 @@
-﻿
-using FlowHub.Main.Views.Desktop.Expenditures;
-
-namespace FlowHub.Main.Platforms.NavigationMethods;
+﻿namespace FlowHub.Main.Platforms.NavigationMethods;
 
 public class HomePageNavs
 {

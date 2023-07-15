@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using FlowHub.Main.AdditionalResourcefulApiClasses;
-using FlowHub.Models;
+﻿using FlowHub.Main.AdditionalResourcefulApiClasses;
 using iText.Kernel.Colors;
 using iText.Kernel.Pdf;
 using iText.Layout;

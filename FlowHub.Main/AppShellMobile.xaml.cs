@@ -1,10 +1,3 @@
-using FlowHub.Main.Views.Mobile;
-using FlowHub.Main.Views.Mobile.Expenditures;
-using FlowHub.Main.Views.Mobile.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
-using FlowHub.Main.Views.Mobile.Incomes;
-using FlowHub.Main.Views.Mobile.Settings;
-using FlowHub.Main.Views.Mobile.Statistics;
-
 namespace FlowHub.Main;
 
 public partial class AppShellMobile : Shell

@@ -1,11 +1,9 @@
 ﻿using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
-using FlowHub.Models;
 using iText.Kernel.Colors;
 using TextAlignment = iText.Layout.Properties.TextAlignment;
 using Color = iText.Kernel.Colors.Color;
-using System.Collections.ObjectModel;
 using static FlowHub.Main.AdditionalResourcefulApiClasses.ExchangeRateAPI;
 using FlowHub.Main.AdditionalResourcefulApiClasses;
 

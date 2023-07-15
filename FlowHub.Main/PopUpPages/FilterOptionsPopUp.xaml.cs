@@ -1,6 +1,3 @@
-using CommunityToolkit.Maui.Views;
-using System.Diagnostics;
-
 namespace FlowHub.Main.PopUpPages;
 
 public partial class FilterOptionsPopUp : Popup

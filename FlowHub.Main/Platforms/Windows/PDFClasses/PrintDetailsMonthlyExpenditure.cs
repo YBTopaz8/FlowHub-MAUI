@@ -1,12 +1,4 @@
-﻿using iText.Kernel.Pdf;
-using iText.Layout;
-using iText.Layout.Element;
-using FlowHub.Models;
-using iText.Kernel.Colors;
-using Color = iText.Kernel.Colors.Color;
-using System.Collections.ObjectModel;
-
-namespace FlowHub.Main.PDF_Classes;
+﻿namespace FlowHub.Main.PDF_Classes;
 
 public class PrintDetailsMonthlyExpenditure
 {

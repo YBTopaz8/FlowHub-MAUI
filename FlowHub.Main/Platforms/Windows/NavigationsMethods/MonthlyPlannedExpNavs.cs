@@ -1,6 +1,4 @@
-﻿using FlowHub.Main.Views.Mobile.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
-
-namespace FlowHub.Main.Platforms.NavigationsMethods;
+﻿namespace FlowHub.Main.Platforms.NavigationsMethods;
 
 public class MonthlyPlannedExpNavs
 {

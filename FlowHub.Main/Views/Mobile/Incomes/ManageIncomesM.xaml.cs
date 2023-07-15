@@ -1,10 +1,4 @@
-﻿using CommunityToolkit.Maui.Views;
-using FlowHub.Main.PopUpPages;
-using FlowHub.Main.Utilities;
-using FlowHub.Main.ViewModels.Incomes;
-using System.Diagnostics;
-
-namespace FlowHub.Main.Views.Mobile.Incomes;
+﻿namespace FlowHub.Main.Views.Mobile.Incomes;
 
 public partial class ManageIncomesM : ContentPage
 {

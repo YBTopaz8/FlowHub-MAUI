@@ -1,13 +1,4 @@
-﻿using CommunityToolkit.Diagnostics;
-using CommunityToolkit.Maui.Core.Extensions;
-using CommunityToolkit.Maui.Views;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using FlowHub.DataAccess.IRepositories;
-using FlowHub.Main.PopUpPages;
-using FlowHub.Main.Utilities;
-using FlowHub.Main.ViewModels.Expenditures;
-using FlowHub.Models;
+﻿using CommunityToolkit.Maui.Core.Extensions;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.Kernel;
@@ -15,10 +6,6 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.VisualElements;
 using SkiaSharp;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
 
 namespace FlowHub.Main.ViewModels.Statistics;
 

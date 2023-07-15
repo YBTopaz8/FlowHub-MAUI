@@ -1,16 +1,4 @@
-﻿using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Core;
-using CommunityToolkit.Maui.Views;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using FlowHub.DataAccess.IRepositories;
-using FlowHub.Main.Platforms.NavigationMethods;
-using FlowHub.Main.PopUpPages;
-using FlowHub.Main.Utilities;
-using FlowHub.Models;
-using System.Diagnostics;
-
-namespace FlowHub.Main.ViewModels.Incomes;
+﻿namespace FlowHub.Main.ViewModels.Incomes;
 
 public partial class UpSertIncomeVM : ObservableObject
 {
@@ -42,7 +30,7 @@ public partial class UpSertIncomeVM : ObservableObject
     public bool closePopUp;
 
     public PopupResult ThisPopUpResult;
-    
+
     double InitialUserPockerMoney;
     double InitialIncomeAmout;
     double _initialTotalIncAmount;
@@ -132,7 +120,7 @@ public partial class UpSertIncomeVM : ObservableObject
                 await toast.Show(tokenSource.Token);
 
                 await ManageIncomesNavs.ReturnOnce();
-                
+
             }
         }
     }

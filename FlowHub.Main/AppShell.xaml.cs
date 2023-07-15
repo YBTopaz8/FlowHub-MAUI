@@ -1,9 +1,3 @@
-using FlowHub.Main.Views.Desktop;
-using FlowHub.Main.Views.Desktop.Expenditures;
-using FlowHub.Main.Views.Desktop.Incomes;
-using FlowHub.Main.Views.Desktop.Settings;
-using FlowHub.Main.Views.Desktop.Statistics;
-
 namespace FlowHub.Main;
 
 public partial class AppShell : Shell

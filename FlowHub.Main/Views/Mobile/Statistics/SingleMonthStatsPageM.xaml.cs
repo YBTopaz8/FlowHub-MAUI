@@ -1,8 +1,5 @@
-using FlowHub.Main.ViewModels.Statistics;
 using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.Kernel;
-using System.Diagnostics;
-using FlowHub.Models;
 
 namespace FlowHub.Main.Views.Mobile.Statistics;
 

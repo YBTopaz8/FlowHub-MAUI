@@ -1,18 +1,4 @@
-﻿using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Core;
-using CommunityToolkit.Maui.Views;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using FlowHub.DataAccess.IRepositories;
-using FlowHub.Main.Platforms.NavigationMethods;
-using FlowHub.Main.PopUpPages;
-using FlowHub.Main.Utilities;
-using FlowHub.Main.Views;
-using FlowHub.Models;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-
-namespace FlowHub.Main.ViewModels.Incomes;
+﻿namespace FlowHub.Main.ViewModels.Incomes;
 
 public partial class ManageIncomesVM : ObservableObject
 {
@@ -31,7 +17,6 @@ public partial class ManageIncomesVM : ObservableObject
 
     private void HandleUserUpdated()
     {
-
         ActiveUser = userService.OfflineUser;
         UserPocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
@@ -67,7 +52,7 @@ public partial class ManageIncomesVM : ObservableObject
         ActiveUser = user;
         UserPocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
-        FilterGetAllIncomes();  
+        FilterGetAllIncomes();
         //FilterGetIncOfCurrentMonth();
         //await FilterGetAllIncomes();
     }
@@ -123,13 +108,13 @@ public partial class ManageIncomesVM : ObservableObject
                     .OrderByDescending(x => x.DateReceived)
                     .ToList();
 
-                IncomesList = new ObservableCollection<IncomeModel>(IncList); 
+                IncomesList = new ObservableCollection<IncomeModel>(IncList);
 
                 TotalAmount = IncList.AsParallel().Sum(x => x.AmountReceived);
                 TotalIncomes = IncList.Count;
 
                 IsLoaded = true;
-                
+
             }
         }
         catch (Exception ex)
@@ -283,7 +268,7 @@ public partial class ManageIncomesVM : ObservableObject
                 IncomesList.Remove(income);
 
                 await toast.Show(cancellationTokenSource.Token);
-                
+
             }
         }
     }

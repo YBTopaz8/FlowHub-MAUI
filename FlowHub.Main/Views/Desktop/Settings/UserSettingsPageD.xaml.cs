@@ -1,6 +1,3 @@
-using FlowHub.Main.ViewModels.Settings;
-using System.Diagnostics;
-
 namespace FlowHub.Main.Views.Desktop.Settings;
 
 public partial class UserSettingsPageD : ContentPage

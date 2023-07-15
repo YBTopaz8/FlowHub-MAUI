@@ -1,7 +1,4 @@
-﻿using FlowHub.Main.Views.Desktop.Expenditures;
-using FlowHub.Main.Views.Desktop.Statistics;
-
-namespace FlowHub.Main.Platforms.NavigationMethods;
+﻿namespace FlowHub.Main.Platforms.NavigationMethods;
 
 public static class ManageExpendituresNavs
 {

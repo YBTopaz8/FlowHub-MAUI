@@ -1,16 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using FlowHub.DataAccess.IRepositories;
-using FlowHub.Models;
-using System.Diagnostics;
-using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Core;
-using FlowHub.Main.Platforms.NavigationMethods;
-using CommunityToolkit.Maui.Views;
-using FlowHub.Main.PopUpPages;
-using FlowHub.Main.Utilities;
-
-namespace FlowHub.Main.ViewModels.Expenditures;
+﻿namespace FlowHub.Main.ViewModels.Expenditures;
 
 public partial class UpSertExpenditureVM : ObservableObject
 {

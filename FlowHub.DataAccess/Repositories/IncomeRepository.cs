@@ -4,9 +4,6 @@ using LiteDB;
 using LiteDB.Async;
 using MongoDB.Driver;
 using System.Diagnostics;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace FlowHub.DataAccess.Repositories;
 
@@ -47,7 +44,7 @@ public class IncomeRepository : IIncomeRepository
     public async Task<List<IncomeModel>> GetAllIncomesAsync()
     {
         try
-        {            
+        {
             await OpenDB();
             string userId = usersRepo.OfflineUser.Id;
             string userCurrency = usersRepo.OfflineUser.UserCurrency;
@@ -120,48 +117,56 @@ public class IncomeRepository : IIncomeRepository
     bool IsSyncing;
     public async Task SynchronizeIncomesAsync()
     {
-        await GetAllIncomesAsync();
-        await LoadOnlineDB();
-        if (usersRepo.OnlineUser is null)
+        try
         {
-            return;
-        }
-        IsSyncing = true;
-        IsBatchUpdate = true;
-
-        var OfflineDict = OfflineIncomesList.ToDictionary(x => x.Id, x => x);
-        var OnlineDict = OnlineIncomesList.ToDictionary(x => x.Id, x => x);
-        foreach (var itemId in OfflineDict.Keys.Intersect(OnlineDict.Keys))
-        {
-            var offlineItem = OfflineDict[itemId];
-            var onlineItem = OnlineDict[itemId];
-
-            if (offlineItem.UpdatedDateTime > onlineItem.UpdatedDateTime)
+            await GetAllIncomesAsync();
+            await LoadOnlineDB();
+            if (usersRepo.OnlineUser is null)
             {
-                await UpdateIncomeOnlineAsync(offlineItem);
+                return;
             }
-            else if (offlineItem.UpdatedDateTime < onlineItem.UpdatedDateTime)
+            IsSyncing = true;
+            IsBatchUpdate = true;
+
+            var OfflineDict = OfflineIncomesList.ToDictionary(x => x.Id, x => x);
+            var OnlineDict = OnlineIncomesList.ToDictionary(x => x.Id, x => x);
+            foreach (var itemId in OfflineDict.Keys.Intersect(OnlineDict.Keys))
             {
-                await UpdateIncomeAsync(onlineItem);
+                var offlineItem = OfflineDict[itemId];
+                var onlineItem = OnlineDict[itemId];
+
+                if (offlineItem.UpdatedDateTime > onlineItem.UpdatedDateTime)
+                {
+                    await UpdateIncomeOnlineAsync(offlineItem);
+                }
+                else if (offlineItem.UpdatedDateTime < onlineItem.UpdatedDateTime)
+                {
+                    await UpdateIncomeAsync(onlineItem);
+                }
             }
-        }
 
-        foreach (var itemID in OfflineDict.Keys.Except(OnlineDict.Keys))
-        {
-            await AddIncomeOnlineAsync(OfflineDict[itemID]);
-            OnlineIncomesList.Add(OfflineDict[itemID]);
-            
-        }
+            foreach (var itemID in OfflineDict.Keys.Except(OnlineDict.Keys))
+            {
+                await AddIncomeOnlineAsync(OfflineDict[itemID]);
+                OnlineIncomesList.Add(OfflineDict[itemID]);
 
-        foreach (var itemID in OnlineDict.Keys.Except(OfflineDict.Keys))
-        {
-            await AddIncomeAsync(OnlineDict[itemID]);
-            OfflineIncomesList.Add(OfflineDict[itemID]);
+            }
+
+            foreach (var itemID in OnlineDict.Keys.Except(OfflineDict.Keys))
+            {
+                await AddIncomeAsync(OnlineDict[itemID]);
+                OfflineIncomesList.Add(OnlineDict[itemID]);
+            }
+
+            await usersRepo.UpdateUserOnlineGetSetLatestValues(usersRepo.OnlineUser);
+            IsSyncing = false;
+            IsBatchUpdate = false;
+            OfflineIncomesListChanged?.Invoke();
         }
-        await usersRepo.UpdateUserOnlineGetSetLatestValues(usersRepo.OnlineUser);
-        IsSyncing = false;
-        IsBatchUpdate = false;
-        OfflineIncomesListChanged?.Invoke();
+        catch (Exception ex)
+        {
+            Debug.WriteLine("Exception Message : " + ex.Message);
+        }
     }
 
     public async Task<bool> AddIncomeAsync(IncomeModel newIncome)
@@ -205,7 +210,7 @@ public class IncomeRepository : IIncomeRepository
     public async Task<bool> UpdateIncomeAsync(IncomeModel income)
     {
         income.PlatformModel = DeviceInfo.Current.Model;
-        
+
         try
         {
             using (db = await OpenDB())
@@ -244,7 +249,7 @@ public class IncomeRepository : IIncomeRepository
     public async Task<bool> DeleteIncomeAsync(IncomeModel income)
     {
         income.IsDeleted = true;
-        
+
         try
         {
             using (db = await OpenDB())

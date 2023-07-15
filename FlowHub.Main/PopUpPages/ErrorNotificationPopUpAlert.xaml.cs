@@ -1,5 +1,3 @@
-using CommunityToolkit.Maui.Views;
-
 namespace FlowHub.Main.PopUpPages;
 
 public partial class ErrorNotificationPopUpAlert : Popup

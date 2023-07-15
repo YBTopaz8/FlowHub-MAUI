@@ -1,7 +1,4 @@
-﻿
-using FlowHub.Main.Views.Mobile.Incomes;
-
-namespace FlowHub.Main.Platforms.NavigationMethods;
+﻿namespace FlowHub.Main.Platforms.NavigationMethods;
 
 public class ManageIncomesNavs
 {

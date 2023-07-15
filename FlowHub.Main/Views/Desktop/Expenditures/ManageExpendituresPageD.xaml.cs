@@ -1,8 +1,3 @@
-using CommunityToolkit.Maui.Views;
-using FlowHub.Main.PopUpPages;
-using FlowHub.Main.ViewModels.Expenditures;
-using Maui.DataGrid;
-
 namespace FlowHub.Main.Views.Desktop.Expenditures;
 
 public partial class ManageExpendituresPageD : ContentPage

@@ -1,15 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using FlowHub.DataAccess.IRepositories;
-using FlowHub.Models;
-using FlowHub.Main.Platforms.NavigationMethods;
-using System.Diagnostics;
-using CommunityToolkit.Maui.Views;
-using FlowHub.Main.ViewModels.Expenditures;
-using FlowHub.Main.Views;
-using FlowHub.Main.Utilities;
-using System.Collections.ObjectModel;
-using CommunityToolkit.Maui.Core.Extensions;
+﻿using CommunityToolkit.Maui.Core.Extensions;
 
 //This is the view model for the HOME PAGE
 namespace FlowHub.Main.ViewModels;

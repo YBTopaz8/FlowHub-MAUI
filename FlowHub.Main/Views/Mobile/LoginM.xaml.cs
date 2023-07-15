@@ -1,7 +1,4 @@
-using CommunityToolkit.Maui.Core.Platform;
-using FlowHub.Main.ViewModels;
 using Microsoft.Maui.Controls.Platform;
-using System.Diagnostics;
 using UraniumUI.Material.Controls;
 
 namespace FlowHub.Main.Views.Mobile;

@@ -1,7 +1,6 @@
 ﻿using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
-using FlowHub.Models;
 using iText.Kernel.Colors;
 using Color = iText.Kernel.Colors.Color;
 using FlowHub.Main.AdditionalResourcefulApiClasses;

@@ -1,12 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using FlowHub.DataAccess.IRepositories;
-using FlowHub.Models;
-using FlowHub.Main.Platforms.NavigationMethods;
-using System.Diagnostics;
-using FlowHub.Main.AdditionalResourcefulAPIClasses;
-
-namespace FlowHub.Main.ViewModels;
+﻿namespace FlowHub.Main.ViewModels;
 
 public partial class LoginVM : ObservableObject
 {
@@ -166,6 +158,11 @@ public partial class LoginVM : ObservableObject
         ErrorMessageVisible = false;
         IsBusy = true;
         UsersModel User = new();
+
+        CancellationTokenSource cancellationTokenSource = new();
+        ToastDuration duration = ToastDuration.Short;
+        double fontSize = 14;
+
         if (IsLoginOnlineButtonClicked)
         {
             User = await userService.GetUserOnlineAsync(CurrentUser);

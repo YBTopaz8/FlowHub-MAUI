@@ -1,24 +1,6 @@
-﻿using CommunityToolkit.Maui;
-using FlowHub.DataAccess;
-using FlowHub.DataAccess.IRepositories;
-using FlowHub.DataAccess.Repositories;
-using FlowHub.Main.ViewModels;
-using FlowHub.Main.ViewModels.Expenditures;
-using FlowHub.Main.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
-using FlowHub.Main.ViewModels.Incomes;
-using FlowHub.Main.ViewModels.Settings;
-using FlowHub.Main.ViewModels.Statistics;
-using FlowHub.Main.Views.Desktop;
-using FlowHub.Main.Views.Desktop.Expenditures;
-using FlowHub.Main.Views.Desktop.Incomes;
-using FlowHub.Main.Views.Desktop.Settings;
-using FlowHub.Main.Views.Desktop.Statistics;
-using FlowHub.Main.Views.Mobile;
-using FlowHub.Main.Views.Mobile.Expenditures;
-using FlowHub.Main.Views.Mobile.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
-using FlowHub.Main.Views.Mobile.Incomes;
-using FlowHub.Main.Views.Mobile.Settings;
-using FlowHub.Main.Views.Mobile.Statistics;
+﻿
+using CommunityToolkit.Maui;
+
 using InputKit.Handlers;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using UraniumUI;

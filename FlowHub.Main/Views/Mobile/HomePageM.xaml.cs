@@ -1,6 +1,3 @@
-using FlowHub.Main.ViewModels;
-using System.Diagnostics;
-
 namespace FlowHub.Main.Views.Mobile;
 
 public partial class HomePageM : ContentPage
@@ -13,9 +10,16 @@ public partial class HomePageM : ContentPage
         this.BindingContext = vm;
     }
 
+    bool _isInitialized;
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await viewModel.DisplayInfo();
+        if(!_isInitialized)
+        {
+            await viewModel.DisplayInfo();
+            await viewModel.incomeRepo.SynchronizeIncomesAsync();
+            _isInitialized = true;
+        }
+
     }
 }

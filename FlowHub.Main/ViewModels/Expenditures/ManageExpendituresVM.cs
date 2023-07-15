@@ -1,18 +1,4 @@
-﻿using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Core;
-using CommunityToolkit.Maui.Core.Extensions;
-using CommunityToolkit.Maui.Views;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using FlowHub.DataAccess.IRepositories;
-using FlowHub.Main.PDF_Classes;
-using FlowHub.Main.Platforms.NavigationMethods;
-using FlowHub.Main.PopUpPages;
-using FlowHub.Main.Utilities;
-using FlowHub.Main.Views;
-using FlowHub.Models;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+﻿
 
 //This is the view model for the page that shows ALL expenditures
 namespace FlowHub.Main.ViewModels.Expenditures;
@@ -434,7 +420,7 @@ public partial class ManageExpendituresVM : ObservableObject
     }
     private async Task AddEditExpediture(ExpendituresModel expenditure, string pageTitle, bool isAdd)
     {
-        
+
         var NewUpSertVM = new UpSertExpenditureVM(expendituresService, userService, expenditure, pageTitle, isAdd, ActiveUser);
         var UpSertResult = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new UpSertExpendituresPopUp(NewUpSertVM));
 

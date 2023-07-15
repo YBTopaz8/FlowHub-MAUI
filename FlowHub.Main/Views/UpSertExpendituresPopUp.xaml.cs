@@ -1,7 +1,3 @@
-using CommunityToolkit.Maui.Views;
-using FlowHub.Main.Utilities;
-using FlowHub.Main.ViewModels.Expenditures;
-using System.Diagnostics;
 using UraniumUI.Material.Controls;
 
 namespace FlowHub.Main.Views;

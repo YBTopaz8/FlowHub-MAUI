@@ -1,6 +1,3 @@
-using FlowHub.Main.ViewModels.Expenditures;
-using FlowHub.Main.ViewModels.Incomes;
-
 namespace FlowHub.Main.Views.Mobile.Incomes;
 
 public partial class UpSertIncomePageM : ContentPage

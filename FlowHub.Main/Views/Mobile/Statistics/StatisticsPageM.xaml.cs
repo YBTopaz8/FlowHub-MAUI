@@ -1,9 +1,5 @@
-using FlowHub.Main.ViewModels.Statistics;
 using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.Kernel;
-using System.Diagnostics;
-using LiveChartsCore.SkiaSharpView.Painting;
-using SkiaSharp;
 
 namespace FlowHub.Main.Views.Mobile.Statistics;
 

@@ -1,7 +1,3 @@
-using FlowHub.Main.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
-using FlowHub.Models;
-using System.Diagnostics;
-
 namespace FlowHub.Main.Views.Mobile.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
 
 public partial class ManageMonthlyPlannedExpendituresPageM : ContentPage

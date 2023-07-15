@@ -1,8 +1,4 @@
-﻿
-using FlowHub.Main.Views.Mobile.Expenditures;
-using FlowHub.Main.Views.Mobile.Statistics;
-
-namespace FlowHub.Main.Platforms.NavigationMethods;
+﻿namespace FlowHub.Main.Platforms.NavigationMethods;
 
 public static class ManageExpendituresNavs
 {

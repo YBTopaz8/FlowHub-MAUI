@@ -1,5 +1,3 @@
-using FlowHub.Main.ViewModels;
-
 namespace FlowHub.Main.Views.Desktop;
 
 public partial class HomePageD : ContentPage
@@ -10,7 +8,7 @@ public partial class HomePageD : ContentPage
         InitializeComponent();
         viewModel = vm;
         this.BindingContext = vm;
-        
+
     }
     bool _isInitialized;
     protected override async void OnAppearing()

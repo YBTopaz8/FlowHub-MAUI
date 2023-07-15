@@ -1,8 +1,3 @@
-using FlowHub.DataAccess.IRepositories;
-using FlowHub.Main.ViewModels;
-using FlowHub.Main.ViewModels.Expenditures;
-using System.Diagnostics;
-
 namespace FlowHub.Main.Views.Desktop;
 
 public partial class LoginD : ContentPage

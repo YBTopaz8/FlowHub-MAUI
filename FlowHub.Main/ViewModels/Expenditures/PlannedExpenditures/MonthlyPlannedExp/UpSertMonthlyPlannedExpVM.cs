@@ -1,15 +1,4 @@
-﻿using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Core;
-using CommunityToolkit.Maui.Views;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using FlowHub.DataAccess.IRepositories;
-using FlowHub.Main.Platforms.NavigationsMethods;
-using FlowHub.Main.PopUpPages;
-using FlowHub.Models;
-using System.Diagnostics;
-
-namespace FlowHub.Main.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
+﻿namespace FlowHub.Main.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
 
 [QueryProperty(nameof(PageTitle), nameof(PageTitle))]
 [QueryProperty(nameof(Mode), "Mode")]

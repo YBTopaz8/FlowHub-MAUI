@@ -1,7 +1,3 @@
-using FlowHub.Main.ViewModels.Expenditures;
-using FlowHub.Models;
-using System.Diagnostics;
-
 namespace FlowHub.Main.Views.Mobile.Expenditures;
 
 public partial class UpSertExpenditurePageM : ContentPage
