@@ -1,5 +1,4 @@
 ﻿
-
 namespace FlowHub.DataAccess.Repositories;
 
 public class ExpendituresRepository : IExpendituresRepository

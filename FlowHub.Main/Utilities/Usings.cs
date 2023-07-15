@@ -14,12 +14,16 @@ global using FlowHub.Main.Views.Desktop.Expenditures;
 global using FlowHub.Main.Views.Desktop.Incomes;
 global using FlowHub.Main.Views.Desktop.Settings;
 global using FlowHub.Main.Views.Desktop.Statistics;
+global using FlowHub.Main.Views.Desktop.Debts;
+
 global using FlowHub.Main.Views.Mobile;
 global using FlowHub.Main.Views.Mobile.Expenditures;
 global using FlowHub.Main.Views.Mobile.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
 global using FlowHub.Main.Views.Mobile.Incomes;
 global using FlowHub.Main.Views.Mobile.Settings;
 global using FlowHub.Main.Views.Mobile.Statistics;
+global using FlowHub.Main.Views.Mobile.Debts;
+
 global using FlowHub.Main.PopUpPages;
 global using FlowHub.Main.Utilities;
 global using FlowHub.Main.Views;
@@ -36,6 +40,7 @@ global using CommunityToolkit.Mvvm.Input;
 global using CommunityToolkit.Maui.Core;
 global using CommunityToolkit.Maui.Alerts;
 global using CommunityToolkit.Maui.Views;
+global using CommunityToolkit.Maui.Core.Extensions;
 
 global using System.Collections.ObjectModel;
 global using System.Globalization;
@@ -44,5 +49,4 @@ namespace FlowHub.Main.Utilities;
 
 public class Usings
 {
-
 }

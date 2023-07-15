@@ -1,6 +1,6 @@
 ﻿
-
 //This is the view model for the page that shows ALL expenditures
+
 namespace FlowHub.Main.ViewModels.Expenditures;
 public partial class ManageExpendituresVM : ObservableObject
 {
@@ -406,8 +406,8 @@ public partial class ManageExpendituresVM : ObservableObject
         else
         {
             var newExpenditure = new ExpendituresModel() { DateSpent = DateTime.Now };
-            string pageTitle = "Add New Flow Out";
-            bool isAdd = true;
+            const string pageTitle = "Add New Flow Out";
+            const bool isAdd = true;
 
             await AddEditExpediture(newExpenditure, pageTitle, isAdd);
         }
@@ -420,7 +420,6 @@ public partial class ManageExpendituresVM : ObservableObject
     }
     private async Task AddEditExpediture(ExpendituresModel expenditure, string pageTitle, bool isAdd)
     {
-
         var NewUpSertVM = new UpSertExpenditureVM(expendituresService, userService, expenditure, pageTitle, isAdd, ActiveUser);
         var UpSertResult = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new UpSertExpendituresPopUp(NewUpSertVM));
 
@@ -562,7 +561,7 @@ public partial class ManageExpendituresVM : ObservableObject
                 CancellationTokenSource cancellationTokenSource = new();
                 const ToastDuration duration = ToastDuration.Short;
                 const double fontSize = 16;
-                string text = "All Synchronized!";
+                const string text = "All Synchronized!";
                 var toast = Toast.Make(text, duration, fontSize);
                 await toast.Show(cancellationTokenSource.Token); //toast a notification about Sync Success !
             }
@@ -576,7 +575,7 @@ public partial class ManageExpendituresVM : ObservableObject
         CancellationTokenSource cancellationTokenSource = new();
         const ToastDuration duration = ToastDuration.Short;
         const double fontSize = 14;
-        string text = "Flow Out Details Copied to Clipboard";
+        const string text = "Flow Out Details Copied to Clipboard";
         var toast = Toast.Make(text, duration, fontSize);
         await toast.Show(cancellationTokenSource.Token); //toast a notification about exp being copied to clipboard
     }

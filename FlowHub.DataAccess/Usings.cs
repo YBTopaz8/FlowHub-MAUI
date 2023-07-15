@@ -9,5 +9,4 @@ namespace FlowHub.DataAccess;
 
 public class Usings
 {
-
 }

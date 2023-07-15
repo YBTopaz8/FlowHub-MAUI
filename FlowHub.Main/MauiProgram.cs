@@ -1,6 +1,5 @@
 ﻿
 using CommunityToolkit.Maui;
-
 using InputKit.Handlers;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using UraniumUI;
@@ -76,6 +75,10 @@ public static class MauiProgram
 
         /*-- Section for Incomes --*/
         builder.Services.AddSingleton<ManageIncomesD>();
+
+        /* -- Section for Debts --*/
+        builder.Services.AddSingleton<ManageDebtsPageD>();
+
         /*-- Section for Settings --*/
         builder.Services.AddSingleton<UserSettingsPageD>();
         /*-------------------------------REGISTERING MOBILE VIEWS ---------------------------------------------------------------*/
@@ -103,10 +106,13 @@ public static class MauiProgram
         builder.Services.AddSingleton<UpSertMonthlyPlannedExpPageM>();
 
         /* -- Section For Statistics --*/
-        builder.Services.AddTransient<StatisticsPageD>();
+        builder.Services.AddSingleton<StatisticsPageD>();
 
-        builder.Services.AddTransient<StatisticsPageM>();
+        builder.Services.AddSingleton<StatisticsPageM>();
         builder.Services.AddSingleton<SingleMonthStatsPageM>();
+
+        /* -- Section for Debts --*/
+        builder.Services.AddSingleton<ManageDebtsPageM>();
         /*--------------------------------------------------------------------------------------------------------------------------------*/
         return builder.Build();
 	}

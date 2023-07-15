@@ -75,8 +75,8 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
 
         CancellationTokenSource cancellationTokenSource = new();
 
-        ToastDuration duration = ToastDuration.Short;
-        double fontSize = 14;
+        const ToastDuration duration = ToastDuration.Short;
+        const double fontSize = 14;
         var navParam = new Dictionary<string, object>
                 {
                     {"SingleMonthlyPlanDetails", SingleMonthlyPlanned },
@@ -153,7 +153,7 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
         SingleMonthlyPlanned.Expenditures.Add(SingleExpenditureDetails);
 
         SingleMonthlyPlanned.TotalAmount += SingleExpenditureDetails.AmountSpent;
-        SingleMonthlyPlanned.NumberOfExpenditures += 1;
+        SingleMonthlyPlanned.NumberOfExpenditures++;
 
         bool dialogResult = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Add New Monthly Planned Flow Out?"));
         if (dialogResult)
@@ -161,7 +161,7 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
             if (!await monthlyPlannedExpService.AddPlannedExp(SingleMonthlyPlanned))
                 return false;
 
-            string ToastNotifMessage = "Monthly Flow Out Added";
+            const string ToastNotifMessage = "Monthly Flow Out Added";
             var toast = Toast.Make(ToastNotifMessage, duration, fontsize);
             await toast.Show(tokenSource.Token);
         }
@@ -185,7 +185,7 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
             if (!await monthlyPlannedExpService.UpdatePlannedExp(SingleMonthlyPlanned))
                 return false;
         }
-        string ToastNotifMessage = "Flow Out Added";
+        const string ToastNotifMessage = "Flow Out Added";
         var toast = Toast.Make(ToastNotifMessage, duration, fontsize);
         await toast.Show(tokenSource.Token);
         return true;

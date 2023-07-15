@@ -13,14 +13,14 @@ public class DataAccessRepo : IDataAccessRepo
         bool DirectoryExists = Directory.Exists(path);
         if (!DirectoryExists)
         {
-            var fileName = "SavingTracker.db";
+            const string fileName = "SavingTracker.db";
             Directory.CreateDirectory(path);
 
             db = new LiteDatabaseAsync(path + fileName);
         }
         else
         {
-            var fileName = "SavingTracker.db";
+            const string fileName = "SavingTracker.db";
             string connectionString = $"Filename={path}{fileName};Connection=shared";
             db = new LiteDatabaseAsync(connectionString);
         }

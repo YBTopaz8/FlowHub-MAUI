@@ -133,9 +133,9 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
         if (dialogResult)
         {
             CancellationTokenSource cancellationTokenSource = new();
-            ToastDuration duration = ToastDuration.Short;
-            double fontSize = 14;
-            string text = "Flow Out Deleted";
+            const ToastDuration duration = ToastDuration.Short;
+            const double fontSize = 14;
+            const string text = "Flow Out Deleted";
             var toast = Toast.Make(text, duration, fontSize);
 
             SingleMonthlyPlannedDetails.Expenditures.Remove(model);

@@ -117,7 +117,7 @@ public partial class UserSettingsVM : ObservableObject
                 CancellationTokenSource cancellationTokenSource = new();
                 const ToastDuration duration = ToastDuration.Short;
                 const double fontSize = 16;
-                string text = "Profile Updated!";
+                const string text = "Profile Updated!";
                 var toast = Toast.Make(text, duration, fontSize);
                 await toast.Show(cancellationTokenSource.Token); //toast a notification about user profile updated
                 await Shell.Current.GoToAsync("..", true);

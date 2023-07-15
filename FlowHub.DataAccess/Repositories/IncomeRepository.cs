@@ -1,5 +1,4 @@
 ﻿
-
 namespace FlowHub.DataAccess.Repositories;
 
 public class IncomeRepository : IIncomeRepository
@@ -144,7 +143,6 @@ public class IncomeRepository : IIncomeRepository
             {
                 await AddIncomeOnlineAsync(OfflineDict[itemID]);
                 OnlineIncomesList.Add(OfflineDict[itemID]);
-
             }
 
             foreach (var itemID in OnlineDict.Keys.Except(OfflineDict.Keys))
@@ -308,5 +306,4 @@ public class IncomeRepository : IIncomeRepository
     {
         throw new NotImplementedException();
     }
-
 }

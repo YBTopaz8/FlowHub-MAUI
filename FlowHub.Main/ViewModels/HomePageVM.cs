@@ -28,7 +28,6 @@ public partial class HomePageVM : ObservableObject
         await DisplayInfo();
     }
 
-
     [ObservableProperty]
     ObservableCollection<ExpendituresModel> _latestExpenditures;
     [ObservableProperty]
@@ -88,8 +87,8 @@ public partial class HomePageVM : ObservableObject
         else
         {
             var newExpenditure = new ExpendituresModel() { DateSpent = DateTime.Now };
-            string pageTitle = "Add New Flow Out";
-            bool isAdd = true;
+            const string pageTitle = "Add New Flow Out";
+            const bool isAdd = true;
 
             var NewUpSertVM = new UpSertExpenditureVM(expendituresService, userService, newExpenditure, pageTitle, isAdd, ActiveUser);
             var UpSertResult = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new UpSertExpendituresPopUp(NewUpSertVM));

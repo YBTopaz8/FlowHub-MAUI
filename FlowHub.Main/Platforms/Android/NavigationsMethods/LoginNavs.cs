@@ -5,10 +5,10 @@ public class LoginNavs
 {
     public async Task GoToHomePage()
     {
-        await AppShellMobile.Current.GoToAsync($"//HomePageM");
+        await AppShellMobile.Current.GoToAsync("//HomePageM");
     }
     public async Task GoToLoginInPage()
     {
-        await AppShellMobile.Current.GoToAsync($"//LoginM");
+        await AppShellMobile.Current.GoToAsync("//LoginM");
     }
 }

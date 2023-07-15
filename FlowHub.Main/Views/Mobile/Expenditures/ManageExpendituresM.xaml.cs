@@ -86,7 +86,6 @@ public partial class ManageExpendituresM : ContentPage
         //await filterOptionsContainer.FadeTo(1, 0);
     }
 
-
     /*
      * This snippet can be used if i ever want to allow multi selection
     private void ColView_SelectionChanged(object sender, SelectionChangedEventArgs e)

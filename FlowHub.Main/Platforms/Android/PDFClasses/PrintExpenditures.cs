@@ -27,7 +27,7 @@ public static class PrintExpenditures
         string fileName = $"FlowOutsReport_{userCurrency}_{DateTime.Now:ddd, dd MMMM yyyy}.pdf";
         string PathFile = $"{path}/{fileName}";
 
-        string PdfTitle = "Flow Outs Report";
+        const string PdfTitle = "Flow Outs Report";
 
         await Task.Run(() => CreatePdfDoc(expList, PathFile, userCurrency, printDisplayCurrency, ObjectWithRate.result, ObjectWithRate.date, PdfTitle, userName));
     }

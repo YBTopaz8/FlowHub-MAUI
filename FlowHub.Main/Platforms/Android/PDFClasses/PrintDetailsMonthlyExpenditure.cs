@@ -43,7 +43,7 @@ public class PrintDetailsMonthlyExpenditure
         }
 
         string path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-        string fileName = "Report_Multiple_MonthlyPlanned.pdf";
+        const string fileName = "Report_Multiple_MonthlyPlanned.pdf";
         string PathFile = $"{path}/{fileName}";
 
         await Task.Run(()=> CreatePDFDocOfMultipleLists(expLists, PathFile, ListOfTitles, userName, userCurrency, printDisplayCurrency,  ObjectWithRate.result, ObjectWithRate.date));

@@ -20,7 +20,7 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
     private List<PlannedExpendituresModel> tempList = new();
 
     [ObservableProperty]
-    private bool isBusy;
+    bool isBusy;
 
     public List<List<ExpendituresModel>> ListOfExpenditures;
     public List<string> ListOfExpTitles;
@@ -115,8 +115,8 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
         if (dialogResult)
         {
             CancellationTokenSource cancellationTokenSource = new();
-            ToastDuration duration = ToastDuration.Short;
-            double fontSize = 14;
+            const ToastDuration duration = ToastDuration.Short;
+            const double fontSize = 14;
             string text = $"Monthly Planned For {monthlyPlannedExp.Title} Deleted";
             var toast = Toast.Make(text, duration, fontSize);
 

@@ -49,8 +49,8 @@ public partial class UpSertIncomeVM : ObservableObject
     public async Task UpSertIncome()
     {
         CancellationTokenSource cancellationTokenSource = new();
-        ToastDuration duration = ToastDuration.Short;
-        double fontsize = 14;
+        const ToastDuration duration = ToastDuration.Short;
+        const double fontsize = 14;
         if (SingleIncomeDetails.Id is null)
         {
             await AddIncomeAsync(duration, fontsize, cancellationTokenSource);
@@ -81,7 +81,7 @@ public partial class UpSertIncomeVM : ObservableObject
             ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
             await userService.UpdateUserAsync(ActiveUser);
 
-            string toastNotifMessage = "Flow In Update";
+            const string toastNotifMessage = "Flow In Update";
             var toastObj = Toast.Make(toastNotifMessage, duration, fontSize);
             await toastObj.Show(tokenSource.Token);
 
@@ -115,12 +115,11 @@ public partial class UpSertIncomeVM : ObservableObject
 
                 await userService.UpdateUserAsync(ActiveUser);
 
-                string toastNotifMessage = "Flow In Added";
+                const string toastNotifMessage = "Flow In Added";
                 var toast = Toast.Make(toastNotifMessage, duration, fontSize);
                 await toast.Show(tokenSource.Token);
 
                 await ManageIncomesNavs.ReturnOnce();
-
             }
         }
     }

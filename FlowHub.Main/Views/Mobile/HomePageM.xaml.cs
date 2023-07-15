@@ -20,6 +20,5 @@ public partial class HomePageM : ContentPage
             await viewModel.incomeRepo.SynchronizeIncomesAsync();
             _isInitialized = true;
         }
-
     }
 }

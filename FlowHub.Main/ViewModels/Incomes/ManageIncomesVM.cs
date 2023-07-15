@@ -114,7 +114,6 @@ public partial class ManageIncomesVM : ObservableObject
                 TotalIncomes = IncList.Count;
 
                 IsLoaded = true;
-
             }
         }
         catch (Exception ex)
@@ -134,7 +133,6 @@ public partial class ManageIncomesVM : ObservableObject
 
         TotalAmount = IncList.AsParallel().Sum(x => x.AmountReceived);
         TotalIncomes = IncList.Count;
-
     }
 
     [RelayCommand]
@@ -157,14 +155,14 @@ public partial class ManageIncomesVM : ObservableObject
                 }
                 TotalAmount = totalAmountFromList;
                 TotalIncomes = IncomesList.Count;
-                IncTitle = $"Today's Flow Ins";
+                IncTitle = "Today's Flow Ins";
             }
             else
             {
                 IsBusy = false;
                 IncomesList.Clear();
                 TotalIncomes = IncomesList.Count;
-                IncTitle = $"Today's Flow Ins";
+                IncTitle = "Today's Flow Ins";
                 TotalAmount = 0;
             }
         }
@@ -222,8 +220,8 @@ public partial class ManageIncomesVM : ObservableObject
         else
         {
             var  newIncome = new IncomeModel(){DateReceived = DateTime.Now};
-            string PageTitle = "Add New Income";
-            bool isAdd = true;
+            const string PageTitle = "Add New Income";
+            const bool isAdd = true;
 
             await AddEditIncome(newIncome, PageTitle, isAdd);
         }
@@ -245,9 +243,9 @@ public partial class ManageIncomesVM : ObservableObject
     public async Task DeleteIncomeBtn(IncomeModel income)
     {
         CancellationTokenSource cancellationTokenSource = new();
-        ToastDuration duration = ToastDuration.Short;
-        double fontSize = 14;
-        string text = "Income Deleted";
+        const ToastDuration duration = ToastDuration.Short;
+        const double fontSize = 14;
+        const string text = "Income Deleted";
         var toast = Toast.Make(text, duration, fontSize);
 
         bool response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Confirm Deletion?"));
@@ -263,12 +261,10 @@ public partial class ManageIncomesVM : ObservableObject
                 UserPocketMoney -= income.AmountReceived;
                 ActiveUser.DateTimeOfPocketMoneyUpdate = updateDateTime;
 
-
                 await userService.UpdateUserAsync(ActiveUser);
                 IncomesList.Remove(income);
 
                 await toast.Show(cancellationTokenSource.Token);
-
             }
         }
     }
@@ -299,7 +295,7 @@ public partial class ManageIncomesVM : ObservableObject
             CancellationTokenSource cancellationTokenSource = new();
             const ToastDuration duration = ToastDuration.Short;
             const double fontSize = 16;
-            string text = "User Balance Updated!";
+            const string text = "User Balance Updated!";
             var toast = Toast.Make(text, duration, fontSize);
             await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
 

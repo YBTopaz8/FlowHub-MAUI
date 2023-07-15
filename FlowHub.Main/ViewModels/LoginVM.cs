@@ -160,8 +160,8 @@ public partial class LoginVM : ObservableObject
         UsersModel User = new();
 
         CancellationTokenSource cancellationTokenSource = new();
-        ToastDuration duration = ToastDuration.Short;
-        double fontSize = 14;
+        const ToastDuration duration = ToastDuration.Short;
+        const double fontSize = 14;
 
         if (IsLoginOnlineButtonClicked)
         {

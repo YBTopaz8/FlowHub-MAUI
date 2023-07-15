@@ -118,6 +118,8 @@
 	  <None Remove="Resources\Images\save_to_pdf_btn_light.svg" />
 	  <None Remove="Resources\Images\search_property.svg" />
 	  <None Remove="Resources\Images\settings_dark.svg" />
+	  <None Remove="Resources\Images\time_to_pay_d.svg" />
+	  <None Remove="Resources\Images\time_to_pay_l.svg" />
 	  <None Remove="Resources\Images\user.svg" />
 	  <None Remove="Resources\Images\view_btn_48.svg" />
 	</ItemGroup>
@@ -170,6 +172,9 @@
 	  <MauiXaml Update="PopUpPages\ErrorNotificationPopUpAlert.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Desktop\Debts\ManageDebtsPageD.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Desktop\Expenditures\ManageExpendituresPageD.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -189,6 +194,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Desktop\Statistics\StatisticsPageD.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Mobile\Debts\ManageDebtsPageM.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Mobile\Expenditures\ManageExpendituresM.xaml">

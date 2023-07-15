@@ -13,7 +13,7 @@ public class MonthlyPlannedExpNavs
     }
     public async Task ReturnToDetailsMonthlyPlanned(Dictionary<string, object> navParams)
     {
-        await Shell.Current.GoToAsync($"{nameof(DetailsOfMonthlyPlannedExpPageM)}", true, navParams);
+        await Shell.Current.GoToAsync(nameof(DetailsOfMonthlyPlannedExpPageM), true, navParams);
     }
     public async Task ReturnOnce()
     {

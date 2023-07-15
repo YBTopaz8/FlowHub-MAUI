@@ -71,7 +71,7 @@ public partial class UpSertExpenditureVM : ObservableObject
             return;
         }
         CancellationTokenSource cancellationTokenSource = new();
-        ToastDuration duration = ToastDuration.Short;
+        const ToastDuration duration = ToastDuration.Short;
 
         if (SingleExpenditureDetails.Id is not null)
         {
