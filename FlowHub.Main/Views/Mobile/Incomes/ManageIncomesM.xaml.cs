@@ -17,10 +17,10 @@ public partial class ManageIncomesM : ContentPage
         this.BindingContext = vm;
     }
 
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
-       await viewModel.PageLoaded();
+        viewModel.PageLoaded();
     }
     private async void ExportToPDFImageButton_Clicked(object sender, EventArgs e)
     {

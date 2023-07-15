@@ -29,7 +29,6 @@ public partial class ManageExpendituresVM : ObservableObject
         expendituresService.OfflineExpendituresListChanged += HandleExpendituresListUpdated;
     }
 
-
     [ObservableProperty]
     ObservableCollection<ExpendituresModel> expendituresList;
 
@@ -93,7 +92,7 @@ public partial class ManageExpendituresVM : ObservableObject
     int GlobalSortNamePosition = 1;
 
     string monthName;
-    
+
     public async Task PageloadedAsync()
     {
         DayFilterYear = DateTime.UtcNow.Year;
@@ -236,17 +235,16 @@ public partial class ManageExpendituresVM : ObservableObject
         }
     }
 
-    static bool loaded = false;
+    bool IsLoaded;
     [RelayCommand]
     //Function to show very single expenditure from DB
     public void FilterGetAllExp()
     {
         try
         {
-            if (!loaded)
+            if (!IsLoaded)
             {
                 ShowDayFilter = false;
-                filterOption = "Filter_All";
                 ExpTitle = "All Flow Outs";
                 FilterTitle = "Date Spent Descending";
                 List<ExpendituresModel> expList = new();
@@ -270,9 +268,8 @@ public partial class ManageExpendituresVM : ObservableObject
                 IsBusy = false;
 
                 ShowStatisticBtn = expList.Count >= 3;
-                loaded = true;
+                IsLoaded = true;
             }
-            
         }
         catch (Exception ex)
         {
@@ -417,7 +414,7 @@ public partial class ManageExpendituresVM : ObservableObject
     {
         if (ActiveUser is null)
         {
-            Debug.WriteLine("Can't Open PopUp");
+           Debug.WriteLine("Can't Open Add Exp PopUp user is null");
            await Shell.Current.DisplayAlert("Wait", "Cannot go", "Ok");
         }
         else
@@ -437,8 +434,8 @@ public partial class ManageExpendituresVM : ObservableObject
     }
     private async Task AddEditExpediture(ExpendituresModel expenditure, string pageTitle, bool isAdd)
     {
-        ExpendituresModel nExp = expenditure;
-        var NewUpSertVM = new UpSertExpenditureVM(expendituresService, userService, nExp, pageTitle, isAdd, ActiveUser);
+        
+        var NewUpSertVM = new UpSertExpenditureVM(expendituresService, userService, expenditure, pageTitle, isAdd, ActiveUser);
         var UpSertResult = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new UpSertExpendituresPopUp(NewUpSertVM));
 
         //if (UpSertResult.Result == PopupResult.OK)
@@ -452,7 +449,6 @@ public partial class ManageExpendituresVM : ObservableObject
     [RelayCommand]
     public async Task GoToSpecificStatsPage()
     {
-        
         int monthNumb = DayFilterMonth;
         int YearNumb = DayFilterYear;
 
@@ -505,7 +501,6 @@ public partial class ManageExpendituresVM : ObservableObject
         }
     }
 
-    
     public async Task PrintExpendituresBtn()
     {
         Activ = true;

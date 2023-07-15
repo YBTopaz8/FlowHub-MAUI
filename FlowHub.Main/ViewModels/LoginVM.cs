@@ -201,7 +201,6 @@ public partial class LoginVM : ObservableObject
         }
     }
 
-    
     public async Task QuickLogin()
     {
         if (File.Exists(LoginDetectFile))

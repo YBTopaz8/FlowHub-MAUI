@@ -54,7 +54,6 @@ public partial class ManageExpendituresM : ContentPage
         }
     }
 
-    
     protected override async void OnAppearing()
     {
         base.OnAppearing();

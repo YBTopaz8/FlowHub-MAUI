@@ -29,7 +29,6 @@ public partial class StatisticsPageVM : ObservableObject
 	public StatisticsPageVM(IExpendituresRepository expRepo)
 	{
 		expendituresService = expRepo;
-		
 	}
 
 	[ObservableProperty]
@@ -95,8 +94,7 @@ public partial class StatisticsPageVM : ObservableObject
 	[ObservableProperty]
 	string smallestExpenditureTooltipText;
 
-	
-	public async Task PageLoaded()
+	public void PageLoaded()
     {
 		if (!IsLoaded)
 		{
@@ -106,16 +104,14 @@ public partial class StatisticsPageVM : ObservableObject
 			SelectedYearValue = DateTime.Now.Year;//.ToString();
 			Currency = GroupedExpenditures.First().Currency;
 
-			await PopulateDataGridWithSelectedMonthData();
+			PopulateDataGridWithSelectedMonthData();
 			DisplayAllMonthsExpensesChart();
 			IsLoaded = true;
-
 		}
     }
 
     private void CalculateYearNames()
     {
-
         var s = GroupedExpenditures.Select(g => g.Date.Year)
                     .Distinct()
                     .OrderBy(y => y)
@@ -135,10 +131,8 @@ public partial class StatisticsPageVM : ObservableObject
     ObservableCollection<ExpendituresModel> OriginalExpForSelectedMonth = new();
 
 	[RelayCommand]
-	async Task PopulateDataGridWithSelectedMonthData()
+	void PopulateDataGridWithSelectedMonthData()
     {
-
-		
 			if (SelectedYearValue == 0)
 			{
 				SelectedYearValue = DateTime.Now.Year;
@@ -148,12 +142,10 @@ public partial class StatisticsPageVM : ObservableObject
 			DateTime targetDate = new(SelectedYearValue, DateTime.ParseExact(SelectedMonthName, "MMMM", CultureInfo.CurrentCulture).Month, 1);
 			SelectedMonthValue = targetDate.Month;
 
-
 			ExpendituresForSelectedMonth = GroupedExpenditures
 			.Where(g => g.Date.Month == targetDate.Month && g.Date.Year == SelectedYearValue)
 			.SelectMany(g => g)
 			.ToObservableCollection();
-
 
 			OriginalExpForSelectedMonth = ExpendituresForSelectedMonth;
 			TotalNumberOfExpenditures = ExpendituresForSelectedMonth.Count;
@@ -176,8 +168,7 @@ public partial class StatisticsPageVM : ObservableObject
 			{
 				SmallestExpenditureTooltipText = $"  {expWithSmallestAmount.Reason} \n{expWithSmallestAmount.DateSpent:d}";
 			}
-			DisplaySpecificMonthCategoriesPieChart(); 
-		
+			DisplaySpecificMonthCategoriesPieChart();
     }
 
     private void DisplayAllMonthsExpensesChart()
@@ -241,8 +232,6 @@ public partial class StatisticsPageVM : ObservableObject
                 DataLabelsFormatter = _ => $"{data.Category}",
                 IsVisibleAtLegend = true
             }).ToArray();
-
-
         }
         catch (Exception ex)
 		{
@@ -288,7 +277,6 @@ public partial class StatisticsPageVM : ObservableObject
 			.ToObservableCollection();
 	}
 
-
 	string? lastPieCategory = null;
 	[RelayCommand]
 	public async Task PieChartClick(ChartPoint point)
@@ -298,7 +286,7 @@ public partial class StatisticsPageVM : ObservableObject
         {
             return;
         }
-        
+
 		string currentCategory = point.AsDataLabel;
 
 		if (currentCategory == lastPieCategory)
@@ -320,7 +308,6 @@ public partial class StatisticsPageVM : ObservableObject
         ExpendituresForSelectedMonth = OriginalExpForSelectedMonth.Where(e => e.Category.ToString() == SelectedCategoryName)
             .ToObservableCollection();
     }
-
 
 	//section for state management
     public bool IsLoaded;
@@ -361,10 +348,6 @@ public partial class StatisticsPageVM : ObservableObject
         }
     }
 
-
-
-
-
     //old code below
     public List<ExpendituresModel> listOfExp { get; set; }
     public ExpendituresModel[] listOfExpDec { get; set; }
@@ -384,9 +367,6 @@ public partial class StatisticsPageVM : ObservableObject
 	//public SolidColorPaint LegendBGPaint { get; set; } = new SolidColorPaint(new SkiaSharp.SKColor(240, 240, 240));
 
 	public ObservableCollection<ISeries> LineSeries { get; set; }
-
-
-
 
 	[RelayCommand]
 	//public void PageLoaded()
