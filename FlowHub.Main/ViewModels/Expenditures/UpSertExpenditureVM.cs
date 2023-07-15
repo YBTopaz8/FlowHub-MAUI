@@ -129,6 +129,7 @@ public partial class UpSertExpenditureVM : ObservableObject
         SingleExpenditureDetails.Id = Guid.NewGuid().ToString();
         SingleExpenditureDetails.AddedDateTime = DateTime.UtcNow;
         SingleExpenditureDetails.UserId = userService.OfflineUser.UserIDOnline;
+        SingleExpenditureDetails.UpdatedDateTime = DateTime.UtcNow;
 
         if (!await _expenditureService.AddExpenditureAsync(SingleExpenditureDetails))
         {

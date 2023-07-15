@@ -193,7 +193,9 @@
 
                     <Button Text="Quick Login" TextColor="White" 
                         FontSize="20" FontAttributes="Bold"
-                        x:Name="QuickLoginBtn" Clicked="QuickLoginBtn_Clicked" Margin="70,70,70,0" />
+                        x:Name="QuickLoginBtn" Clicked="QuickLoginBtn_Clicked" Margin="70,70,70,0">
+                        
+                    </Button>
 
                     <VerticalStackLayout IsVisible="{Binding ShowQuickLoginErrorMessage}" HorizontalOptions="Center">
                         <Label Text="An Error Occurred" TextColor="Red"/>

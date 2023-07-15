@@ -16,14 +16,14 @@ public partial class StatisticsPageD : ContentPage
 		this.BindingContext = vm;
 	}
 
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
         viewModel.LoadState();
 
         if (!viewModel.IsLoaded)
         {
-            await viewModel.PageLoaded();
+            viewModel.PageLoaded();
             YearPicker.SelectedItem = DateTime.Now.Year.ToString();
         }
 
@@ -37,8 +37,6 @@ public partial class StatisticsPageD : ContentPage
         base.OnDisappearing();
         viewModel.SaveState();
     }
-    int count;
-
     private void DateTimeExpGraph_ChartPointPointerDown(LiveChartsCore.Kernel.Sketches.IChartView chart, LiveChartsCore.Kernel.ChartPoint point)
     {
         //if (point is not null)

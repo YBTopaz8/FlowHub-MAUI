@@ -42,7 +42,7 @@
             </VerticalStackLayout>
 
             <HorizontalStackLayout Grid.Column="2" HorizontalOptions="End">
-                <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding GoToAddIncomePageCommand}" IsVisible="false"/>
+                <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding ShowAddIncomePopUpCommand}" IsVisible="false"/>
             </HorizontalStackLayout>
         </Grid>
 
@@ -60,7 +60,7 @@
                 </Label.Text>
             </Label>
 
-            <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding GoToAddIncomePageCommand}"
+            <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding ShowAddIncomePopUpCommand}"
                          VerticalOptions="Start" HorizontalOptions="End" Margin="0,0,10,0" Grid.Column="1"/>
         </Grid>
        
@@ -72,7 +72,7 @@
                             <SwipeView>
                                 <SwipeView.LeftItems>
                                     <SwipeItem Command="{Binding Source={x:Reference page},
-                                            Path=BindingContext.GoToEditIncomePageCommand}"
+                                            Path=BindingContext.ShowEditIncomePopUpCommand}"
                                                CommandParameter="{Binding .}"
                                                 IconImageSource="{AppThemeBinding Dark= edit_d.png, Light= edit_l.png}" 
                                                BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
@@ -96,7 +96,7 @@
                                             <Label Text="{Binding Reason, StringFormat='Reason: {0}'}"/>
                                             <Label>
                                                 <Label.Text>
-                                                    <MultiBinding StringFormat="{} Amount: {0:n3} {1}">
+                                                    <MultiBinding StringFormat="{} Amount: {0:n2} {1}">
                                                         <Binding Path="AmountReceived"/>
                                                         <Binding Path="Currency"/>
                                                     </MultiBinding>

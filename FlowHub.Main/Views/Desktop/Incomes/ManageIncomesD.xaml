@@ -4,6 +4,8 @@
              x:Class="FlowHub.Main.Views.Desktop.Incomes.ManageIncomesD"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"    
+             xmlns:utilities="clr-namespace:FlowHub.Main.Utilities"
+             xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:viewModel="clr-namespace:FlowHub.Main.ViewModels.Incomes"
              x:DataType="viewModel:ManageIncomesVM"
@@ -11,8 +13,7 @@
              x:Name="page">
     <toolkit:DockLayout>
         <Label FontSize="21" HorizontalOptions="Center"
-               Margin="8"
-               toolkit:DockLayout.DockPosition="Top">
+               Margin="8" toolkit:DockLayout.DockPosition="Top">
             <Label.Text>
                 <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
                     <Binding Path="UserPocketMoney"/>
@@ -21,65 +22,97 @@
             </Label.Text>
         </Label>
 
-        <ScrollView x:Name="DGScrollView" VerticalScrollBarVisibility="Never"
-                    HorizontalOptions="FillAndExpand">
-            <material:DataGrid ItemsSource="{Binding IncomesList}"
-                               MaximumWidthRequest="1000" Padding="10"
-                               HorizontalOptions="Center">
-                <material:DataGrid.EmptyView>
-                    <VerticalStackLayout Margin="40,20" MinimumWidthRequest="400">
-                        <Image WidthRequest="70"
+        <VerticalStackLayout HorizontalOptions="Start" toolkit:DockLayout.DockPosition="Right">
+            <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png}" HeightRequest="60"
+                         BackgroundColor="Transparent"
+                         Command="{Binding ShowAddIncomePopUpCommand}"
+                         ToolTipProperties.Text="Add New Flow In"/>
+            <ImageButton Source="{AppThemeBinding Dark=save_to_pdf_d.png}" HeightRequest="60"
+                         IsVisible="false"/>
+            <ProgressBar IsVisible="false" x:Name="PrintProgressBarIndic" ProgressColor="DarkSlateBlue" WidthRequest="50"/>
+            <ImageButton Source="{AppThemeBinding Dark=sync_icon_d.png, Light=sync_icon_l.png}" 
+                         HeightRequest="55" x:Name="SyncButton"
+                         IsEnabled="False"/>
+
+        </VerticalStackLayout>
+
+        <dg:DataGrid ItemsSource="{Binding IncomesList}" BackgroundColor="#201F24"
+                     WidthRequest="1000" HeaderBackground="DarkSlateBlue"
+                     RowHeight="50" HeaderHeight="40" 
+                     BorderColor="Transparent" HorizontalOptions="CenterAndExpand"
+                     x:Name="IncDG">
+            <dg:DataGrid.NoDataView>
+                <VerticalStackLayout Margin="40,20" MinimumWidthRequest="400" >
+                    <Image WidthRequest="70"
                                         HeightRequest="60"
                                         HorizontalOptions="Center"
                                         VerticalOptions="Center"
-                                        Source="search_property.png"/>
-                        <Label Text="No Flow Out Available..." FontSize="21" HorizontalOptions="Center" Margin="30"/>
-                    </VerticalStackLayout>
-                </material:DataGrid.EmptyView>
-                <material:DataGrid.Columns>
-                    <material:DataGridColumn Title="Date Received">
-                        <material:DataGridColumn.CellItemTemplate>
-                            <DataTemplate>
-                                <Label Text="{Binding DateReceived, StringFormat='{0:MMMM dd, yyyy}'}"/>
-                            </DataTemplate>
-                        </material:DataGridColumn.CellItemTemplate>
-                    </material:DataGridColumn>
+                                        Source="{AppThemeBinding Dark=nothing_found.png}"/>
+                    <Label Text="No Flow In Available..." FontSize="21" 
+                           HorizontalTextAlignment="Center" HorizontalOptions="Center" 
+                           Margin="30"/>
+                </VerticalStackLayout>
+            </dg:DataGrid.NoDataView>
+            <!--Equivalent of emptyview-->
 
-                    <material:DataGridColumn Binding="{Binding Reason}" Title="Reason"/>
+            <dg:DataGrid.Columns>
+                <dg:DataGridColumn Title="Date Received" PropertyName="DateReceived"
+                                   SortingEnabled="True">
+                    <dg:DataGridColumn.CellTemplate>
+                        <DataTemplate x:DataType="models:IncomeModel">
+                            <Label Text="{Binding ., StringFormat='{0:ddd, MMMM dd, yyyy}'}" TextColor="White" 
+                                   HorizontalTextAlignment="Center"
+                                   VerticalTextAlignment="Center" BackgroundColor="#201F24"/>
+                        </DataTemplate>
+                    </dg:DataGridColumn.CellTemplate>
+                </dg:DataGridColumn>
 
-                    <material:DataGridColumn Title="Amount Spent">
-                        <material:DataGridColumn.CellItemTemplate>
-                            <DataTemplate>
-                                <Label>
-                                    <Label.Text>
-                                        <MultiBinding StringFormat="{} {0:n2} {1}">
-                                            <Binding Path="AmountReceived"/>
-                                            <Binding Path="Currency"/>
-                                        </MultiBinding>
-                                    </Label.Text>
-                                </Label>
-                            </DataTemplate>
-                        </material:DataGridColumn.CellItemTemplate>
-                    </material:DataGridColumn>
+                <dg:DataGridColumn Title="Reason" PropertyName="Reason" SortingEnabled="True">
+                    <dg:DataGridColumn.CellTemplate>
+                        <DataTemplate x:DataType="models:IncomeModel">
+                            <Label Text="{Binding .}" TextColor="White" 
+                                   HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                   BackgroundColor="#201F24" HorizontalOptions="FillAndExpand"/>
+                        </DataTemplate>
+                    </dg:DataGridColumn.CellTemplate>
+                </dg:DataGridColumn>
+                
+                <dg:DataGridColumn Title="Amount Received" SortingEnabled="False">
+                    <dg:DataGridColumn.CellTemplate>
+                        <DataTemplate x:DataType="models:IncomeModel">
+                            <Label TextColor="White" BackgroundColor="#201F24" 
+                                   VerticalTextAlignment="Center" HorizontalTextAlignment="Center" 
+                                   HorizontalOptions="FillAndExpand">
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{} {0:n2} {1}">
+                                        <Binding Path="AmountReceived"/>
+                                        <Binding Path="Currency"/>
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                        </DataTemplate>
+                    </dg:DataGridColumn.CellTemplate>
+                </dg:DataGridColumn>
 
-                    <material:DataGridColumn Title="Actions">
-                        <material:DataGridColumn.CellItemTemplate>
-                            <DataTemplate>
-                                <HorizontalStackLayout >
+                <dg:DataGridColumn Title="Actions" Width="0.8*" SortingEnabled="False">
+                    <dg:DataGridColumn.CellTemplate>
+                        <DataTemplate x:DataType="models:IncomeModel">
+                            <ContentView HorizontalOptions="Fill" BackgroundColor="#201F24">
+                                <HorizontalStackLayout  HorizontalOptions="CenterAndExpand">
                                     <ImageButton Source="{AppThemeBinding Light=edit_l.png, Dark=edit_d.png}" WidthRequest="50"
-                                                 Command="{Binding Source={x:Reference page},
-                                            Path=BindingContext.GoToEditIncomePageCommand}"
-                                               CommandParameter="{Binding .}" />
+                                                     Command="{Binding Source={x:Reference page}, 
+                                                Path=BindingContext.ShowEditIncomePopUpCommand}"  
+                                                       CommandParameter="{Binding .}" />
                                     <ImageButton Source="{AppThemeBinding Light=delete_l.png, Dark=delete_d.png}" WidthRequest="50" 
-                                                 Command="{Binding Source={x:Reference page},
-                                            Path=BindingContext.DeleteIncomeBtnCommand}"
-                                               CommandParameter="{Binding .}"  />
+                                                     Command="{Binding Source={x:Reference page}, 
+                                                Path=BindingContext.DeleteIncomeBtnCommand}"  
+                                                       CommandParameter="{Binding .}"  />
                                 </HorizontalStackLayout>
-                            </DataTemplate>
-                        </material:DataGridColumn.CellItemTemplate>
-                    </material:DataGridColumn>
-                </material:DataGrid.Columns>
-            </material:DataGrid>
-        </ScrollView>
+                            </ContentView>
+                        </DataTemplate>
+                    </dg:DataGridColumn.CellTemplate>
+                </dg:DataGridColumn>
+            </dg:DataGrid.Columns>
+        </dg:DataGrid>
     </toolkit:DockLayout>
 </ContentPage>

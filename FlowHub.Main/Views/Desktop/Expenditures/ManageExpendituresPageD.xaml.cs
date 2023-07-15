@@ -23,7 +23,6 @@ public partial class ManageExpendituresPageD : ContentPage
         base.OnAppearing();
         await viewModel.PageloadedAsync();
 
-
         //ExpDG.SortedColumnIndex = 0;
     }
 

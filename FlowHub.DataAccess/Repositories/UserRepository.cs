@@ -16,17 +16,21 @@ public class UserRepository : IUsersRepository
 
     private readonly IDataAccessRepo dataAccessRepo;
     private readonly IOnlineCredentialsRepository onlineDataAccessRepo;
+    private readonly IExpendituresRepository expenditureRepo;
+    private readonly IIncomeRepository incomeRepo;
     private const string userDataCollectionName = "Users";
+
+    public event Action OfflineUserDataChanged;
 
     public UsersModel OfflineUser { get; set; }
     public UsersModel OnlineUser { get; set; }
 
-    public UserRepository(IDataAccessRepo dataAccess, IOnlineCredentialsRepository onlineRepository)//, IExpendituresRepository expenditureRepository)
+    public UserRepository(IDataAccessRepo dataAccess, IOnlineCredentialsRepository onlineRepository) //if you inject exp, inc etc here, it will lead to circular injection and app will crash :(
     {
         dataAccessRepo = dataAccess;
         onlineDataAccessRepo = onlineRepository;
-       // expenditureRepo = expenditureRepository;
     }
+
     void OpenDB()
     {
         db = dataAccessRepo.GetDb();
@@ -52,6 +56,7 @@ public class UserRepository : IUsersRepository
         OpenDB();
         OfflineUser = await OfflineUserCollection.FindOneAsync(x => x.Id == UserID);
         db.Dispose();
+        OfflineUserDataChanged?.Invoke();
         return OfflineUser;
     }
 
@@ -81,6 +86,7 @@ public class UserRepository : IUsersRepository
             OfflineUser.UserIDOnline = OnlineUser.Id;
             _ = await UpdateUserAsync(OfflineUser);
         }
+        OfflineUserDataChanged?.Invoke();
         return OfflineUser;
     }
     public async Task<bool> AddUserAsync(UsersModel user)
@@ -115,6 +121,12 @@ public class UserRepository : IUsersRepository
             if (await OfflineUserCollection.UpdateAsync(user))
             {
                 db?.Dispose();
+                OfflineUser = user;
+                OfflineUserDataChanged?.Invoke();
+                if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                {
+                    await UpdateUserOnlineAsync(user);
+                }
                 return true;
             }
             else
@@ -195,12 +207,10 @@ public class UserRepository : IUsersRepository
         }
     }
 
-    public async Task UpdateUserOnlineEditAsync(UsersModel user)
+    public async Task UpdateUserOnlineAsync(UsersModel user)
     {
         EnsureOnlineConnection();
-        UsersModel userToUpdate= user;
-        userToUpdate.Id = user.UserIDOnline;
-        _ = await OnlineUserCollection.ReplaceOneAsync(u => u.Id == userToUpdate.Id, userToUpdate);
+        _ = await OnlineUserCollection.ReplaceOneAsync(u => u.Id == user.UserIDOnline,user);
     }
 
     public async Task<bool> UpdateUserOnlineGetSetLatestValues(UsersModel user)
@@ -218,7 +228,7 @@ public class UserRepository : IUsersRepository
         }
         else
         {
-            await UpdateUserOnlineEditAsync(OfflineUser);
+            await UpdateUserOnlineAsync(OfflineUser);
             return true;
         }
     }

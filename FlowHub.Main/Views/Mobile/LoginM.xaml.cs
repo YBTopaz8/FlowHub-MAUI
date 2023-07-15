@@ -24,9 +24,9 @@ public partial class LoginM : ContentPage
 #if ANDROID
                 Android.Graphics.Drawables.GradientDrawable gd = new();
                 gd.SetColor(Android.Graphics.Color.Transparent);
-                
+
                 handler.PlatformView.SetBackground(gd);
-                
+
 #endif
             }
         });

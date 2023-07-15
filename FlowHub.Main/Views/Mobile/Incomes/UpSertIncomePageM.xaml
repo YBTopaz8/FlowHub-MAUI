@@ -43,7 +43,7 @@
 
             
             <HorizontalStackLayout HorizontalOptions="Center" Margin="0,0,0,0" Spacing="15">
-                <ImageButton x:Name="SaveIncBtn" Clicked="SaveIncBtn_Clicked"
+                <ImageButton  x:Name="SaveIncBtn" Clicked="SaveIncBtn_Clicked"
                                 Source="{AppThemeBinding Dark=save_icon_d.png, Light=save_icon_l.png}"/>
                 <ImageButton Command="{Binding CancelBtnCommand}"
                                 Source="{AppThemeBinding Dark=cancel_icon_d.png, Light=cancel_icon_l.png}"/>

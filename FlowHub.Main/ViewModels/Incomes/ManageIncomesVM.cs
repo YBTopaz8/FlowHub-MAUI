@@ -6,6 +6,8 @@ using CommunityToolkit.Mvvm.Input;
 using FlowHub.DataAccess.IRepositories;
 using FlowHub.Main.Platforms.NavigationMethods;
 using FlowHub.Main.PopUpPages;
+using FlowHub.Main.Utilities;
+using FlowHub.Main.Views;
 using FlowHub.Models;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -23,40 +25,51 @@ public partial class ManageIncomesVM : ObservableObject
     {
         incomeService = incomeRepository;
         userService = usersRepository;
+        incomeRepository.OfflineIncomesListChanged += HandleIncomesListUpdated;
+        usersRepository.OfflineUserDataChanged += HandleUserUpdated;
     }
 
-    public ObservableCollection<IncomeModel> IncomesList { get; set; } = new();
+    private void HandleUserUpdated()
+    {
+
+        ActiveUser = userService.OfflineUser;
+        UserPocketMoney = ActiveUser.PocketMoney;
+        UserCurrency = ActiveUser.UserCurrency;
+    }
 
     [ObservableProperty]
-    private double totalAmount;
+    ObservableCollection<IncomeModel> incomesList;
 
     [ObservableProperty]
-    private int totalIncomes;
+    double totalAmount;
 
     [ObservableProperty]
-    private string userCurrency;
+    int totalIncomes;
 
     [ObservableProperty]
-    private double userPocketMoney;
+    string userCurrency;
 
     [ObservableProperty]
-    private bool isBusy;
+    double userPocketMoney;
 
     [ObservableProperty]
-    private string incTitle;
+    bool isBusy;
 
-    private UsersModel ActiveUser = new();
+    [ObservableProperty]
+    string incTitle;
+
+    UsersModel ActiveUser = new();
 
     [RelayCommand]
-    public async Task PageLoaded()
+    public void PageLoaded()
     {
         var user = userService.OfflineUser;
         ActiveUser = user;
         UserPocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
-        await incomeService.GetAllIncomesAsync();
+        FilterGetAllIncomes();  
         //FilterGetIncOfCurrentMonth();
-        await FilterGetAllIncomes();
+        //await FilterGetAllIncomes();
     }
 
     [RelayCommand]
@@ -96,45 +109,47 @@ public partial class ManageIncomesVM : ObservableObject
         }
     }
 
-    [RelayCommand]
-    public async Task FilterGetAllIncomes()
+    bool IsLoaded;
+    public void FilterGetAllIncomes()
     {
         try
         {
-            IsBusy = true;
-            double totalAmountFromList = 0;
-            var AllIncomes = incomeService.OfflineIncomesList;
-            if (AllIncomes?.Count > 0)
+            if (!IsLoaded)
             {
-                IsBusy = false;
-                IncomesList.Clear();
-                foreach (IncomeModel inc in AllIncomes)
-                {
-                    IncomesList.Add(inc);
-                    totalAmountFromList += inc.AmountReceived;
-                }
-                TotalAmount = totalAmountFromList;
-                TotalIncomes = IncomesList.Count;
-                IncTitle = $"All Flow Ins";
-                if (ActiveUser.TotalIncomeAmount == 0)
-                {
-                    ActiveUser.TotalIncomeAmount = totalAmountFromList;
-                    await userService.UpdateUserAsync(ActiveUser);
-                }
-            }
-            else
-            {
-                IsBusy = false;
-                IncomesList.Clear();
-                TotalIncomes = IncomesList.Count;
-                IncTitle = $"All Flow Ins";
-                TotalAmount = 0;
+                IsBusy = true;
+                IncTitle = "All Flow Ins";
+                var IncList = incomeService.OfflineIncomesList
+                    .Where(x => !x.IsDeleted )
+                    .OrderByDescending(x => x.DateReceived)
+                    .ToList();
+
+                IncomesList = new ObservableCollection<IncomeModel>(IncList); 
+
+                TotalAmount = IncList.AsParallel().Sum(x => x.AmountReceived);
+                TotalIncomes = IncList.Count;
+
+                IsLoaded = true;
+                
             }
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"Exception MESSAGE: {ex.Message}");
         }
+    }
+
+    private void HandleIncomesListUpdated()
+    {
+        var IncList = incomeService.OfflineIncomesList
+            .Where(x => !x.IsDeleted)
+            .OrderByDescending(x => x.DateReceived)
+            .ToList();
+        IncomesList = new ObservableCollection<IncomeModel>(IncList);
+        OnPropertyChanged(nameof(IncomesList));
+
+        TotalAmount = IncList.AsParallel().Sum(x => x.AmountReceived);
+        TotalIncomes = IncList.Count;
+
     }
 
     [RelayCommand]
@@ -212,35 +227,33 @@ public partial class ManageIncomesVM : ObservableObject
     }
 
     [RelayCommand]
-    public async Task GoToAddIncomePage()
+    public async Task ShowAddIncomePopUp()
     {
         if (ActiveUser is null)
         {
-            Debug.WriteLine("Can't go because Active User is Null");
+            Debug.WriteLine("Can't Open because Active User is Null");
             await Shell.Current.DisplayAlert("Wait", "Please Wait", "OK");
         }
         else
         {
-            var navParam = new Dictionary<string, object>
-            {
-                {"SingleIncomeDetails", new IncomeModel{DateReceived = DateTime.Now} },
-                {"PageTitle", new string("Add New Income")},
-                {"ActiveUser",ActiveUser }
-            };
-            await NavFunctions.FromManageIncToUpsertIncome(navParam);
+            var  newIncome = new IncomeModel(){DateReceived = DateTime.Now};
+            string PageTitle = "Add New Income";
+            bool isAdd = true;
+
+            await AddEditIncome(newIncome, PageTitle, isAdd);
         }
     }
 
-    [RelayCommand]
-    public async Task GoToEditIncomePage(IncomeModel income)
+    private async Task AddEditIncome(IncomeModel newIncome, string pageTitle, bool isAdd)
     {
-        var navParam = new Dictionary<string, object>
-        {
-                {"SingleIncomeDetails", income},
-                {"PageTitle", new string("Edit Income")},
-                {"ActiveUser",ActiveUser }
-        };
-        await NavFunctions.FromManageIncToUpsertIncome(navParam);
+        var newUpserIncomeVM = new UpSertIncomeVM(incomeService, userService,newIncome, pageTitle, isAdd, ActiveUser);
+        var UpSertResult = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new UpSertIncomePopUp(newUpserIncomeVM));
+    }
+
+    [RelayCommand]
+    public async Task ShowEditIncomePopUp(IncomeModel income)
+    {
+        await AddEditIncome(income, "Edit Flow In", false);
     }
 
     [RelayCommand]
@@ -252,23 +265,25 @@ public partial class ManageIncomesVM : ObservableObject
         string text = "Income Deleted";
         var toast = Toast.Make(text, duration, fontSize);
 
-        bool response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You want to delete?"));
+        bool response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Confirm Deletion?"));
         if (response)
         {
-            var deleteResponse = await incomeService.DeleteIncomeAsync(income.Id);
-
+            var updateDateTime = DateTime.UtcNow;
+            income.UpdatedDateTime = updateDateTime;
+            var deleteResponse = await incomeService.DeleteIncomeAsync(income);
             if (deleteResponse)
             {
                 ActiveUser.TotalIncomeAmount -= income.AmountReceived;
                 ActiveUser.PocketMoney -= income.AmountReceived;
                 UserPocketMoney -= income.AmountReceived;
+                ActiveUser.DateTimeOfPocketMoneyUpdate = updateDateTime;
+
 
                 await userService.UpdateUserAsync(ActiveUser);
-                incomeService.OfflineIncomesList.Remove(income);
                 IncomesList.Remove(income);
 
                 await toast.Show(cancellationTokenSource.Token);
-                FilterGetIncOfCurrentMonth();
+                
             }
         }
     }
@@ -303,7 +318,7 @@ public partial class ManageIncomesVM : ObservableObject
             var toast = Toast.Make(text, duration, fontSize);
             await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
 
-            await PageLoaded();
+            PageLoaded();
         }
     }
 

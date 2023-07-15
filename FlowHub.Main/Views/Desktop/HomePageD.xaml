@@ -61,7 +61,10 @@
                     
                     <CollectionView ItemsSource="{Binding LatestExpenditures}" HorizontalOptions="FillAndExpand">
                         <CollectionView.EmptyView>
-                            <Label Text="No Flow Outs Available..." HorizontalOptions="Center" VerticalOptions="Center" />
+                            <VerticalStackLayout VerticalOptions="Center">
+                                <Image Source="nothing_found.png" MaximumHeightRequest="50"/>
+                                <Label Text="No Flow Outs Available..." HorizontalOptions="Center" VerticalOptions="Center" />
+                            </VerticalStackLayout>
                         </CollectionView.EmptyView>
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:ExpendituresModel">
@@ -122,7 +125,7 @@
                         <CollectionView.EmptyView>
                             <VerticalStackLayout VerticalOptions="Center">
                                 <Image Source="nothing_found.png" MaximumHeightRequest="50"/>
-                                <Label Text="No Flow Outs Available..." HorizontalOptions="Center" VerticalOptions="Center" />
+                                <Label Text="No Flow In Available..." HorizontalOptions="Center" VerticalOptions="Center" />
                             </VerticalStackLayout>
                         </CollectionView.EmptyView>
                     </CollectionView>

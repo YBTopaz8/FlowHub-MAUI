@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <mct:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FlowHub.Main.Views.UpSertExpendituresPopUp"
+             x:Class="FlowHub.Main.Views.UpSertIncomePopUp"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
@@ -9,28 +9,23 @@
              xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
              xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
-             xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Expenditures"
-             x:DataType="viewModels:UpSertExpenditureVM" 
+             xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Incomes"
+             x:DataType="viewModels:UpSertIncomeVM" 
              CanBeDismissedByTappingOutsideOfPopup="False"
              xmlns:utilities="clr-namespace:FlowHub.Main.Utilities"
              Color="Transparent"
              x:Name="page">
-
-    <Border Margin="13,10"        
+    <Border Margin="15,10"        
         Stroke="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=White}"
         StrokeThickness="0" StrokeShape="RoundRectangle 12">
-        <Border.Resources>
-            <ResourceDictionary>
-                <utilities:EnumConverter x:Key="EnumConverter"/>
-            </ResourceDictionary>
-        </Border.Resources>
-        <VerticalStackLayout>
-        <Label Text="{Binding PageTitle}" HorizontalOptions="Center" Margin="0,10,0,0" 
-               TextDecorations="Underline" FontAttributes="Bold"
-               FontSize="23" TextColor="White"/>
 
+        <VerticalStackLayout>
+            <Label Text="{Binding PageTitle}" HorizontalOptions="Center" 
+                   Margin="0,10,0,0" TextDecorations="Underline" 
+                   FontAttributes="Bold" FontSize="23" 
+                   TextColor="White"/>
             <input:FormView Spacing="5" Margin="8,0"
-                    SubmitCommand="{Binding UpSertExpenditureCommand}">
+                            SubmitCommand="{Binding UpSertIncomeCommand}">
                 <input:FormView.Resources>
                     <ResourceDictionary>
                         <Style TargetType="material:TextField">
@@ -47,11 +42,10 @@
                         </Style>
                     </ResourceDictionary>
                 </input:FormView.Resources>
-
-                <VerticalStackLayout  toolkit:DockLayout.DockPosition="Top" >
-                                       
-                    <Label HorizontalOptions="End" Margin="8,8" FontAttributes="Italic" FontSize="13"
-                                    TextColor="AliceBlue">
+                <VerticalStackLayout>
+                    <Label HorizontalOptions="End" Margin="8,8" 
+                           FontAttributes="Italic" FontSize="13"
+                           TextColor="AliceBlue">
                         <Label.Text>
                             <MultiBinding StringFormat="{} Resulting Balance : {0:n2} {1}">
                                 <Binding Path="ResultingBalance"/>
@@ -59,50 +53,30 @@
                             </MultiBinding>
                         </Label.Text>
                     </Label>
-                    <Label HorizontalOptions="End" Margin="8,2" FontAttributes="Italic" FontSize="13"
-                                    TextColor="AliceBlue">
-                        <Label.Text>
-                            <MultiBinding StringFormat="{} Flow Out's Amount : {0:n2} {1}">
-                                <Binding Path="TotalAmountSpent"/>
-                                <Binding Path="ActiveUser.UserCurrency"/>
-                            </MultiBinding>
-                        </Label.Text>
-                    </Label>
                 </VerticalStackLayout>
 
                 <material:DatePickerField MinimumDate="01/01/2022" Title="Date Spent" 
-                                            MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
-                                            Date="{Binding SingleExpenditureDetails.DateSpent}">
-
+                                          MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
+                                          Date="{Binding SingleIncomeDetails.DateReceived}">
                     <material:DatePickerField.Validations>
                         <validation:RequiredValidation/>
                     </material:DatePickerField.Validations>
                 </material:DatePickerField>
 
-                <material:TextField Grid.Column="0" Title="Price"
-                                    x:Name="UnitPrice" Focused="UnitPrice_Focused"
-                                    TextChanged="UnitPrice_TextChanged"
-                                    AccentColor="Gray"
-                                    Text="{Binding SingleExpenditureDetails.UnitPrice}" Keyboard="Numeric" >
-                       
+                <material:TextField Title="Amount Received" Text="{Binding SingleIncomeDetails.AmountReceived}"
+                                    x:Name="AmountReceived" Keyboard="Numeric"
+                                    TextChanged="AmountReceived_TextChanged" Focused="AmountReceived_Focused">
                 </material:TextField>
-               
-
-                <material:PickerField Title="Category" ItemsSource="{Binding ExpenditureCategory}" SelectedItem="{Binding SingleExpenditureDetails.Category}"
-                                      
-                                      AccentColor="Gray"/> 
                 
-                <material:EditorField Title="Reason" Text="{Binding SingleExpenditureDetails.Reason}" IsTextPredictionEnabled="True"
-                                      AccentColor="Gray"
-                                      TitleColor="White">
-                    <material:EditorField.Validations>
+                <material:TextField Title="Reason" Text="{Binding SingleIncomeDetails.Reason}">
+                    <material:TextField.Validations>
                         <validation:RequiredValidation/>
-                    </material:EditorField.Validations>
-                </material:EditorField>
+                    </material:TextField.Validations>
+                </material:TextField>
 
                 <HorizontalStackLayout HorizontalOptions="Center" Margin="0,15,0,0" Spacing="15">
                     <Button input:FormView.IsSubmitButton="True"
-                                            Text="Save Flow Out" BackgroundColor="{StaticResource SaveBtnColor}" TextColor="White" 
+                                            Text="Save Flow In" BackgroundColor="{StaticResource SaveBtnColor}" TextColor="White" 
                                             FontSize="20" FontAttributes="Bold"/>
 
                     <Button Command="{Binding CancelBtnCommand}"
@@ -110,11 +84,7 @@
                                             FontSize="16" />
 
                 </HorizontalStackLayout>
-
-
             </input:FormView>
-        
         </VerticalStackLayout>
-  
     </Border>
 </mct:Popup>

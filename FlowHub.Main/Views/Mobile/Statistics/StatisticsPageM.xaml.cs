@@ -5,7 +5,6 @@ using System.Diagnostics;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
 
-
 namespace FlowHub.Main.Views.Mobile.Statistics;
 
 public partial class StatisticsPageM
@@ -18,14 +17,14 @@ public partial class StatisticsPageM
 		this.BindingContext = vm;
 	}
 
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
         viewModel.LoadState();
 
         if (!viewModel.IsLoaded)
         {
-            await viewModel.PageLoaded();
+            viewModel.PageLoaded();
             YearPicker.SelectedItem = DateTime.Now.Year.ToString();
         }
     }
@@ -38,10 +37,8 @@ public partial class StatisticsPageM
     {
         Debug.WriteLine("Back button pressed");
         return base.OnBackButtonPressed();
-        
     }
     private void BarChart_ChartPointPointerDown(IChartView chart, ChartPoint point)
     {
-        
     }
 }

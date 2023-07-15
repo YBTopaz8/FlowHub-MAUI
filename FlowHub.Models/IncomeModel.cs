@@ -14,6 +14,6 @@ public class IncomeModel
     public string Currency { get; set; }
     public bool UpdateOnSync { get; set; } = false;
     public string? PlatformModel { get; set; }
-
+    public bool IsDeleted { get; set; }
     public string UserId { get; set; }
 }

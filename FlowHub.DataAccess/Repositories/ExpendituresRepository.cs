@@ -15,6 +15,7 @@ public class ExpendituresRepository : IExpendituresRepository
     public List<ExpendituresModel> OfflineExpendituresList { get; set; }
 
     bool isBatchUpdate;
+
     public event Action OfflineExpendituresListChanged;
 
     private IMongoCollection<ExpendituresModel> AllOnlineExpenditures;
@@ -30,7 +31,7 @@ public class ExpendituresRepository : IExpendituresRepository
     private const string expendituresDataCollectionName = "Expenditures";
     private const string IDsDataCollectionName = "IDsToDelete";
 
-    public ExpendituresRepository(IDataAccessRepo dataAccess, IUsersRepository userRepo, IOnlineCredentialsRepository onlineRepository)
+    public ExpendituresRepository(IDataAccessRepo dataAccess, IOnlineCredentialsRepository onlineRepository, IUsersRepository userRepo)
     {
         dataAccessRepo = dataAccess;
         usersRepo = userRepo;
@@ -88,7 +89,7 @@ public class ExpendituresRepository : IExpendituresRepository
                     {
                         OfflineExpendituresListChanged?.Invoke();
                     }
-                    return true;                    
+                    return true;
                 }
                 else
                 {
@@ -210,7 +211,8 @@ public class ExpendituresRepository : IExpendituresRepository
             }
         }
 
-        var filter = Builders<ExpendituresModel>.Filter.Eq("UserId", usersRepo.OnlineUser.Id);
+        var filter = Builders<ExpendituresModel>.Filter.Eq("UserId", usersRepo.OnlineUser.Id) &
+            Builders<ExpendituresModel>.Filter.Eq("Currency", usersRepo.OnlineUser.UserCurrency);
 
         AllOnlineExpenditures ??= DBOnline?.GetCollection<ExpendituresModel>(expendituresDataCollectionName);
 

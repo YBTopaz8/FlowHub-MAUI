@@ -13,7 +13,7 @@ public class ManageIncomesNavs
     {
        await Shell.Current.GoToAsync(nameof(ManageIncomesM), true, navParams);
     }
-    public async Task ReturnOnce()
+    public static async Task ReturnOnce()
     {
         await Shell.Current.GoToAsync("..");
     }

@@ -48,7 +48,7 @@ public static class MauiProgram
             handlers.AddUraniumUIHandlers();
         });
 
-/*----------------------- REGISTERING Repositories ------------------------------------------------------------------------*/
+        /*----------------------- REGISTERING Repositories ------------------------------------------------------------------------*/
 
         builder.Services.AddSingleton<IExpendituresRepository, ExpendituresRepository>();
         builder.Services.AddSingleton<IIncomeRepository, IncomeRepository>();
@@ -58,7 +58,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IOnlineCredentialsRepository, OnlineDataAccessRepository>();
         builder.Services.AddSingleton<IPlannedExpendituresRepository, PlannedExpendituresRepository>();
 
-/*--------------------ADDING VIEWMODELS----------------------------------------------------------------------------------------*/
+        /*--------------------ADDING VIEWMODELS----------------------------------------------------------------------------------------*/
 
         /*-- Section for HomePage AND Login --*/
         builder.Services.AddSingleton<HomePageVM>();
@@ -69,7 +69,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<ManageExpendituresVM>();
 
         /* -- Section for Incomes --*/
-        builder.Services.AddSingleton<UpSertIncomeVM>();
+        //builder.Services.AddSingleton<UpSertIncomeVM>();
         builder.Services.AddSingleton<ManageIncomesVM>();
         builder.Services.AddSingleton<UserSettingsVM>();
 
@@ -82,7 +82,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<StatisticsPageVM>();
         builder.Services.AddSingleton<SingleMonthStatsPageVM>();
 
-/*------------------------REGISTERING DESKTOP VIEWS ----------------------------------------------------------------------------*/
+        /*------------------------REGISTERING DESKTOP VIEWS ----------------------------------------------------------------------------*/
 
         /*-- Section for HomePage AND Login --*/
         builder.Services.AddSingleton<HomePageD>();
@@ -96,7 +96,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<ManageIncomesD>();
         /*-- Section for Settings --*/
         builder.Services.AddSingleton<UserSettingsPageD>();
-/*-------------------------------REGISTERING MOBILE VIEWS ---------------------------------------------------------------*/
+        /*-------------------------------REGISTERING MOBILE VIEWS ---------------------------------------------------------------*/
 
         /*--  REGISTERING MOBILE VIEWS --*/
         builder.Services.AddSingleton<HomePageM>();
@@ -125,7 +125,7 @@ public static class MauiProgram
 
         builder.Services.AddTransient<StatisticsPageM>();
         builder.Services.AddSingleton<SingleMonthStatsPageM>();
-/*--------------------------------------------------------------------------------------------------------------------------------*/
+        /*--------------------------------------------------------------------------------------------------------------------------------*/
         return builder.Build();
 	}
 }

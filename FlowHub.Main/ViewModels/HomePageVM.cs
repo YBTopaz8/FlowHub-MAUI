@@ -17,18 +17,28 @@ namespace FlowHub.Main.ViewModels;
 [QueryProperty(nameof(TotalExp), nameof(TotalExp))]
 public partial class HomePageVM : ObservableObject
 {
-    private readonly IExpendituresRepository _expendituresService;
+    public readonly IExpendituresRepository expendituresService;
     private readonly ISettingsServiceRepository settingsService;
     private readonly IUsersRepository userService;
-
+    public readonly IIncomeRepository incomeRepo;
     private readonly HomePageNavs NavFunction = new();
 
-    public HomePageVM(IExpendituresRepository expendituresRepository, ISettingsServiceRepository settingsServiceRepo, IUsersRepository usersRepository)
+    public HomePageVM(IExpendituresRepository expendituresRepository, ISettingsServiceRepository settingsServiceRepo, IUsersRepository usersRepository, IIncomeRepository incomeRepository)
     {
-        _expendituresService = expendituresRepository;
+        expendituresService = expendituresRepository;
         settingsService = settingsServiceRepo;
         userService = usersRepository;
+        incomeRepo = incomeRepository;
+
+        expendituresService.OfflineExpendituresListChanged += OnChangesDetected;
+        incomeRepo.OfflineIncomesListChanged += OnChangesDetected;
     }
+
+    private async void OnChangesDetected()
+    {
+        await DisplayInfo();
+    }
+
 
     [ObservableProperty]
     ObservableCollection<ExpendituresModel> _latestExpenditures;
@@ -47,7 +57,7 @@ public partial class HomePageVM : ObservableObject
 
     [ObservableProperty]
     private UsersModel activeUser = new ();
-        
+
     public async Task DisplayInfo()
     {
         string Id = await settingsService.GetPreference<string>("Id", "error");
@@ -58,13 +68,11 @@ public partial class HomePageVM : ObservableObject
         Username = ActiveUser.Username;
         PocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
-        var ListOfExp = await _expendituresService.GetAllExpendituresAsync();
+        var ListOfExp = await expendituresService.GetAllExpendituresAsync();
 
-        LatestExpenditures = ListOfExp.Count != 0 
-            ? ListOfExp.OrderByDescending(s => s.DateSpent).Take(5).ToObservableCollection() 
+        LatestExpenditures = ListOfExp.Count != 0
+            ? ListOfExp.OrderByDescending(s => s.DateSpent).Take(5).ToObservableCollection()
             : new ObservableCollection<ExpendituresModel>();
-
-        
     }
 
     [RelayCommand]
@@ -72,7 +80,7 @@ public partial class HomePageVM : ObservableObject
     {
         try
         {
-            var expList = _expendituresService.OfflineExpendituresList;
+            var expList = expendituresService.OfflineExpendituresList;
             TotalExp = expList.Count;
         }
         catch (Exception ex)
@@ -94,7 +102,7 @@ public partial class HomePageVM : ObservableObject
             string pageTitle = "Add New Flow Out";
             bool isAdd = true;
 
-            var NewUpSertVM = new UpSertExpenditureVM(_expendituresService, userService, newExpenditure, pageTitle, isAdd, ActiveUser);
+            var NewUpSertVM = new UpSertExpenditureVM(expendituresService, userService, newExpenditure, pageTitle, isAdd, ActiveUser);
             var UpSertResult = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new UpSertExpendituresPopUp(NewUpSertVM));
 
             if (UpSertResult.Result == PopupResult.OK)

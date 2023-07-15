@@ -54,7 +54,7 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
 
     [ObservableProperty]
     List<ExpendituresModel> tempList = new();
-    
+
     public void PageLoaded()
     {
        // UsersModel user = ActiveUser;
@@ -127,7 +127,6 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
         //NumberOfExpInReport= TempList.Where(x => x.IncludeInReport == true).Count();
     }
 
-    
     public async Task GoToEditExpInMonthP(ExpendituresModel model)
     {
         Dictionary<string, object> navParam = new()
@@ -140,7 +139,7 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
         };
         await NavFunctions.ToUpSertMonthlyPlanned(navParam);
     }
-        
+
     public async Task DeleteExpFromMonthlyP(ExpendituresModel model)
     {
         bool dialogResult = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Delete Flow Out?"));
