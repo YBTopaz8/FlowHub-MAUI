@@ -1,10 +1,4 @@
-﻿using FlowHub.DataAccess.IRepositories;
-using FlowHub.Models;
-using LiteDB.Async;
-using MongoDB.Driver;
-using System.Diagnostics;
-
-namespace FlowHub.DataAccess.Repositories;
+﻿namespace FlowHub.DataAccess.Repositories;
 
 public class PlannedExpendituresRepository : IPlannedExpendituresRepository
 {

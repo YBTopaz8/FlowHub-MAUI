@@ -1,7 +1,4 @@
-﻿
-using FlowHub.Models;
-
-namespace FlowHub.DataAccess.IRepositories;
+﻿namespace FlowHub.DataAccess.IRepositories;
 
 public interface IIncomeRepository
 {

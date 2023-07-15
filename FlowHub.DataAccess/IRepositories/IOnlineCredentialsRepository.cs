@@ -1,7 +1,4 @@
-﻿
-using MongoDB.Driver;
-
-namespace FlowHub.DataAccess.IRepositories;
+﻿namespace FlowHub.DataAccess.IRepositories;
 
 public interface IOnlineCredentialsRepository
 {
