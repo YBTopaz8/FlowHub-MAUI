@@ -95,6 +95,8 @@ public partial class UpSertExpenditureVM : ObservableObject
 
         SingleExpenditureDetails.UpdateOnSync = true;
         SingleExpenditureDetails.AmountSpent = TotalAmountSpent;
+        SingleExpenditureDetails.PlatformModel = DeviceInfo.Current.Model;
+
         if (!await _expenditureService.UpdateExpenditureAsync(SingleExpenditureDetails))
         {
             return;
@@ -118,6 +120,7 @@ public partial class UpSertExpenditureVM : ObservableObject
         SingleExpenditureDetails.AddedDateTime = DateTime.UtcNow;
         SingleExpenditureDetails.UserId = userService.OfflineUser.UserIDOnline;
         SingleExpenditureDetails.UpdatedDateTime = DateTime.UtcNow;
+        SingleExpenditureDetails.PlatformModel = DeviceInfo.Current.Model;
 
         if (!await _expenditureService.AddExpenditureAsync(SingleExpenditureDetails))
         {

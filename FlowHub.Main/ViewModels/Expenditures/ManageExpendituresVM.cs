@@ -462,14 +462,14 @@ public partial class ManageExpendituresVM : ObservableObject
         if (response)
         {
             IsBusy = true;
-            var deleteResponse = await expendituresService.DeleteExpenditureAsync(expenditure.Id); //delete the expenditure from db
+            expenditure.UpdatedDateTime = DateTime.UtcNow;
+            expenditure.PlatformModel = DeviceInfo.Current.Model;
+            var deleteResponse = await expendituresService.DeleteExpenditureAsync(expenditure); //delete the expenditure from db
 
             if (deleteResponse)
             {
                 text = "Flow Out Deleted";
-                //expendituresService.OfflineExpendituresList.Remove(expenditure);
 
-                //FilterGetAllExp();
                 ActiveUser.TotalExpendituresAmount -= expenditure.AmountSpent;
                 ActiveUser.PocketMoney += expenditure.AmountSpent;
                 UserPocketMoney += expenditure.AmountSpent;
@@ -550,22 +550,7 @@ public partial class ManageExpendituresVM : ObservableObject
     [RelayCommand]
     public async Task SyncExpTest()
     {
-        bool response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do you want to Sync data?"));
-        if (response)
-        {
-            IsBusy = true;
-            if (await expendituresService.SynchronizeExpendituresAsync(ActiveUser.Email, ActiveUser.Password))
-            {
-                await PageloadedAsync();
-                IsBusy = false;
-                CancellationTokenSource cancellationTokenSource = new();
-                const ToastDuration duration = ToastDuration.Short;
-                const double fontSize = 16;
-                const string text = "All Synchronized!";
-                var toast = Toast.Make(text, duration, fontSize);
-                await toast.Show(cancellationTokenSource.Token); //toast a notification about Sync Success !
-            }
-        }
+
     }
 
     [RelayCommand]

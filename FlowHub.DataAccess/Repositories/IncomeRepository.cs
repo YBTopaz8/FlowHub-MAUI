@@ -37,7 +37,6 @@ public class IncomeRepository : IIncomeRepository
 
     public async Task<List<IncomeModel>> GetAllIncomesAsync()
     {
-        
         if(OfflineIncomesList is not null)
         {
             return OfflineIncomesList;
@@ -105,7 +104,7 @@ public class IncomeRepository : IIncomeRepository
             }
         }
 
-        var filtersIncome = Builders<IncomeModel>.Filter.Eq("UserId", usersRepo.OfflineUser.Id) &
+        var filtersIncome = Builders<IncomeModel>.Filter.Eq("UserId", usersRepo.OnlineUser.Id) &
             Builders<IncomeModel>.Filter.Eq("Currency", usersRepo.OfflineUser.UserCurrency);
 
         AllIncomesOnline ??= DBOnline?.GetCollection<IncomeModel>(incomesDataCollectionName);
@@ -175,7 +174,6 @@ public class IncomeRepository : IIncomeRepository
 
     public async Task<bool> AddIncomeAsync(IncomeModel newIncome)
     {
-        
         try
         {
             using (db = await OpenDB())
@@ -283,13 +281,12 @@ public class IncomeRepository : IIncomeRepository
             return false;
         }
     }
- /*--------- SECTION FOR OFFLINE CRUD OPERATIONS----------*/
+ /*--------- SECTION FOR ONLINE CRUD OPERATIONS----------*/
 
     async Task AddIncomeOnlineAsync(IncomeModel income)
     {
         await AllIncomesOnline?.InsertOneAsync(income);
         Debug.WriteLine("Income added online");
-        
     }
 
     async Task UpdateIncomeOnlineAsync(IncomeModel inc)
