@@ -17,7 +17,6 @@ public partial class HomePageD : ContentPage
         if(!_isInitialized)
         {
             await viewModel.DisplayInfo();
-            await viewModel.incomeRepo.SynchronizeIncomesAsync();
             _isInitialized = true;
         }
     }

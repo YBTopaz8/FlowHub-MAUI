@@ -274,11 +274,11 @@ public partial class ManageIncomesVM : ObservableObject
     {
         if (IncomesList?.Count < 1)
         {
-            await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Cannot Save an Empty List to PDF"));
+            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Cannot Save an Empty List to PDF"));
         }
         else
         {
-            await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Saved"));
+            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Saved"));
         }
     }
 

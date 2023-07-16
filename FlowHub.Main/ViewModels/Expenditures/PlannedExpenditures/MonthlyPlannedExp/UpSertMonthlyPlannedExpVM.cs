@@ -102,7 +102,7 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
             }
             else
             {
-                await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Failed to Save Flow Out"));
+                await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Failed to Save Flow Out"));
             }
         }
         else
@@ -125,7 +125,7 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
                 }
                 else
                 {
-                    await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Failed to Save Flow Out"));
+                    await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Failed to Save Flow Out"));
                 }
             }
             else
@@ -136,7 +136,7 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
                 }
                 else
                 {
-                    await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Failed to Save Flow Out"));
+                    await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Failed to Save Flow Out"));
                 }
             }
         }

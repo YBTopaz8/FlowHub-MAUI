@@ -33,6 +33,8 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<IExpendituresRepository, ExpendituresRepository>();
         builder.Services.AddSingleton<IIncomeRepository, IncomeRepository>();
+        builder.Services.AddSingleton<IDebtRepository, DebtRepository>();
+
         builder.Services.AddSingleton<IDataAccessRepo, DataAccessRepo>();
         builder.Services.AddSingleton<ISettingsServiceRepository, SettingsServiceRepository>();
         builder.Services.AddSingleton<IUsersRepository, UserRepository>();

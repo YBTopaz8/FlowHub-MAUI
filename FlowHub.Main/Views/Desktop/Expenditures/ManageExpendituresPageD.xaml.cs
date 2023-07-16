@@ -42,7 +42,7 @@ public partial class ManageExpendituresPageD : ContentPage
     {
         if (viewModel.ExpendituresList?.Count < 1)
         {
-            await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Cannot Save an Empty List to PDF"));
+            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Cannot Save an Empty List to PDF"));
         }
         else
         {

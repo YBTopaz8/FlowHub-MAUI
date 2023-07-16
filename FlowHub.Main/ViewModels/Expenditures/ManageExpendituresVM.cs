@@ -439,7 +439,7 @@ public partial class ManageExpendituresVM : ObservableObject
 
         if (GroupedExpenditures is null)
         {
-            await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("No Data to visualize"));
+            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("No Data to visualize"));
             return;
         }
 
@@ -495,7 +495,7 @@ public partial class ManageExpendituresVM : ObservableObject
 
         if (ExpendituresList?.Count < 1 || ExpendituresList is null)
         {
-            await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Cannot save an Empty list to PDF"));
+            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Cannot save an Empty list to PDF"));
             return;
         }
         string dialogueResponse = (string)await Shell.Current.ShowPopupAsync(new InputCurrencyForPrintPopUpPage("Please Select Currency", UserCurrency));
@@ -506,7 +506,7 @@ public partial class ManageExpendituresVM : ObservableObject
 
         if (dialogueResponse != UserCurrency && !Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
         {
-            await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("No Internet !\nPlease Connect to the Internet in order to save in other currencies"));
+            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("No Internet !\nPlease Connect to the Internet in order to save in other currencies"));
             return;
         }
         await PrintExpenditures.SaveExpenditureToPDF(ExpendituresList, ActiveUser.UserCurrency, dialogueResponse, ActiveUser.Username);

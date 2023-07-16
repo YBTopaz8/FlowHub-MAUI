@@ -6,26 +6,29 @@ namespace FlowHub.Main.ViewModels;
 [QueryProperty(nameof(TotalExp), nameof(TotalExp))]
 public partial class HomePageVM : ObservableObject
 {
-    public readonly IExpendituresRepository expendituresService;
+    public readonly IExpendituresRepository expenditureRepo;
     private readonly ISettingsServiceRepository settingsService;
     private readonly IUsersRepository userService;
     public readonly IIncomeRepository incomeRepo;
+    private readonly IDebtRepository debtRepo;
     private readonly HomePageNavs NavFunction = new();
 
-    public HomePageVM(IExpendituresRepository expendituresRepository, ISettingsServiceRepository settingsServiceRepo, IUsersRepository usersRepository, IIncomeRepository incomeRepository)
+    public HomePageVM(IExpendituresRepository expendituresRepository, ISettingsServiceRepository settingsServiceRepo,
+                    IUsersRepository usersRepository, IIncomeRepository incomeRepository,
+                    IDebtRepository debtRepository)
     {
-        expendituresService = expendituresRepository;
+        expenditureRepo = expendituresRepository;
         settingsService = settingsServiceRepo;
         userService = usersRepository;
         incomeRepo = incomeRepository;
-
-        expendituresService.OfflineExpendituresListChanged += OnChangesDetected;
+        debtRepo = debtRepository;
+        expenditureRepo.OfflineExpendituresListChanged += OnChangesDetected;
         incomeRepo.OfflineIncomesListChanged += OnChangesDetected;
     }
 
     private async void OnChangesDetected()
     {
-        await DisplayInfo();
+        await InitializeEverything();
     }
 
     [ObservableProperty]
@@ -48,6 +51,14 @@ public partial class HomePageVM : ObservableObject
 
     public async Task DisplayInfo()
     {
+        await InitializeEverything();
+
+        await SyncAndNotifyAsync();
+
+    }
+
+    private async Task InitializeEverything()
+    {
         string Id = await settingsService.GetPreference<string>("Id", "error");
 
         var user = userService.OfflineUser;
@@ -56,11 +67,38 @@ public partial class HomePageVM : ObservableObject
         Username = ActiveUser.Username;
         PocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
-        var ListOfExp = await expendituresService.GetAllExpendituresAsync();
+        var ListOfExp = await expenditureRepo.GetAllExpendituresAsync();
 
         LatestExpenditures = ListOfExp.Count != 0
             ? ListOfExp.OrderByDescending(s => s.DateSpent).Take(5).ToObservableCollection()
             : new ObservableCollection<ExpendituresModel>();
+
+        var ListOfInc = await incomeRepo.GetAllIncomesAsync();
+        LatestIncomes = ListOfInc.Count != 0
+            ? ListOfInc.OrderByDescending(s => s.DateReceived).Take(5).ToObservableCollection()
+            : new ObservableCollection<IncomeModel>();
+    }
+
+    private async Task SyncAndNotifyAsync()
+    {
+        try
+        {
+            await Task.WhenAll(debtRepo.SynchronizeDebtsAsync(), incomeRepo.SynchronizeIncomesAsync());
+
+            CancellationTokenSource cts = new();
+            const ToastDuration duration = ToastDuration.Short;
+            const double fontSize = 14;
+            string text = "All Synced Up !";
+            var toast = Toast.Make(text, duration, fontSize);
+            await toast.Show(cts.Token);
+        }
+        catch (AggregateException aEx)
+        {
+            foreach (var ex in aEx.InnerExceptions)
+            {
+                await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Error when syncing " + ex.Message));
+            }
+        }
     }
 
     [RelayCommand]
@@ -68,7 +106,7 @@ public partial class HomePageVM : ObservableObject
     {
         try
         {
-            var expList = expendituresService.OfflineExpendituresList;
+            var expList = expenditureRepo.OfflineExpendituresList;
             TotalExp = expList.Count;
         }
         catch (Exception ex)
@@ -90,7 +128,7 @@ public partial class HomePageVM : ObservableObject
             const string pageTitle = "Add New Flow Out";
             const bool isAdd = true;
 
-            var NewUpSertVM = new UpSertExpenditureVM(expendituresService, userService, newExpenditure, pageTitle, isAdd, ActiveUser);
+            var NewUpSertVM = new UpSertExpenditureVM(expenditureRepo, userService, newExpenditure, pageTitle, isAdd, ActiveUser);
             var UpSertResult = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new UpSertExpendituresPopUp(NewUpSertVM));
 
             if (UpSertResult.Result == PopupResult.OK)

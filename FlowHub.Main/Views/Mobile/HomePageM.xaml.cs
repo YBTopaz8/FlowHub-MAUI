@@ -8,6 +8,7 @@ public partial class HomePageM : ContentPage
         InitializeComponent();
         viewModel = vm;
         this.BindingContext = vm;
+        
     }
 
     bool _isInitialized;
@@ -17,7 +18,6 @@ public partial class HomePageM : ContentPage
         if(!_isInitialized)
         {
             await viewModel.DisplayInfo();
-            await viewModel.incomeRepo.SynchronizeIncomesAsync();
             _isInitialized = true;
         }
     }

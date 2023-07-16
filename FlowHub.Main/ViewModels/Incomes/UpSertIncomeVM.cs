@@ -70,6 +70,7 @@ public partial class UpSertIncomeVM : ObservableObject
         double FinalTotalInc = _initialTotalIncAmount + difference;
         double FinalPocketMoney = InitialUserPockerMoney + difference;
         SingleIncomeDetails.UpdatedDateTime = DateTime.UtcNow;
+        SingleIncomeDetails.PlatformModel = DeviceInfo.Current.Model;
         if (FinalPocketMoney < 0)
         {
             // show error that.. for some reason, you amount can't be -ve
@@ -95,7 +96,7 @@ public partial class UpSertIncomeVM : ObservableObject
         if (SingleIncomeDetails.AmountReceived <= 0)
         {
             //call the error popup page here
-            await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Amount Receive must be greater than 0"));
+            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Amount Receive must be greater than 0"));
             return;
         }
         else
@@ -105,7 +106,7 @@ public partial class UpSertIncomeVM : ObservableObject
             SingleIncomeDetails.AddedDateTime = DateTime.UtcNow;
             SingleIncomeDetails.UpdatedDateTime = DateTime.UtcNow;
             SingleIncomeDetails.UserId = ActiveUser.UserIDOnline;
-
+            SingleIncomeDetails.PlatformModel = DeviceInfo.Current.Model;
             if (await incomeService.AddIncomeAsync(SingleIncomeDetails))
             {
                 ActiveUser.TotalIncomeAmount += SingleIncomeDetails.AmountReceived;

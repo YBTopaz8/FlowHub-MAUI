@@ -67,7 +67,7 @@ public partial class UpSertExpenditureVM : ObservableObject
         {
             ThisPopUpResult = PopupResult.Cancel;
             ClosePopUp = true;
-            await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("Not Enough balance to save"));
+            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Not Enough balance to save"));
             return;
         }
         CancellationTokenSource cancellationTokenSource = new();

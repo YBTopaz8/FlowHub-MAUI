@@ -169,7 +169,7 @@
 	  <MauiXaml Update="PopUpPages\AcceptCancelPopUpAlert.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="PopUpPages\ErrorNotificationPopUpAlert.xaml">
+	  <MauiXaml Update="PopUpPages\ErrorPopUpAlert.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Desktop\Debts\ManageDebtsPageD.xaml">
@@ -277,6 +277,9 @@
 	  </Compile>
 	  <Compile Update="Platforms\Windows\PDFClasses\PrintExpenditures.cs">
 	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
+	  </Compile>
+	  <Compile Update="PopUpPages\ErrorPopUpAlert.xaml.cs">
+	    <DependentUpon>ErrorPopUpAlert.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="PopUpPages\LoadingActivityIndicatorPopUp.xaml.cs">
 	    <DependentUpon>LoadingActivityIndicatorPopUp.xaml</DependentUpon>

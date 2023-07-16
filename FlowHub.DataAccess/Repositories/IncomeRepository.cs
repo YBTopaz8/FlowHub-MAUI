@@ -37,6 +37,11 @@ public class IncomeRepository : IIncomeRepository
 
     public async Task<List<IncomeModel>> GetAllIncomesAsync()
     {
+        
+        if(OfflineIncomesList is not null)
+        {
+            return OfflineIncomesList;
+        }
         try
         {
             await OpenDB();
@@ -62,7 +67,7 @@ public class IncomeRepository : IIncomeRepository
 
     async Task LoadOnlineDB()
     {
-        if(Connectivity.NetworkAccess != NetworkAccess.Internet)
+        if(Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
         {
             return;
         }
@@ -105,7 +110,7 @@ public class IncomeRepository : IIncomeRepository
 
         AllIncomesOnline ??= DBOnline?.GetCollection<IncomeModel>(incomesDataCollectionName);
 
-        OnlineIncomesList = await DBOnline.GetCollection<IncomeModel>(incomesDataCollectionName).Find(filtersIncome).ToListAsync();
+        OnlineIncomesList = await AllIncomesOnline.Find(filtersIncome).ToListAsync();
     }
 
     bool IsSyncing;
@@ -119,15 +124,21 @@ public class IncomeRepository : IIncomeRepository
             {
                 return;
             }
+
+            if (OnlineIncomesList.Count < 1 && OfflineIncomesList.Count < 1)
+            {
+                return; //no need to sync
+            }
             IsSyncing = true;
             IsBatchUpdate = true;
 
-            var OfflineDict = OfflineIncomesList.ToDictionary(x => x.Id, x => x);
-            var OnlineDict = OnlineIncomesList.ToDictionary(x => x.Id, x => x);
-            foreach (var itemId in OfflineDict.Keys.Intersect(OnlineDict.Keys))
+            Dictionary<string, IncomeModel> OfflineIncomeDict = OfflineIncomesList.ToDictionary(x => x.Id, x => x);
+            Dictionary<string, IncomeModel> OnlineIncomeDict = OnlineIncomesList.ToDictionary(x => x.Id, x => x);
+
+            foreach (var itemId in OfflineIncomeDict.Keys.Intersect(OnlineIncomeDict.Keys))
             {
-                var offlineItem = OfflineDict[itemId];
-                var onlineItem = OnlineDict[itemId];
+                var offlineItem = OfflineIncomeDict[itemId];
+                var onlineItem = OnlineIncomeDict[itemId];
 
                 if (offlineItem.UpdatedDateTime > onlineItem.UpdatedDateTime)
                 {
@@ -139,16 +150,16 @@ public class IncomeRepository : IIncomeRepository
                 }
             }
 
-            foreach (var itemID in OfflineDict.Keys.Except(OnlineDict.Keys))
+            foreach (var itemID in OfflineIncomeDict.Keys.Except(OnlineIncomeDict.Keys))
             {
-                await AddIncomeOnlineAsync(OfflineDict[itemID]);
-                OnlineIncomesList.Add(OfflineDict[itemID]);
+                await AddIncomeOnlineAsync(OfflineIncomeDict[itemID]);
+                OnlineIncomesList.Add(OfflineIncomeDict[itemID]);
             }
 
-            foreach (var itemID in OnlineDict.Keys.Except(OfflineDict.Keys))
+            foreach (var itemID in OnlineIncomeDict.Keys.Except(OfflineIncomeDict.Keys))
             {
-                await AddIncomeAsync(OnlineDict[itemID]);
-                OfflineIncomesList.Add(OnlineDict[itemID]);
+                await AddIncomeAsync(OnlineIncomeDict[itemID]);
+                OfflineIncomesList.Add(OnlineIncomeDict[itemID]);
             }
 
             await usersRepo.UpdateUserOnlineGetSetLatestValues(usersRepo.OnlineUser);
@@ -164,8 +175,7 @@ public class IncomeRepository : IIncomeRepository
 
     public async Task<bool> AddIncomeAsync(IncomeModel newIncome)
     {
-        newIncome.PlatformModel = DeviceInfo.Current.Model;
-
+        
         try
         {
             using (db = await OpenDB())
@@ -188,22 +198,20 @@ public class IncomeRepository : IIncomeRepository
                 }
                 else
                 {
-                    Debug.WriteLine("Error while updating Income");
+                    Debug.WriteLine("Error while adding Income");
                     return false;
                 }
             }
         }
         catch (Exception ex)
         {
-            Debug.WriteLine("Failed to handle local income: " + ex.Message);
+            Debug.WriteLine("Failed to add local income: " + ex.Message);
             return false;
         }
     }
 
     public async Task<bool> UpdateIncomeAsync(IncomeModel income)
     {
-        income.PlatformModel = DeviceInfo.Current.Model;
-
         try
         {
             using (db = await OpenDB())
@@ -279,15 +287,9 @@ public class IncomeRepository : IIncomeRepository
 
     async Task AddIncomeOnlineAsync(IncomeModel income)
     {
-        try
-        {
-            await AllIncomesOnline?.InsertOneAsync(income);
-            Debug.WriteLine("Income added online");
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex.Message);
-        }
+        await AllIncomesOnline?.InsertOneAsync(income);
+        Debug.WriteLine("Income added online");
+        
     }
 
     async Task UpdateIncomeOnlineAsync(IncomeModel inc)

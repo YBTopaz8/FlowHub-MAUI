@@ -156,7 +156,7 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresVM : ObservableObjec
             }
             else
             {
-                await Shell.Current.ShowPopupAsync(new ErrorNotificationPopUpAlert("No Internet Found ! \nPlease Connect to the Internet"));
+                await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("No Internet Found ! \nPlease Connect to the Internet"));
             }
         }
     }
