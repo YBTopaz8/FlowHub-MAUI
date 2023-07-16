@@ -54,7 +54,6 @@ public partial class HomePageVM : ObservableObject
         await InitializeEverything();
 
         await SyncAndNotifyAsync();
-
     }
 
     private async Task InitializeEverything()
@@ -83,7 +82,7 @@ public partial class HomePageVM : ObservableObject
     {
         try
         {
-            await Task.WhenAll(debtRepo.SynchronizeDebtsAsync(), incomeRepo.SynchronizeIncomesAsync());
+            await Task.WhenAll(expenditureRepo.SynchronizeExpendituresAsync(), debtRepo.SynchronizeDebtsAsync(), incomeRepo.SynchronizeIncomesAsync());
 
             CancellationTokenSource cts = new();
             const ToastDuration duration = ToastDuration.Short;

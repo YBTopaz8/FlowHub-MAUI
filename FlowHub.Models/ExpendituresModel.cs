@@ -22,6 +22,7 @@ public class ExpendituresModel
     public ExpenditureCategory Category { get; set; } = ExpenditureCategory.None;
     public string? PlatformModel { get; set; }
     public bool UpdateOnSync { get; set; } = false;
+    public bool IsDeleted { get; set; }
     public string UserId { get; set; }
 }
 

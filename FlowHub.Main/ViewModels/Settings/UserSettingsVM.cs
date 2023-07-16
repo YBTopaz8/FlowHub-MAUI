@@ -127,9 +127,9 @@ public partial class UserSettingsVM : ObservableObject
     }
 
     [RelayCommand]
-    public async Task DeleteIdsCollection()
+    public void DeleteIdsCollection()
     {
-        await expService.DropCollectionIDsToDelete();
+        
     }
 
     [RelayCommand]

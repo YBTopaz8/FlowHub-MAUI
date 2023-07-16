@@ -2,17 +2,22 @@
 
 public partial class LoginVM : ObservableObject
 {
-    private readonly ISettingsServiceRepository settingsService;
-    private readonly IUsersRepository userService;
-    private readonly IExpendituresRepository expenditureService;
+    private readonly ISettingsServiceRepository settingsRepo;
+    private readonly IUsersRepository userRepo;
+    private readonly IExpendituresRepository expenditureRepo;
+    private readonly IIncomeRepository incomeRepo;
+    private readonly IDebtRepository debtRepo;
     private readonly CountryAndCurrencyCodes countryAndCurrency = new();
 
     readonly LoginNavs NavFunctions = new();
-    public LoginVM(ISettingsServiceRepository sessionServiceRepo, IUsersRepository userRepo, IExpendituresRepository expRepo)
+    public LoginVM(ISettingsServiceRepository sessionServiceRepository, IUsersRepository userRepository, IExpendituresRepository expRepository,
+                    IIncomeRepository incomeRepository, IDebtRepository debtRepository)
     {
-        settingsService = sessionServiceRepo;
-        userService = userRepo;
-        expenditureService = expRepo;
+        settingsRepo = sessionServiceRepository;
+        userRepo = userRepository;
+        expenditureRepo = expRepository;
+        incomeRepo = incomeRepository;
+        debtRepo= debtRepository;
     }
 
     [ObservableProperty]
@@ -65,13 +70,13 @@ public partial class LoginVM : ObservableObject
     {
         if (IsQuickLoginDetectionFilePresent())
         {
-            Username = await settingsService.GetPreference<string>("Username", null);
+            Username = await settingsRepo.GetPreference<string>("Username", null);
             if (Username is null)
             {
                 File.Delete(LoginDetectFile);
                 await PageLoaded();
             }
-            userId = await settingsService.GetPreference<string>(nameof(CurrentUser.Id), null);
+            userId = await settingsRepo.GetPreference<string>(nameof(CurrentUser.Id), null);
             IsQuickLoginVisible = true;
         }
         else
@@ -81,7 +86,7 @@ public partial class LoginVM : ObservableObject
             HasLoginRemembered = false;
             CountryNamesList = countryAndCurrency.GetCountryNames();
 
-            if (await userService.CheckIfAnyUserExists())
+            if (await userRepo.CheckIfAnyUserExists())
             {
                 CurrentUser.Id = userId;
                 if (userId is null)
@@ -93,7 +98,7 @@ public partial class LoginVM : ObservableObject
             }
             else
             {
-                await settingsService.ClearPreferences();
+                await settingsRepo.ClearPreferences();
                 HasLoginRemembered = false;
             }
         }
@@ -120,11 +125,11 @@ public partial class LoginVM : ObservableObject
         CurrentUser.UserCurrency = userCurrency;
         CurrentUser.PocketMoney = PocketMoney;
         CurrentUser.RememberLogin = true;
-        if (await userService.AddUserAsync(CurrentUser))
+        if (await userRepo.AddUserAsync(CurrentUser))
         {
-            await settingsService.SetPreference(nameof(CurrentUser.Id), CurrentUser.Id);
-            await settingsService.SetPreference("Username", CurrentUser.Username);
-            await settingsService.SetPreference(nameof(CurrentUser.UserCurrency), CurrentUser.UserCurrency);
+            await settingsRepo.SetPreference(nameof(CurrentUser.Id), CurrentUser.Id);
+            await settingsRepo.SetPreference("Username", CurrentUser.Username);
+            await settingsRepo.SetPreference(nameof(CurrentUser.UserCurrency), CurrentUser.UserCurrency);
 
             if (!File.Exists(LoginDetectFile))
             {
@@ -133,7 +138,7 @@ public partial class LoginVM : ObservableObject
 
             if (RegisterAccountOnline && Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
             {
-                if (await userService.AddUserOnlineAsync(CurrentUser))
+                if (await userRepo.AddUserOnlineAsync(CurrentUser))
                 {
                     await Shell.Current.DisplayAlert("User Registration", "Online Account Created !", "Ok");
                     await NavFunctions.GoToHomePage();
@@ -165,11 +170,11 @@ public partial class LoginVM : ObservableObject
 
         if (IsLoginOnlineButtonClicked)
         {
-            User = await userService.GetUserOnlineAsync(CurrentUser);
+            User = await userRepo.GetUserOnlineAsync(CurrentUser);
         }
         else
         {
-            User = await userService.GetUserAsync(CurrentUser.Email.Trim(), CurrentUser.Password);
+            User = await userRepo.GetUserAsync(CurrentUser.Email.Trim(), CurrentUser.Password);
         }
 
         if (User is null)
@@ -184,13 +189,12 @@ public partial class LoginVM : ObservableObject
                 File.Create(LoginDetectFile).Close();
             }
             CurrentUser = User;
-            userService.OfflineUser = await userService.GetUserAsync(CurrentUser.Id); //initialized user to be used by the entire app
-            await settingsService.SetPreference<string>(nameof(CurrentUser.Id), CurrentUser.Id);
-            await settingsService.SetPreference<string>("Username", CurrentUser.Username);
-            await settingsService.SetPreference<string>(nameof(CurrentUser.UserCurrency), CurrentUser.UserCurrency);
+            userRepo.OfflineUser = await userRepo.GetUserAsync(CurrentUser.Id); //initialized user to be used by the entire app
+            await settingsRepo.SetPreference<string>(nameof(CurrentUser.Id), CurrentUser.Id);
+            await settingsRepo.SetPreference<string>("Username", CurrentUser.Username);
+            await settingsRepo.SetPreference<string>(nameof(CurrentUser.UserCurrency), CurrentUser.UserCurrency);
 
-            await expenditureService.SynchronizeExpendituresAsync(CurrentUser.Email, CurrentUser.Password);
-
+            await SyncAndNotifyAsync();
             IsBusy = false;
 
             IsQuickLoginVisible = true;
@@ -203,12 +207,34 @@ public partial class LoginVM : ObservableObject
         if (File.Exists(LoginDetectFile))
         {
             IsQuickLoginVisible = false;
-            userService.OfflineUser = await userService.GetUserAsync(userId); //initialized user to be used by the entire app                                
+            userRepo.OfflineUser = await userRepo.GetUserAsync(userId); //initialized user to be used by the entire app                                
             await NavFunctions.GoToHomePage();
         }
         else
         {
             ShowQuickLoginErrorMessage = true;
+        }
+    }
+
+    private async Task SyncAndNotifyAsync()
+    {
+        try
+        {
+            await Task.WhenAll(expenditureRepo.SynchronizeExpendituresAsync(),debtRepo.SynchronizeDebtsAsync(), incomeRepo.SynchronizeIncomesAsync());
+
+            CancellationTokenSource cts = new();
+            const ToastDuration duration = ToastDuration.Short;
+            const double fontSize = 14;
+            string text = "All Synced Up !";
+            var toast = Toast.Make(text, duration, fontSize);
+            await toast.Show(cts.Token);
+        }
+        catch (AggregateException aEx)
+        {
+            foreach (var ex in aEx.InnerExceptions)
+            {
+                await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Error when syncing " + ex.Message));
+            }
         }
     }
 

@@ -8,7 +8,6 @@ public partial class HomePageM : ContentPage
         InitializeComponent();
         viewModel = vm;
         this.BindingContext = vm;
-        
     }
 
     bool _isInitialized;

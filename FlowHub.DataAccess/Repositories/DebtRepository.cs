@@ -99,7 +99,7 @@ public class DebtRepository : IDebtRepository
                 Debug.WriteLine($"Exception Message {ex.Message}");
             }
         }
-        var filtersDebt= Builders<DebtModel>.Filter.Eq("UserId", usersRepo.OfflineUser.Id) &
+        var filtersDebt= Builders<DebtModel>.Filter.Eq("UserId", usersRepo.OnlineUser.Id) &
             Builders<DebtModel>.Filter.Eq("Currency", usersRepo.OfflineUser.UserCurrency);
 
         AllDebtsOnline ??= DBOnline.GetCollection<DebtModel>(DebtsCollectionName);
@@ -167,7 +167,6 @@ public class DebtRepository : IDebtRepository
     }
     public async Task<bool> AddDebtAsync(DebtModel debt)
     {
-
         try
         {
             using (db = await OpenDB())
@@ -270,7 +269,6 @@ public class DebtRepository : IDebtRepository
         }
     }
 
-
     /* -- ---------------- Online Operations------------------ */
     async Task AddDebtOnlineAsync(DebtModel debtItem)
     {
@@ -295,5 +293,4 @@ public class DebtRepository : IDebtRepository
     {
         throw new NotImplementedException();
     }
-
 }
