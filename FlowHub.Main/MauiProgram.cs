@@ -18,7 +18,8 @@ public static class MauiProgram
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-	        }).UseMauiCommunityToolkit();
+	        })
+            .UseMauiCommunityToolkit();
 
         builder.ConfigureMauiHandlers(handlers =>
         {
@@ -29,6 +30,7 @@ public static class MauiProgram
             handlers.AddUraniumUIHandlers();
         });
 
+        
         /*----------------------- REGISTERING Repositories ------------------------------------------------------------------------*/
 
         builder.Services.AddSingleton<IExpendituresRepository, ExpendituresRepository>();

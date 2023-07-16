@@ -3,10 +3,56 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FlowHub.Main.Views.Mobile.Debts.ManageDebtsPageM"
              Title="Manage Debts Page">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+    <AbsoluteLayout>
+        <!-- The content of your page here. This could be any layout/view.-->
+        
+        <VerticalStackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+
+            <Label Text="Amount" />
+            <Entry Placeholder="Enter Amount" />
+
+            <Label Text="Currency" />
+            <Picker Title="Select Currency" />
+
+            <Label Text="Name" />
+            <Entry Placeholder="Enter Name" x:Name="contactName"/>
+
+            <Label Text="Contact" />
+            <Entry Placeholder="Enter Contact Number" />
+
+            <Label Text="Save Lender?" />
+            <CheckBox IsChecked="False"/>
+
+            <Label Text="Deadline" />
+            <DatePicker />
+
+            <Label Text="Amount Paid" />
+            <Entry Placeholder="Enter Amount Paid" />
+
+            <Label Text="Notes" />
+            <Editor Placeholder="Enter Notes" />
+
+            <HorizontalStackLayout>
+                <Button Text="Save"  HorizontalOptions="FillAndExpand"/>
+                <Button Text="Cancel" HorizontalOptions="FillAndExpand"/>
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+
+        <!-- Your FAB -->
+        <Button Clicked="OnFabClicked"
+                WidthRequest="50"
+                HeightRequest="50"
+                CornerRadius="26"
+                BackgroundColor="DarkSlateBlue"
+                BorderColor="DarkSlateBlue"
+                Text="+"
+                FontSize="23"
+                TextColor="White"
+                AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                Margin="0,0,20,20"
+                />
+    </AbsoluteLayout>
 </ContentPage>

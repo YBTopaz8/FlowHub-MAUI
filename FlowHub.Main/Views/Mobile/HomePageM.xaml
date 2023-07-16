@@ -76,5 +76,6 @@
         </VerticalStackLayout>
 
         <!-- End Section for Expenditure display-->
+
     </VerticalStackLayout>
 </ContentPage>
