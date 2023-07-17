@@ -14,7 +14,7 @@ public partial class UpSertIncomePopUp : Popup
         viewModel.PageLoaded();
 
 #if WINDOWS
-        this.Size = new Size(400, 350);
+        Size = new Size(400, 350);
 #endif
         viewModel.PropertyChanged += ViewModel_PropertyChanged;
     }

@@ -7,7 +7,7 @@ public partial class ManageMonthlyPlannedExpendituresPageM : ContentPage
 	{
 		InitializeComponent();
 		viewModel= vm;
-		this.BindingContext = vm;
+		BindingContext = vm;
     }
 
     protected override async void OnAppearing()

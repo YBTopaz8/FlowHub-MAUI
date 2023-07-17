@@ -2,12 +2,22 @@ namespace FlowHub.Main.Views.Mobile.Debts;
 
 public partial class ManageDebtsPageM : ContentPage
 {
-	public ManageDebtsPageM()
+    readonly ManageDebtsVM viewModel;
+
+    public ManageDebtsPageM(ManageDebtsVM vm)
 	{
 		InitializeComponent();
-	}
+        viewModel = vm;
+		BindingContext = vm;
+    }
     private async void OnFabClicked(object sender, EventArgs e)
     {
+
+    }
+
+    private async void OnContactClicked(object sender, EventArgs e)
+	{
+		/*
 		try
 		{
 			var status = await Permissions.CheckStatusAsync<Permissions.ContactsRead>();
@@ -21,14 +31,13 @@ public partial class ManageDebtsPageM : ContentPage
 			{
 				Debug.WriteLine("Contact not picked");
 			}
-			string namePrefix = PickedContact.NamePrefix is null ? PickedContact.GivenName
-				+ (PickedContact.MiddleName ?? "")
-				+ " " + PickedContact.FamilyName : PickedContact.FamilyName;
+
+			string namePrefix = PickedContact.DisplayName;
 			contactName.Text = namePrefix;
 		}
 		catch (Exception ex)
 		{
 			Debug.WriteLine("Permission denied "+ ex.Message);
-		}
+		}*/
     }
 }

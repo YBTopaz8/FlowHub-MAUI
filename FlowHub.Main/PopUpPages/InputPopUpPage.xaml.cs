@@ -26,13 +26,13 @@ public partial class InputPopUpPage : Popup
             InputAmount.IsVisible = true;
             InputAmount.Title = FieldsTitlesTextThenNumeric[1];
 
-            this.Size = new Size(300, 260);
+            Size = new Size(300, 260);
         }
         else if (GivenInputType.HasFlag(InputType.Numeric))
         {
             InputAmount.IsVisible = true;
             InputAmount.Title = FieldsTitlesTextThenNumeric[0];
-            this.Size = new Size(300, 200);
+            Size = new Size(300, 200);
         }
         else if (GivenInputType.HasFlag(InputType.Text))
         {

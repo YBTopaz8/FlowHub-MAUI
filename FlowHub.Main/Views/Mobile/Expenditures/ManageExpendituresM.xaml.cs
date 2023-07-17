@@ -10,10 +10,7 @@ public partial class ManageExpendituresM : ContentPage
     {
         InitializeComponent();
         viewModel = vm;
-        this.BindingContext = vm;
-
-        rotation = new Animation(v => SyncButton.Rotation = v,
-            0, 360, Easing.Linear);
+        BindingContext = vm;
 
         Microsoft.Maui.Handlers
             .DatePickerHandler.Mapper
@@ -28,27 +25,6 @@ public partial class ManageExpendituresM : ContentPage
 #endif
                 }
             });
-
-        viewModel.PropertyChanged += ViewModel_PropertyChanged;
-    }
-
-    private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(viewModel.IsBusy))
-        {
-            if (viewModel.IsBusy)
-            {
-                rotation.Commit(this, "RotateSyncButton", 16, 1000, Easing.Linear,
-                    (value , b) => SyncButton.Rotation = 0,
-                    () => true);
-                ColView.IsVisible = false;
-            }
-            else
-            {
-                this.AbortAnimation("RotateSyncButton");
-                ColView.IsVisible = true;
-            }
-        }
     }
 
     protected override async void OnAppearing()

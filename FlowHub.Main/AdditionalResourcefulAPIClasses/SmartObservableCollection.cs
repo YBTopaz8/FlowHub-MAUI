@@ -11,9 +11,9 @@ public class SmartObservableCollection<T> : ObservableCollection<T>
 		{
 			Items.Add(item);
 		}
-		this.OnPropertyChanged(new PropertyChangedEventArgs("Count"));
-		this.OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
-		this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+		OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+		OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+		OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 	}
 
 	public void Reset(IEnumerable<T> range)

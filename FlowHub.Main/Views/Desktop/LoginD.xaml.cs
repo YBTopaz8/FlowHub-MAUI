@@ -8,7 +8,7 @@ public partial class LoginD : ContentPage
     {
         InitializeComponent();
         viewModel = vm;
-        this.BindingContext = vm;
+        BindingContext = vm;
     }
     protected override async void OnAppearing()
     {

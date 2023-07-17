@@ -7,7 +7,7 @@ public partial class UpSertMonthlyPlannedExpPageM : ContentPage
 	{
 		InitializeComponent();
 		viewModel = vm;
-		this.BindingContext = vm;
+		BindingContext = vm;
 	//	Comments.Text = "";
 	}
 

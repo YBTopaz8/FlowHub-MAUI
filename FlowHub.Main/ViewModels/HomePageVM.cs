@@ -69,12 +69,20 @@ public partial class HomePageVM : ObservableObject
         var ListOfExp = await expenditureRepo.GetAllExpendituresAsync();
 
         LatestExpenditures = ListOfExp.Count != 0
-            ? ListOfExp.OrderByDescending(s => s.DateSpent).Take(5).ToObservableCollection()
+            ? ListOfExp
+            .Where(x => !x.IsDeleted)
+            .OrderByDescending(s => s.DateSpent)
+            .Take(5)
+            .ToObservableCollection()
             : new ObservableCollection<ExpendituresModel>();
 
         var ListOfInc = await incomeRepo.GetAllIncomesAsync();
         LatestIncomes = ListOfInc.Count != 0
-            ? ListOfInc.OrderByDescending(s => s.DateReceived).Take(5).ToObservableCollection()
+            ? ListOfInc
+            .Where(predicate: x => !x.IsDeleted)
+            .OrderByDescending(s => s.DateReceived)
+            .Take(5)
+            .ToObservableCollection()
             : new ObservableCollection<IncomeModel>();
     }
 

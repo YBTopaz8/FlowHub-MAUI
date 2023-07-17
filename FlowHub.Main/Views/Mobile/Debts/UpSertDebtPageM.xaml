@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlowHub.Main.Views.Mobile.Debts.UpSertDebtPageM"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"  
+             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
+             xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+             xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
+             xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Debts"
+             x:DataType="viewModels:UpSertDebtVM"
+             
+             Title="UpSertDebtPageM"
+             >
+    <VerticalStackLayout Margin="8">
+        <input:FormView Spacing="5" SubmitCommand="{Binding UpSertDebtCommand}">
+            <input:FormView.Resources>
+                <ResourceDictionary>
+                    <Style TargetType="material:TextField">
+                        <Setter Property="BorderColor" Value="DarkSlateBlue"/>
+                    </Style>
+                    <Style TargetType="material:EditorField">
+                        <Setter Property="BorderColor" Value="DarkSlateBlue"/>
+                    </Style>
+                    <Style TargetType="material:DatePickerField">
+                        <Setter Property="BorderColor" Value="DarkSlateBlue"/>
+                    </Style>
+                    <Style TargetType="material:PickerField">
+                        <Setter Property="BorderColor" Value="DarkSlateBlue"/>
+                    </Style>
+                </ResourceDictionary>
+            </input:FormView.Resources>
+
+            <HorizontalStackLayout RadioButtonGroup.GroupName="Debt" Spacing="5">
+
+                <RadioButton Content="Borrow"
+                             TextColor="White"
+                            IsChecked="{Binding IsBorrow}"/>
+                <RadioButton Content="Lend"                                       
+                            TextColor="White"                                      
+                            IsChecked="{Binding IsLent}"/>
+
+            </HorizontalStackLayout>
+            
+            <Grid ColumnSpacing="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <material:TextField Grid.Column="0" Title="Amount" x:Name="AmountTextField"
+                                    Text="{Binding SingleDebtDetails.Amount}" Focused="TextField_Focused"
+                                    Keyboard="Numeric">
+                    <validation:RequiredValidation/>
+                    
+                    <validation:MinValueValidation MinValue="0.1"/>
+                </material:TextField>
+                <Label Grid.Column="1" FontSize="18"
+                       FontAttributes="Bold"
+                       VerticalTextAlignment="Center"
+                       Text="{Binding SingleDebtDetails.Currency}"/>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                    
+                    <material:TextField x:Name="PersonName" Text="{Binding SingleDebtDetails.PersonOrOrganization.Name}">
+                        <validation:RequiredValidation/>
+                        <material:TextField.Triggers>
+                            <DataTrigger TargetType="material:TextField"
+                                         Binding="{Binding IsLent}" Value="true">
+                                <Setter Property="Title" Value="Flow Giver"/>
+                            </DataTrigger>
+                            <DataTrigger TargetType="material:TextField"
+                                         Binding="{Binding IsLent}" Value="false">
+                                <Setter Property="Title" Value="Flow Receiver"/>
+                            </DataTrigger>
+                        </material:TextField.Triggers>
+                    </material:TextField>
+                    
+                
+                <ImageButton Grid.Column="1" Source="user_icon_d"                             
+                             Clicked="ImageButton_Clicked"/>
+            </Grid>
+            <material:TextField Title="Phone Number"
+                                Text="{Binding SingleDebtDetails.PersonOrOrganization.PhoneNumber}"
+                                x:Name="PersonNumber"/>
+
+            <material:EditorField Title="Note"
+                                  Text="{Binding SingleDebtDetails.Notes}"
+                                  AccentColor="White"/>
+            
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <HorizontalStackLayout Grid.Column="0" Margin="6,0">
+                    <Label Text="Deadline" VerticalTextAlignment="Center"/>
+                    <Switch OnColor="DarkSlateBlue" ThumbColor="White" 
+                            
+                            x:Name="DeadlineSwitch"/>
+                </HorizontalStackLayout>
+                
+                <material:DatePickerField Grid.Column="1" Title="Deadline" MinimumDate="01/01/2022"
+                                          IsVisible="{Binding IsToggled, Source={x:Reference DeadlineSwitch}}"
+                                      Date="{Binding SingleDebtDetails.Deadline, StringFormat='{0:MMMM dd, yyyy}'}"/>
+            
+            </Grid>
+
+            <Button Text="Save" WidthRequest="80" HorizontalOptions="Center" 
+                    input:FormView.IsSubmitButton="True"
+                    />
+            <VerticalStackLayout>
+                
+            </VerticalStackLayout>
+        </input:FormView>
+    </VerticalStackLayout>
+</ContentPage>

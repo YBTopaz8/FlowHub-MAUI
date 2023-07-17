@@ -7,7 +7,7 @@ public partial class UpSertIncomePageM : ContentPage
 	{
 		InitializeComponent();
 		viewModel = vm;
-		this.BindingContext = vm;
+		BindingContext = vm;
 	}
 
     protected override void OnAppearing()

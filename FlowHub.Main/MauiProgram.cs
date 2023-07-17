@@ -30,7 +30,6 @@ public static class MauiProgram
             handlers.AddUraniumUIHandlers();
         });
 
-        
         /*----------------------- REGISTERING Repositories ------------------------------------------------------------------------*/
 
         builder.Services.AddSingleton<IExpendituresRepository, ExpendituresRepository>();
@@ -67,6 +66,9 @@ public static class MauiProgram
         builder.Services.AddSingleton<StatisticsPageVM>();
         builder.Services.AddSingleton<SingleMonthStatsPageVM>();
 
+        /*-- Section for Debts --*/
+        builder.Services.AddSingleton<ManageDebtsVM>();
+        builder.Services.AddSingleton<UpSertDebtVM>();
         /*------------------------REGISTERING DESKTOP VIEWS ----------------------------------------------------------------------------*/
 
         /*-- Section for HomePage AND Login --*/
@@ -117,6 +119,7 @@ public static class MauiProgram
 
         /* -- Section for Debts --*/
         builder.Services.AddSingleton<ManageDebtsPageM>();
+        builder.Services.AddSingleton<UpSertDebtPageM>();
         /*--------------------------------------------------------------------------------------------------------------------------------*/
         return builder.Build();
 	}

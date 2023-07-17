@@ -5,8 +5,6 @@ public partial class ManageIncomesVM : ObservableObject
     private readonly IIncomeRepository incomeService;
     private readonly IUsersRepository userService;
 
-    private readonly ManageIncomesNavs NavFunctions = new();
-
     public ManageIncomesVM(IIncomeRepository incomeRepository, IUsersRepository usersRepository)
     {
         incomeService = incomeRepository;
@@ -56,44 +54,6 @@ public partial class ManageIncomesVM : ObservableObject
         //FilterGetIncOfCurrentMonth();
         //await FilterGetAllIncomes();
     }
-
-    [RelayCommand]
-    public void FilterGetIncOfCurrentMonth()
-    {
-        try
-        {
-            IsBusy = true;
-            double totalAmountFromList = 0;
-            var incOfCurrentMonth = incomeService.OfflineIncomesList.FindAll(x => x.DateReceived.Month == DateTime.Today.Month)
-                .ToList();
-            if (incOfCurrentMonth?.Count > 0)
-            {
-                IsBusy = false;
-                IncomesList.Clear();
-                foreach (IncomeModel inc in incOfCurrentMonth)
-                {
-                    IncomesList.Add(inc);
-                    totalAmountFromList += inc.AmountReceived;
-                }
-                TotalAmount = totalAmountFromList;
-                TotalIncomes = IncomesList.Count;
-                IncTitle = $"Flow In For {DateTime.Now:MMM - yyyy}";
-            }
-            else
-            {
-                IsBusy = false;
-                IncomesList.Clear();
-                TotalIncomes = IncomesList.Count;
-                IncTitle = $"Flow Ins For {DateTime.Now:MMM - yyyy}";
-                TotalAmount = 0;
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception MESSAGE: {ex.Message}");
-        }
-    }
-
     bool IsLoaded;
     public void FilterGetAllIncomes()
     {
@@ -103,15 +63,7 @@ public partial class ManageIncomesVM : ObservableObject
             {
                 IsBusy = true;
                 IncTitle = "All Flow Ins";
-                var IncList = incomeService.OfflineIncomesList
-                    .Where(x => !x.IsDeleted )
-                    .OrderByDescending(x => x.DateReceived)
-                    .ToList();
-
-                IncomesList = new ObservableCollection<IncomeModel>(IncList);
-
-                TotalAmount = IncList.AsParallel().Sum(x => x.AmountReceived);
-                TotalIncomes = IncList.Count;
+                ApplyChanges();
 
                 IsLoaded = true;
             }
@@ -124,89 +76,20 @@ public partial class ManageIncomesVM : ObservableObject
 
     private void HandleIncomesListUpdated()
     {
+        ApplyChanges();
+    }
+
+    private void ApplyChanges()
+    {
         var IncList = incomeService.OfflineIncomesList
-            .Where(x => !x.IsDeleted)
-            .OrderByDescending(x => x.DateReceived)
-            .ToList();
+                    .Where(x => !x.IsDeleted)
+                    .OrderByDescending(x => x.DateReceived)
+                    .ToList();
         IncomesList = new ObservableCollection<IncomeModel>(IncList);
         OnPropertyChanged(nameof(IncomesList));
 
         TotalAmount = IncList.AsParallel().Sum(x => x.AmountReceived);
         TotalIncomes = IncList.Count;
-    }
-
-    [RelayCommand]
-    public void FilterGetIncOfToday()
-    {
-        try
-        {
-            IsBusy = true;
-            double totalAmountFromList = 0;
-            var incOfToday = incomeService.OfflineIncomesList.FindAll(x => x.DateReceived.Day == DateTime.Today.Day)
-                .ToList();
-            if (incOfToday?.Count > 0)
-            {
-                IsBusy = false;
-                IncomesList.Clear();
-                foreach (IncomeModel inc in incOfToday)
-                {
-                    IncomesList.Add(inc);
-                    totalAmountFromList += inc.AmountReceived;
-                }
-                TotalAmount = totalAmountFromList;
-                TotalIncomes = IncomesList.Count;
-                IncTitle = "Today's Flow Ins";
-            }
-            else
-            {
-                IsBusy = false;
-                IncomesList.Clear();
-                TotalIncomes = IncomesList.Count;
-                IncTitle = "Today's Flow Ins";
-                TotalAmount = 0;
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception MESSAGE: {ex.Message}");
-        }
-    }
-
-    [RelayCommand]
-    public void FilterGetIncOfSpecificMonth(DateTime specificDate)
-    {
-        try
-        {
-            IsBusy = true;
-            double totalAmountFromList = 0;
-            var incOfSpecificMonth = incomeService.OfflineIncomesList.FindAll(x => x.DateReceived.Month == specificDate.Month)
-                .ToList();
-            if (incOfSpecificMonth?.Count > 0)
-            {
-                IsBusy = false;
-                IncomesList.Clear();
-                foreach (IncomeModel inc in incOfSpecificMonth)
-                {
-                    IncomesList.Add(inc);
-                    totalAmountFromList += inc.AmountReceived;
-                }
-                TotalAmount = totalAmountFromList;
-                TotalIncomes = IncomesList.Count;
-                IncTitle = $"Flow In For {DateTime.Now:MMM - yyyy}";
-            }
-            else
-            {
-                IsBusy = false;
-                IncomesList.Clear();
-                TotalIncomes = IncomesList.Count;
-                IncTitle = $"Flow in For {DateTime.Now:MMM - yyyy}";
-                TotalAmount = 0;
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception MESSAGE: {ex.Message}");
-        }
     }
 
     [RelayCommand]
@@ -230,7 +113,7 @@ public partial class ManageIncomesVM : ObservableObject
     private async Task AddEditIncome(IncomeModel newIncome, string pageTitle, bool isAdd)
     {
         var newUpserIncomeVM = new UpSertIncomeVM(incomeService, userService,newIncome, pageTitle, isAdd, ActiveUser);
-        var UpSertResult = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new UpSertIncomePopUp(newUpserIncomeVM));
+        await Shell.Current.ShowPopupAsync(new UpSertIncomePopUp(newUpserIncomeVM));
     }
 
     [RelayCommand]

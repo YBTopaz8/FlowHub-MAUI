@@ -11,7 +11,7 @@ public partial class SingleMonthStatsPageM : ContentPage
 	{
 		InitializeComponent();
 		viewModel= vm;
-		this.BindingContext = vm;
+		BindingContext = vm;
 	}
 
     protected override void OnAppearing()

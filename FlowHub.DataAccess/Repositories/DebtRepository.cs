@@ -22,7 +22,7 @@ public class DebtRepository : IDebtRepository
     {
         this.dataAccess = dataAccess;
         this.onlineRepository = onlineRepository;
-        this.usersRepo = userRepo;
+        usersRepo = userRepo;
     }
 
     async Task<LiteDatabaseAsync> OpenDB()

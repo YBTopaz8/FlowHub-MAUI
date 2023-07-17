@@ -7,7 +7,7 @@ public partial class UserSettingsPageM
 	{
 		InitializeComponent();
 		viewModel = vm;
-		this.BindingContext= viewModel;
+		BindingContext= viewModel;
 	}
 
     protected override void OnAppearing()

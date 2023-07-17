@@ -2,13 +2,14 @@
 
 public partial class UpSertExpenditureVM : ObservableObject
 {
-    private readonly IExpendituresRepository _expenditureService;
-    private readonly IUsersRepository userService;
+    readonly IExpendituresRepository expenditureRepo;
+    readonly IUsersRepository userRepo;
 
-    public UpSertExpenditureVM(IExpendituresRepository expendituresRepository, IUsersRepository usersRepository, ExpendituresModel singleExpendituresDetails, string pageTitle, bool isAdd, UsersModel activeUser)
+    public UpSertExpenditureVM(IExpendituresRepository expendituresRepository, IUsersRepository usersRepository, ExpendituresModel singleExpendituresDetails,
+                                string pageTitle, bool isAdd, UsersModel activeUser)
     {
-        _expenditureService = expendituresRepository;
-        userService = usersRepository;
+        expenditureRepo = expendituresRepository;
+        userRepo = usersRepository;
         SingleExpenditureDetails = singleExpendituresDetails;
         PageTitle = pageTitle;
         IsAdd = isAdd;
@@ -73,6 +74,8 @@ public partial class UpSertExpenditureVM : ObservableObject
         CancellationTokenSource cancellationTokenSource = new();
         const ToastDuration duration = ToastDuration.Short;
 
+        SingleExpenditureDetails.UpdatedDateTime = DateTime.UtcNow;
+        SingleExpenditureDetails.PlatformModel = DeviceInfo.Current.Model;
         if (SingleExpenditureDetails.Id is not null)
         {
             await UpdateExpenditureAsync(14, cancellationTokenSource, duration);
@@ -88,21 +91,14 @@ public partial class UpSertExpenditureVM : ObservableObject
     private async Task UpdateExpenditureAsync(double fontsize, CancellationTokenSource tokenSource, ToastDuration toastDuration)
     {
         double difference = TotalAmountSpent - _initialExpenditureAmount;
-
         var FinalTotalExp = _initialTotalExpAmount - difference;
-
-        SingleExpenditureDetails.UpdatedDateTime = DateTime.UtcNow;
-
-        SingleExpenditureDetails.UpdateOnSync = true;
         SingleExpenditureDetails.AmountSpent = TotalAmountSpent;
-        SingleExpenditureDetails.PlatformModel = DeviceInfo.Current.Model;
 
-        if (!await _expenditureService.UpdateExpenditureAsync(SingleExpenditureDetails))
+        if (!await expenditureRepo.UpdateExpenditureAsync(SingleExpenditureDetails))
         {
             return;
         }
 
-        await _expenditureService.GetAllExpendituresAsync();
         await UpdateUserAsync(FinalTotalExp);
 
         const string toastNotifMessage = "Flow Out Updated";
@@ -114,20 +110,17 @@ public partial class UpSertExpenditureVM : ObservableObject
 
     private async Task<bool> AddExpenditureAsync(double fontSize, CancellationTokenSource tokenSource, ToastDuration toastDuration)
     {
+        SingleExpenditureDetails.Id = Guid.NewGuid().ToString();
         SingleExpenditureDetails.Currency = ActiveUser.UserCurrency;
         SingleExpenditureDetails.AmountSpent = TotalAmountSpent;
-        SingleExpenditureDetails.Id = Guid.NewGuid().ToString();
         SingleExpenditureDetails.AddedDateTime = DateTime.UtcNow;
-        SingleExpenditureDetails.UserId = userService.OfflineUser.UserIDOnline;
-        SingleExpenditureDetails.UpdatedDateTime = DateTime.UtcNow;
-        SingleExpenditureDetails.PlatformModel = DeviceInfo.Current.Model;
+        SingleExpenditureDetails.UserId = userRepo.OfflineUser.UserIDOnline;
 
-        if (!await _expenditureService.AddExpenditureAsync(SingleExpenditureDetails))
+        if (!await expenditureRepo.AddExpenditureAsync(SingleExpenditureDetails))
         {
             return false;
         }
 
-        await _expenditureService.GetAllExpendituresAsync();
         await UpdateUserAsync(TotalAmountSpent);
 
         const string toastNotifMessage = "Flow Out Added";
@@ -141,7 +134,7 @@ public partial class UpSertExpenditureVM : ObservableObject
         ActiveUser.TotalExpendituresAmount += ExpAmountSpent;
         ActiveUser.PocketMoney = ResultingBalance;
         ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
-        await userService.UpdateUserAsync(ActiveUser);
+        await userRepo.UpdateUserAsync(ActiveUser);
     }
 
     [RelayCommand]
@@ -178,8 +171,8 @@ public partial class UpSertExpenditureVM : ObservableObject
             {
                 ActiveUser.PocketMoney = amount;
                 ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
-                userService.OfflineUser = ActiveUser;
-                await userService.UpdateUserAsync(ActiveUser);
+                userRepo.OfflineUser = ActiveUser;
+                await userRepo.UpdateUserAsync(ActiveUser);
 
                 CancellationTokenSource cancellationTokenSource = new();
                 const ToastDuration duration = ToastDuration.Short;

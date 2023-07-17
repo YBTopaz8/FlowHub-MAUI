@@ -16,5 +16,4 @@ public interface IExpendituresRepository
     Task SynchronizeExpendituresAsync();
 
     Task DropExpendituresCollection();
-
 }

@@ -38,7 +38,7 @@ public partial class UpSertExpendituresPopUp : Popup
 
         //        Size = new Size(popupWidth, popupHeight);
 #if WINDOWS
-        this.Size = new Size(400, 420);
+        Size = new Size(400, 420);
 #endif
         viewModel.PropertyChanged += ViewModel_PropertyChanged;
 	}

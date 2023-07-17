@@ -7,7 +7,7 @@ public partial class HomePageD : ContentPage
     {
         InitializeComponent();
         viewModel = vm;
-        this.BindingContext = vm;
+        BindingContext = vm;
     }
     bool _isInitialized;
     protected override async void OnAppearing()

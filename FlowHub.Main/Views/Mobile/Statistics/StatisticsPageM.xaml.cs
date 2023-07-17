@@ -10,7 +10,7 @@ public partial class StatisticsPageM
 	{
 		InitializeComponent();
 		viewModel = vm;
-		this.BindingContext = vm;
+		BindingContext = vm;
 	}
 
     protected override void OnAppearing()

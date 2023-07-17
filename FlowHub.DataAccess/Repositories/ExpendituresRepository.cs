@@ -14,7 +14,6 @@ public class ExpendituresRepository : IExpendituresRepository
     public event Action OfflineExpendituresListChanged;
 
     private IMongoCollection<ExpendituresModel> AllOnlineExpenditures;
-    private IMongoCollection<IDsToBeDeleted> AllOnlineIDsToBeDeleted;
 
     ILiteCollectionAsync<ExpendituresModel> AllExpenditures;
 
@@ -23,7 +22,6 @@ public class ExpendituresRepository : IExpendituresRepository
     private readonly IOnlineCredentialsRepository onlineDataAccessRepo;
 
     private const string expendituresDataCollectionName = "Expenditures";
-    private const string IDsDataCollectionName = "IDsToDelete";
 
     public ExpendituresRepository(IDataAccessRepo dataAccess, IOnlineCredentialsRepository onlineRepository, IUsersRepository userRepo)
     {
@@ -48,18 +46,19 @@ public class ExpendituresRepository : IExpendituresRepository
         }
         try
         {
-            using (db = await OpenDB())
-            {
+            await OpenDB();
+
                 string userId = usersRepo.OfflineUser.Id;
                 string userCurrency = usersRepo.OfflineUser.UserCurrency;
                 if (usersRepo.OfflineUser.UserIDOnline != string.Empty)
                 {
                     userId = usersRepo.OfflineUser.UserIDOnline;
                 }
-                OfflineExpendituresList = await AllExpenditures.Query().Where(x => x.UserId == userId && x.Currency == userCurrency).ToListAsync();
+                OfflineExpendituresList = await AllExpenditures.Query()
+                .Where(x => x.UserId == userId && x.Currency == userCurrency).ToListAsync();
 
-                return OfflineExpendituresList;
-            }
+            db.Dispose();
+            return OfflineExpendituresList;
         }
         catch (Exception ex)
         {
@@ -179,8 +178,8 @@ public class ExpendituresRepository : IExpendituresRepository
     {
         try
         {
-            using (db = await OpenDB())                ;
-            {
+            await OpenDB();
+
                 if (await AllExpenditures.InsertAsync(expenditure) is not null)
                 {
                     OfflineExpendituresList.Add(expenditure);
@@ -201,16 +200,11 @@ public class ExpendituresRepository : IExpendituresRepository
                     Debug.WriteLine("Error while inserting Expenditure");
                 }
                 return false;
-            }
         }
         catch (Exception ex)
         {
             Debug.WriteLine("Add ExpLocal "+ ex.InnerException.Message);
             return false;
-        }
-        finally
-        {
-            db.Dispose();
         }
     }
 
@@ -239,14 +233,12 @@ public class ExpendituresRepository : IExpendituresRepository
                 else
                 {
                     Debug.WriteLine("Failed to update Expenditure");
-                    db.Dispose();
                     return false;
                 }
             }
         }
         catch (Exception ex)
         {
-            db.Dispose();
             Debug.WriteLine(ex.Message);
             return false;
         }
@@ -276,14 +268,12 @@ public class ExpendituresRepository : IExpendituresRepository
                 else
                 {
                     Debug.WriteLine("Failed to delete Expenditure");
-                    db.Dispose();
                     return false;
                 }
             }
         }
         catch (Exception ex)
         {
-            db.Dispose();
             Debug.WriteLine(ex.Message);
             return false;
         }

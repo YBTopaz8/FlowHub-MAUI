@@ -7,7 +7,7 @@ public partial class ManageIncomesD : ContentPage
 	{
 		InitializeComponent();
 		viewModel = vm;
-		this.BindingContext = vm;
+		BindingContext = vm;
         viewModel.PageLoaded();
     }
     protected override void OnAppearing()

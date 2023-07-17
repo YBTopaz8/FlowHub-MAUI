@@ -10,7 +10,7 @@ public partial class LoginM : ContentPage
     {
         InitializeComponent();
         viewModel = vm;
-        this.BindingContext = vm;
+        BindingContext = vm;
 
         //to remove picker's underline
 

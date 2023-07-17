@@ -77,10 +77,7 @@
                         ToolTipProperties.Text="Click to Save to PDF" 
                         Clicked="ExportToPDFImageButton_Clicked"/>
             <ProgressBar IsVisible="false" x:Name="PrintProgressBarIndic" ProgressColor="DarkSlateBlue" WidthRequest="50"/>
-            <ImageButton Source="{AppThemeBinding Dark=sync_icon_d.png, Light=sync_icon_l.png}" 
-                         HeightRequest="55"
-                         x:Name="SyncButton"
-                         Command="{Binding SyncExpTestCommand}"/>
+            
 
             <ImageButton x:Name="pie_chart" Source="{AppThemeBinding Dark=pie_chart.png, Light=pie_chart_l.png}" 
                          HeightRequest="55"
