@@ -21,7 +21,7 @@ public partial class StatisticsPageM
         if (!viewModel.IsLoaded)
         {
             viewModel.PageLoaded();
-            YearPicker.SelectedItem = DateTime.Now.Year.ToString();
+            YearPicker.SelectedItem = DateTime.Now.Year;//.ToString();
         }
     }
     protected override void OnDisappearing()

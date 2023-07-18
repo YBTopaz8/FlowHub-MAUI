@@ -108,7 +108,7 @@ public class IncomeRepository : IIncomeRepository
             Builders<IncomeModel>.Filter.Eq("Currency", usersRepo.OfflineUser.UserCurrency);
 
         AllIncomesOnline ??= DBOnline?.GetCollection<IncomeModel>(incomesDataCollectionName);
-
+       
         OnlineIncomesList = await AllIncomesOnline.Find(filtersIncome).ToListAsync();
     }
 

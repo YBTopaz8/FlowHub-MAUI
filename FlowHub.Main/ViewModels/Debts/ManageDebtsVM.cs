@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlowHub.Main.Utilities.BottomSheet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,15 +28,18 @@ public partial class ManageDebtsVM : ObservableObject
     int totalBorrowed;
     [ObservableProperty]
     UsersModel activeUser;
+    [ObservableProperty]
+    DebtModel singleDebtDetails;
 
     bool IsLoaded;
-    public void GetAllDebts()
+    public void PageLoaded()
     {
         try
         {
-            if (IsLoaded)
+            if (!IsLoaded)
             {
                 ApplyChanges();
+                IsLoaded = true;
             }
         }
         catch (Exception ex)
@@ -48,7 +52,7 @@ public partial class ManageDebtsVM : ObservableObject
     public async Task GoToAddDebtAsync()
     {
         var navParams = new Dictionary<string, object>()
-        {
+        {            
             {"SingleDebtDetails", new DebtModel()
             {
               Amount = 0,
@@ -61,6 +65,16 @@ public partial class ManageDebtsVM : ObservableObject
         await Shell.Current.GoToAsync(nameof(UpSertDebtPageM),true, navParams);
     }
 
+    public bool IsDeadlineSet
+    {
+        get => SingleDebtDetails.Deadline.HasValue;
+    }
+    [RelayCommand]
+    public async Task ViewDebtSheet(DebtModel debt)
+    {
+        SingleDebtDetails = debt;
+        var s = await Drawer.Open(new EditDebtBottomSheet(this));
+    }
     private void ApplyChanges()
     {
         List<DebtModel> debtList = new();
@@ -71,6 +85,22 @@ public partial class ManageDebtsVM : ObservableObject
 
         TotalBorrowed = debtList.Count(x => x.DebtType == DebtType.Borrowed);//.Sum(x => x.Amount);
         TotalLent = debtList.Count(x => x.DebtType == DebtType.Lent);//.Sum(x => x.Amount);
+    }
+
+    [RelayCommand]
+    void OpenPhoneDialer()
+    {
+        try
+        {
+            if (PhoneDialer.Default.IsSupported)
+            {
+                PhoneDialer.Default.Open(SingleDebtDetails.PersonOrOrganization.PhoneNumber);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception when opening phone dialer MESSAGE : {ex.Message}");
+        }
     }
 
     private void HandleDebtsListUpdated()

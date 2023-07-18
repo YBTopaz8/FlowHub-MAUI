@@ -11,7 +11,7 @@
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Debts"
              x:DataType="viewModels:UpSertDebtVM"
-             
+             BackgroundColor="#F0F0F0"
              Title="UpSertDebtPageM"
              >
     <VerticalStackLayout Margin="8">
@@ -33,13 +33,14 @@
                 </ResourceDictionary>
             </input:FormView.Resources>
 
-            <HorizontalStackLayout RadioButtonGroup.GroupName="Debt" Spacing="5">
-
+            <HorizontalStackLayout RadioButtonGroup.GroupName="Debt" Spacing="5"
+                                   HorizontalOptions="Center">
+                
                 <RadioButton Content="Borrow"
-                             TextColor="White"
+                             
                             IsChecked="{Binding IsBorrow}"/>
                 <RadioButton Content="Lend"                                       
-                            TextColor="White"                                      
+                                                                 
                             IsChecked="{Binding IsLent}"/>
 
             </HorizontalStackLayout>
@@ -75,17 +76,17 @@
                         <material:TextField.Triggers>
                             <DataTrigger TargetType="material:TextField"
                                          Binding="{Binding IsLent}" Value="true">
-                                <Setter Property="Title" Value="Flow Giver"/>
+                                <Setter Property="Title" Value="Flow Receiver"/>
                             </DataTrigger>
                             <DataTrigger TargetType="material:TextField"
                                          Binding="{Binding IsLent}" Value="false">
-                                <Setter Property="Title" Value="Flow Receiver"/>
+                                <Setter Property="Title" Value="Flow Giverasdasd"/>
                             </DataTrigger>
                         </material:TextField.Triggers>
                     </material:TextField>
-                    
-                
-                <ImageButton Grid.Column="1" Source="user_icon_d"                             
+
+
+                <ImageButton Grid.Column="1" Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}"                             
                              Clicked="ImageButton_Clicked"/>
             </Grid>
             <material:TextField Title="Phone Number"
@@ -94,7 +95,7 @@
 
             <material:EditorField Title="Note"
                                   Text="{Binding SingleDebtDetails.Notes}"
-                                  AccentColor="White"/>
+                                  />
             
             <Grid>
                 <Grid.ColumnDefinitions>

@@ -66,7 +66,7 @@ public partial class UpSertDebtVM : ObservableObject
 
     public void PageLoaded()
     {
-
+        IsBorrow = true;
     }
 
     [RelayCommand]

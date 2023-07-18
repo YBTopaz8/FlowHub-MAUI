@@ -33,6 +33,7 @@ public class ExpendituresRepository : IExpendituresRepository
     async Task<LiteDatabaseAsync> OpenDB()
     {
         db = dataAccessRepo.GetDb();
+        
         AllExpenditures = db.GetCollection<ExpendituresModel>(expendituresDataCollectionName);
         await AllExpenditures.EnsureIndexAsync(x => x.Id);
         return db;
@@ -111,6 +112,16 @@ public class ExpendituresRepository : IExpendituresRepository
             Builders<ExpendituresModel>.Filter.Eq("Currency", usersRepo.OfflineUser.UserCurrency);
 
         AllOnlineExpenditures = DBOnline.GetCollection<ExpendituresModel>(expendituresDataCollectionName);
+        try
+        {
+            var updateDef = Builders<ExpendituresModel>.Update.Unset("UpdateOnSync");
+            var filterExp = Builders<ExpendituresModel>.Filter.Empty;
+            await AllOnlineExpenditures.UpdateManyAsync(filterExp, updateDef);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("Exception : " + ex.Message);
+        }
         OnlineExpendituresList = await AllOnlineExpenditures.Find(filtersExpenditures).ToListAsync();
     }
 
@@ -136,33 +147,43 @@ public class ExpendituresRepository : IExpendituresRepository
             Dictionary<string, ExpendituresModel> OnlineExpendituresDict = OnlineExpendituresList.ToDictionary(x => x.Id, x => x);
             Dictionary<string, ExpendituresModel> OfflineExpendituresDict = OfflineExpendituresList.ToDictionary(x => x.Id, x => x);
 
-            foreach (var itemID in OfflineExpendituresDict.Keys.Intersect(OnlineExpendituresDict.Keys))
-            {
-                var offlineItem = OfflineExpendituresDict[itemID];
-                var onlineItem = OnlineExpendituresDict[itemID];
-
-                if (offlineItem.UpdatedDateTime > offlineItem.UpdatedDateTime)
+            await OpenDB();
+            
+                using var transs = db.BeginTransactionAsync();
+                foreach (var itemID in OfflineExpendituresDict.Keys.Intersect(OnlineExpendituresDict.Keys))
                 {
-                    await UpdateExpenditureOnlineAsync(offlineItem);
+                    var offlineItem = OfflineExpendituresDict[itemID];
+                    var onlineItem = OnlineExpendituresDict[itemID];
+
+                    if (offlineItem.UpdatedDateTime > onlineItem.UpdatedDateTime)
+                    {
+                        await UpdateExpenditureOnlineAsync(offlineItem);
+                    }
+                    else if (offlineItem.UpdatedDateTime < onlineItem.UpdatedDateTime)
+                    {
+                        //await UpdateExpenditureAsync(onlineItem);
+                        AllExpenditures.UpdateAsync(onlineItem.Id, onlineItem);
+                        Debug.WriteLine("UpdateExpenditureAsync");
+                    }
                 }
-                else if (offlineItem.UpdatedDateTime < offlineItem.UpdatedDateTime)
+
+                foreach (var itemID in OfflineExpendituresDict.Keys.Except(OnlineExpendituresDict.Keys))
                 {
-                    await UpdateExpenditureAsync(onlineItem);
+                    await AddExpenditureOnlineAsync(OfflineExpendituresDict[itemID]);
+                    OnlineExpendituresList.Add(OfflineExpendituresDict[itemID]);
                 }
-            }
 
-            foreach (var itemID in OfflineExpendituresDict.Keys.Except(OnlineExpendituresDict.Keys))
-            {
-                await AddExpenditureOnlineAsync(OfflineExpendituresDict[itemID]);
-                OnlineExpendituresList.Add(OfflineExpendituresDict[itemID]);
-            }
+                foreach (var itemID in OnlineExpendituresDict.Keys.Except(OfflineExpendituresDict.Keys))
+                {
+                    //await AddExpenditureAsync(OnlineExpendituresDict[itemID]);
+                    AllExpenditures.InsertAsync(OnlineExpendituresDict[itemID]);
+                    OfflineExpendituresList.Add(OnlineExpendituresDict[itemID]);
+                    Debug.WriteLine("AddExpenditureAsync");
+                }
 
-            foreach (var itemID in OnlineExpendituresDict.Keys.Except(OfflineExpendituresDict.Keys))
-            {
-                await AddExpenditureAsync(OnlineExpendituresDict[itemID]);
-                OfflineExpendituresList.Remove(OnlineExpendituresDict[itemID]);
-            }
+                await db.CommitAsync();
 
+            db.Dispose();
             await usersRepo.UpdateUserOnlineGetSetLatestValues(usersRepo.OfflineUser);
             IsSyncing = false;
             IsBatchUpdate = false;
@@ -170,6 +191,7 @@ public class ExpendituresRepository : IExpendituresRepository
         }
         catch (Exception ex)
         {
+            await db.RollbackAsync();
             Debug.WriteLine("Exception Message : " + ex.Message);
         }
     }
@@ -214,6 +236,7 @@ public class ExpendituresRepository : IExpendituresRepository
         {
             using (db = await OpenDB())
             {
+                
                 if (await AllExpenditures.UpdateAsync(expenditure))
                 {
                     Debug.WriteLine("Expenditure updated locally");

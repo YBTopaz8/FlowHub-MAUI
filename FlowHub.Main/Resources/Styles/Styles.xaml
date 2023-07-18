@@ -28,7 +28,7 @@
     </Style>
 
     <Style TargetType="Button">
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource White}}" />
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SaveBtnColor}, Dark={StaticResource SaveBtnColor}}" />
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
         <Setter Property="FontSize" Value="15"/>
@@ -309,7 +309,7 @@
 
     <Style TargetType="Switch">
         <Setter Property="OnColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
-        <Setter Property="ThumbColor" Value="{StaticResource White}" />
+        <Setter Property="ThumbColor" Value="{AppThemeBinding Light={StaticResource BackGroundLight},Dark={StaticResource White}}" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -359,6 +359,9 @@
         <Setter Property="Padding" Value="0"/>
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}" />
     </Style>
+    <Style TargetType="ContentPage">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackGroundLight}}"/>
+    </Style>
 
     <Style TargetType="Shell" ApplyToDerivedTypes="True">
         <Setter Property="Shell.BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}" />
@@ -397,7 +400,7 @@
     <Style TargetType="material:CheckBox">
         <Setter Property="Color" Value="DarkSlateBlue"/>
         <Setter Property="IconColor" Value="DarkSlateBlue"/>
-        <Setter Property="BorderColor" Value="DarkSlateBlue"/>
-        
+        <Setter Property="BorderColor" Value="DarkSlateBlue"/>        
     </Style>
+
 </ResourceDictionary>

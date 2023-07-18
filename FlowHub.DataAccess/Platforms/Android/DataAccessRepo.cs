@@ -12,6 +12,7 @@ public class DataAccessRepo : IDataAccessRepo
         path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SavingTracker.db");
         // string path = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments).AbsolutePath;
         db = new LiteDatabaseAsync(path);
+        
         return db;
     }
 }

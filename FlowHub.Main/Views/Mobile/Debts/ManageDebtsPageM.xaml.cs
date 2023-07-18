@@ -10,9 +10,13 @@ public partial class ManageDebtsPageM : ContentPage
         viewModel = vm;
 		BindingContext = vm;
     }
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+		viewModel.PageLoaded();
+    }
     private async void OnFabClicked(object sender, EventArgs e)
     {
-
     }
 
     private async void OnContactClicked(object sender, EventArgs e)

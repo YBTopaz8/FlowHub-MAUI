@@ -31,3 +31,10 @@ public enum DebtType
     Borrowed, // User has borrowed money (owes money)
     Lent      // User has lent money (is owed money)
 }
+
+public class PersonOrOrganizationModel
+{
+    public string Name { get; set; }
+    public string? PhoneNumber { get; set; }
+    public string? Email { get; set; }
+}

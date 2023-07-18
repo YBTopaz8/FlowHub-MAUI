@@ -7,12 +7,14 @@
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Debts"
              x:DataType="viewModels:ManageDebtsVM"
              x:Name="Page"
-             Title="Flow Holds">
+             Title="Flow Holds"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}">
 
     <AbsoluteLayout>
         <!-- The content of your page here. This could be any layout/view.-->
         
-        <VerticalStackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+        <VerticalStackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All"
+                             Margin="8,3">
 
             <CollectionView ItemsSource="{Binding DebtsList}">
                 <CollectionView.EmptyView>
@@ -27,10 +29,13 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:DebtModel">
                         <VerticalStackLayout>
+                            <VerticalStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={x:Reference Page}, Path=BindingContext.ViewDebtSheetCommand}"
+                                                      CommandParameter="{Binding .}"/>
+                            </VerticalStackLayout.GestureRecognizers>
                             <Label Text="{Binding DebtType}"/>
                             <Label Text="{Binding Amount}"/>
                             <Label Text="{Binding PersonOrOrganization.Name}"/>
-                            <Label Text="{Binding PersonOrOrganization.PhoneNumber}"/>
                             <BoxView HeightRequest="2" Color="DarkSlateBlue"/>
                         </VerticalStackLayout>
                     </DataTemplate>
@@ -49,6 +54,7 @@
                 BackgroundColor="DarkSlateBlue"
                 BorderColor="DarkSlateBlue"
                 Text="+"
+                TextColor="White"
                 FontSize="40"
                 AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize"
                 AbsoluteLayout.LayoutFlags="PositionProportional"
