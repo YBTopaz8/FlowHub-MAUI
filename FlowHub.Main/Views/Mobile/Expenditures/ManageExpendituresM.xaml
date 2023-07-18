@@ -8,7 +8,7 @@
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Expenditures"
              x:DataType="viewModels:ManageExpendituresVM"             
              x:Name="Page"
-             BackgroundColor="#F0F0F0"
+             BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark={StaticResource BackGroundDark}}"
              >
     <!--<ContentPage.ToolbarItems>
         <ToolbarItem IconImageSource="filter_d" Command="{Binding ShowFilterPopUpPageCommand}" />
@@ -16,8 +16,8 @@
     <AbsoluteLayout>
     
     <toolkit:DockLayout Margin="5,0" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
-        <Label toolkit:DockLayout.DockPosition="Top" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,5">            
-            <Label.Text>
+            <Label toolkit:DockLayout.DockPosition="Top" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" >
+                <Label.Text>
                 <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
                     <Binding Path="UserPocketMoney"/>
                     <Binding Path="UserCurrency"/>
@@ -75,15 +75,16 @@
             <CollectionView.GroupHeaderTemplate>
                 <DataTemplate x:DataType="viewModels:DateGroup">
                     <Label Text="{Binding Date, StringFormat='{0:ddd, MMMM dd, yyyy}'}" 
-                           BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=DarkSlateBlue}"
-                           TextColor="white"
-                           FontAttributes="Bold" FontSize="12" Padding="10,3"/>
+                           BackgroundColor="{AppThemeBinding Dark={StaticResource BorderDark}, Light=DarkSlateBlue}"
+                           TextColor="{StaticResource Secondary}" 
+                           FontAttributes="Bold,Italic" FontSize="12" Padding="10,3"/>
                 </DataTemplate>
             </CollectionView.GroupHeaderTemplate>
             <CollectionView.GroupFooterTemplate>
                 <DataTemplate x:DataType="viewModels:DateGroup">
                     <Label FontAttributes="Bold"
-                           FontSize="13" Margin="10,5" HorizontalOptions="End">
+                           FontSize="12" Margin="10,5" HorizontalOptions="End"
+                           Opacity="0.5">
                         <Label.Text>
                             <MultiBinding StringFormat="{}{0} Flows, Total : {1:n2} {2}">
                                 <Binding Path="TotalCount"/>
@@ -126,9 +127,11 @@
                                     
                                 <FlexLayout JustifyContent="SpaceBetween" Direction="Row" Margin="10,5">
                                     <VerticalStackLayout>
-                                        <Label Text="{Binding Reason}" FontAttributes="Bold"/>
+                                        <Label Text="{Binding Reason}" FontAttributes="Bold"
+                                               TextColor="{StaticResource WildBlueYonder}"/>
 
-                                        <Label Text="{Binding Category}" Margin="0,0" FontAttributes="Italic"/>
+                                        <Label Text="{Binding Category}" TextColor="{StaticResource Secondary}"
+                                               Margin="0,0" FontAttributes="Italic"/>
                                     </VerticalStackLayout>
                                     <Label FontAttributes="Bold" VerticalTextAlignment="Center">
                                         <Label.Text>

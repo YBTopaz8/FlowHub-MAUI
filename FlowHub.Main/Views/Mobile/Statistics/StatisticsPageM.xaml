@@ -178,8 +178,10 @@
                         </Grid.ColumnDefinitions>
 
                         <StackLayout Grid.Column="0">
-                            <Label Text="{Binding Reason}" FontAttributes="Bold"/>
-                            <Label Text="{Binding Category}" FontSize="10" FontAttributes="Italic"/>
+                            <Label Text="{Binding Reason}" TextColor="{StaticResource WildBlueYonder}"
+                                   FontAttributes="Bold"/>
+                            <Label Text="{Binding Category}" TextColor="{StaticResource Secondary}"
+                                   FontSize="10" FontAttributes="Italic"/>
                         </StackLayout>
 
                         <StackLayout Grid.Column="1" HorizontalOptions="End">
@@ -193,7 +195,7 @@
                             </Label>
                             <Label Text="{Binding DateSpent, StringFormat='{0:MM/dd/yyyy}'}" FontSize="10"
                                    HorizontalTextAlignment="End" FontAttributes="Italic"
-                                   />
+                                   Opacity="0.7"/>
                         </StackLayout>
                     </Grid>
                     

@@ -12,8 +12,9 @@
     <ContentPage.ToolbarItems>
         <!--<ToolbarItem IconImageSource="filter_d" Command="{Binding ShowFilterPopUpPageCommand}"/>-->
     </ContentPage.ToolbarItems>
-    <toolkit:DockLayout>
-        <Label toolkit:DockLayout.DockPosition="Top" FontSize="21" FontAttributes="Bold" HorizontalOptions="Center">
+    <toolkit:DockLayout Margin="5,0">
+        <Label toolkit:DockLayout.DockPosition="Top" FontSize="20" 
+               FontAttributes="Bold" HorizontalOptions="Center">
             <Label.GestureRecognizers>
                 <TapGestureRecognizer NumberOfTapsRequired="2" Tapped="TapGestureRecognizer_Tapped"/>
             </Label.GestureRecognizers>

@@ -112,16 +112,16 @@ public class ExpendituresRepository : IExpendituresRepository
             Builders<ExpendituresModel>.Filter.Eq("Currency", usersRepo.OfflineUser.UserCurrency);
 
         AllOnlineExpenditures = DBOnline.GetCollection<ExpendituresModel>(expendituresDataCollectionName);
-        try
-        {
-            var updateDef = Builders<ExpendituresModel>.Update.Unset("UpdateOnSync");
-            var filterExp = Builders<ExpendituresModel>.Filter.Empty;
-            await AllOnlineExpenditures.UpdateManyAsync(filterExp, updateDef);
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine("Exception : " + ex.Message);
-        }
+        //try 
+        //{ CODE TO REMOVE A FIELD FROM ONLINE
+        //    var updateDef = Builders<ExpendituresModel>.Update.Unset("UpdateOnSync");
+        //    var filterExp = Builders<ExpendituresModel>.Filter.Empty;
+        //    await AllOnlineExpenditures.UpdateManyAsync(filterExp, updateDef);
+        //}
+        //catch (Exception ex)
+        //{
+        //    Debug.WriteLine("Exception : " + ex.Message);
+        //}
         OnlineExpendituresList = await AllOnlineExpenditures.Find(filtersExpenditures).ToListAsync();
     }
 

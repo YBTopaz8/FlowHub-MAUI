@@ -6,7 +6,7 @@
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Debts"
              x:DataType="viewModels:ManageDebtsVM"
-             BackgroundColor="#F0F9FF"
+             BackgroundColor="{AppThemeBinding Light=#F0F9FF}"
              >
     <VerticalStackLayout Spacing="2">
         <VerticalStackLayout.Resources>
@@ -16,31 +16,21 @@
                 </Style>
             </ResourceDictionary>
         </VerticalStackLayout.Resources>
-        <HorizontalStackLayout >
-            
-            <Label Text="Flow Holds Details" HorizontalTextAlignment="Center"
-               TextColor="DarkSlateBlue"
-               FontSize="23" FontAttributes="Bold"/>
-            
-        </HorizontalStackLayout>
-        <ImageButton Source="{AppThemeBinding Light=phone_l, Dark=phone_d}" HorizontalOptions="End"
-                     Command="{Binding OpenPhoneDialerCommand}" HeightRequest="30"
-                         ToolTipProperties.Text="Open Dialer"/>
-        <Rectangle Fill="DarkSlateBlue" HeightRequest="2" Margin="0,0,0,10"/>
-        
-        <Label FontSize="19" HorizontalOptions="Center" Margin="0,0,0,10"
-               FontAttributes="Bold">
+
+        <Label FontSize="21" HorizontalOptions="CenterAndExpand"
+               FontAttributes="Bold" Margin="0,0,0,10"
+               TextColor="{StaticResource CeruleanBlue}">
             <Label.Triggers>
                 <DataTrigger TargetType="Label"
                             Binding="{Binding SingleDebtDetails.DebtType}" Value="Lent">
                     <Setter Property="Text" >
                         <Setter.Value>
-                        <MultiBinding StringFormat="{} {0} Owes You {1} {2}">
-                            <Binding Path="SingleDebtDetails.PersonOrOrganization.Name"/>
-                            <Binding Path="SingleDebtDetails.Amount"/>
-                            <Binding Path="SingleDebtDetails.Currency"/>
-                        </MultiBinding>
-                    </Setter.Value>
+                            <MultiBinding StringFormat="{} {0} Owes You {1} {2}">
+                                <Binding Path="SingleDebtDetails.PersonOrOrganization.Name"/>
+                                <Binding Path="SingleDebtDetails.Amount"/>
+                                <Binding Path="SingleDebtDetails.Currency"/>
+                            </MultiBinding>
+                        </Setter.Value>
                     </Setter>
                 </DataTrigger>
                 <DataTrigger TargetType="Label"
@@ -48,23 +38,25 @@
                              Value="Borrowed">
                     <Setter Property="Text">
                         <Setter.Value>
-                        <MultiBinding StringFormat="{} You Owe {0} {1} {2}">
-                            <Binding Path="SingleDebtDetails.PersonOrOrganization.Name"/>
-                            <Binding Path="SingleDebtDetails.Amount"/>
-                            <Binding Path="SingleDebtDetails.Currency"/>
-                        </MultiBinding>
-                    </Setter.Value>
+                            <MultiBinding StringFormat="{} You Owe {0} {1} {2}">
+                                <Binding Path="SingleDebtDetails.PersonOrOrganization.Name"/>
+                                <Binding Path="SingleDebtDetails.Amount"/>
+                                <Binding Path="SingleDebtDetails.Currency"/>
+                            </MultiBinding>
+                        </Setter.Value>
                     </Setter>
                 </DataTrigger>
             </Label.Triggers>
         </Label>
+        <Rectangle Fill="{StaticResource CeruleanBlue}" HeightRequest="2" Margin="0,0,0,10"/>
+        
         <FlexLayout JustifyContent="SpaceBetween" Margin="3,0">
             <VerticalStackLayout Spacing="8">
                 <VerticalStackLayout.Resources>
                     <ResourceDictionary>
                         <Style TargetType="Label">
                             <Setter Property="FontSize" Value="16"/>
-
+                            <Setter Property="TextColor" Value="White"/>
                         </Style>
                     </ResourceDictionary>
                 </VerticalStackLayout.Resources>
@@ -88,7 +80,10 @@
                     <ResourceDictionary>
                         <Style TargetType="Label">
                             <Setter Property="FontSize" Value="16"/>
-                            <Setter Property="HorizontalTextAlignment" Value="End"/>
+                            <Setter Property="FontAttributes" Value="Bold"/>
+                            <Setter Property="TextColor" Value="{StaticResource WildBlueYonder}"/>
+                            
+                            <Setter Property="HorizontalOptions" Value="End"/>
                         </Style>
                     </ResourceDictionary>
                 </VerticalStackLayout.Resources>
@@ -106,20 +101,20 @@
                     <Label.Triggers>
                         <DataTrigger TargetType="Label"
                             Binding="{Binding SingleDebtDetails.DebtType}" Value="Lent">
-                            <Setter Property="Text" Value="Owes Money"/>
+                            <Setter Property="Text" Value="Flow In"/>
                         </DataTrigger>
                         
                         <DataTrigger TargetType="Label"
                              Binding="{Binding SingleDebtDetails.DebtType}" 
                              Value="Borrowed">
-                            <Setter Property="Text" Value="Owe Money"/>
+                            <Setter Property="Text" Value="Flow Out"/>
                         </DataTrigger>
                     </Label.Triggers>
                 </Label>
 
                 <Label Text="{Binding SingleDebtDetails.PersonOrOrganization.Name}"/>
-                
-                <Label Text="{Binding SingleDebtDetails.Deadline}">
+
+                <Label Text="{Binding SingleDebtDetails.Deadline, StringFormat='{0:ddd, MMM dd, yyyy}'}" >
                     <Label.Triggers>
                         <DataTrigger TargetType="Label"
                                      Binding="{Binding IsDeadlineSet}" Value="False">
@@ -147,7 +142,11 @@
             
             
         </FlexLayout>
-        
-        
+
+
+        <ImageButton Source="{AppThemeBinding Light=phone_l, Dark=phone_dsb}" HorizontalOptions="Center" 
+                     Command="{Binding OpenPhoneDialerCommand}" HeightRequest="40" 
+                     
+                     ToolTipProperties.Text="Launch A Phone Call"/>
     </VerticalStackLayout>
 </base:DrawerView>

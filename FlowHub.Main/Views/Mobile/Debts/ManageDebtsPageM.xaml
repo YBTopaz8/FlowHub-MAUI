@@ -8,8 +8,13 @@
              x:DataType="viewModels:ManageDebtsVM"
              x:Name="Page"
              Title="Flow Holds"
+             xmlns:utilities="clr-namespace:FlowHub.Main.Utilities"
              BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}">
-
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <utilities:DateToDueDateStringConverter x:Key="DueDateConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <AbsoluteLayout>
         <!-- The content of your page here. This could be any layout/view.-->
         
@@ -28,16 +33,52 @@
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:DebtModel">
-                        <VerticalStackLayout>
-                            <VerticalStackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={x:Reference Page}, Path=BindingContext.ViewDebtSheetCommand}"
+                        
+                            <VerticalStackLayout Margin="10,8" Spacing="5">
+                                <VerticalStackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={x:Reference Page}, Path=BindingContext.ViewDebtSheetCommand}"
                                                       CommandParameter="{Binding .}"/>
-                            </VerticalStackLayout.GestureRecognizers>
-                            <Label Text="{Binding DebtType}"/>
-                            <Label Text="{Binding Amount}"/>
-                            <Label Text="{Binding PersonOrOrganization.Name}"/>
-                            <BoxView HeightRequest="2" Color="DarkSlateBlue"/>
-                        </VerticalStackLayout>
+                                </VerticalStackLayout.GestureRecognizers>
+                                <Label HorizontalOptions="Center"
+                                   TextColor="White"
+                                   FontSize="16"
+                                   FontAttributes="Bold">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label"
+                                        Binding="{Binding DebtType}" Value="Borrowed">
+                                            <Setter Property="Text">
+                                                <Setter.Value>
+                                                    <MultiBinding StringFormat="{} {0} Owes You : {1} {2}">
+                                                        <Binding Path="PersonOrOrganization.Name"/>
+                                                        <Binding Path="Amount"/>
+                                                        <Binding Path="Currency"/>
+                                                    </MultiBinding>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                    <Label.Text>
+                                        <MultiBinding StringFormat="{} You Owe {1} {2} To {0}">
+                                            <Binding Path="PersonOrOrganization.Name"/>
+                                            <Binding Path="Amount"/>
+                                            <Binding Path="Currency"/>
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
+                                <FlexLayout JustifyContent="SpaceBetween">
+                                <HorizontalStackLayout>
+                                    <Image Source="phone_d" HeightRequest="13"/>
+                                    <Label Text="{Binding PersonOrOrganization.PhoneNumber}"
+                                       TextColor="{StaticResource WildBlueYonder}"/>
+                                </HorizontalStackLayout>
+                                    
+                                    <Label Text="{Binding Deadline, Converter={StaticResource DueDateConverter}}"
+                                       TextColor="{StaticResource WildBlueYonder}"/>
+                                </FlexLayout>
+                                <Line HeightRequest="0.2" BackgroundColor="DarkSlateBlue"/>
+
+                            </VerticalStackLayout>                        
+                        
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

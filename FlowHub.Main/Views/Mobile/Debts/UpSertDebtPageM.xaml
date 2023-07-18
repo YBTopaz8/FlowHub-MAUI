@@ -11,7 +11,7 @@
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Debts"
              x:DataType="viewModels:UpSertDebtVM"
-             BackgroundColor="#F0F0F0"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}"
              Title="UpSertDebtPageM"
              >
     <VerticalStackLayout Margin="8">

@@ -61,7 +61,7 @@ public partial class BaseDrawer : PopUpSheet
 
         y = baseY;
         ypan = 0;
-        pgBottomSheet.TranslateTo(0, baseY, 500, Easing.CubicOut);
+        pgBottomSheet.TranslateTo(0, baseY, 400, Easing.CubicOut); //change opening speed here
         await Task.Delay(300);
         ChangeBorder(baseY == 0);
     }
@@ -70,7 +70,7 @@ public partial class BaseDrawer : PopUpSheet
     {
         pgBottomSheet.CancelAnimations();
         Close(obj);
-        await pgBottomSheet.TranslateTo(0, screenHeight + 50, 500, Easing.CubicOut);
+        await pgBottomSheet.TranslateTo(0, screenHeight + 50, 400, Easing.CubicOut);
         y = pgBottomSheet.TranslationY;
         pgContentScroll.HeightRequest = sizeScroll;
     }
