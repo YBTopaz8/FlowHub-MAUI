@@ -52,7 +52,7 @@ public partial class ManageDebtsVM : ObservableObject
     public async Task GoToAddDebtAsync()
     {
         var navParams = new Dictionary<string, object>()
-        {            
+        {
             {"SingleDebtDetails", new DebtModel()
             {
               Amount = 0,

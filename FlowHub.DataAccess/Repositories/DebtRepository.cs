@@ -49,6 +49,7 @@ public class DebtRepository : IDebtRepository
                     .Where(x => x.UserId == userId)
                     .OrderByDescending(x => x.UpdateDateTime)
                     .ToListAsync();
+                OfflineDebtList ??= Enumerable.Empty<DebtModel>().ToList();
                 return OfflineDebtList;
             }
         }

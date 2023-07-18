@@ -15,7 +15,7 @@ public class IncomeRepository : IIncomeRepository
     readonly IUsersRepository usersRepo;
     readonly IOnlineCredentialsRepository onlineDataAccessRepo;
 
-    private const string incomesDataCollectionName = "Incomes";
+    private const string incomesDataCollectionName = "IncomesCollection";
 
     bool IsBatchUpdate;
     public event Action OfflineIncomesListChanged;
@@ -50,17 +50,20 @@ public class IncomeRepository : IIncomeRepository
             {
                 userId = usersRepo.OfflineUser.UserIDOnline;
             }
+            
             OfflineIncomesList = await AllIncomes.Query()
                 .Where(x => x.UserId == userId)
                 .OrderByDescending(x => x.UpdatedDateTime)
                 .ToListAsync();
             db.Dispose();
+            OfflineIncomesList ??= Enumerable.Empty<IncomeModel>().ToList();
             return OfflineIncomesList;
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
-            return Enumerable.Empty<IncomeModel>().ToList();
+            OfflineIncomesList ??= Enumerable.Empty<IncomeModel>().ToList();
+            return OfflineIncomesList;
         }
     }
 
@@ -107,8 +110,8 @@ public class IncomeRepository : IIncomeRepository
         var filtersIncome = Builders<IncomeModel>.Filter.Eq("UserId", usersRepo.OnlineUser.Id) &
             Builders<IncomeModel>.Filter.Eq("Currency", usersRepo.OfflineUser.UserCurrency);
 
-        AllIncomesOnline ??= DBOnline?.GetCollection<IncomeModel>(incomesDataCollectionName);
-       
+        AllIncomesOnline ??= DBOnline?.GetCollection<IncomeModel>("Incomes");
+
         OnlineIncomesList = await AllIncomesOnline.Find(filtersIncome).ToListAsync();
     }
 

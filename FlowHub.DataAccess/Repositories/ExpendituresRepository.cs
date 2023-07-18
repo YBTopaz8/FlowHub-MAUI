@@ -33,7 +33,7 @@ public class ExpendituresRepository : IExpendituresRepository
     async Task<LiteDatabaseAsync> OpenDB()
     {
         db = dataAccessRepo.GetDb();
-        
+
         AllExpenditures = db.GetCollection<ExpendituresModel>(expendituresDataCollectionName);
         await AllExpenditures.EnsureIndexAsync(x => x.Id);
         return db;
@@ -59,7 +59,9 @@ public class ExpendituresRepository : IExpendituresRepository
                 .Where(x => x.UserId == userId && x.Currency == userCurrency).ToListAsync();
 
             db.Dispose();
+            OfflineExpendituresList ??= Enumerable.Empty<ExpendituresModel>().ToList();
             return OfflineExpendituresList;
+
         }
         catch (Exception ex)
         {
@@ -148,7 +150,7 @@ public class ExpendituresRepository : IExpendituresRepository
             Dictionary<string, ExpendituresModel> OfflineExpendituresDict = OfflineExpendituresList.ToDictionary(x => x.Id, x => x);
 
             await OpenDB();
-            
+
                 using var transs = db.BeginTransactionAsync();
                 foreach (var itemID in OfflineExpendituresDict.Keys.Intersect(OnlineExpendituresDict.Keys))
                 {
@@ -236,7 +238,7 @@ public class ExpendituresRepository : IExpendituresRepository
         {
             using (db = await OpenDB())
             {
-                
+
                 if (await AllExpenditures.UpdateAsync(expenditure))
                 {
                     Debug.WriteLine("Expenditure updated locally");
