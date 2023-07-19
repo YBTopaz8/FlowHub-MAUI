@@ -18,7 +18,7 @@ public partial class UpSertExpenditureVM : ObservableObject
     }
 
     [ObservableProperty]
-    ExpendituresModel singleExpenditureDetails = new(){ DateSpent = DateTime.Now };
+    ExpendituresModel singleExpenditureDetails = new() { DateSpent = DateTime.Now };
 
     [ObservableProperty]
     string _pageTitle;

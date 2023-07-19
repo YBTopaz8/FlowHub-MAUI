@@ -14,7 +14,7 @@ public partial class HomePageD : ContentPage
     {
         base.OnAppearing();
 
-        if(!_isInitialized)
+        if (!_isInitialized)
         {
             await viewModel.DisplayInfo();
             _isInitialized = true;

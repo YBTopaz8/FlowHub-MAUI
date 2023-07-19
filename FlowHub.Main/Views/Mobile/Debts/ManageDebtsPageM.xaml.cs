@@ -5,23 +5,23 @@ public partial class ManageDebtsPageM : ContentPage
     readonly ManageDebtsVM viewModel;
 
     public ManageDebtsPageM(ManageDebtsVM vm)
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
         viewModel = vm;
-		BindingContext = vm;
+        BindingContext = vm;
     }
     protected override void OnAppearing()
     {
         base.OnAppearing();
-		viewModel.PageLoaded();
+        viewModel.PageLoaded();
     }
     private async void OnFabClicked(object sender, EventArgs e)
     {
     }
 
     private async void OnContactClicked(object sender, EventArgs e)
-	{
-		/*
+    {
+        /*
 		try
 		{
 			var status = await Permissions.CheckStatusAsync<Permissions.ContactsRead>();

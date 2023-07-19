@@ -12,7 +12,7 @@ public class PlannedExpendituresRepository : IPlannedExpendituresRepository
     private IMongoCollection<IDsToBeDeleted> AllOnlineIDsToBeDeleted;
 
     List<PlannedExpendituresModel> OnlinePlannedExpList { get; set; }
-    public List<PlannedExpendituresModel> OfflinePlannedExpendituresList { get ; set ; }
+    public List<PlannedExpendituresModel> OfflinePlannedExpendituresList { get; set; }
 
     private readonly IDataAccessRepo dataAccessRepo;
     private readonly IUsersRepository usersRepo;

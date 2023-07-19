@@ -2,13 +2,13 @@ namespace FlowHub.Main.Views.Desktop.Expenditures;
 
 public partial class ManageExpendituresPageD : ContentPage
 {
-	readonly ManageExpendituresVM viewModel;
+    readonly ManageExpendituresVM viewModel;
     readonly Animation rotation;
     public ManageExpendituresPageD(ManageExpendituresVM vm)
-	{
-		InitializeComponent();
-		viewModel = vm;
-		BindingContext = vm;
+    {
+        InitializeComponent();
+        viewModel = vm;
+        BindingContext = vm;
     }
 
     protected override async void OnAppearing()

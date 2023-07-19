@@ -8,7 +8,7 @@ public class ManageIncomesNavs
     }
     public async Task FromUpsertIncToManageIncome(Dictionary<string, object> navParams)
     {
-       await Shell.Current.GoToAsync(nameof(ManageIncomesM), true, navParams);
+        await Shell.Current.GoToAsync(nameof(ManageIncomesM), true, navParams);
     }
     public static async Task ReturnOnce()
     {

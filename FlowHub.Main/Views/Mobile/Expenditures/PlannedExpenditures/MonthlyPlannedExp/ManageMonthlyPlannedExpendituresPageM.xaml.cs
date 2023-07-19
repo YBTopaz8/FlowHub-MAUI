@@ -2,12 +2,12 @@ namespace FlowHub.Main.Views.Mobile.Expenditures.PlannedExpenditures.MonthlyPlan
 
 public partial class ManageMonthlyPlannedExpendituresPageM : ContentPage
 {
-	private ManageMonthlyMonthlyPlannedExpendituresVM viewModel;
-	public ManageMonthlyPlannedExpendituresPageM(ManageMonthlyMonthlyPlannedExpendituresVM vm)
-	{
-		InitializeComponent();
-		viewModel= vm;
-		BindingContext = vm;
+    private ManageMonthlyMonthlyPlannedExpendituresVM viewModel;
+    public ManageMonthlyPlannedExpendituresPageM(ManageMonthlyMonthlyPlannedExpendituresVM vm)
+    {
+        InitializeComponent();
+        viewModel = vm;
+        BindingContext = vm;
     }
 
     protected override async void OnAppearing()
@@ -32,8 +32,8 @@ public partial class ManageMonthlyPlannedExpendituresPageM : ContentPage
             }
         }
     }
-    List<List<ExpendituresModel>> ListOfExps { get;set; }
-    List<string> ListOfTitles { get;set; }
+    List<List<ExpendituresModel>> ListOfExps { get; set; }
+    List<string> ListOfTitles { get; set; }
     private void ColView_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         ListOfExps = new();

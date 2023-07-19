@@ -2,14 +2,14 @@
 
 public partial class App : Application
 {
-	public App()
-	{
-		InitializeComponent();
+    public App()
+    {
+        InitializeComponent();
 #if ANDROID
         MainPage = new AppShellMobile();
 #elif WINDOWS
 
-		MainPage = new AppShell();
+        MainPage = new AppShell();
 #endif
     }
 

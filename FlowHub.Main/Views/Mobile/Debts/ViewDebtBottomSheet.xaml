@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <base:DrawerView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FlowHub.Main.Views.Mobile.Debts.EditDebtBottomSheet"
+             x:Class="FlowHub.Main.Views.Mobile.Debts.ViewDebtBottomSheet"
              xmlns:base="clr-namespace:FlowHub.Main.Utilities.BottomSheet"
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Debts"
@@ -19,7 +19,7 @@
 
         <Label FontSize="21" HorizontalOptions="CenterAndExpand"
                FontAttributes="Bold" Margin="0,0,0,10"
-               TextColor="{StaticResource CeruleanBlue}">
+               TextColor="{StaticResource Cyan200Accent}">
             <Label.Triggers>
                 <DataTrigger TargetType="Label"
                             Binding="{Binding SingleDebtDetails.DebtType}" Value="Lent">
@@ -48,7 +48,7 @@
                 </DataTrigger>
             </Label.Triggers>
         </Label>
-        <Rectangle Fill="{StaticResource CeruleanBlue}" HeightRequest="2" Margin="0,0,0,10"/>
+        <Rectangle Fill="{StaticResource Cyan200Accent}" HeightRequest="2" Margin="0,0,0,10"/>
         
         <FlexLayout JustifyContent="SpaceBetween" Margin="3,0">
             <VerticalStackLayout Spacing="8">
@@ -73,6 +73,7 @@
                 </Label>
                 <Label Text="Flow Completion : "/>
                 <Label Text="Contact : "/>
+                <Label Text="Notes : "/>
             </VerticalStackLayout>
 
             <VerticalStackLayout Spacing="8">
@@ -133,20 +134,22 @@
                         <DataTrigger TargetType="Label"
                              Binding="{Binding SingleDebtDetails.IsPaidCompletely}" 
                              Value="False">
-                            <Setter Property="Text" Value="Not Yet Completed"/>
+                            <Setter Property="Text" Value="Pending"/>
                         </DataTrigger>
                     </Label.Triggers>
                 </Label>
                 <Label Text="{Binding SingleDebtDetails.PersonOrOrganization.PhoneNumber}"/>
+                <Label Text="{Binding SingleDebtDetails.Notes}"/>
             </VerticalStackLayout>
             
             
         </FlexLayout>
 
-
         <ImageButton Source="{AppThemeBinding Light=phone_l, Dark=phone_dsb}" HorizontalOptions="Center" 
-                     Command="{Binding OpenPhoneDialerCommand}" HeightRequest="40" 
-                     
+                     Command="{Binding OpenPhoneDialerCommand}" HeightRequest="40"                      
                      ToolTipProperties.Text="Launch A Phone Call"/>
+        <ImageButton Source="{AppThemeBinding Dark=delete_d, Light=delete_l}" HorizontalOptions="End"
+                        Command="{Binding DeleteDebtCommand}" HeightRequest="25" 
+                        ToolTipProperties.Text="Delete This Debt"/>
     </VerticalStackLayout>
 </base:DrawerView>

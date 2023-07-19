@@ -12,7 +12,7 @@
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Debts"
              x:DataType="viewModels:UpSertDebtVM"
              BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}"
-             Title="UpSertDebtPageM"
+             Title="Flow Hold Details"
              >
     <VerticalStackLayout Margin="8">
         <input:FormView Spacing="5" SubmitCommand="{Binding UpSertDebtCommand}">
@@ -34,15 +34,14 @@
             </input:FormView.Resources>
 
             <HorizontalStackLayout RadioButtonGroup.GroupName="Debt" Spacing="5"
+                                   RadioButtonGroup.SelectedValue="{Binding IsBorrow}"
                                    HorizontalOptions="Center">
-                
-                <RadioButton Content="Borrow"
-                             
-                            IsChecked="{Binding IsBorrow}"/>
-                <RadioButton Content="Lend"                                       
-                                                                 
+                <RadioButton Content="Lend"                      
                             IsChecked="{Binding IsLent}"/>
 
+                <RadioButton Content="Borrow"                             
+                            IsChecked="{Binding IsBorrow}"/>
+                
             </HorizontalStackLayout>
             
             <Grid ColumnSpacing="5">
@@ -80,7 +79,7 @@
                             </DataTrigger>
                             <DataTrigger TargetType="material:TextField"
                                          Binding="{Binding IsLent}" Value="false">
-                                <Setter Property="Title" Value="Flow Giverasdasd"/>
+                                <Setter Property="Title" Value="Flow Giver"/>
                             </DataTrigger>
                         </material:TextField.Triggers>
                     </material:TextField>
@@ -104,15 +103,16 @@
                 </Grid.ColumnDefinitions>
                 <HorizontalStackLayout Grid.Column="0" Margin="6,0">
                     <Label Text="Deadline" VerticalTextAlignment="Center"/>
-                    <Switch OnColor="DarkSlateBlue" ThumbColor="White" 
-                            
-                            x:Name="DeadlineSwitch"/>
+                    <Switch OnColor="DarkSlateBlue" ThumbColor="White"                             
+                            x:Name="DeadlineSwitch"
+                            IsToggled="{Binding HasDeadLine}">
+
+                    </Switch>
                 </HorizontalStackLayout>
                 
                 <material:DatePickerField Grid.Column="1" Title="Deadline" MinimumDate="01/01/2022"
                                           IsVisible="{Binding IsToggled, Source={x:Reference DeadlineSwitch}}"
-                                      Date="{Binding SingleDebtDetails.Deadline, StringFormat='{0:MMMM dd, yyyy}'}"/>
-            
+                                      Date="{Binding SingleDebtDetails.Deadline, StringFormat='{0:MMMM dd, yyyy}'}"/>            
             </Grid>
 
             <Button Text="Save" WidthRequest="80" HorizontalOptions="Center" 

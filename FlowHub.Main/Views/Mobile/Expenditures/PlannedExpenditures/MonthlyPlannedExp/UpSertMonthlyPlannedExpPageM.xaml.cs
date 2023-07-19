@@ -2,27 +2,27 @@ namespace FlowHub.Main.Views.Mobile.Expenditures.PlannedExpenditures.MonthlyPlan
 
 public partial class UpSertMonthlyPlannedExpPageM : ContentPage
 {
-	private readonly UpSertMonthlyPlannedExpVM viewModel;
-	public UpSertMonthlyPlannedExpPageM(UpSertMonthlyPlannedExpVM vm)
-	{
-		InitializeComponent();
-		viewModel = vm;
-		BindingContext = vm;
-	//	Comments.Text = "";
-	}
+    private readonly UpSertMonthlyPlannedExpVM viewModel;
+    public UpSertMonthlyPlannedExpPageM(UpSertMonthlyPlannedExpVM vm)
+    {
+        InitializeComponent();
+        viewModel = vm;
+        BindingContext = vm;
+        //	Comments.Text = "";
+    }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
-		viewModel.PageLoadedCommand.Execute(null);
-	//	CommentCheck.IsChecked = viewModel.HasComment;
+        viewModel.PageLoadedCommand.Execute(null);
+        //	CommentCheck.IsChecked = viewModel.HasComment;
     }
 
     private void CommentCheck_CheckChanged(object sender, EventArgs e)
     {
-		//if (!CommentCheck.IsChecked)
-		//{
-		//	viewModel.SingleExpenditureDetails.Comment = "None";
-		//}
+        //if (!CommentCheck.IsChecked)
+        //{
+        //	viewModel.SingleExpenditureDetails.Comment = "None";
+        //}
     }
 }

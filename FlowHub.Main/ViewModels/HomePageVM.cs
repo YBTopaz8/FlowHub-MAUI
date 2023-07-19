@@ -11,7 +11,6 @@ public partial class HomePageVM : ObservableObject
     private readonly IUsersRepository userService;
     public readonly IIncomeRepository incomeRepo;
     private readonly IDebtRepository debtRepo;
-    private readonly HomePageNavs NavFunction = new();
 
     public HomePageVM(IExpendituresRepository expendituresRepository, ISettingsServiceRepository settingsServiceRepo,
                     IUsersRepository usersRepository, IIncomeRepository incomeRepository,
@@ -47,7 +46,7 @@ public partial class HomePageVM : ObservableObject
     public double pocketMoney;
 
     [ObservableProperty]
-    private UsersModel activeUser = new ();
+    private UsersModel activeUser = new();
 
     public async Task DisplayInfo()
     {
@@ -84,6 +83,7 @@ public partial class HomePageVM : ObservableObject
             .Take(5)
             .ToObservableCollection()
             : new ObservableCollection<IncomeModel>();
+        await debtRepo.GetAllDebtAsync();
     }
 
     private async Task SyncAndNotifyAsync()

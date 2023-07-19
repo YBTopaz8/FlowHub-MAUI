@@ -2,9 +2,9 @@ namespace FlowHub.Main.Views.Mobile.Settings;
 
 public partial class ApplicationSettingsPageM
 {
-	public ApplicationSettingsPageM()
-	{
-		InitializeComponent();
+    public ApplicationSettingsPageM()
+    {
+        InitializeComponent();
     }
 
     private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)

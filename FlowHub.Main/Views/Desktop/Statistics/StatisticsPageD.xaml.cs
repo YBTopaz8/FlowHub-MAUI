@@ -4,11 +4,11 @@ public partial class StatisticsPageD : ContentPage
 {
     readonly StatisticsPageVM viewModel;
     public StatisticsPageD(StatisticsPageVM vm)
-	{
-		InitializeComponent();
-		viewModel = vm;
-		BindingContext = vm;
-	}
+    {
+        InitializeComponent();
+        viewModel = vm;
+        BindingContext = vm;
+    }
 
     protected override void OnAppearing()
     {

@@ -19,6 +19,8 @@ public partial class UpSertDebtVM : ObservableObject
 
     [ObservableProperty]
     string pageTitle;
+    [ObservableProperty]
+    bool hasDeadLine;
 
     bool isLent;
     bool isBorrow;
@@ -66,7 +68,8 @@ public partial class UpSertDebtVM : ObservableObject
 
     public void PageLoaded()
     {
-        IsBorrow = true;
+        DebtType = SingleDebtDetails.DebtType;
+        HasDeadLine = SingleDebtDetails.Deadline is not null;
     }
 
     [RelayCommand]
@@ -95,7 +98,7 @@ public partial class UpSertDebtVM : ObservableObject
         SingleDebtDetails.Id = Guid.NewGuid().ToString();
         SingleDebtDetails.AddedDateTime = DateTime.UtcNow;
 
-        if(!await debtRepo.AddDebtAsync(SingleDebtDetails))
+        if (!await debtRepo.AddDebtAsync(SingleDebtDetails))
         {
             return;
         }

@@ -5,14 +5,15 @@ public partial class UpSertDebtPageM : ContentPage
     private readonly UpSertDebtVM viewModel;
 
     public UpSertDebtPageM(UpSertDebtVM vm)
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
         BindingContext = vm;
         viewModel = vm;
     }
     protected override void OnAppearing()
     {
         base.OnAppearing();
+        viewModel.PageLoaded();
     }
     private async void ImageButton_Clicked(object sender, EventArgs e)
     {

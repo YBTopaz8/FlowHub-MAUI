@@ -60,7 +60,7 @@ public partial class ManageExpendituresVM : ObservableObject
         UserPocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
         await expendituresService.GetAllExpendituresAsync();
-      //  filterOption = "Filter_Curr_Month";
+        //  filterOption = "Filter_Curr_Month";
 
         GetAllExp();
     }
@@ -130,8 +130,8 @@ public partial class ManageExpendituresVM : ObservableObject
     {
         if (ActiveUser is null)
         {
-           Debug.WriteLine("Can't Open Add Exp PopUp user is null");
-           await Shell.Current.DisplayAlert("Wait", "Cannot go", "Ok");
+            Debug.WriteLine("Can't Open Add Exp PopUp user is null");
+            await Shell.Current.DisplayAlert("Wait", "Cannot go", "Ok");
         }
         else
         {
@@ -178,7 +178,7 @@ public partial class ManageExpendituresVM : ObservableObject
         const ToastDuration duration = ToastDuration.Short;
         const double fontSize = 14;
         string text;
-        bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You want to Delete?")))!;
+        bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Confirm Delete ?")))!;
         if (response)
         {
             IsBusy = true;
@@ -188,8 +188,7 @@ public partial class ManageExpendituresVM : ObservableObject
 
             if (deleteResponse)
             {
-                text = "Flow Out Deleted";
-
+                text = "Flow Out Deleted Successfully";
                 ActiveUser.TotalExpendituresAmount -= expenditure.AmountSpent;
                 ActiveUser.PocketMoney += expenditure.AmountSpent;
                 UserPocketMoney += expenditure.AmountSpent;
@@ -197,11 +196,11 @@ public partial class ManageExpendituresVM : ObservableObject
             }
             else
             {
-                 text = "Flow Out Not Deleted";
+                text = "Flow Out Not Deleted";
             }
             var toast = Toast.Make(text, duration, fontSize);
             await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
-          //  Sorting(GlobalSortNamePosition);
+            ApplyChanges();
             IsBusy = false;
         }
     }
@@ -259,9 +258,9 @@ public class DateGroup : List<ExpendituresModel>
     public string Currency { get; }
     public DateGroup(DateTime date, List<ExpendituresModel> expenditures) : base(expenditures)
     {
-       Date = date;
-       TotalAmount = expenditures.Sum(x => x.AmountSpent);
-       TotalCount = expenditures.Count;
-       Currency = expenditures[0].Currency;
+        Date = date;
+        TotalAmount = expenditures.Sum(x => x.AmountSpent);
+        TotalCount = expenditures.Count;
+        Currency = expenditures[0].Currency;
     }
 }

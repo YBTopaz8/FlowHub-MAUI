@@ -44,7 +44,7 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
 
     public void PageLoaded()
     {
-       // UsersModel user = ActiveUser;
+        // UsersModel user = ActiveUser;
         UserCurrency = ActiveUser.UserCurrency;
         GetAllPlannedExpForMonth();
     }
@@ -109,7 +109,7 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
         }
         TotalAmount = tot;
 
-       // NumberOfExpInReport = TempList.Count(x => x.IncludeInReport); this is better apparently
+        // NumberOfExpInReport = TempList.Count(x => x.IncludeInReport); this is better apparently
 
         //NumberOfExpInReport= TempList.Where(x => x.IncludeInReport == true).Count();
     }
@@ -155,9 +155,9 @@ public partial class DetailsOfMonthlyPlannedExpVM : ObservableObject
 
     public async Task PrintPDFandShare()
     {
-        PrintFunction  = new PrintDetailsMonthlyExpenditure();
-        string dialogueResponse =(string) await Shell.Current.ShowPopupAsync(new InputCurrencyForPrintPopUpPage("Share PDF File? (Requires Internet)", UserCurrency));
-        if (dialogueResponse is not "Cancel" )
+        PrintFunction = new PrintDetailsMonthlyExpenditure();
+        string dialogueResponse = (string)await Shell.Current.ShowPopupAsync(new InputCurrencyForPrintPopUpPage("Share PDF File? (Requires Internet)", UserCurrency));
+        if (dialogueResponse is not "Cancel")
         {
             if (Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
             {

@@ -2,15 +2,15 @@ namespace FlowHub.Main.Views.Desktop.Settings;
 
 public partial class UserSettingsPageD : ContentPage
 {
-	UserSettingsVM viewModel;
-	public UserSettingsPageD(UserSettingsVM vm)
-	{
-		InitializeComponent();
-		viewModel = vm;
-		BindingContext= viewModel;
-	}
-	protected override void OnAppearing()
-	{
+    UserSettingsVM viewModel;
+    public UserSettingsPageD(UserSettingsVM vm)
+    {
+        InitializeComponent();
+        viewModel = vm;
+        BindingContext = viewModel;
+    }
+    protected override void OnAppearing()
+    {
         base.OnAppearing();
         viewModel.PageLoadedCommand.Execute(null);
         viewModel.GetCountryNamesList();

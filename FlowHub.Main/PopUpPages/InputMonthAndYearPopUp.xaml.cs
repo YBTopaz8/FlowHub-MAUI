@@ -2,9 +2,9 @@ namespace FlowHub.Main.PopUpPages;
 
 public partial class InputMonthAndYearPopUp : Popup
 {
-	public InputMonthAndYearPopUp()
-	{
-		InitializeComponent();
+    public InputMonthAndYearPopUp()
+    {
+        InitializeComponent();
 
         List<string> ListOfMonths = new()
         { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
@@ -16,13 +16,13 @@ public partial class InputMonthAndYearPopUp : Popup
 
         int monthIndex = DateTime.UtcNow.Month;
 
-        MonthPicker.SelectedIndex =  monthIndex - 1;
+        MonthPicker.SelectedIndex = monthIndex - 1;
         YearPicker.SelectedItem = DateTime.UtcNow.Year.ToString();
-	}
+    }
 
     void OnYesButtonClicked(object sender, EventArgs e)
     {
-        string MonthValue =  MonthPicker.SelectedItem.ToString();
+        string MonthValue = MonthPicker.SelectedItem.ToString();
         string YearValue = YearPicker.SelectedItem.ToString();
 
         string MonthYear = $"{MonthValue}, {YearValue}";

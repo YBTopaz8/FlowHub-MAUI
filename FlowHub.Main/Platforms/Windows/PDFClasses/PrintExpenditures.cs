@@ -20,7 +20,7 @@ public static class PrintExpenditures
 
         if (!userCurrency.Equals(printDisplayCurrency))
         {
-            ExchangeRateAPI JsonWithRates = new ();
+            ExchangeRateAPI JsonWithRates = new();
             ObjectWithRate = JsonWithRates.GetConvertedRate(userCurrency, printDisplayCurrency);
         }
 
@@ -28,7 +28,7 @@ public static class PrintExpenditures
 
         const string PdfTitle = "Flow Outs Report";
 
-        await Task.Run(()=> CreatePdfDoc(expList, PathFile, userCurrency, printDisplayCurrency, ObjectWithRate.result, ObjectWithRate.date, PdfTitle, userName));
+        await Task.Run(() => CreatePdfDoc(expList, PathFile, userCurrency, printDisplayCurrency, ObjectWithRate.result, ObjectWithRate.date, PdfTitle, userName));
     }
 
     private static string EnsureDirectoryAndReturnPath(string currency)
@@ -47,8 +47,8 @@ public static class PrintExpenditures
         Color HeaderTextColor = WebColors.GetRGBColor("darkslateblue");
 
         using PdfWriter writer = new(PathFile);
-        using PdfDocument pdf = new (writer);
-        Document document = new (pdf, pageSize: PageSize.A4, immediateFlush: false);
+        using PdfDocument pdf = new(writer);
+        Document document = new(pdf, pageSize: PageSize.A4, immediateFlush: false);
         Paragraph header = new Paragraph(pdfTitle)
             .SetTextAlignment(TextAlignment.CENTER)
             .SetFontColor(HeaderTextColor)

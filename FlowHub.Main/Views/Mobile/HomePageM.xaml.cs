@@ -4,7 +4,7 @@ public partial class HomePageM : ContentPage
 {
     public readonly HomePageVM viewModel;
     public HomePageM(HomePageVM vm)
-	{
+    {
         InitializeComponent();
         viewModel = vm;
         BindingContext = vm;
@@ -14,7 +14,7 @@ public partial class HomePageM : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        if(!_isInitialized)
+        if (!_isInitialized)
         {
             await viewModel.DisplayInfo();
             _isInitialized = true;

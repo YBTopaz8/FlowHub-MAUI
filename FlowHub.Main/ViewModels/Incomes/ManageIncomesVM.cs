@@ -102,7 +102,7 @@ public partial class ManageIncomesVM : ObservableObject
         }
         else
         {
-            var  newIncome = new IncomeModel(){DateReceived = DateTime.Now};
+            var newIncome = new IncomeModel() { DateReceived = DateTime.Now };
             const string PageTitle = "Add New Income";
             const bool isAdd = true;
 
@@ -112,7 +112,7 @@ public partial class ManageIncomesVM : ObservableObject
 
     private async Task AddEditIncome(IncomeModel newIncome, string pageTitle, bool isAdd)
     {
-        var newUpserIncomeVM = new UpSertIncomeVM(incomeService, userService,newIncome, pageTitle, isAdd, ActiveUser);
+        var newUpserIncomeVM = new UpSertIncomeVM(incomeService, userService, newIncome, pageTitle, isAdd, ActiveUser);
         await Shell.Current.ShowPopupAsync(new UpSertIncomePopUp(newUpserIncomeVM));
     }
 
@@ -187,7 +187,7 @@ public partial class ManageIncomesVM : ObservableObject
     }
 
     [RelayCommand]
-    public  void ShowFilterPopUpPage()
+    public void ShowFilterPopUpPage()
     {
         //var filterOption = (string)await Shell.Current.ShowPopupAsync(new FilterOptionsPopUp("test"));
         //if (filterOption.Equals("Filter_All"))

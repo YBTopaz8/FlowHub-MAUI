@@ -25,6 +25,7 @@ public class DebtModel
     public bool IsPaidCompletely { get; set; }
     public string? UserId { get; set; }
     public string? PlatformModel { get; set; }
+    public List<PaymentAdvances>? PaymentAdvances { get; set; }
 }
 public enum DebtType
 {
@@ -32,6 +33,11 @@ public enum DebtType
     Lent      // User has lent money (is owed money)
 }
 
+public class PaymentAdvances
+{
+    public double AmountPaid { get; set; }
+    public DateTime DatePaid { get; set; }
+}
 public class PersonOrOrganizationModel
 {
     public string Name { get; set; }

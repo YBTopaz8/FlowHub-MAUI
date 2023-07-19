@@ -3,12 +3,12 @@ namespace FlowHub.Main.Views.Mobile.Settings;
 public partial class EditUserSettingsPageM : ContentPage
 {
     private UserSettingsVM viewmodel;
-	public EditUserSettingsPageM(UserSettingsVM vm)
-	{
-		InitializeComponent();
+    public EditUserSettingsPageM(UserSettingsVM vm)
+    {
+        InitializeComponent();
         viewmodel = vm;
         BindingContext = vm;
-	}
+    }
 
     protected override void OnAppearing()
     {

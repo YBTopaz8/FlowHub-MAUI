@@ -3,9 +3,9 @@ namespace FlowHub.Main.PopUpPages;
 public partial class InputPopUpPage : Popup
 {
     public InputType GivenInputType { get; set; }
-	public InputPopUpPage(InputType inputType, List<string> FieldsTitlesTextThenNumeric, string optionalPopUpTitleText=null, TaxModel SelectedTax = null, bool IsDeleteBtnVisible = false)
-	{
-		InitializeComponent();
+    public InputPopUpPage(InputType inputType, List<string> FieldsTitlesTextThenNumeric, string optionalPopUpTitleText = null, TaxModel SelectedTax = null, bool IsDeleteBtnVisible = false)
+    {
+        InitializeComponent();
 
         DeleteButton.IsVisible = IsDeleteBtnVisible;
         if (SelectedTax is not null)
@@ -16,7 +16,7 @@ public partial class InputPopUpPage : Popup
 
         GivenInputType = inputType;
 
-        PopUpTitle.Text= optionalPopUpTitleText;
+        PopUpTitle.Text = optionalPopUpTitleText;
 
         if (GivenInputType.HasFlag(InputType.Numeric) && GivenInputType.HasFlag(InputType.Text))
         {
@@ -43,7 +43,7 @@ public partial class InputPopUpPage : Popup
         {
             Debug.WriteLine("InputPopUpPage: GivenInputType is not valid");
         }
-	}
+    }
 
     void OnOKButtonClicked(object sender, EventArgs e)
     {

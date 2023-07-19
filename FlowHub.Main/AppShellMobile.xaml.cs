@@ -2,9 +2,9 @@ namespace FlowHub.Main;
 
 public partial class AppShellMobile : Shell
 {
-	public AppShellMobile()
-	{
-		InitializeComponent();
+    public AppShellMobile()
+    {
+        InitializeComponent();
         Routing.RegisterRoute(nameof(HomePageM), typeof(HomePageM));
         Routing.RegisterRoute(nameof(LoginM), typeof(LoginM));
 

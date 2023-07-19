@@ -33,51 +33,76 @@
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:DebtModel">
-                        
-                            <VerticalStackLayout Margin="10,8" Spacing="5">
-                                <VerticalStackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={x:Reference Page}, Path=BindingContext.ViewDebtSheetCommand}"
-                                                      CommandParameter="{Binding .}"/>
-                                </VerticalStackLayout.GestureRecognizers>
-                                <Label HorizontalOptions="Center"
-                                   TextColor="White"
-                                   FontSize="16"
-                                   FontAttributes="Bold">
-                                    <Label.Triggers>
-                                        <DataTrigger TargetType="Label"
-                                        Binding="{Binding DebtType}" Value="Borrowed">
-                                            <Setter Property="Text">
-                                                <Setter.Value>
-                                                    <MultiBinding StringFormat="{} {0} Owes You : {1} {2}">
-                                                        <Binding Path="PersonOrOrganization.Name"/>
-                                                        <Binding Path="Amount"/>
-                                                        <Binding Path="Currency"/>
-                                                    </MultiBinding>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </DataTrigger>
-                                    </Label.Triggers>
-                                    <Label.Text>
-                                        <MultiBinding StringFormat="{} You Owe {1} {2} To {0}">
-                                            <Binding Path="PersonOrOrganization.Name"/>
-                                            <Binding Path="Amount"/>
-                                            <Binding Path="Currency"/>
-                                        </MultiBinding>
-                                    </Label.Text>
-                                </Label>
-                                <FlexLayout JustifyContent="SpaceBetween">
-                                <HorizontalStackLayout>
-                                    <Image Source="phone_d" HeightRequest="13"/>
-                                    <Label Text="{Binding PersonOrOrganization.PhoneNumber}"
-                                       TextColor="{StaticResource WildBlueYonder}"/>
-                                </HorizontalStackLayout>
-                                    
-                                    <Label Text="{Binding Deadline, Converter={StaticResource DueDateConverter}}"
-                                       TextColor="{StaticResource WildBlueYonder}"/>
-                                </FlexLayout>
-                                <Line HeightRequest="0.2" BackgroundColor="DarkSlateBlue"/>
 
-                            </VerticalStackLayout>                        
+                        <SwipeView HorizontalOptions="FillAndExpand" Margin="0,2" 
+                                   Threshold="200">
+                            
+                            <SwipeView.LeftItems>
+                                <SwipeItems Mode="Execute">
+                                    <SwipeItem
+                                    Command="{Binding Source={x:Reference Page}, Path=BindingContext.ToggleDebtCompletionStatusCommand}"
+                                    CommandParameter="{Binding .}"
+                                    IconImageSource="{AppThemeBinding Dark=done_undone_d, Light = done_undone_l}" 
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
+                                                               
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
+                            <SwipeView.RightItems>
+                                <SwipeItem 
+                                        Command="{Binding Source={x:Reference Page}, Path=BindingContext.GoToEditDebtCommand}"
+                                        CommandParameter="{Binding .}"
+                                        IconImageSource="{AppThemeBinding Dark= edit_d, Light= edit_l}"
+                                         BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
+                            </SwipeView.RightItems>
+
+                            <Border HorizontalOptions="EndAndExpand" 
+                                    StrokeThickness="0"
+                                    Margin="5,2">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer NumberOfTapsRequired="2"
+                                        Command="{Binding Source={x:Reference Page}, Path=BindingContext.ViewDebtSheetCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout Spacing="5">
+                                    <Label HorizontalOptions="Center" TextColor="White"
+                                        FontSize="16" FontAttributes="Bold">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label"
+                                        Binding="{Binding DebtType}" Value="Borrowed">
+                                                <Setter Property="Text">
+                                                    <Setter.Value>
+                                                        <MultiBinding StringFormat="{} {0} Owes You : {1} {2}">
+                                                            <Binding Path="PersonOrOrganization.Name"/>
+                                                            <Binding Path="Amount"/>
+                                                            <Binding Path="Currency"/>
+                                                        </MultiBinding>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{} You Owe {1} {2} To {0}">
+                                                <Binding Path="PersonOrOrganization.Name"/>
+                                                <Binding Path="Amount"/>
+                                                <Binding Path="Currency"/>
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+                                    
+                                    <FlexLayout JustifyContent="SpaceBetween" Margin="5,0">
+                                        
+                                            <Label Text="{Binding PersonOrOrganization.PhoneNumber}"
+                                       TextColor="{StaticResource Cyan200Accent}"/>
+
+                                            <Label Text="{Binding ., Converter={StaticResource DueDateConverter}}"
+                                       TextColor="{StaticResource WildBlueYonder}"/>
+                                    </FlexLayout>
+                                    <Line HeightRequest="0.2" BackgroundColor="DarkSlateBlue"/>
+
+                                </VerticalStackLayout>
+                            </Border>
+
+                        </SwipeView>                       
                         
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
@@ -86,18 +111,13 @@
         </VerticalStackLayout>
 
         <!-- Your FAB -->
-        <Button 
+        <Button             
                 Command="{Binding GoToAddDebtCommand}"
-                WidthRequest="55"
-                HeightRequest="55"
-                CornerRadius="26"
-                Padding="0"
-                BackgroundColor="DarkSlateBlue"
-                BorderColor="DarkSlateBlue"
-                Text="+"
-                TextColor="White"
-                FontSize="40"
-                AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize"
+                WidthRequest="55" HeightRequest="55"
+                CornerRadius="26" Padding="0"
+                BackgroundColor="DarkSlateBlue" BorderColor="DarkSlateBlue"
+                Text="+" TextColor="White"
+                FontSize="40" AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize"
                 AbsoluteLayout.LayoutFlags="PositionProportional"
                 Margin="0,0,15,30"
                 />

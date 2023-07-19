@@ -10,8 +10,8 @@
         <Label toolkit:DockLayout.DockPosition="Left" Text="Left" WidthRequest="80" />
         <Label toolkit:DockLayout.DockPosition="Right" Text="Right" WidthRequest="90" />
         <Label Text="Center" />-->
-        <Label Text="FlowHub - v0.1.0 Made With Love :D " HorizontalOptions="Center" Margin="2" FontSize="24"/>
-        <Label Text="By Yvan Brunel" HorizontalOptions="Center" Margin="2" FontSize="24"/>
+        <Label Text="FlowHub - v0.1.0 Made With Love :D " HorizontalOptions="Center" Margin="2" FontSize="19"/>
+        <Label Text="By Yvan Brunel" HorizontalOptions="Center" Margin="2" FontSize="19"/>
         <Label Text="Tap Here to view GitHub Repo" HorizontalTextAlignment="Center" VerticalOptions="Start" HeightRequest="30"
                FontSize="21">
             <Label.GestureRecognizers>

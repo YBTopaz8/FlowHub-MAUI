@@ -5,12 +5,12 @@ namespace FlowHub.Main.Views;
 
 public partial class UpSertIncomePopUp : Popup
 {
-	readonly UpSertIncomeVM viewModel;
-	public UpSertIncomePopUp(UpSertIncomeVM vm)
-	{
-		InitializeComponent();
-		viewModel = vm;
-		BindingContext = vm;
+    readonly UpSertIncomeVM viewModel;
+    public UpSertIncomePopUp(UpSertIncomeVM vm)
+    {
+        InitializeComponent();
+        viewModel = vm;
+        BindingContext = vm;
         viewModel.PageLoaded();
 
 #if WINDOWS
@@ -36,7 +36,7 @@ public partial class UpSertIncomePopUp : Popup
     private void AmountReceived_TextChanged(object sender, TextChangedEventArgs e)
     {
         var s = sender as TextField;
-        if(s.Text?.Length == 0)
+        if (s.Text?.Length == 0)
         {
             viewModel.SingleIncomeDetails.AmountReceived = 0;
         }

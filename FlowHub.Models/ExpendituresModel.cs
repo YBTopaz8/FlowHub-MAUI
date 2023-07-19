@@ -60,7 +60,9 @@ public enum ExpenditureCategory
     Travel = 10,
 
     [Description("Utilities")]
-    Utilities = 11
+    Utilities = 11,
+    [Description("Flow Hold Payment")]
+    FlowHoldPayment = 12,
 }
 
 public static class ExpenditureCategoryDescriptions

@@ -6,11 +6,11 @@ public partial class UpSertExpenditurePageD : ContentPage
 {
     private readonly UpSertExpenditureVM viewModel;
     public UpSertExpenditurePageD(UpSertExpenditureVM vm)
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
         viewModel = vm;
         BindingContext = vm;
-	}
+    }
 
     protected override void OnAppearing()
     {

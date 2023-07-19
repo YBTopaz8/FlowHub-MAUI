@@ -59,12 +59,21 @@ public partial class ManageDebtsVM : ObservableObject
               PersonOrOrganization = new PersonOrOrganizationModel(),
               Currency = usersRepo.OfflineUser.UserCurrency
             } },
-            {"ActiveUser", ActiveUser },
             {"PageTitle", "Add Debt" }
         };
-        await Shell.Current.GoToAsync(nameof(UpSertDebtPageM),true, navParams);
+        await Shell.Current.GoToAsync(nameof(UpSertDebtPageM), true, navParams);
     }
 
+    [RelayCommand]
+    public async Task GoToEditDebtAsync(DebtModel debt)
+    {
+        var navParams = new Dictionary<string, object>()
+        {
+            {"SingleDebtDetails", debt },
+            {"PageTitle", "Edit Debt" }
+        };
+        await Shell.Current.GoToAsync(nameof(UpSertDebtPageM), true, navParams);
+    }
     public bool IsDeadlineSet
     {
         get => SingleDebtDetails.Deadline.HasValue;
@@ -73,18 +82,88 @@ public partial class ManageDebtsVM : ObservableObject
     public async Task ViewDebtSheet(DebtModel debt)
     {
         SingleDebtDetails = debt;
-        var s = await Drawer.Open(new EditDebtBottomSheet(this));
+        _ = await Drawer.Open(new ViewDebtBottomSheet(this));
     }
     private void ApplyChanges()
     {
         List<DebtModel> debtList = new();
         debtList = debtRepo.OfflineDebtList
+                    .Where(x => !x.IsDeleted)
                     .OrderByDescending(x => x.UpdateDateTime)
                     .ToList();
         DebtsList = new ObservableCollection<DebtModel>(debtList);
 
         TotalBorrowed = debtList.Count(x => x.DebtType == DebtType.Borrowed);//.Sum(x => x.Amount);
         TotalLent = debtList.Count(x => x.DebtType == DebtType.Lent);//.Sum(x => x.Amount);
+    }
+
+    [RelayCommand]
+    async Task DeleteDebtAsync(DebtModel debt)
+    {
+        CancellationTokenSource cancellationTokenSource = new();
+        const ToastDuration duration = ToastDuration.Short;
+        const double fontSize = 14;
+        string text;
+        try
+        {
+            var response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Delete Flow Hold ?"));
+            if (response)
+            {
+                debt.PlatformModel = DeviceInfo.Current.Model;
+                if (await debtRepo.DeleteDebtAsync(debt))
+                {
+                    text = "Flow Hold Deleted Successfully";
+                }
+                else
+                {
+                    text = "Flow Hold Deletion Failed";
+                }
+                var toast = Toast.Make(text, duration, fontSize);
+                await toast.Show(cancellationTokenSource.Token);
+                ApplyChanges();
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception when deleting debt MESSAGE : {ex.Message}");
+        }
+    }
+
+    [RelayCommand]
+    async Task ToggleDebtCompletionStatus(DebtModel debt)
+    {
+        CancellationTokenSource cancellationTokenSource = new();
+        const ToastDuration duration = ToastDuration.Short;
+        const double fontSize = 14;
+        string text;
+        try
+        {
+            string message = debt.IsPaidCompletely ? "Mark as Pending" : "Mark as Completed";
+            var response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert(message));
+            if (response)
+            {
+                if (!debt.IsPaidCompletely)
+                {
+                    debt.IsPaidCompletely = true;
+                    debt.DatePaidCompletely = DateTime.Now;
+                    text = "Flow Hold Marked as Completed";
+                }
+                else
+                {
+                    debt.IsPaidCompletely = false;
+                    debt.Deadline = null;
+                    text = "Flow Hold Marked as Pending";
+                }
+                await debtRepo.UpdateDebtAsync(debt);
+
+                var toast = Toast.Make(text, duration, fontSize);
+                await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception when Marking as completed debt MESSAGE : {ex.Message}");
+        }
     }
 
     [RelayCommand]

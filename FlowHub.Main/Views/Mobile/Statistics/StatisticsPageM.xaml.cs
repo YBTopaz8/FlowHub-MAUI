@@ -5,13 +5,13 @@ namespace FlowHub.Main.Views.Mobile.Statistics;
 
 public partial class StatisticsPageM
 {
-	private readonly StatisticsPageVM viewModel;
-	public StatisticsPageM(StatisticsPageVM vm)
-	{
-		InitializeComponent();
-		viewModel = vm;
-		BindingContext = vm;
-	}
+    private readonly StatisticsPageVM viewModel;
+    public StatisticsPageM(StatisticsPageVM vm)
+    {
+        InitializeComponent();
+        viewModel = vm;
+        BindingContext = vm;
+    }
 
     protected override void OnAppearing()
     {

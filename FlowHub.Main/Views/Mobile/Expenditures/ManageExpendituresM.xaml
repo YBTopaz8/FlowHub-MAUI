@@ -105,8 +105,9 @@
                                 <SwipeItems>
                                     <SwipeItem 
                                         Command="{Binding Source={x:Reference Page}, Path=BindingContext.ShowEditExpenditurePopUpCommand}"  
-                                        CommandParameter="{Binding .}" IconImageSource="{AppThemeBinding Dark= edit_d.png, Light= edit_l.png}" 
-                                        BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
+                                        CommandParameter="{Binding .}" IconImageSource="{AppThemeBinding Dark= edit_d, Light= edit_l}"
+                                        BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"
+                                        />
                                 </SwipeItems>
                             </SwipeView.LeftItems>
 
@@ -114,36 +115,39 @@
                                 <SwipeItems>
                                     <SwipeItem 
                                         Command="{Binding Source={x:Reference Page}, Path=BindingContext.DeleteExpenditureBtnCommand}"  
-                                        CommandParameter="{Binding .}" IconImageSource="{AppThemeBinding Dark= delete_d.png, Light = delete_l.png}" 
+                                        CommandParameter="{Binding .}" IconImageSource="{AppThemeBinding Dark= delete_d, Light = delete_l}" 
                                         BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
                                 </SwipeItems>
                             </SwipeView.RightItems>
-                            
-                            <VerticalStackLayout HorizontalOptions="FillAndExpand">
-                                <VerticalStackLayout.GestureRecognizers>
+                            <Border HorizontalOptions="FillAndExpand" 
+                                    StrokeThickness="0">
+                                <Border.GestureRecognizers>
                                     <TapGestureRecognizer NumberOfTapsRequired="2" Command="{Binding Source={x:Reference Page}, Path=BindingContext.CopyToClipboardCommand}"
                                                             CommandParameter="{Binding .}"/>
-                                </VerticalStackLayout.GestureRecognizers>
-                                    
-                                <FlexLayout JustifyContent="SpaceBetween" Direction="Row" Margin="10,5">
-                                    <VerticalStackLayout>
-                                        <Label Text="{Binding Reason}" FontAttributes="Bold"
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout >
+
+                                    <FlexLayout JustifyContent="SpaceBetween" Direction="Row" Margin="6,2">
+                                        <VerticalStackLayout>
+                                            <Label Text="{Binding Reason}" FontAttributes="Bold"
                                                TextColor="{StaticResource WildBlueYonder}"/>
 
-                                        <Label Text="{Binding Category}" TextColor="{StaticResource Secondary}"
+                                            <Label Text="{Binding Category}" TextColor="{StaticResource Secondary}"
                                                Margin="0,0" FontAttributes="Italic"/>
-                                    </VerticalStackLayout>
-                                    <Label FontAttributes="Bold" VerticalTextAlignment="Center">
-                                        <Label.Text>
-                                            <MultiBinding StringFormat="{}{0:n2} {1}">
-                                                <Binding Path="AmountSpent"/>
-                                                <Binding Path="Currency"/>
-                                            </MultiBinding>
-                                        </Label.Text>
-                                    </Label>
-                                </FlexLayout>
-                                <Rectangle Fill="#404040" HeightRequest="0.8"/>
-                            </VerticalStackLayout>
+                                        </VerticalStackLayout>
+                                        <Label FontAttributes="Bold" VerticalTextAlignment="Center">
+                                            <Label.Text>
+                                                <MultiBinding StringFormat="{}{0:n2} {1}">
+                                                    <Binding Path="AmountSpent"/>
+                                                    <Binding Path="Currency"/>
+                                                </MultiBinding>
+                                            </Label.Text>
+                                        </Label>
+                                    </FlexLayout>
+                                    <Rectangle Fill="#404040" HeightRequest="0.8"/>
+                                </VerticalStackLayout>
+
+                            </Border>
                         </SwipeView>
                     
                 </DataTemplate>
@@ -166,6 +170,8 @@
                 AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize"
                 AbsoluteLayout.LayoutFlags="PositionProportional"
                 Margin="0,0,15,30"
+                ToolTipProperties.Text="Add New Flow Out"
+            
                 />
     </AbsoluteLayout>
 </ContentPage>
