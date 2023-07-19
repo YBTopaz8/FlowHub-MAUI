@@ -180,8 +180,6 @@ public partial class LoginVM : ObservableObject
 
         if (IsLoginOnlineButtonClicked)
         {
-            CurrentUser.Email = "8brunel@gmail.com";
-            CurrentUser.Password = "Yvan";
             User = await userRepo.GetUserOnlineAsync(CurrentUser);
         }
         else
