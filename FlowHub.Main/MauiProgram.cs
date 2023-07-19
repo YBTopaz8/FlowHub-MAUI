@@ -8,17 +8,18 @@ namespace FlowHub.Main;
 
 public static class MauiProgram
 {
-	public static MauiApp CreateMauiApp()
-	{
-		var builder = MauiApp.CreateBuilder();
-		builder
+    public static MauiApp CreateMauiApp()
+    {
+        var builder = MauiApp.CreateBuilder();
+        builder
             .UseSkiaSharp(true)
-			.UseMauiApp<App>()
-			.ConfigureFonts(fonts =>
-			{
-				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-	        }).UseMauiCommunityToolkit();
+            .UseMauiApp<App>()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            })
+            .UseMauiCommunityToolkit();
 
         builder.ConfigureMauiHandlers(handlers =>
         {
@@ -65,6 +66,9 @@ public static class MauiProgram
         builder.Services.AddSingleton<StatisticsPageVM>();
         builder.Services.AddSingleton<SingleMonthStatsPageVM>();
 
+        /*-- Section for Debts --*/
+        builder.Services.AddSingleton<ManageDebtsVM>();
+        builder.Services.AddSingleton<UpSertDebtVM>();
         /*------------------------REGISTERING DESKTOP VIEWS ----------------------------------------------------------------------------*/
 
         /*-- Section for HomePage AND Login --*/
@@ -115,7 +119,8 @@ public static class MauiProgram
 
         /* -- Section for Debts --*/
         builder.Services.AddSingleton<ManageDebtsPageM>();
+        builder.Services.AddSingleton<UpSertDebtPageM>();
         /*--------------------------------------------------------------------------------------------------------------------------------*/
         return builder.Build();
-	}
+    }
 }

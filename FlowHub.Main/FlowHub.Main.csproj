@@ -41,26 +41,26 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android33.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhubmaui</ApplicationId>
-	  <ApplicationDisplayVersion>0.1.1</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>0.8.0</ApplicationDisplayVersion>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android33.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhubmaui</ApplicationId>
-	  <ApplicationDisplayVersion>0.1.1</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>0.8.0</ApplicationDisplayVersion>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhubmaui</ApplicationId>
-	  <ApplicationDisplayVersion>0.1.1</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>0.8.0</ApplicationDisplayVersion>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhubmaui</ApplicationId>
-	  <ApplicationDisplayVersion>0.1.1</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>0.8.0</ApplicationDisplayVersion>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
@@ -172,6 +172,12 @@
 	  <MauiXaml Update="PopUpPages\ErrorPopUpAlert.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Utilities\BottomSheet\Drawers\BaseDrawer.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Utilities\BottomSheet\Drawers\ListDrawer.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Desktop\Debts\ManageDebtsPageD.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -196,7 +202,13 @@
 	  <MauiXaml Update="Views\Desktop\Statistics\StatisticsPageD.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Mobile\Debts\ViewDebtBottomSheet.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Mobile\Debts\ManageDebtsPageM.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Mobile\Debts\UpSertDebtPageM.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Mobile\Expenditures\ManageExpendituresM.xaml">
@@ -288,6 +300,9 @@
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>Resources.resx</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Mobile\Debts\ViewDebtBottomSheet.xaml.cs">
+	    <DependentUpon>ViewDebtBottomSheet.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\Mobile\Incomes\ManageIncomesM.xaml.cs">
 	    <DependentUpon>ManageIncomesM.xaml</DependentUpon>

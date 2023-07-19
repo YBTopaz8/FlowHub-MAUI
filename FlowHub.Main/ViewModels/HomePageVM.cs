@@ -11,7 +11,6 @@ public partial class HomePageVM : ObservableObject
     private readonly IUsersRepository userService;
     public readonly IIncomeRepository incomeRepo;
     private readonly IDebtRepository debtRepo;
-    private readonly HomePageNavs NavFunction = new();
 
     public HomePageVM(IExpendituresRepository expendituresRepository, ISettingsServiceRepository settingsServiceRepo,
                     IUsersRepository usersRepository, IIncomeRepository incomeRepository,
@@ -47,7 +46,7 @@ public partial class HomePageVM : ObservableObject
     public double pocketMoney;
 
     [ObservableProperty]
-    private UsersModel activeUser = new ();
+    private UsersModel activeUser = new();
 
     public async Task DisplayInfo()
     {
@@ -69,13 +68,22 @@ public partial class HomePageVM : ObservableObject
         var ListOfExp = await expenditureRepo.GetAllExpendituresAsync();
 
         LatestExpenditures = ListOfExp.Count != 0
-            ? ListOfExp.OrderByDescending(s => s.DateSpent).Take(5).ToObservableCollection()
+            ? ListOfExp
+            .Where(x => !x.IsDeleted)
+            .OrderByDescending(s => s.DateSpent)
+            .Take(5)
+            .ToObservableCollection()
             : new ObservableCollection<ExpendituresModel>();
 
         var ListOfInc = await incomeRepo.GetAllIncomesAsync();
         LatestIncomes = ListOfInc.Count != 0
-            ? ListOfInc.OrderByDescending(s => s.DateReceived).Take(5).ToObservableCollection()
+            ? ListOfInc
+            .Where(predicate: x => !x.IsDeleted)
+            .OrderByDescending(s => s.DateReceived)
+            .Take(5)
+            .ToObservableCollection()
             : new ObservableCollection<IncomeModel>();
+        await debtRepo.GetAllDebtAsync();
     }
 
     private async Task SyncAndNotifyAsync()

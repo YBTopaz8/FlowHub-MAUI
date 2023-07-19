@@ -9,38 +9,38 @@ namespace FlowHub.Main.ViewModels.Statistics;
 [QueryProperty(nameof(SpecificYearNumber), "YearNumber")]
 [QueryProperty(nameof(PageTitle), nameof(PageTitle))]
 [QueryProperty(nameof(ListOfExpenditures), "ExpendituresList")]
-public partial class SingleMonthStatsPageVM :ObservableObject
+public partial class SingleMonthStatsPageVM : ObservableObject
 {
     private readonly IExpendituresRepository expendituresService;
 
-	public SingleMonthStatsPageVM(IExpendituresRepository expRepo)
-	{
-		expendituresService = expRepo;
-	}
+    public SingleMonthStatsPageVM(IExpendituresRepository expRepo)
+    {
+        expendituresService = expRepo;
+    }
 
-	[ObservableProperty]
-	public int specificMonthNumber;
+    [ObservableProperty]
+    public int specificMonthNumber;
 
-	[ObservableProperty]
-	public int specificYearNumber;
+    [ObservableProperty]
+    public int specificYearNumber;
 
     [ObservableProperty]
     public string pageTitle;
 
-	[ObservableProperty]
-	public int totalFlowOuts;
+    [ObservableProperty]
+    public int totalFlowOuts;
 
-	[ObservableProperty]
-	public double totalAmount;
+    [ObservableProperty]
+    public double totalAmount;
 
-	[ObservableProperty]
-	public double averageAmount;
+    [ObservableProperty]
+    public double averageAmount;
 
-	[ObservableProperty]
-	public double biggestAmount;
+    [ObservableProperty]
+    public double biggestAmount;
 
-	[ObservableProperty]
-	public string currency;
+    [ObservableProperty]
+    public string currency;
 
     [ObservableProperty]
     public bool isPieChartVisible;
@@ -48,16 +48,16 @@ public partial class SingleMonthStatsPageVM :ObservableObject
     [ObservableProperty]
     public bool isLineChartVisible;
 
-	[ObservableProperty]
-	public ExpendituresModel singleExpenditure = new();
+    [ObservableProperty]
+    public ExpendituresModel singleExpenditure = new();
 
-	[ObservableProperty]
-	public ObservableCollection<ExpendituresModel> listOfExpenditures;
-	public List<ISeries> PieSeries { get; set; }
+    [ObservableProperty]
+    public ObservableCollection<ExpendituresModel> listOfExpenditures;
+    public List<ISeries> PieSeries { get; set; }
     public List<ISeries> LineSeries { get; set; }
 
-	[RelayCommand]
-	public void PageLoaded()
+    [RelayCommand]
+    public void PageLoaded()
     {
         TotalFlowOuts = ListOfExpenditures.Count;
         TotalAmount = ListOfExpenditures.Sum(exp => exp.AmountSpent);
@@ -78,7 +78,7 @@ public partial class SingleMonthStatsPageVM :ObservableObject
             IsLineChartVisible = true;
             LoadLineChart();
         }
-}
+    }
 
     private void LoadLineChart()
     {
@@ -126,7 +126,7 @@ public partial class SingleMonthStatsPageVM :ObservableObject
     }
 
     public void ChangeSelectedExp(int SelectedExpIndex)
-	{
-		SingleExpenditure = ListOfExpenditures[SelectedExpIndex];
-	}
+    {
+        SingleExpenditure = ListOfExpenditures[SelectedExpIndex];
+    }
 }

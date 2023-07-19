@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<popUp:PopUpSheet xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlowHub.Main.Utilities.BottomSheet.Drawers.BaseDrawer"
+             xmlns:popUp="clr-namespace:FlowHub.Main.Utilities.BottomSheet"
+             Title="BaseDrawer">
+    <Grid x:Name="pgRoot">
+
+        <ImageButton BackgroundColor="Transparent" Clicked="pgBackground_Clicked"/>
+
+        <Grid x:Name="pgBottomSheet">
+            <ImageButton BackgroundColor="Transparent" />
+            <Border x:Name="pgBottomSheetBorder" Stroke="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"
+                    BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"
+                    StrokeShape="RoundRectangle 24,24,0,0" Padding="0,16">
+            </Border>
+            <Grid RowDefinitions="32,*">
+
+                <Rectangle WidthRequest="40" HeightRequest="4" BackgroundColor="{AppThemeBinding Dark=#E8E8E8, Light=darkslateblue}"/>
+
+                <ScrollView x:Name="pgContentScroll" Grid.Row="1" VerticalOptions="Start">
+                    <Grid Margin="16,0" x:Name="pgContentView"/>
+                </ScrollView>
+
+                <ImageButton x:Name="pgPanGesture" BackgroundColor="Transparent" TranslationY="0"  HeightRequest="100" >
+                    <ImageButton.GestureRecognizers>
+                        <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated"/>
+                    </ImageButton.GestureRecognizers>
+                </ImageButton>
+
+            </Grid>
+        </Grid>
+    </Grid>
+</popUp:PopUpSheet>

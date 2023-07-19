@@ -4,7 +4,7 @@ public static class ManageExpendituresNavs
 {
     public static async Task FromManageExpToUpsertExpenditures(Dictionary<string, object> navParams)
     {
-        await Shell.Current.GoToAsync(nameof(UpSertExpenditurePageD),true, navParams);
+        await Shell.Current.GoToAsync(nameof(UpSertExpenditurePageD), true, navParams);
     }
     public static async Task FromUpsertExpToManageExpenditures(Dictionary<string, object> navParams)
     {

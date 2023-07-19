@@ -15,15 +15,15 @@ public class IncomeRepository : IIncomeRepository
     readonly IUsersRepository usersRepo;
     readonly IOnlineCredentialsRepository onlineDataAccessRepo;
 
-    private const string incomesDataCollectionName = "Incomes";
+    private const string incomesDataCollectionName = "IncomesCollection";
 
     bool IsBatchUpdate;
     public event Action OfflineIncomesListChanged;
 
     public IncomeRepository(IDataAccessRepo dataAccess, IOnlineCredentialsRepository onlineRepository, IUsersRepository userRepository)
     {
-        dataAccessRepo= dataAccess;
-        usersRepo= userRepository;
+        dataAccessRepo = dataAccess;
+        usersRepo = userRepository;
         onlineDataAccessRepo = onlineRepository;
     }
 
@@ -37,40 +37,45 @@ public class IncomeRepository : IIncomeRepository
 
     public async Task<List<IncomeModel>> GetAllIncomesAsync()
     {
-        if(OfflineIncomesList is not null)
+        if (OfflineIncomesList is not null)
         {
             return OfflineIncomesList;
         }
         try
         {
             await OpenDB();
-            string userId = usersRepo.OfflineUser.Id;
+            usersRepo.OfflineUser ??= usersRepo.OnlineUser;
+            string userId = usersRepo.OfflineUser is null? usersRepo.OnlineUser.Id : usersRepo.OfflineUser.Id ;
             string userCurrency = usersRepo.OfflineUser.UserCurrency;
             if (usersRepo.OfflineUser.UserIDOnline != string.Empty)
             {
                 userId = usersRepo.OfflineUser.UserIDOnline;
             }
+
             OfflineIncomesList = await AllIncomes.Query()
                 .Where(x => x.UserId == userId)
                 .OrderByDescending(x => x.UpdatedDateTime)
                 .ToListAsync();
             db.Dispose();
+            OfflineIncomesList ??= Enumerable.Empty<IncomeModel>().ToList();
             return OfflineIncomesList;
         }
         catch (Exception ex)
         {
+            Debug.WriteLine(ex.InnerException.Message);
             Debug.WriteLine(ex.Message);
-            return Enumerable.Empty<IncomeModel>().ToList();
+            OfflineIncomesList ??= Enumerable.Empty<IncomeModel>().ToList();
+            return OfflineIncomesList;
         }
     }
 
     async Task LoadOnlineDB()
     {
-        if(Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+        if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
         {
             return;
         }
-        if(OnlineIncomesList is not null)
+        if (OnlineIncomesList is not null)
         {
             return;
         }
@@ -80,7 +85,7 @@ public class IncomeRepository : IIncomeRepository
             DBOnline = onlineDataAccessRepo.OnlineMongoDatabase;
         }
 
-        if(usersRepo.OnlineUser is null)
+        if (usersRepo.OnlineUser is null)
         {
             try
             {
@@ -107,7 +112,7 @@ public class IncomeRepository : IIncomeRepository
         var filtersIncome = Builders<IncomeModel>.Filter.Eq("UserId", usersRepo.OnlineUser.Id) &
             Builders<IncomeModel>.Filter.Eq("Currency", usersRepo.OfflineUser.UserCurrency);
 
-        AllIncomesOnline ??= DBOnline?.GetCollection<IncomeModel>(incomesDataCollectionName);
+        AllIncomesOnline ??= DBOnline?.GetCollection<IncomeModel>("Incomes");
 
         OnlineIncomesList = await AllIncomesOnline.Find(filtersIncome).ToListAsync();
     }
@@ -139,11 +144,11 @@ public class IncomeRepository : IIncomeRepository
                 var offlineItem = OfflineIncomeDict[itemId];
                 var onlineItem = OnlineIncomeDict[itemId];
 
-                if (offlineItem.UpdatedDateTime > onlineItem.UpdatedDateTime)
+                if (offlineItem.UpdatedDateTime.ToUniversalTime() > onlineItem.UpdatedDateTime.ToUniversalTime())
                 {
                     await UpdateIncomeOnlineAsync(offlineItem);
                 }
-                else if (offlineItem.UpdatedDateTime < onlineItem.UpdatedDateTime)
+                else if (offlineItem.UpdatedDateTime.ToUniversalTime() < onlineItem.UpdatedDateTime.ToUniversalTime())
                 {
                     await UpdateIncomeAsync(onlineItem);
                 }
@@ -168,7 +173,7 @@ public class IncomeRepository : IIncomeRepository
         }
         catch (Exception ex)
         {
-            Debug.WriteLine("Exception Message : " + ex.Message);
+            Debug.WriteLine("Income Sync Exception Message : " + ex.Message);
         }
     }
 
@@ -281,7 +286,7 @@ public class IncomeRepository : IIncomeRepository
             return false;
         }
     }
- /*--------- SECTION FOR ONLINE CRUD OPERATIONS----------*/
+    /*--------- SECTION FOR ONLINE CRUD OPERATIONS----------*/
 
     async Task AddIncomeOnlineAsync(IncomeModel income)
     {
@@ -301,8 +306,11 @@ public class IncomeRepository : IIncomeRepository
     }
     //think of adding a method to undelete an income
 
-    public Task DropIncomesCollection()
+    public async Task DropIncomesCollection()
     {
-        throw new NotImplementedException();
+        await OpenDB();
+        await db.DropCollectionAsync(incomesDataCollectionName);
+        db.Dispose();
+        Debug.WriteLine("Incomes Collection dropped!");
     }
 }

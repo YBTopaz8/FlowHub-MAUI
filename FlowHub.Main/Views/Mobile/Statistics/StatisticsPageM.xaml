@@ -16,8 +16,7 @@
                 FontSize="21"
                 Text="Graphs and Charts!"
                 VerticalOptions="Center"                    
-                HorizontalOptions="Center" />
-        
+                HorizontalOptions="Center" />        
 
         <HorizontalStackLayout IsVisible="true" Spacing="5" toolkit:DockLayout.DockPosition="Top"
                                Margin="0,5,0,0"
@@ -27,8 +26,8 @@
             <material:PickerField ItemsSource="{Binding MonthNames}" SelectedItem="{Binding SelectedMonthName}" BorderColor="DarkSlateGray"
                                   SelectedValueChangedCommand="{Binding PopulateDataGridWithSelectedMonthDataCommand}"
                                   Title="Month"/>
-                <material:PickerField ItemsSource="{Binding YearNames}" SelectedItem="{Binding SelectedYearValue}" BorderColor="DarkSlateGray" x:Name="YearPicker"
-                                  SelectedValueChangedCommand="{Binding PopulateDataGridWithSelectedMonthDataCommand}"
+                <material:PickerField ItemsSource="{Binding YearNames}" SelectedItem="{Binding SelectedYearValue}" BorderColor="{AppThemeBinding Light=Black, Dark=DarkSlateGray}"
+                                     x:Name="YearPicker" SelectedValueChangedCommand="{Binding PopulateDataGridWithSelectedMonthDataCommand}"
                                   Title="Year"/>
             </HorizontalStackLayout>
             <ScrollView
@@ -44,8 +43,10 @@
                                 <Setter Property="HeightRequest" Value="55"/>
                                 <Setter Property="Padding" Value="0,3"/>
                                 <Setter Property="Margin" Value="0,10"/>
-                                <Setter Property="Stroke" Value="DarkSlateGray"/>
-                            </Style>
+                            <Setter Property="Stroke" Value="{AppThemeBinding Light=Black, Dark=DarkSlateGray}"/>
+                            <Setter Property="StrokeShape" Value="RoundRectangle 13"/>
+                            <Setter Property="StrokeThickness" Value="1"/>
+                        </Style>
                             <Style TargetType="VerticalStackLayout">
                                 <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
                             </Style>
@@ -54,7 +55,9 @@
                     <Border WidthRequest="195">
                         <VerticalStackLayout>
                             <Label Text="Total Number of Flows" FontSize="16" />
-                            <Label Text="{Binding TotalNumberOfExpenditures, StringFormat='{0} Flows'}" HorizontalTextAlignment="Center"/>
+                        
+                            
+                        <Label Text="{Binding TotalNumberOfExpenditures, StringFormat='{0} Flows'}" HorizontalTextAlignment="Center"/>
                         </VerticalStackLayout>
                     </Border>
                     <Border>
@@ -153,6 +156,7 @@
         <Label toolkit:DockLayout.DockPosition="Top"
                 VerticalOptions="Center" FontSize="21"             
                 HorizontalOptions="Center"
+               FontAttributes="Bold"
                 TextDecorations="Underline">
             <Label.Text>
                 <MultiBinding StringFormat="{}{0} {1}">
@@ -174,8 +178,10 @@
                         </Grid.ColumnDefinitions>
 
                         <StackLayout Grid.Column="0">
-                            <Label Text="{Binding Reason}" FontAttributes="Bold"/>
-                            <Label Text="{Binding Category}" FontSize="10" FontAttributes="Italic"/>
+                            <Label Text="{Binding Reason}" TextColor="{StaticResource WildBlueYonder}"
+                                   FontAttributes="Bold"/>
+                            <Label Text="{Binding Category}" TextColor="{StaticResource Secondary}"
+                                   FontSize="10" FontAttributes="Italic"/>
                         </StackLayout>
 
                         <StackLayout Grid.Column="1" HorizontalOptions="End">
@@ -189,7 +195,7 @@
                             </Label>
                             <Label Text="{Binding DateSpent, StringFormat='{0:MM/dd/yyyy}'}" FontSize="10"
                                    HorizontalTextAlignment="End" FontAttributes="Italic"
-                                   />
+                                   Opacity="0.7"/>
                         </StackLayout>
                     </Grid>
                     

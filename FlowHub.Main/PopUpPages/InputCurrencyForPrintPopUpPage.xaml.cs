@@ -53,7 +53,7 @@ public partial class InputCurrencyForPrintPopUpPage : Popup
         };
 
         CurrencyPicker.ItemsSource = ListOfCurrencies;
-       CurrencyPicker.SelectedItem = UserCurrency;
+        CurrencyPicker.SelectedItem = UserCurrency;
     }
 
     void OnYesButtonClicked(object sender, EventArgs e)

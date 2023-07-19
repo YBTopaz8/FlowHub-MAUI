@@ -3,7 +3,7 @@
 public class CountryAndCurrencyCodes
 {
     Dictionary<string, string> CountryAndCurrency;
-     readonly List<string> CountryNames= new();
+    readonly List<string> CountryNames = new();
 
     public Dictionary<string, string> LoadDictionaryWithCountryAndCurrency()
     {

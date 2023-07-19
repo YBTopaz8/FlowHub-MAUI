@@ -5,6 +5,12 @@
 public class DataAccessRepo : IDataAccessRepo
 {
     LiteDatabaseAsync db;
+
+    public void DeleteDB()
+    {
+        throw new NotImplementedException();
+    }
+
     public LiteDatabaseAsync GetDb() //this function returns the path where the db file is saved
     {
         string path;

@@ -23,7 +23,8 @@
                 <Shadow Offset="15,20" Opacity="0.1"/>
             </Border.Shadow>
             <VerticalStackLayout Spacing="5">
-                <Label Text="Latest Flow Outs" FontSize="22" HorizontalOptions="Center" Padding="10,0,0,0"/>
+                <Label Text="Latest Flow Outs" FontSize="22" HorizontalOptions="Center"                        
+                       Padding="10,0,0,0"/>
                 <BoxView
                         Color="DarkSlateBlue"
                         HeightRequest="2"
@@ -44,8 +45,10 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackLayout Grid.Column="0">
-                                    <Label Text="{Binding Reason}" FontAttributes="Bold"/>
-                                    <Label Text="{Binding Category}" FontSize="10" FontAttributes="Italic"/>
+                                    <Label Text="{Binding Reason}" FontAttributes="Bold"
+                                           TextColor="{StaticResource WildBlueYonder}"/>
+                                    <Label Text="{Binding Category}" FontSize="10" FontAttributes="Italic"
+                                           TextColor="{StaticResource Secondary}"/>
                                 </StackLayout>
 
                                 <StackLayout Grid.Column="1" HorizontalOptions="End">
@@ -58,8 +61,8 @@
                                         </Label.Text>
                                     </Label>
                                     <Label Text="{Binding DateSpent, StringFormat='{0:MM/dd/yyyy}'}" FontSize="10"
-                                   HorizontalTextAlignment="End" FontAttributes="Italic"
-                                   />
+                                            HorizontalTextAlignment="End" FontAttributes="Italic"
+                                           Opacity="0.5"/>
                                 </StackLayout>
                             </Grid>
 
@@ -76,5 +79,6 @@
         </VerticalStackLayout>
 
         <!-- End Section for Expenditure display-->
+
     </VerticalStackLayout>
 </ContentPage>

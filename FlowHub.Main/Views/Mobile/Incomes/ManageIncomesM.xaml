@@ -12,8 +12,9 @@
     <ContentPage.ToolbarItems>
         <!--<ToolbarItem IconImageSource="filter_d" Command="{Binding ShowFilterPopUpPageCommand}"/>-->
     </ContentPage.ToolbarItems>
-    <toolkit:DockLayout>
-        <Label toolkit:DockLayout.DockPosition="Top" FontSize="21" FontAttributes="Bold" HorizontalOptions="Center">
+    <toolkit:DockLayout Margin="5,0">
+        <Label toolkit:DockLayout.DockPosition="Top" FontSize="20" 
+               FontAttributes="Bold" HorizontalOptions="Center">
             <Label.GestureRecognizers>
                 <TapGestureRecognizer NumberOfTapsRequired="2" Tapped="TapGestureRecognizer_Tapped"/>
             </Label.GestureRecognizers>
@@ -67,52 +68,50 @@
         <CollectionView IsVisible="true" ItemsSource="{Binding IncomesList}" EmptyView="No Flow Ins Available..." >
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:IncomeModel">
-                    <ScrollView>
-                        <VerticalStackLayout HorizontalOptions="Center" Margin="0,5,0,0">
-                            <SwipeView>
-                                <SwipeView.LeftItems>
-                                    <SwipeItem 
-                                               Command="{Binding Source={x:Reference page}, Path=BindingContext.ShowEditIncomePopUpCommand}"
-                                               CommandParameter="{Binding .}" IconImageSource="{AppThemeBinding Dark= edit_d.png, Light= edit_l.png}" 
-                                               BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
-                                </SwipeView.LeftItems>
+                    
+                    <SwipeView>
+                        <SwipeView.LeftItems>
+                            <SwipeItem 
+                                        Command="{Binding Source={x:Reference page}, Path=BindingContext.ShowEditIncomePopUpCommand}"
+                                        CommandParameter="{Binding .}" IconImageSource="{AppThemeBinding Dark= edit_d.png, Light= edit_l.png}" 
+                                        BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
+                        </SwipeView.LeftItems>
 
-                                <SwipeView.RightItems>
-                                    <SwipeItem 
-                                            Command="{Binding Source={x:Reference page}, Path=BindingContext.DeleteIncomeBtnCommand}"
-                                            CommandParameter="{Binding .}" IconImageSource="{AppThemeBinding Dark= delete_d.png, Light = delete_l.png}" 
-                                            BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
-                                </SwipeView.RightItems>
+                        <SwipeView.RightItems>
+                            <SwipeItem 
+                                    Command="{Binding Source={x:Reference page}, Path=BindingContext.DeleteIncomeBtnCommand}"
+                                    CommandParameter="{Binding .}" IconImageSource="{AppThemeBinding Dark= delete_d.png, Light = delete_l.png}" 
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
+                        </SwipeView.RightItems>
 
-                                <Border Padding="10" Margin="10,2"
-                                        HeightRequest="85" HorizontalOptions="FillAndExpand">
+                        <Border Padding="5" Margin="6,2"
+                                HorizontalOptions="FillAndExpand">
 
-                                    <VerticalStackLayout>
-                                        <Label HorizontalOptions="Center" FontSize="18" FontAttributes="Bold"
-                                               Text="{Binding DateReceived, StringFormat='{0:MMMM dd, yyyy}'}"/>
+                            <VerticalStackLayout>
+                                <Label HorizontalOptions="Center" FontSize="18" FontAttributes="Bold"
+                                        Text="{Binding DateReceived, StringFormat='{0:MMMM dd, yyyy}'}"/>
 
-                                        <FlexLayout JustifyContent="SpaceBetween" Direction="Row"
-                                                    Margin="10,0">
-                                            <Label Text="{Binding Reason, StringFormat='{0}'}" FontSize="16"
-                                                   FontAttributes="Bold"/>
+                                <FlexLayout JustifyContent="SpaceBetween" Direction="Row"
+                                            Margin="10,0">
+                                    <Label Text="{Binding Reason, StringFormat='{0}'}" FontSize="16"
+                                            FontAttributes="Bold"/>
                                             
-                                            <Label FontSize="16"
-                                                   FontAttributes="Bold">
-                                                <Label.Text>
-                                                    <MultiBinding StringFormat="{} {0:n2} {1}">
-                                                        <Binding Path="AmountReceived"/>
-                                                        <Binding Path="Currency"/>
-                                                    </MultiBinding>
-                                                </Label.Text>
-                                            </Label>
+                                    <Label FontSize="16"
+                                            FontAttributes="Bold">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{} {0:n2} {1}">
+                                                <Binding Path="AmountReceived"/>
+                                                <Binding Path="Currency"/>
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
                                             
-                                        </FlexLayout>
-                                    </VerticalStackLayout>
-                                </Border>
+                                </FlexLayout>
+                            </VerticalStackLayout>
+                        </Border>
 
-                            </SwipeView>
-                        </VerticalStackLayout>
-                    </ScrollView>
+                    </SwipeView>
+                        
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

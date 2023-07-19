@@ -5,7 +5,7 @@ public interface IUsersRepository
     event Action OfflineUserDataChanged;
     public UsersModel OfflineUser { get; set; }
     public UsersModel OnlineUser { get; set; }
- //   Task<UsersModel> GetUserAsync();
+    //   Task<UsersModel> GetUserAsync();
     Task<UsersModel> GetUserAsync(string UserEmail, string UserPassword);
     Task<UsersModel> GetUserAsync(string UserId);
     Task<UsersModel> GetUserOnlineAsync(UsersModel user);

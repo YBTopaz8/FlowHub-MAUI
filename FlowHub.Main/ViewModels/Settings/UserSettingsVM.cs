@@ -129,7 +129,6 @@ public partial class UserSettingsVM : ObservableObject
     [RelayCommand]
     public void DeleteIdsCollection()
     {
-        
     }
 
     [RelayCommand]

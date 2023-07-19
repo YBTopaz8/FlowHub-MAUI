@@ -33,10 +33,12 @@
 
             <HorizontalStackLayout HorizontalOptions="EndAndExpand" Spacing="8">
                 
-                <Button Text="Yes" FontSize="20" BackgroundColor="DarkSlateBlue" FontAttributes="Bold"
-                        Clicked="OnYesButtonClicked"/>
-                <Button Text="Cancel" FontSize="18" BackgroundColor="DarkRed"
+                <Button Text="Cancel" FontSize="18" BackgroundColor="Transparent" 
+                        TextColor="{AppThemeBinding Dark={StaticResource Primary},Light= StaticResource Cyan200Accent}"
                         Clicked="OnNoButtonClicked"/>
+                <Button Text="Yes" FontSize="20" BackgroundColor="Transparent" FontAttributes="Bold"
+                        TextColor="{StaticResource Cyan200Accent}"
+                        Clicked="OnYesButtonClicked"/>
             </HorizontalStackLayout>
         </VerticalStackLayout>
     </Border>

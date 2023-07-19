@@ -13,7 +13,7 @@ public class DebtRepository : IDebtRepository
     private readonly IOnlineCredentialsRepository onlineRepository;
     private readonly IUsersRepository usersRepo;
 
-    public List<DebtModel> OfflineDebtList { get ; set ; }
+    public List<DebtModel> OfflineDebtList { get; set; }
     public List<DebtModel> OnlineDebtList { get; set; }
 
     public event Action OfflineDebtListChanged;
@@ -22,7 +22,7 @@ public class DebtRepository : IDebtRepository
     {
         this.dataAccess = dataAccess;
         this.onlineRepository = onlineRepository;
-        this.usersRepo = userRepo;
+        usersRepo = userRepo;
     }
 
     async Task<LiteDatabaseAsync> OpenDB()
@@ -49,6 +49,7 @@ public class DebtRepository : IDebtRepository
                     .Where(x => x.UserId == userId)
                     .OrderByDescending(x => x.UpdateDateTime)
                     .ToListAsync();
+                OfflineDebtList ??= Enumerable.Empty<DebtModel>().ToList();
                 return OfflineDebtList;
             }
         }
@@ -99,7 +100,7 @@ public class DebtRepository : IDebtRepository
                 Debug.WriteLine($"Exception Message {ex.Message}");
             }
         }
-        var filtersDebt= Builders<DebtModel>.Filter.Eq("UserId", usersRepo.OnlineUser.Id) &
+        var filtersDebt = Builders<DebtModel>.Filter.Eq("UserId", usersRepo.OnlineUser.Id) &
             Builders<DebtModel>.Filter.Eq("Currency", usersRepo.OfflineUser.UserCurrency);
 
         AllDebtsOnline ??= DBOnline.GetCollection<DebtModel>(DebtsCollectionName);
@@ -130,15 +131,15 @@ public class DebtRepository : IDebtRepository
             Dictionary<string, DebtModel> OnlineDebtDict = OnlineDebtList.ToDictionary(x => x.Id, x => x);
             Dictionary<string, DebtModel> OfflineDebtDict = OfflineDebtList.ToDictionary(x => x.Id, x => x);
 
-            foreach(var itemID in OfflineDebtDict.Keys.Intersect(OnlineDebtDict.Keys))
+            foreach (var itemID in OfflineDebtDict.Keys.Intersect(OnlineDebtDict.Keys))
             {
                 var offlineItem = OfflineDebtDict[itemID];
                 var onlineItem = OnlineDebtDict[itemID];
-                if (offlineItem.UpdateDateTime > onlineItem.UpdateDateTime)
+                if (offlineItem.UpdateDateTime.ToUniversalTime() > onlineItem.UpdateDateTime.ToUniversalTime())
                 {
                     await UpdateDebtOnlineAsync(offlineItem);
                 }
-                else if (offlineItem.UpdateDateTime < onlineItem.UpdateDateTime)
+                else if (offlineItem.UpdateDateTime.ToUniversalTime() < onlineItem.UpdateDateTime.ToUniversalTime())
                 {
                     await UpdateDebtAsync(onlineItem);
                 }
@@ -162,11 +163,12 @@ public class DebtRepository : IDebtRepository
         }
         catch (Exception ex)
         {
-            Debug.WriteLine("Sync exception" + ex.Message);
+            Debug.WriteLine("Debts Sync exception" + ex.Message);
         }
     }
     public async Task<bool> AddDebtAsync(DebtModel debt)
     {
+        debt.UpdateDateTime = DateTime.UtcNow;
         try
         {
             using (db = await OpenDB())
@@ -201,9 +203,11 @@ public class DebtRepository : IDebtRepository
     }
     public async Task<bool> UpdateDebtAsync(DebtModel debt)
     {
+        debt.UpdateDateTime = DateTime.UtcNow;
+
         try
         {
-            using(db = await OpenDB())
+            using (db = await OpenDB())
             {
                 if (await AllDebts.UpdateAsync(debt))
                 {
@@ -236,10 +240,11 @@ public class DebtRepository : IDebtRepository
     }
     public async Task<bool> DeleteDebtAsync(DebtModel debt)
     {
+        debt.UpdateDateTime = DateTime.UtcNow;
         debt.IsDeleted = true;
         try
         {
-            using(db = await OpenDB())
+            using (db = await OpenDB())
             {
                 if (await AllDebts.UpdateAsync(debt))
                 {
@@ -284,13 +289,11 @@ public class DebtRepository : IDebtRepository
     {
         await AllDebtsOnline.ReplaceOneAsync(debt => debt.Id == debtItem.Id, debtItem);
     }
-    public Task DropDebtCollection()
+    public async Task DropDebtCollection()
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> SynchronizeDebtAsync(string userEmail, string userPassword)
-    {
-        throw new NotImplementedException();
+        await OpenDB();
+        await db.DropCollectionAsync(DebtsCollectionName);
+        db.Dispose();
+        Debug.WriteLine("debts Collection dropped!");
     }
 }

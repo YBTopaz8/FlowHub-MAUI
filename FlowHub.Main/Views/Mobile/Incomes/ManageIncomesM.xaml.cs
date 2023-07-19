@@ -8,7 +8,7 @@ public partial class ManageIncomesM : ContentPage
     {
         InitializeComponent();
         viewModel = vm;
-        this.BindingContext = vm;
+        BindingContext = vm;
     }
 
     protected override void OnAppearing()
@@ -34,7 +34,7 @@ public partial class ManageIncomesM : ContentPage
     }
     private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
-        PopUpCloseResult result = (PopUpCloseResult) await Shell.Current.ShowPopupAsync(new InputPopUpPage(InputType.Numeric, new List<string>() { "Amount" }, "Enter New Pocket Money"));
+        PopUpCloseResult result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new InputPopUpPage(InputType.Numeric, new List<string>() { "Amount" }, "Enter New Pocket Money"));
         if (result.Result is PopupResult.OK)
         {
             double NewAmount = (double)result.Data;

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<base:DrawerView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlowHub.Main.Views.Mobile.Debts.ViewDebtBottomSheet"
+             xmlns:base="clr-namespace:FlowHub.Main.Utilities.BottomSheet"
+             xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
+             xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Debts"
+             x:DataType="viewModels:ManageDebtsVM"
+             BackgroundColor="{AppThemeBinding Light=#F0F9FF}"
+             >
+    <VerticalStackLayout Spacing="2">
+        <VerticalStackLayout.Resources>
+            <ResourceDictionary>
+                <Style TargetType="Label">
+                    <Setter Property="TextColor" Value="{AppThemeBinding Light=Black}"/>
+                </Style>
+            </ResourceDictionary>
+        </VerticalStackLayout.Resources>
+
+        <Label FontSize="21" HorizontalOptions="CenterAndExpand"
+               FontAttributes="Bold" Margin="0,0,0,10"
+               TextColor="{StaticResource Cyan200Accent}">
+            <Label.Triggers>
+                <DataTrigger TargetType="Label"
+                            Binding="{Binding SingleDebtDetails.DebtType}" Value="Lent">
+                    <Setter Property="Text" >
+                        <Setter.Value>
+                            <MultiBinding StringFormat="{} {0} Owes You {1} {2}">
+                                <Binding Path="SingleDebtDetails.PersonOrOrganization.Name"/>
+                                <Binding Path="SingleDebtDetails.Amount"/>
+                                <Binding Path="SingleDebtDetails.Currency"/>
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+                <DataTrigger TargetType="Label"
+                             Binding="{Binding SingleDebtDetails.DebtType}" 
+                             Value="Borrowed">
+                    <Setter Property="Text">
+                        <Setter.Value>
+                            <MultiBinding StringFormat="{} You Owe {0} {1} {2}">
+                                <Binding Path="SingleDebtDetails.PersonOrOrganization.Name"/>
+                                <Binding Path="SingleDebtDetails.Amount"/>
+                                <Binding Path="SingleDebtDetails.Currency"/>
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </Label.Triggers>
+        </Label>
+        <Rectangle Fill="{StaticResource Cyan200Accent}" HeightRequest="2" Margin="0,0,0,10"/>
+        
+        <FlexLayout JustifyContent="SpaceBetween" Margin="3,0">
+            <VerticalStackLayout Spacing="8">
+                <VerticalStackLayout.Resources>
+                    <ResourceDictionary>
+                        <Style TargetType="Label">
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="TextColor" Value="White"/>
+                        </Style>
+                    </ResourceDictionary>
+                </VerticalStackLayout.Resources>
+                <Label Text="Flow Amount :"/>
+                <Label Text="Flow Direction :"/>
+                <Label Text="Flow Partner :"/>
+                <Label Text="Flow Due: ">
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label"
+                                     Binding="{Binding IsDeadlineSet}" Value="false">
+                            <Setter Property="IsVisible" Value="False"/>
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+                <Label Text="Flow Completion : "/>
+                <Label Text="Contact : "/>
+                <Label Text="Notes : "/>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="8">
+                <VerticalStackLayout.Resources>
+                    <ResourceDictionary>
+                        <Style TargetType="Label">
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="FontAttributes" Value="Bold"/>
+                            <Setter Property="TextColor" Value="{StaticResource WildBlueYonder}"/>
+                            
+                            <Setter Property="HorizontalOptions" Value="End"/>
+                        </Style>
+                    </ResourceDictionary>
+                </VerticalStackLayout.Resources>
+
+                <Label> 
+                    <Label.Text>
+                        <MultiBinding StringFormat="{} {0} {1}">
+                            <Binding Path="SingleDebtDetails.Amount"/>
+                            <Binding Path="SingleDebtDetails.Currency"/>
+                        </MultiBinding>
+                    </Label.Text>
+                </Label>
+
+                <Label>
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label"
+                            Binding="{Binding SingleDebtDetails.DebtType}" Value="Lent">
+                            <Setter Property="Text" Value="Flow In"/>
+                        </DataTrigger>
+                        
+                        <DataTrigger TargetType="Label"
+                             Binding="{Binding SingleDebtDetails.DebtType}" 
+                             Value="Borrowed">
+                            <Setter Property="Text" Value="Flow Out"/>
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+
+                <Label Text="{Binding SingleDebtDetails.PersonOrOrganization.Name}"/>
+
+                <Label Text="{Binding SingleDebtDetails.Deadline, StringFormat='{0:ddd, MMM dd, yyyy}'}" >
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label"
+                                     Binding="{Binding IsDeadlineSet}" Value="False">
+                            <Setter Property="IsVisible" Value="false"/>
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+
+                <Label>
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label"
+                            Binding="{Binding SingleDebtDetails.IsPaidCompletely}" Value="True">
+                            <Setter Property="Text" Value="Completed"/>
+                        </DataTrigger>
+
+                        <DataTrigger TargetType="Label"
+                             Binding="{Binding SingleDebtDetails.IsPaidCompletely}" 
+                             Value="False">
+                            <Setter Property="Text" Value="Pending"/>
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+                <Label Text="{Binding SingleDebtDetails.PersonOrOrganization.PhoneNumber}"/>
+                <Label Text="{Binding SingleDebtDetails.Notes}"/>
+            </VerticalStackLayout>
+            
+            
+        </FlexLayout>
+
+        <ImageButton Source="{AppThemeBinding Light=phone_l, Dark=phone_dsb}" HorizontalOptions="Center" 
+                     Command="{Binding OpenPhoneDialerCommand}" HeightRequest="40"                      
+                     ToolTipProperties.Text="Launch A Phone Call"/>
+        <ImageButton Source="{AppThemeBinding Dark=delete_d, Light=delete_l}" HorizontalOptions="End"
+                        Command="{Binding DeleteDebtCommand}" HeightRequest="25" 
+                        ToolTipProperties.Text="Delete This Debt"/>
+    </VerticalStackLayout>
+</base:DrawerView>

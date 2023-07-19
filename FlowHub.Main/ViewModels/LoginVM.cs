@@ -7,17 +7,19 @@ public partial class LoginVM : ObservableObject
     private readonly IExpendituresRepository expenditureRepo;
     private readonly IIncomeRepository incomeRepo;
     private readonly IDebtRepository debtRepo;
+    private readonly IDataAccessRepo dataAccessRepo;
     private readonly CountryAndCurrencyCodes countryAndCurrency = new();
 
     readonly LoginNavs NavFunctions = new();
     public LoginVM(ISettingsServiceRepository sessionServiceRepository, IUsersRepository userRepository, IExpendituresRepository expRepository,
-                    IIncomeRepository incomeRepository, IDebtRepository debtRepository)
+                    IIncomeRepository incomeRepository, IDebtRepository debtRepository, IDataAccessRepo dataAccessRepo)
     {
         settingsRepo = sessionServiceRepository;
         userRepo = userRepository;
         expenditureRepo = expRepository;
         incomeRepo = incomeRepository;
-        debtRepo= debtRepository;
+        debtRepo = debtRepository;
+        this.dataAccessRepo = dataAccessRepo;
     }
 
     [ObservableProperty]
@@ -70,14 +72,21 @@ public partial class LoginVM : ObservableObject
     {
         if (IsQuickLoginDetectionFilePresent())
         {
+            if (!await userRepo.CheckIfAnyUserExists())
+            {
+                File.Delete(LoginDetectFile);
+                await PageLoaded();
+            }
             Username = await settingsRepo.GetPreference<string>("Username", null);
             if (Username is null)
             {
                 File.Delete(LoginDetectFile);
                 await PageLoaded();
             }
-            userId = await settingsRepo.GetPreference<string>(nameof(CurrentUser.Id), null);
             IsQuickLoginVisible = true;
+            userId = await settingsRepo.GetPreference<string>(nameof(CurrentUser.Id), null);
+            userRepo.OfflineUser = await userRepo.GetUserAsync(userId); //initialized user to be used by the entire app  
+            //await Task.WhenAll(expenditureRepo.SynchronizeExpendituresAsync(), debtRepo.SynchronizeDebtsAsync(), incomeRepo.SynchronizeIncomesAsync());
         }
         else
         {
@@ -94,6 +103,7 @@ public partial class LoginVM : ObservableObject
                     IsLoginFormVisible = true;
                     HasLoginRemembered = false;
                 }
+
                 IsLoginFormVisible = false;
             }
             else
@@ -170,6 +180,8 @@ public partial class LoginVM : ObservableObject
 
         if (IsLoginOnlineButtonClicked)
         {
+            CurrentUser.Email = "8brunel@gmail.com";
+            CurrentUser.Password = "Yvan";
             User = await userRepo.GetUserOnlineAsync(CurrentUser);
         }
         else
@@ -220,8 +232,6 @@ public partial class LoginVM : ObservableObject
     {
         try
         {
-            await Task.WhenAll(expenditureRepo.SynchronizeExpendituresAsync(),debtRepo.SynchronizeDebtsAsync(), incomeRepo.SynchronizeIncomesAsync());
-
             CancellationTokenSource cts = new();
             const ToastDuration duration = ToastDuration.Short;
             const double fontSize = 14;

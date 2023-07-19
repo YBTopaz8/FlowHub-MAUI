@@ -14,7 +14,6 @@ public class ExpendituresRepository : IExpendituresRepository
     public event Action OfflineExpendituresListChanged;
 
     private IMongoCollection<ExpendituresModel> AllOnlineExpenditures;
-    private IMongoCollection<IDsToBeDeleted> AllOnlineIDsToBeDeleted;
 
     ILiteCollectionAsync<ExpendituresModel> AllExpenditures;
 
@@ -23,7 +22,6 @@ public class ExpendituresRepository : IExpendituresRepository
     private readonly IOnlineCredentialsRepository onlineDataAccessRepo;
 
     private const string expendituresDataCollectionName = "Expenditures";
-    private const string IDsDataCollectionName = "IDsToDelete";
 
     public ExpendituresRepository(IDataAccessRepo dataAccess, IOnlineCredentialsRepository onlineRepository, IUsersRepository userRepo)
     {
@@ -35,6 +33,7 @@ public class ExpendituresRepository : IExpendituresRepository
     async Task<LiteDatabaseAsync> OpenDB()
     {
         db = dataAccessRepo.GetDb();
+
         AllExpenditures = db.GetCollection<ExpendituresModel>(expendituresDataCollectionName);
         await AllExpenditures.EnsureIndexAsync(x => x.Id);
         return db;
@@ -48,18 +47,20 @@ public class ExpendituresRepository : IExpendituresRepository
         }
         try
         {
-            using (db = await OpenDB())
-            {
-                string userId = usersRepo.OfflineUser.Id;
-                string userCurrency = usersRepo.OfflineUser.UserCurrency;
-                if (usersRepo.OfflineUser.UserIDOnline != string.Empty)
-                {
-                    userId = usersRepo.OfflineUser.UserIDOnline;
-                }
-                OfflineExpendituresList = await AllExpenditures.Query().Where(x => x.UserId == userId && x.Currency == userCurrency).ToListAsync();
+            await OpenDB();
 
-                return OfflineExpendituresList;
+            string userId = usersRepo.OfflineUser.Id;
+            string userCurrency = usersRepo.OfflineUser.UserCurrency;
+            if (usersRepo.OfflineUser.UserIDOnline != string.Empty)
+            {
+                userId = usersRepo.OfflineUser.UserIDOnline;
             }
+            OfflineExpendituresList = await AllExpenditures.Query()
+            .Where(x => x.UserId == userId && x.Currency == userCurrency).ToListAsync();
+
+            db.Dispose();
+            OfflineExpendituresList ??= Enumerable.Empty<ExpendituresModel>().ToList();
+            return OfflineExpendituresList;
         }
         catch (Exception ex)
         {
@@ -112,6 +113,16 @@ public class ExpendituresRepository : IExpendituresRepository
             Builders<ExpendituresModel>.Filter.Eq("Currency", usersRepo.OfflineUser.UserCurrency);
 
         AllOnlineExpenditures = DBOnline.GetCollection<ExpendituresModel>(expendituresDataCollectionName);
+        //try 
+        //{ CODE TO REMOVE A FIELD FROM ONLINE
+        //    var updateDef = Builders<ExpendituresModel>.Update.Unset("UpdateOnSync");
+        //    var filterExp = Builders<ExpendituresModel>.Filter.Empty;
+        //    await AllOnlineExpenditures.UpdateManyAsync(filterExp, updateDef);
+        //}
+        //catch (Exception ex)
+        //{
+        //    Debug.WriteLine("Exception : " + ex.Message);
+        //}
         OnlineExpendituresList = await AllOnlineExpenditures.Find(filtersExpenditures).ToListAsync();
     }
 
@@ -123,7 +134,7 @@ public class ExpendituresRepository : IExpendituresRepository
         {
             await GetAllExpendituresAsync();
             await LoadOnlineDB();
-            if(usersRepo.OnlineUser is null)
+            if (usersRepo.OnlineUser is null)
             {
                 return;
             }
@@ -142,11 +153,11 @@ public class ExpendituresRepository : IExpendituresRepository
                 var offlineItem = OfflineExpendituresDict[itemID];
                 var onlineItem = OnlineExpendituresDict[itemID];
 
-                if (offlineItem.UpdatedDateTime > offlineItem.UpdatedDateTime)
+                if (offlineItem.UpdatedDateTime.ToUniversalTime() > onlineItem.UpdatedDateTime.ToUniversalTime())
                 {
                     await UpdateExpenditureOnlineAsync(offlineItem);
                 }
-                else if (offlineItem.UpdatedDateTime < offlineItem.UpdatedDateTime)
+                else if (offlineItem.UpdatedDateTime.ToUniversalTime() < onlineItem.UpdatedDateTime.ToUniversalTime())
                 {
                     await UpdateExpenditureAsync(onlineItem);
                 }
@@ -161,7 +172,6 @@ public class ExpendituresRepository : IExpendituresRepository
             foreach (var itemID in OnlineExpendituresDict.Keys.Except(OfflineExpendituresDict.Keys))
             {
                 await AddExpenditureAsync(OnlineExpendituresDict[itemID]);
-                OfflineExpendituresList.Remove(OnlineExpendituresDict[itemID]);
             }
 
             await usersRepo.UpdateUserOnlineGetSetLatestValues(usersRepo.OfflineUser);
@@ -171,7 +181,8 @@ public class ExpendituresRepository : IExpendituresRepository
         }
         catch (Exception ex)
         {
-            Debug.WriteLine("Exception Message : " + ex.Message);
+            await db.RollbackAsync();
+            Debug.WriteLine("Expenditures Sync Exception Message : " + ex.Message);
         }
     }
     /*--------- SECTION FOR OFFLINE CRUD OPERATIONS----------*/
@@ -179,38 +190,33 @@ public class ExpendituresRepository : IExpendituresRepository
     {
         try
         {
-            using (db = await OpenDB())                ;
-            {
-                if (await AllExpenditures.InsertAsync(expenditure) is not null)
-                {
-                    OfflineExpendituresList.Add(expenditure);
-                    if (!IsBatchUpdate)
-                    {
-                        OfflineExpendituresListChanged?.Invoke();
-                    }
+            await OpenDB();
 
-                    if (!IsSyncing && Connectivity.NetworkAccess == NetworkAccess.Internet)
-                    {
-                        OnlineExpendituresList.Add(expenditure);
-                        await AddExpenditureOnlineAsync(expenditure);
-                    }
-                    return true;
-                }
-                else
+            if (await AllExpenditures.InsertAsync(expenditure) is not null)
+            {
+                OfflineExpendituresList.Add(expenditure);
+                if (!IsBatchUpdate)
                 {
-                    Debug.WriteLine("Error while inserting Expenditure");
+                    OfflineExpendituresListChanged?.Invoke();
                 }
-                return false;
+
+                if (!IsSyncing && Connectivity.NetworkAccess == NetworkAccess.Internet)
+                {
+                    OnlineExpendituresList.Add(expenditure);
+                    await AddExpenditureOnlineAsync(expenditure);
+                }
+                return true;
             }
+            else
+            {
+                Debug.WriteLine("Error while inserting Expenditure");
+            }
+            return false;
         }
         catch (Exception ex)
         {
-            Debug.WriteLine("Add ExpLocal "+ ex.InnerException.Message);
+            Debug.WriteLine("Add ExpLocal " + ex.InnerException.Message);
             return false;
-        }
-        finally
-        {
-            db.Dispose();
         }
     }
 
@@ -232,21 +238,19 @@ public class ExpendituresRepository : IExpendituresRepository
                     }
                     if (!IsSyncing && Connectivity.NetworkAccess == NetworkAccess.Internet)
                     {
-                          await UpdateExpenditureOnlineAsync(expenditure);
+                        await UpdateExpenditureOnlineAsync(expenditure);
                     }
                     return true;
                 }
                 else
                 {
                     Debug.WriteLine("Failed to update Expenditure");
-                    db.Dispose();
                     return false;
                 }
             }
         }
         catch (Exception ex)
         {
-            db.Dispose();
             Debug.WriteLine(ex.Message);
             return false;
         }
@@ -276,14 +280,12 @@ public class ExpendituresRepository : IExpendituresRepository
                 else
                 {
                     Debug.WriteLine("Failed to delete Expenditure");
-                    db.Dispose();
                     return false;
                 }
             }
         }
         catch (Exception ex)
         {
-            db.Dispose();
             Debug.WriteLine(ex.Message);
             return false;
         }

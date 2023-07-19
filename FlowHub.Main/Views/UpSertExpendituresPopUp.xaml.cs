@@ -4,11 +4,11 @@ namespace FlowHub.Main.Views;
 
 public partial class UpSertExpendituresPopUp : Popup
 {
-	readonly UpSertExpenditureVM viewModel;
-	public UpSertExpendituresPopUp(UpSertExpenditureVM vm)
-	{
-		InitializeComponent();
-		viewModel = vm;
+    readonly UpSertExpenditureVM viewModel;
+    public UpSertExpendituresPopUp(UpSertExpenditureVM vm)
+    {
+        InitializeComponent();
+        viewModel = vm;
         BindingContext = vm;
         viewModel.PageLoaded();
 
@@ -38,10 +38,10 @@ public partial class UpSertExpendituresPopUp : Popup
 
         //        Size = new Size(popupWidth, popupHeight);
 #if WINDOWS
-        this.Size = new Size(400, 420);
+        Size = new Size(400, 420);
 #endif
         viewModel.PropertyChanged += ViewModel_PropertyChanged;
-	}
+    }
 
     private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
@@ -53,7 +53,7 @@ public partial class UpSertExpendituresPopUp : Popup
                 Close(new PopUpCloseResult() { Data = null, Result = PopupResult.Cancel });
                 return;
             }
-            Close(new PopUpCloseResult() { Data = viewModel.SingleExpenditureDetails, Result = viewModel.ThisPopUpResult});
+            Close(new PopUpCloseResult() { Data = viewModel.SingleExpenditureDetails, Result = viewModel.ThisPopUpResult });
         }
     }
 

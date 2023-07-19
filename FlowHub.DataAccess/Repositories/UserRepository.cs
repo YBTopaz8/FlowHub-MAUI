@@ -66,20 +66,19 @@ public class UserRepository : IUsersRepository
             DBOnline = onlineDataAccessRepo.OnlineMongoDatabase;
         }
         OnlineUser ??= await DBOnline.GetCollection<UsersModel>("Users").Find(filterUserCredentials).FirstOrDefaultAsync();
+        OfflineUser = OnlineUser;
         if (OnlineUser is null)
         {
             return null;
         }
-        if (OfflineUser is null)
-        {
-            OfflineUser = OnlineUser;
-            await AddUserAsync(OnlineUser);
-        }
-        else
-        {
-            OfflineUser.UserIDOnline = OnlineUser.Id;
-            _ = await UpdateUserAsync(OfflineUser);
-        }
+
+        await AddUserAsync(OnlineUser);
+
+        //if(OfflineUser is not null)
+        //{
+        //    OfflineUser.UserIDOnline = OnlineUser.Id;
+        //    _ = await UpdateUserAsync(OfflineUser);
+        //}
         OfflineUserDataChanged?.Invoke();
         return OfflineUser;
     }
@@ -204,7 +203,7 @@ public class UserRepository : IUsersRepository
     public async Task UpdateUserOnlineAsync(UsersModel user)
     {
         EnsureOnlineConnection();
-        _ = await OnlineUserCollection.ReplaceOneAsync(u => u.Id == user.UserIDOnline,user);
+        _ = await OnlineUserCollection.ReplaceOneAsync(u => u.Id == user.UserIDOnline, user);
     }
 
     public async Task<bool> UpdateUserOnlineGetSetLatestValues(UsersModel user)

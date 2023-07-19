@@ -12,7 +12,7 @@ public partial class FilterOptionsPopUp : Popup
     readonly List<string> ListOfYears = new()
         { "2019", "2020", "2021", "2022", "2023" , "2024", "2025" };
 
-    public FilterOptionsPopUp(string InitialFilterOption, int specificMonth=0, int specificYear=0)
+    public FilterOptionsPopUp(string InitialFilterOption, int specificMonth = 0, int specificYear = 0)
     {
         InitializeComponent();
 
@@ -39,7 +39,7 @@ public partial class FilterOptionsPopUp : Popup
         {
             int monthIndex = specificMonth - 1;
             MonthPicker.SelectedIndex = monthIndex;
-            selectedMonth = ReturnFirstThreeLetters( ListOfMonths[monthIndex]);
+            selectedMonth = ReturnFirstThreeLetters(ListOfMonths[monthIndex]);
             YearPicker.SelectedItem = specificYear.ToString();
         }
 
@@ -85,7 +85,7 @@ public partial class FilterOptionsPopUp : Popup
         }
     }
 
-    void OnOKButtonClicked(object sender, EventArgs e) => Close(FilterResult );
+    void OnOKButtonClicked(object sender, EventArgs e) => Close(FilterResult);
     void OnCancelButtonClicked(object sender, EventArgs e) => Close(InitialResultForCancel);
 
     private string ReturnFirstThreeLetters(string SelectedMonthParam)

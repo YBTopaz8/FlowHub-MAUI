@@ -8,6 +8,7 @@ global using FlowHub.Main.ViewModels.Expenditures.PlannedExpenditures.MonthlyPla
 global using FlowHub.Main.ViewModels.Incomes;
 global using FlowHub.Main.ViewModels.Settings;
 global using FlowHub.Main.ViewModels.Statistics;
+global using FlowHub.Main.ViewModels.Debts;
 
 global using FlowHub.Main.Views.Desktop;
 global using FlowHub.Main.Views.Desktop.Expenditures;

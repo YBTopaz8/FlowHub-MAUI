@@ -39,21 +39,25 @@ public class UsersModel : INotifyPropertyChanged
         => SetProperty(ref pocketMoney, value);
     }
 
-    public double TotalExpendituresAmount {
+    public double TotalExpendituresAmount
+    {
         get => totalExpendituresAmount;
         set
         => SetProperty(ref totalExpendituresAmount, value);
     }
-    public double TotalIncomeAmount {
+    public double TotalIncomeAmount
+    {
         get => totalIncomeAmount;
         set => SetProperty(ref totalIncomeAmount, value);
     }
-    public double TotalInDebtAmount {
+    public double TotalInDebtAmount
+    {
         get => totalInDebtAmount;
         set
         => SetProperty(ref totalInDebtAmount, value);
     }
-    public double TotalOutDebtAmount {
+    public double TotalOutDebtAmount
+    {
         get => totalOutDebtAmount;
         set => SetProperty(ref totalOutDebtAmount, value);
     }

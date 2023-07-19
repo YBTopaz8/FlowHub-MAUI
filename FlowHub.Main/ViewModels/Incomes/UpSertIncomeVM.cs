@@ -17,7 +17,7 @@ public partial class UpSertIncomeVM : ObservableObject
     }
 
     [ObservableProperty]
-    IncomeModel singleIncomeDetails = new (){ DateReceived = DateTime.Now};
+    IncomeModel singleIncomeDetails = new() { DateReceived = DateTime.Now };
 
     [ObservableProperty]
     string pageTitle;
@@ -91,7 +91,7 @@ public partial class UpSertIncomeVM : ObservableObject
     }
 
     async Task AddIncomeAsync(ToastDuration duration, double fontSize, CancellationTokenSource tokenSource)
-     {
+    {
         SingleIncomeDetails.Currency = ActiveUser.UserCurrency;
         if (SingleIncomeDetails.AmountReceived <= 0)
         {

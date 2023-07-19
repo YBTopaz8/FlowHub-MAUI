@@ -59,7 +59,7 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
         expCounter = 1;
         InitialSingleMonthlyPlannedExp = SingleMonthlyPlanned.TotalAmount;
         InitialExpenditureAmount = SingleExpenditureDetails.AmountSpent;
-        if(SingleExpenditureDetails.Comment is not null)
+        if (SingleExpenditureDetails.Comment is not null)
         {
             HasComment = !SingleExpenditureDetails.Comment.Equals("None");
         }
@@ -109,7 +109,7 @@ public partial class UpSertMonthlyPlannedExpVM : ObservableObject
         {
             if (SingleExpenditureDetails.Id is null)
             {
-                if(await AddExpToExistingMonthlyPlanned(duration, fontSize, cancellationTokenSource))
+                if (await AddExpToExistingMonthlyPlanned(duration, fontSize, cancellationTokenSource))
                 {
                     if (AddAnotherExp)
                     {

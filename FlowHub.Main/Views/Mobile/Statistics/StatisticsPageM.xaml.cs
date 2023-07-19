@@ -5,13 +5,13 @@ namespace FlowHub.Main.Views.Mobile.Statistics;
 
 public partial class StatisticsPageM
 {
-	private readonly StatisticsPageVM viewModel;
-	public StatisticsPageM(StatisticsPageVM vm)
-	{
-		InitializeComponent();
-		viewModel = vm;
-		this.BindingContext = vm;
-	}
+    private readonly StatisticsPageVM viewModel;
+    public StatisticsPageM(StatisticsPageVM vm)
+    {
+        InitializeComponent();
+        viewModel = vm;
+        BindingContext = vm;
+    }
 
     protected override void OnAppearing()
     {
@@ -21,7 +21,7 @@ public partial class StatisticsPageM
         if (!viewModel.IsLoaded)
         {
             viewModel.PageLoaded();
-            YearPicker.SelectedItem = DateTime.Now.Year.ToString();
+            YearPicker.SelectedItem = DateTime.Now.Year;//.ToString();
         }
     }
     protected override void OnDisappearing()

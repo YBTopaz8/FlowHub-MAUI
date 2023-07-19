@@ -137,10 +137,7 @@
                 </Label>
                 <Label Text="{Binding SingleExpenditure.Reason, StringFormat='Reason : {0}'}"
                        LineBreakMode="WordWrap"/>
-                <HorizontalStackLayout>
-                    <Label Text="{Binding SingleExpenditure.IsPurchase, StringFormat='Flow is Purchase? : {0}'}"/>
-
-                </HorizontalStackLayout>
+                
             </VerticalStackLayout>
         </Border>
     </VerticalStackLayout>

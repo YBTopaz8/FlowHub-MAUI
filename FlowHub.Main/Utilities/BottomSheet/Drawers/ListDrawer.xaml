@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<popUp:DrawerView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlowHub.Main.Utilities.BottomSheet.Drawers.ListDrawer"
+             xmlns:popUp="clr-namespace:FlowHub.Main.Utilities.BottomSheet"
+             >
+    <VerticalStackLayout>
+        <Label 
+            Text="TITLE"
+            FontSize="18"
+            Padding="15"
+            BackgroundColor="LightYellow"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+        <Button Text="CLOSE" Clicked="Button_Clicked"/>
+        <VerticalStackLayout x:Name="pgList">
+        </VerticalStackLayout>
+    </VerticalStackLayout>
+</popUp:DrawerView>

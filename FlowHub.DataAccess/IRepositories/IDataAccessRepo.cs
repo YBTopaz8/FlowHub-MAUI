@@ -3,4 +3,5 @@
 public interface IDataAccessRepo
 {
     LiteDatabaseAsync GetDb();
+    void DeleteDB();
 }

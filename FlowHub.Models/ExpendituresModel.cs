@@ -13,7 +13,6 @@ public class ExpendituresModel
     public double AmountSpent { get; set; }
     public List<TaxModel>? Taxes { get; set; }
     public string? Reason { get; set; }
-    public bool IsPurchase { get; set; } = true; //if false then it's a Payment
     public bool IncludeInReport { get; set; } = true;
     public DateTime AddedDateTime { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedDateTime { get; set; } = DateTime.UtcNow;
@@ -21,7 +20,6 @@ public class ExpendituresModel
     public string Currency { get; set; } = string.Empty;
     public ExpenditureCategory Category { get; set; } = ExpenditureCategory.None;
     public string? PlatformModel { get; set; }
-    public bool UpdateOnSync { get; set; } = false;
     public bool IsDeleted { get; set; }
     public string UserId { get; set; }
 }
@@ -62,7 +60,9 @@ public enum ExpenditureCategory
     Travel = 10,
 
     [Description("Utilities")]
-    Utilities = 11
+    Utilities = 11,
+    [Description("Flow Hold Payment")]
+    FlowHoldPayment = 12,
 }
 
 public static class ExpenditureCategoryDescriptions
