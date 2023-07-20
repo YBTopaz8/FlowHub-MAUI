@@ -127,7 +127,7 @@
                                     <FlexLayout JustifyContent="SpaceBetween" Direction="Row" Margin="6,2">
                                         <VerticalStackLayout>
                                             <Label Text="{Binding Reason}" FontAttributes="Bold" FontSize="15"
-                                               TextColor="{StaticResource WildBlueYonder}"/>
+                                               TextColor="{ AppThemeBinding Dark={StaticResource WildBlueYonder}, Light=Darkslateblue}"/>
 
                                             <Label Text="{Binding Category}" TextColor="{AppThemeBinding Dark={StaticResource Secondary}, Light=black}"
                                                     FontAttributes="Italic"

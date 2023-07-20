@@ -12,15 +12,22 @@
         <utils:InverseBoolConverter x:Key="VisibilityToggler"/>
     </ContentPage.Resources>
     <toolkit:DockLayout>
+        <VerticalStackLayout toolkit:DockLayout.DockPosition="Bottom">
 
+            <Label Text="FlowHub - v0.8.5 " HorizontalOptions="Center" Margin="2" FontSize="23"/>
+
+            <Label Text="By Yvan Brunel" HorizontalTextAlignment="Center" 
+                HeightRequest="30"
+               Margin="2" FontSize="19"/>
+        </VerticalStackLayout>
         <Border HeightRequest="50" WidthRequest="50" HorizontalOptions="End" Margin="5"
                 Stroke="darkslateblue" StrokeShape="RoundRectangle 20" 
                 StrokeThickness="1" ToolTipProperties.Text="Click Here to Switch Themes">
             <Border.Shadow>
-                <Shadow Offset="7,10" Opacity="20"/>
+                <Shadow Offset="4,15" Opacity="0.3"/>
             </Border.Shadow>
-            
-            <HorizontalStackLayout>
+
+            <HorizontalStackLayout BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundLight}, Light={StaticResource BackGroundDark}}">
                 <ImageButton HeightRequest="30" x:Name="darkBtns" HorizontalOptions="Start"
                          Source="darkmoon" IsVisible="{Binding IsLightTheme}"
                          Clicked="ThemeToggler_Clicked"/>
@@ -31,16 +38,16 @@
             </HorizontalStackLayout>   
             
         </Border>
-        <Label Text="FlowHub - v0.8.5 Made With Love :D " HorizontalOptions="Center" Margin="2" FontSize="19"/>
-        
-        <Label Text="By Yvan Brunel" HorizontalTextAlignment="Center" Margin="2" FontSize="19"/>
-        
-        <Label Text="Tap Here to view GitHub Repo" HorizontalTextAlignment="Center" VerticalOptions="Start" HeightRequest="30"
-               FontSize="21">
-            <Label.GestureRecognizers>
-                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
-            </Label.GestureRecognizers>
-        </Label>
+        <VerticalStackLayout>
 
+            <Label Text="Tap Here to view GitHub Repo" HorizontalTextAlignment="Center" 
+               VerticalOptions="Start" HeightRequest="30"
+               FontSize="21">
+            </Label>
+            <ImageButton Source="github" Clicked="ImageButton_Clicked"
+                     HeightRequest="50" WidthRequest="50"/>
+
+        </VerticalStackLayout>
+        
     </toolkit:DockLayout>
 </ContentPage>

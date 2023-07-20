@@ -9,9 +9,11 @@
              xmlns:viewsPlannedExp="clr-namespace:FlowHub.Main.Views.Mobile.Expenditures.PlannedExpenditures.MonthlyPlannedExp"
              xmlns:viewsStats="clr-namespace:FlowHub.Main.Views.Mobile.Statistics"
              xmlns:viewsDebts="clr-namespace:FlowHub.Main.Views.Mobile.Debts"
-             CurrentItem ="{x:Reference login}"
-             
-             >
+             xmlns:mct="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
+             CurrentItem ="{x:Reference login}">
+    <Shell.Behaviors>
+        <mct:StatusBarBehavior StatusBarColor="DarkSlateBlue"/>
+    </Shell.Behaviors>
     <TabBar>
         <ShellContent Title="Home" Icon="{AppThemeBinding Dark=home_d, Light=home_l}"
             ContentTemplate="{DataTemplate views:HomePageM}"

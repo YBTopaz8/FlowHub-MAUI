@@ -29,13 +29,6 @@ public partial class ApplicationSettingsPageM : ContentPage
         IsLightTheme = SelectedTheme == 0;
     }
 
-    private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
-    {
-        var uri = new Uri("https://github.com/YBTopaz8/FlowHub-MAUI");
-        await Browser.Default.OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
-        await Clipboard.SetTextAsync(uri.ToString());
-    }
-
     private void ThemeToggler_Clicked(object sender, EventArgs e)
     {
         SelectedTheme = AppThemesSettings.ThemeSettings.SwitchTheme();
@@ -43,8 +36,10 @@ public partial class ApplicationSettingsPageM : ContentPage
         darkBtns.IsVisible = !darkBtns.IsVisible;
     }
 
-    private void ThemeSwitcherTapped_Tapped(object sender, TappedEventArgs e)
+    private async void ImageButton_Clicked(object sender, EventArgs e)
     {
-        SelectedTheme = AppThemesSettings.ThemeSettings.SwitchTheme();
+        var uri = new Uri("https://github.com/YBTopaz8/FlowHub-MAUI");
+        await Browser.Default.OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
+        await Clipboard.SetTextAsync(uri.ToString());
     }
 }

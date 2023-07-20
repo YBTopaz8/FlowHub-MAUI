@@ -16,18 +16,12 @@ public static class AppThemesSettings
 
         public static void SetTheme()
         {
-            switch (Theme)
+            Application.Current.UserAppTheme = Theme switch
             {
-                case 0:
-                    Application.Current.UserAppTheme = AppTheme.Light;
-                    break;
-                case 1:
-                    Application.Current.UserAppTheme = AppTheme.Dark;
-                break;
-                default:
-                    Application.Current.UserAppTheme = AppTheme.Light;
-                    break;
-            }
+                0 => AppTheme.Light,
+                1 => AppTheme.Dark,
+                _ => AppTheme.Light,
+            };
         }
 
         public static int GetTheme()
