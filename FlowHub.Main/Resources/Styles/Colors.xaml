@@ -52,7 +52,7 @@
 
     <Color x:Key="BackGroundDark">#201F24</Color>
     <Color x:Key="BorderDark">#1B1B1B</Color>
-    <Color x:Key="BackGroundLight">#F2F0F4</Color>
+    <Color x:Key="BackGroundLight">#D8D8D8</Color>
     <Color x:Key="DataGridColorDark">#263238</Color>
     <Color x:Key="PositiveActionBtnDark">#6B69D6</Color>
     <Color x:Key="NegativeActionBtnDark">#A3FF0000</Color>

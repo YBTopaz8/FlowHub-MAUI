@@ -20,10 +20,16 @@
         StrokeThickness="0" StrokeShape="RoundRectangle 12">
 
         <VerticalStackLayout>
+            <VerticalStackLayout.Resources>
+                <ResourceDictionary>
+                    <Style TargetType="Label">
+                        <Setter Property="TextColor" Value="{AppThemeBinding Light=dark, Dark=AliceBlue}"/>
+                    </Style>
+                </ResourceDictionary>
+            </VerticalStackLayout.Resources>
             <Label Text="{Binding PageTitle}" HorizontalOptions="Center" 
                    Margin="0,10,0,0" TextDecorations="Underline" 
-                   FontAttributes="Bold" FontSize="23" 
-                   TextColor="White"/>
+                   FontAttributes="Bold" FontSize="23" />
             <input:FormView Spacing="5" Margin="8,0"
                             SubmitCommand="{Binding UpSertIncomeCommand}">
                 <input:FormView.Resources>
@@ -44,8 +50,7 @@
                 </input:FormView.Resources>
                 <VerticalStackLayout>
                     <Label HorizontalOptions="End" Margin="8,8" 
-                           FontAttributes="Italic" FontSize="13"
-                           TextColor="AliceBlue">
+                           FontAttributes="Italic" FontSize="13">
                         <Label.Text>
                             <MultiBinding StringFormat="{} Resulting Balance : {0:n2} {1}">
                                 <Binding Path="ResultingBalance"/>
@@ -57,7 +62,8 @@
 
                 <material:DatePickerField MinimumDate="01/01/2022" Title="Date Spent" 
                                           MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
-                                          Date="{Binding SingleIncomeDetails.DateReceived}">
+                                          Date="{Binding SingleIncomeDetails.DateReceived}"
+                                          TextColor="{AppThemeBinding Light=black, Dark=white}">
                     <material:DatePickerField.Validations>
                         <validation:RequiredValidation/>
                     </material:DatePickerField.Validations>

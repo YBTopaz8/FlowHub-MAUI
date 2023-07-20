@@ -25,9 +25,16 @@
             </ResourceDictionary>
         </Border.Resources>
         <VerticalStackLayout>
-        <Label Text="{Binding PageTitle}" HorizontalOptions="Center" Margin="0,10,0,0" 
+            <VerticalStackLayout.Resources>
+                <ResourceDictionary>
+                    <Style TargetType="Label">
+                        <Setter Property="TextColor" Value="{AppThemeBinding Light=dark, Dark=AliceBlue}"/>
+                    </Style>
+                </ResourceDictionary>
+            </VerticalStackLayout.Resources>
+            <Label Text="{Binding PageTitle}" HorizontalOptions="Center" Margin="0,10,0,0" 
                TextDecorations="Underline" FontAttributes="Bold"
-               FontSize="23" TextColor="White"/>
+               FontSize="23"/>
 
             <input:FormView Spacing="5" Margin="8,0"
                     SubmitCommand="{Binding UpSertExpenditureCommand}">
@@ -49,9 +56,8 @@
                 </input:FormView.Resources>
 
                 <VerticalStackLayout  toolkit:DockLayout.DockPosition="Top" >
-                                       
-                    <Label HorizontalOptions="End" Margin="8,8" FontAttributes="Italic" FontSize="13"
-                                    TextColor="AliceBlue">
+                    <Label HorizontalOptions="End" Margin="8,8" 
+                           FontAttributes="Italic" FontSize="13">
                         <Label.Text>
                             <MultiBinding StringFormat="{} Resulting Balance : {0:n2} {1}">
                                 <Binding Path="ResultingBalance"/>
@@ -59,8 +65,8 @@
                             </MultiBinding>
                         </Label.Text>
                     </Label>
-                    <Label HorizontalOptions="End" Margin="8,2" FontAttributes="Italic" FontSize="13"
-                                    TextColor="AliceBlue">
+                    <Label HorizontalOptions="End" Margin="8,2" 
+                           FontAttributes="Italic" FontSize="13">
                         <Label.Text>
                             <MultiBinding StringFormat="{} Flow Out's Amount : {0:n2} {1}">
                                 <Binding Path="TotalAmountSpent"/>
@@ -72,7 +78,8 @@
 
                 <material:DatePickerField MinimumDate="01/01/2022" Title="Date Spent" 
                                             MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
-                                            Date="{Binding SingleExpenditureDetails.DateSpent}">
+                                            Date="{Binding SingleExpenditureDetails.DateSpent}"
+                                          TextColor="{AppThemeBinding Light=black, Dark=white}">
 
                     <material:DatePickerField.Validations>
                         <validation:RequiredValidation/>
@@ -82,19 +89,18 @@
                 <material:TextField Grid.Column="0" Title="Price"
                                     x:Name="UnitPrice" Focused="UnitPrice_Focused"
                                     TextChanged="UnitPrice_TextChanged"
-                                    AccentColor="Gray"
                                     Text="{Binding SingleExpenditureDetails.UnitPrice}" Keyboard="Numeric" >
                        
                 </material:TextField>
                
 
-                <material:PickerField Title="Category" ItemsSource="{Binding ExpenditureCategory}" SelectedItem="{Binding SingleExpenditureDetails.Category}"
-                                      
-                                      AccentColor="Gray"/> 
+                <material:PickerField Title="Category" ItemsSource="{Binding ExpenditureCategory}"
+                                      TextColor="{AppThemeBinding Light=black, Dark=white}"
+                                      SelectedItem="{Binding SingleExpenditureDetails.Category}"/> 
                 
-                <material:EditorField Title="Reason" Text="{Binding SingleExpenditureDetails.Reason}" IsTextPredictionEnabled="True"
-                                      AccentColor="Gray"
-                                      TitleColor="White">
+                <material:EditorField Title="Reason" Text="{Binding SingleExpenditureDetails.Reason}" 
+                                      IsTextPredictionEnabled="True" TitleColor="{AppThemeBinding Light=black}"
+                                      TextColor="{AppThemeBinding Light=black, Dark=white}">
                     <material:EditorField.Validations>
                         <validation:RequiredValidation/>
                     </material:EditorField.Validations>

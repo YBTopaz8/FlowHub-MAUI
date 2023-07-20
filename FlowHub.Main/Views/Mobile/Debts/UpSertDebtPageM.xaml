@@ -10,10 +10,15 @@
              xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Debts"
-             x:DataType="viewModels:UpSertDebtVM"
-             BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}"
-             Title="Flow Hold Details"
-             >
+             x:DataType="viewModels:UpSertDebtVM"             
+             xmlns:converters="clr-namespace:FlowHub.Main.Utilities"
+             Title="Flow Hold Details">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
     <VerticalStackLayout Margin="8">
         <input:FormView Spacing="5" SubmitCommand="{Binding UpSertDebtCommand}">
             <input:FormView.Resources>
@@ -33,15 +38,15 @@
                 </ResourceDictionary>
             </input:FormView.Resources>
 
-            <HorizontalStackLayout RadioButtonGroup.GroupName="Debt" Spacing="5"
-                                   RadioButtonGroup.SelectedValue="{Binding IsBorrow}"
-                                   HorizontalOptions="Center">
-                <RadioButton Content="Lend"                      
-                            IsChecked="{Binding IsLent}"/>
-
-                <RadioButton Content="Borrow"                             
-                            IsChecked="{Binding IsBorrow}"/>
+            <HorizontalStackLayout Spacing="7" HorizontalOptions="Center">
+                <material:RadioButton Text="Lend" IsChecked="{Binding IsLent}" x:Name="IsLentRBtn"                                      
+                                      CircleColor="{AppThemeBinding Light=darkslateblue}"
+                                      TextColor="{AppThemeBinding Light=black, Dark=white}"/>
                 
+                <material:RadioButton Text="Borrow" x:Name="IsBorrowedRBtn"
+                                      IsChecked="{Binding IsBorrow}"
+                                      CircleColor="{AppThemeBinding Light=darkslateblue}"
+                                      TextColor="{AppThemeBinding Light=black, Dark=white}"/>                
             </HorizontalStackLayout>
             
             <Grid ColumnSpacing="5">
@@ -53,7 +58,7 @@
                 <material:TextField Grid.Column="0" Title="Amount" x:Name="AmountTextField"
                                     Text="{Binding SingleDebtDetails.Amount}" Focused="TextField_Focused"
                                     Keyboard="Numeric">
-                    <validation:RequiredValidation/>
+                    <validation:RequiredValidation Message="Amount can't be less than 0"/>
                     
                     <validation:MinValueValidation MinValue="0.1"/>
                 </material:TextField>
@@ -75,11 +80,11 @@
                         <material:TextField.Triggers>
                             <DataTrigger TargetType="material:TextField"
                                          Binding="{Binding IsLent}" Value="true">
-                                <Setter Property="Title" Value="Flow Receiver"/>
+                                <Setter Property="Title" Value="Lend To"/>
                             </DataTrigger>
                             <DataTrigger TargetType="material:TextField"
                                          Binding="{Binding IsLent}" Value="false">
-                                <Setter Property="Title" Value="Flow Giver"/>
+                                <Setter Property="Title" Value="Borrow From"/>
                             </DataTrigger>
                         </material:TextField.Triggers>
                     </material:TextField>
@@ -88,13 +93,12 @@
                 <ImageButton Grid.Column="1" Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}"                             
                              Clicked="ImageButton_Clicked"/>
             </Grid>
-            <material:TextField Title="Phone Number"
+            <material:TextField Title="Contact"
                                 Text="{Binding SingleDebtDetails.PersonOrOrganization.PhoneNumber}"
                                 x:Name="PersonNumber"/>
 
             <material:EditorField Title="Note"
-                                  Text="{Binding SingleDebtDetails.Notes}"
-                                  />
+                                  Text="{Binding SingleDebtDetails.Notes}"/>
             
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -103,7 +107,7 @@
                 </Grid.ColumnDefinitions>
                 <HorizontalStackLayout Grid.Column="0" Margin="6,0">
                     <Label Text="Deadline" VerticalTextAlignment="Center"/>
-                    <Switch OnColor="DarkSlateBlue" ThumbColor="White"                             
+                    <Switch OnColor="DarkSlateBlue" ThumbColor="{AppThemeBinding Dark=white, Light=gray}"                             
                             x:Name="DeadlineSwitch"
                             IsToggled="{Binding HasDeadLine}">
 
@@ -112,7 +116,8 @@
                 
                 <material:DatePickerField Grid.Column="1" Title="Deadline" MinimumDate="01/01/2022"
                                           IsVisible="{Binding IsToggled, Source={x:Reference DeadlineSwitch}}"
-                                      Date="{Binding SingleDebtDetails.Deadline, StringFormat='{0:MMMM dd, yyyy}'}"/>            
+                                          Date="{Binding SingleDebtDetails.Deadline, StringFormat='{0:MMMM dd, yyyy}'}"
+                                          TextColor="{AppThemeBinding Dark=white, Light=black}" TitleColor="{AppThemeBinding Light=black}"/>
             </Grid>
 
             <Button Text="Save" WidthRequest="80" HorizontalOptions="Center" 

@@ -14,6 +14,8 @@ public partial class UpSertDebtPageM : ContentPage
     {
         base.OnAppearing();
         viewModel.PageLoaded();
+        IsBorrowedRBtn.IsChecked = !viewModel.IsLent;
+        IsLentRBtn.IsChecked = viewModel.IsLent;
     }
     private async void ImageButton_Clicked(object sender, EventArgs e)
     {
@@ -48,4 +50,5 @@ public partial class UpSertDebtPageM : ContentPage
             AmountTextField.Text = "";
         }
     }
+
 }

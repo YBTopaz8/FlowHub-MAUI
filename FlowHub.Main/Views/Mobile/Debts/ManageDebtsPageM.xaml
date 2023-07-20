@@ -20,7 +20,6 @@
         
         <VerticalStackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All"
                              Margin="8,3">
-
             <CollectionView ItemsSource="{Binding DebtsList}">
                 <CollectionView.EmptyView>
                     <ContentView>
@@ -38,14 +37,12 @@
                                    Threshold="200">
                             
                             <SwipeView.LeftItems>
-                                <SwipeItems Mode="Execute">
                                     <SwipeItem
                                     Command="{Binding Source={x:Reference Page}, Path=BindingContext.ToggleDebtCompletionStatusCommand}"
                                     CommandParameter="{Binding .}"
                                     IconImageSource="{AppThemeBinding Dark=done_undone_d, Light = done_undone_l}" 
                                     BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
-                                                               
-                                </SwipeItems>
+                                             
                             </SwipeView.LeftItems>
                             <SwipeView.RightItems>
                                 <SwipeItem 
@@ -56,22 +53,23 @@
                             </SwipeView.RightItems>
 
                             <Border HorizontalOptions="EndAndExpand" 
-                                    StrokeThickness="0"
-                                    Margin="5,2">
+                                    Margin="6,2" Padding="5" 
+                                    StrokeThickness="1">
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer NumberOfTapsRequired="2"
                                         Command="{Binding Source={x:Reference Page}, Path=BindingContext.ViewDebtSheetCommand}"
                                         CommandParameter="{Binding .}"/>
                                 </Border.GestureRecognizers>
+                                
                                 <VerticalStackLayout Spacing="5">
-                                    <Label HorizontalOptions="Center" TextColor="White"
+                                    <Label HorizontalOptions="Center" TextColor="{AppThemeBinding Dark={StaticResource WhiteBrush},Light={StaticResource BlackBrush} }"
                                         FontSize="16" FontAttributes="Bold">
                                         <Label.Triggers>
                                             <DataTrigger TargetType="Label"
-                                        Binding="{Binding DebtType}" Value="Borrowed">
+                                                        Binding="{Binding DebtType}" Value="Lent">
                                                 <Setter Property="Text">
                                                     <Setter.Value>
-                                                        <MultiBinding StringFormat="{} {0} Owes You : {1} {2}">
+                                                        <MultiBinding StringFormat="{} {0} Owes You {1} {2}">
                                                             <Binding Path="PersonOrOrganization.Name"/>
                                                             <Binding Path="Amount"/>
                                                             <Binding Path="Currency"/>
@@ -90,14 +88,13 @@
                                     </Label>
                                     
                                     <FlexLayout JustifyContent="SpaceBetween" Margin="5,0">
-                                        
-                                            <Label Text="{Binding PersonOrOrganization.PhoneNumber}"
-                                       TextColor="{StaticResource Cyan200Accent}"/>
 
-                                            <Label Text="{Binding ., Converter={StaticResource DueDateConverter}}"
-                                       TextColor="{StaticResource WildBlueYonder}"/>
+                                        <Label Text="{Binding PersonOrOrganization.PhoneNumber}"
+                                       TextColor="{AppThemeBinding Dark={StaticResource Cyan200Accent}, Light=black}"
+                                               Opacity="{AppThemeBinding Light=0.6}"/>
+                                        <Label Text="{Binding ., Converter={StaticResource DueDateConverter}}"
+                                       TextColor="{AppThemeBinding Dark={StaticResource WildBlueYonder}, Light={StaticResource Primary}}"/>
                                     </FlexLayout>
-                                    <Line HeightRequest="0.2" BackgroundColor="DarkSlateBlue"/>
 
                                 </VerticalStackLayout>
                             </Border>

@@ -24,7 +24,6 @@ public partial class UpSertDebtVM : ObservableObject
 
     bool isLent;
     bool isBorrow;
-
     public bool IsLent
     {
         get => isLent;
@@ -32,9 +31,8 @@ public partial class UpSertDebtVM : ObservableObject
         {
             if (SetProperty(ref isLent, value) && value)
             {
-                isBorrow = false;
+                SetProperty(ref isBorrow, false, nameof(IsBorrow));
             }
-            OnPropertyChanged(nameof(isLent));
         }
     }
     public bool IsBorrow
@@ -44,33 +42,27 @@ public partial class UpSertDebtVM : ObservableObject
         {
             if (SetProperty(ref isBorrow, value) && value)
             {
-                IsLent = false;
+                SetProperty(ref isLent, false, nameof(IsLent));
             }
-            OnPropertyChanged(nameof(isBorrow));
         }
     }
 
     public DebtType DebtType
     {
-        get => isLent ? DebtType.Lent : DebtType.Borrowed;
+        get => IsLent ? DebtType.Lent : DebtType.Borrowed;
         set
         {
-            if (value == DebtType.Lent)
-            {
-                IsLent = true;
-            }
-            else
-            {
-                IsBorrow = true;
-            }
+            IsLent = value == DebtType.Lent;
         }
     }
 
     public void PageLoaded()
     {
         DebtType = SingleDebtDetails.DebtType;
+        IsLent = DebtType == DebtType.Lent;
         HasDeadLine = SingleDebtDetails.Deadline is not null;
     }
+
 
     [RelayCommand]
     public async Task UpSertDebt()

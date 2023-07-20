@@ -17,12 +17,20 @@
     </Style>
 
     <Style TargetType="Border">
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=#F5F5F5}"/>
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
         <Setter Property="Stroke" Value="{StaticResource Primary}" />
         <Setter Property="StrokeShape" Value="RoundRectangle 10"/>
         <Setter Property="StrokeThickness" Value="2"/>
     </Style>
 
+    
+    <Style TargetType="VerticalStackLayout">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}"/>        
+    </Style>
+    <Style TargetType="AbsoluteLayout">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}"/>
+    </Style>
+    
     <Style TargetType="BoxView">
         <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Gray200}}" />
     </Style>
@@ -211,6 +219,7 @@
     </Style>
 
     <Style TargetType="RadioButton">
+        <Setter Property="BorderColor" Value="DarkSlateBlue"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
@@ -309,7 +318,7 @@
 
     <Style TargetType="Switch">
         <Setter Property="OnColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
-        <Setter Property="ThumbColor" Value="{AppThemeBinding Light={StaticResource BackGroundLight},Dark={StaticResource White}}" />
+        <Setter Property="ThumbColor" Value="{AppThemeBinding Light={StaticResource Black},Dark={StaticResource White}}" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -360,7 +369,7 @@
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}" />
     </Style>
     <Style TargetType="ContentPage">
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackGroundLight}}"/>
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}"/>
     </Style>
 
     <Style TargetType="Shell" ApplyToDerivedTypes="True">
@@ -392,7 +401,10 @@
         <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Gray200}}" />
     </Style>
     <Style TargetType="material:TextField">
-        <Setter Property="AccentColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
+        <Setter Property="AccentColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+        <Setter Property="TitleColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+        
     </Style>
     <Style TargetType="material:DataGrid">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource DataGridColorDark}}"/>

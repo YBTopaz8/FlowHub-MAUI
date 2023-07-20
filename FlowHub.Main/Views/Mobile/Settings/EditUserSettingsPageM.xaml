@@ -27,7 +27,8 @@
             <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5">
                 <material:PickerField Title="Country" ItemsSource="{Binding CountryNamesList}" Grid.Column="0"
                                       toolkit:DockLayout.DockPosition="Top"
-                                      x:Name="CountryPicker"
+                                      x:Name="CountryPicker" TitleColor="{AppThemeBinding Light=black}"
+                                      TextColor="{AppThemeBinding Light=black}"
                                       SelectedValueChanged="CountryPicker_SelectedValueChanged">
                     <validation:RequiredValidation Message="Please Select a Country"/>
                 </material:PickerField>
@@ -56,7 +57,7 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-            <ImageButton Source="save_icon_d" input:FormView.IsSubmitButton="True"/>
+            <ImageButton Source="save_icon_l" input:FormView.IsSubmitButton="True"/>
         </input:FormView>
         
     </toolkit:DockLayout>

@@ -6,20 +6,21 @@
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Debts"
              x:DataType="viewModels:ManageDebtsVM"
-             BackgroundColor="{AppThemeBinding Light=#F0F9FF}"
+             xmlns:utilities="clr-namespace:FlowHub.Main.Utilities.ConvertersUtils"
              >
-    <VerticalStackLayout Spacing="2">
+    <VerticalStackLayout Spacing="2" >
         <VerticalStackLayout.Resources>
             <ResourceDictionary>
+                <utilities:TextNullConverter x:Key="NotesConverter"/>
                 <Style TargetType="Label">
-                    <Setter Property="TextColor" Value="{AppThemeBinding Light=Black}"/>
+                    <Setter Property="TextColor" Value="{AppThemeBinding Light=black, Dark=White}"/>
                 </Style>
             </ResourceDictionary>
         </VerticalStackLayout.Resources>
 
-        <Label FontSize="21" HorizontalOptions="CenterAndExpand"
-               FontAttributes="Bold" Margin="0,0,0,10"
-               TextColor="{StaticResource Cyan200Accent}">
+        <Label FontSize="19" HorizontalOptions="CenterAndExpand"
+               FontAttributes="Bold" Margin="0,0,0,10" 
+               TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Cyan200Accent}}">
             <Label.Triggers>
                 <DataTrigger TargetType="Label"
                             Binding="{Binding SingleDebtDetails.DebtType}" Value="Lent">
@@ -34,11 +35,10 @@
                     </Setter>
                 </DataTrigger>
                 <DataTrigger TargetType="Label"
-                             Binding="{Binding SingleDebtDetails.DebtType}" 
-                             Value="Borrowed">
-                    <Setter Property="Text">
+                            Binding="{Binding SingleDebtDetails.DebtType}" Value="Borrowed">
+                    <Setter Property="Text" >
                         <Setter.Value>
-                            <MultiBinding StringFormat="{} You Owe {0} {1} {2}">
+                            <MultiBinding StringFormat="{} You Owe {1} {2} To {0}">
                                 <Binding Path="SingleDebtDetails.PersonOrOrganization.Name"/>
                                 <Binding Path="SingleDebtDetails.Amount"/>
                                 <Binding Path="SingleDebtDetails.Currency"/>
@@ -48,7 +48,8 @@
                 </DataTrigger>
             </Label.Triggers>
         </Label>
-        <Rectangle Fill="{StaticResource Cyan200Accent}" HeightRequest="2" Margin="0,0,0,10"/>
+        <Rectangle Fill="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Cyan200Accent}}"
+                   HeightRequest="2" Margin="0,0,0,10"/>
         
         <FlexLayout JustifyContent="SpaceBetween" Margin="3,0">
             <VerticalStackLayout Spacing="8">
@@ -56,7 +57,6 @@
                     <ResourceDictionary>
                         <Style TargetType="Label">
                             <Setter Property="FontSize" Value="16"/>
-                            <Setter Property="TextColor" Value="White"/>
                         </Style>
                     </ResourceDictionary>
                 </VerticalStackLayout.Resources>
@@ -74,6 +74,7 @@
                 <Label Text="Flow Completion : "/>
                 <Label Text="Contact : "/>
                 <Label Text="Notes : "/>
+                
             </VerticalStackLayout>
 
             <VerticalStackLayout Spacing="8">
@@ -82,8 +83,7 @@
                         <Style TargetType="Label">
                             <Setter Property="FontSize" Value="16"/>
                             <Setter Property="FontAttributes" Value="Bold"/>
-                            <Setter Property="TextColor" Value="{StaticResource WildBlueYonder}"/>
-                            
+                            <Setter Property="TextColor" Value="{StaticResource WildBlueYonder}"/>                            
                             <Setter Property="HorizontalOptions" Value="End"/>
                         </Style>
                     </ResourceDictionary>
@@ -139,17 +139,18 @@
                     </Label.Triggers>
                 </Label>
                 <Label Text="{Binding SingleDebtDetails.PersonOrOrganization.PhoneNumber}"/>
-                <Label Text="{Binding SingleDebtDetails.Notes}"/>
+                <Label Text="{Binding SingleDebtDetails.Notes, Converter={StaticResource NotesConverter}}"/>
             </VerticalStackLayout>
             
             
         </FlexLayout>
 
+        <ImageButton Source="{AppThemeBinding Dark=delete_d, Light=delete_l}" HorizontalOptions="End"
+                     Command="{Binding DeleteDebtCommand}" CommandParameter="{Binding SingleDebtDetails}"
+                     HeightRequest="30" Margin="0,5,0,0"
+                     ToolTipProperties.Text="Delete This Debt"/>
         <ImageButton Source="{AppThemeBinding Light=phone_l, Dark=phone_dsb}" HorizontalOptions="Center" 
                      Command="{Binding OpenPhoneDialerCommand}" HeightRequest="40"                      
                      ToolTipProperties.Text="Launch A Phone Call"/>
-        <ImageButton Source="{AppThemeBinding Dark=delete_d, Light=delete_l}" HorizontalOptions="End"
-                        Command="{Binding DeleteDebtCommand}" HeightRequest="25" 
-                        ToolTipProperties.Text="Delete This Debt"/>
     </VerticalStackLayout>
 </base:DrawerView>

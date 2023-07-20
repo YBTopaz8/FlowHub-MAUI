@@ -10,33 +10,17 @@
              Shell.NavBarIsVisible="False"
              x:DataType="viewModel:LoginVM"
              >
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <Style TargetType="material:TextField">
-                <Setter Property="BackgroundColor" Value="Transparent"/>
-                <Setter Property="AccentColor" Value="{AppThemeBinding Dark=white, Light=darkslateblue}"/>
-                <Setter Property="BorderColor" Value="{AppThemeBinding Dark=darkslateblue, Light=darkslateblue}"/>
-            </Style>
-            <Style TargetType="material:PickerField">
-                <Setter Property="BackgroundColor" Value="Transparent"/>
-                <Setter Property="AccentColor" Value="{AppThemeBinding Dark=white, Light=darkslateblue}"/>
-                <Setter Property="BorderColor" Value="{AppThemeBinding Dark=darkslateblue, Light=darkslateblue}"/>
-			</Style>
-            
-        </ResourceDictionary>
-    </ContentPage.Resources>
     <ScrollView>
-        <VerticalStackLayout Spacing="5" BackgroundColor="{AppThemeBinding Dark=#1A1A1A, Light=#EEF1F6}" >
+        <VerticalStackLayout Spacing="5">
 
             <VerticalStackLayout BackgroundColor="{AppThemeBinding Dark=#201F24, Light=white}" >
-                
-                    <Image Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}" Grid.Row="0" 
+
+                <Image Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}" Grid.Row="0" 
                            Margin="5"
                            HorizontalOptions="Center" HeightRequest="70"/>
-                    <VerticalStackLayout Margin="8,0" HorizontalOptions="Center">
-                        <Label Text="Hello." FontSize="Title" FontAttributes="Bold"/>
-                        <Label Text="Welcome to FlowHub" FontSize="Title" Margin="0,0,0,40" FontAttributes="Bold"/>
-                    </VerticalStackLayout>
+                <Label Text="Hello." FontSize="Title" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+                <Label Text="Welcome to FlowHub" FontSize="Title" Margin="0,0,0,40" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+                    
                 
 
                 <Border x:Name="LoginSignUpTab" 

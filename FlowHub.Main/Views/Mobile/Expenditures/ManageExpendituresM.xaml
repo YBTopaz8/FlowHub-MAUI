@@ -16,7 +16,7 @@
     <AbsoluteLayout>
     
     <toolkit:DockLayout Margin="5,0" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
-            <Label toolkit:DockLayout.DockPosition="Top" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" >
+            <Label toolkit:DockLayout.DockPosition="Top" FontSize="21" FontAttributes="Bold" HorizontalOptions="Center" >
                 <Label.Text>
                 <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
                     <Binding Path="UserPocketMoney"/>
@@ -31,9 +31,9 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Start">
-                    <ImageButton Clicked="ExportToPDFImageButton_Clicked"
-        Source="{AppThemeBinding Dark=save_to_pdf_d.png, Light=save_to_pdf_l.png}" />
+                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Start" BackgroundColor="Transparent">
+                    <ImageButton Clicked="ExportToPDFImageButton_Clicked" BackgroundColor="Transparent"
+                        Source="{AppThemeBinding Dark=save_to_pdf_d.png, Light=save_to_pdf_l.png}" />
                     <ProgressBar IsVisible="false" x:Name="PrintProgressBarIndic" ProgressColor="DarkSlateBlue" WidthRequest="50"/>
                 </VerticalStackLayout>
 
@@ -50,6 +50,7 @@
         <Label toolkit:DockLayout.DockPosition="Top" Text="{Binding ExpTitle}" FontSize="20" Margin="5" FontAttributes="Bold" HorizontalOptions="Center"/>
                
         <Label FontSize="17" Margin="3" toolkit:DockLayout.DockPosition="Bottom"
+               FontAttributes="Bold"
                HorizontalOptions="Center" VerticalOptions="End">
             <Label.Text>
                 <MultiBinding StringFormat="{} {2} Flow Out(s) worth {0:n2} {1}">
@@ -75,8 +76,8 @@
             <CollectionView.GroupHeaderTemplate>
                 <DataTemplate x:DataType="viewModels:DateGroup">
                     <Label Text="{Binding Date, StringFormat='{0:ddd, MMMM dd, yyyy}'}" 
-                           BackgroundColor="{AppThemeBinding Dark={StaticResource BorderDark}, Light=DarkSlateBlue}"
-                           TextColor="{StaticResource Secondary}" 
+                           BackgroundColor="{AppThemeBinding Dark={StaticResource BorderDark}, Light={StaticResource Secondary}}"
+                           TextColor="{AppThemeBinding Dark={StaticResource Secondary}, Light=black}" 
                            FontAttributes="Bold,Italic" FontSize="12" Padding="10,3"/>
                 </DataTemplate>
             </CollectionView.GroupHeaderTemplate>
@@ -96,18 +97,15 @@
                 </DataTemplate>
             </CollectionView.GroupFooterTemplate>
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:ExpendituresModel">
-                    
+                <DataTemplate x:DataType="models:ExpendituresModel">                    
                             <!--set to fill and expand for it to take the whole width of the screen-->
-                        <SwipeView HorizontalOptions="FillAndExpand" Margin="0,2">
-                        
+                        <SwipeView HorizontalOptions="FillAndExpand" Margin="0,2" BackgroundColor="Transparent">                        
                             <SwipeView.LeftItems>
                                 <SwipeItems>
                                     <SwipeItem 
                                         Command="{Binding Source={x:Reference Page}, Path=BindingContext.ShowEditExpenditurePopUpCommand}"  
                                         CommandParameter="{Binding .}" IconImageSource="{AppThemeBinding Dark= edit_d, Light= edit_l}"
-                                        BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"
-                                        />
+                                        BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=#D8D8D8}"/>
                                 </SwipeItems>
                             </SwipeView.LeftItems>
 
@@ -116,7 +114,7 @@
                                     <SwipeItem 
                                         Command="{Binding Source={x:Reference Page}, Path=BindingContext.DeleteExpenditureBtnCommand}"  
                                         CommandParameter="{Binding .}" IconImageSource="{AppThemeBinding Dark= delete_d, Light = delete_l}" 
-                                        BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
+                                        BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=#D8D8D8}"/>
                                 </SwipeItems>
                             </SwipeView.RightItems>
                             <Border HorizontalOptions="FillAndExpand" 
@@ -126,16 +124,17 @@
                                                             CommandParameter="{Binding .}"/>
                                 </Border.GestureRecognizers>
                                 <VerticalStackLayout >
-
                                     <FlexLayout JustifyContent="SpaceBetween" Direction="Row" Margin="6,2">
                                         <VerticalStackLayout>
-                                            <Label Text="{Binding Reason}" FontAttributes="Bold"
+                                            <Label Text="{Binding Reason}" FontAttributes="Bold" FontSize="15"
                                                TextColor="{StaticResource WildBlueYonder}"/>
 
-                                            <Label Text="{Binding Category}" TextColor="{StaticResource Secondary}"
-                                               Margin="0,0" FontAttributes="Italic"/>
+                                            <Label Text="{Binding Category}" TextColor="{AppThemeBinding Dark={StaticResource Secondary}, Light=black}"
+                                                    FontAttributes="Italic"
+                                                   Opacity="{AppThemeBinding Light=0.5}"/>
                                         </VerticalStackLayout>
-                                        <Label FontAttributes="Bold" VerticalTextAlignment="Center">
+                                        <Label FontAttributes="Bold" VerticalTextAlignment="Center"
+                                               FontSize="15">
                                             <Label.Text>
                                                 <MultiBinding StringFormat="{}{0:n2} {1}">
                                                     <Binding Path="AmountSpent"/>

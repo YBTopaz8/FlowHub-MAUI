@@ -6,7 +6,10 @@ public partial class App : Application
     {
         InitializeComponent();
 #if ANDROID
+
         MainPage = new AppShellMobile();
+        AppThemesSettings.ThemeSettings.SetTheme();
+
 #elif WINDOWS
 
         MainPage = new AppShell();
@@ -20,7 +23,6 @@ public partial class App : Application
         window.MinimumHeight = 730;
         window.MinimumWidth = 1280;
         window.Title = "FlowHub";
-
         return window;
     }
 }

@@ -23,11 +23,13 @@
                               VerticalOptions="Center"                    
                             HorizontalOptions="Center" >
             
-            <material:PickerField ItemsSource="{Binding MonthNames}" SelectedItem="{Binding SelectedMonthName}" BorderColor="DarkSlateGray"
+            <material:PickerField ItemsSource="{Binding MonthNames}" SelectedItem="{Binding SelectedMonthName}" BorderColor="{AppThemeBinding Dark=DarkSlateGray, Light=darkslateblue}"
+                                  TextColor="{AppThemeBinding Dark=white, Light=black}"
                                   SelectedValueChangedCommand="{Binding PopulateDataGridWithSelectedMonthDataCommand}"
                                   Title="Month"/>
-                <material:PickerField ItemsSource="{Binding YearNames}" SelectedItem="{Binding SelectedYearValue}" BorderColor="{AppThemeBinding Light=Black, Dark=DarkSlateGray}"
-                                     x:Name="YearPicker" SelectedValueChangedCommand="{Binding PopulateDataGridWithSelectedMonthDataCommand}"
+            <material:PickerField ItemsSource="{Binding YearNames}" SelectedItem="{Binding SelectedYearValue}" BorderColor="{AppThemeBinding Dark=DarkSlateGray, Light=darkslateblue}"
+                                  x:Name="YearPicker" SelectedValueChangedCommand="{Binding PopulateDataGridWithSelectedMonthDataCommand}"
+                                  TextColor="{AppThemeBinding Dark=white, Light=black}"
                                   Title="Year"/>
             </HorizontalStackLayout>
             <ScrollView
@@ -43,24 +45,24 @@
                                 <Setter Property="HeightRequest" Value="55"/>
                                 <Setter Property="Padding" Value="0,3"/>
                                 <Setter Property="Margin" Value="0,10"/>
-                            <Setter Property="Stroke" Value="{AppThemeBinding Light=Black, Dark=DarkSlateGray}"/>
+                            <Setter Property="Stroke" Value="{AppThemeBinding Light=darkslateblue, Dark=DarkSlateGray}"/>
                             <Setter Property="StrokeShape" Value="RoundRectangle 13"/>
                             <Setter Property="StrokeThickness" Value="1"/>
                         </Style>
                             <Style TargetType="VerticalStackLayout">
                                 <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
+                                <Setter Property="BackgroundColor" Value="Transparent"/>
                             </Style>
                         </ResourceDictionary>
                     </HorizontalStackLayout.Resources>
                     <Border WidthRequest="195">
                         <VerticalStackLayout>
-                            <Label Text="Total Number of Flows" FontSize="16" />
-                        
+                            <Label Text="Total Number of Flows" FontSize="16" />                      
                             
                         <Label Text="{Binding TotalNumberOfExpenditures, StringFormat='{0} Flows'}" HorizontalTextAlignment="Center"/>
                         </VerticalStackLayout>
                     </Border>
-                    <Border>
+                    <Border BackgroundColor="Transparent">
                         <VerticalStackLayout>
                             <Label Text="Total Flows Amount" FontSize="16"/>
                             <Label HorizontalTextAlignment="Center">

@@ -4,8 +4,7 @@
              x:Class="FlowHub.Main.Views.Mobile.HomePageM"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels"
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
-             x:DataType="viewModels:HomePageVM"
-             >
+             x:DataType="viewModels:HomePageVM">
     <VerticalStackLayout>
         <Label FontSize="21" HorizontalTextAlignment="Center" FontAttributes="Bold" Margin="10">
             <Label.Text>
@@ -16,18 +15,17 @@
             </Label.Text>
         </Label>
         <!-- Begin Section for Expenditure display-->
-        <Border Margin="10"
-                Padding="5"
+        <Border Margin="10" Padding="5"
                 StrokeShape="RoundRectangle 10">
             <Border.Shadow>
-                <Shadow Offset="15,20" Opacity="0.1"/>
+                <Shadow Offset="10,25" Opacity="0.2"/>
             </Border.Shadow>
             <VerticalStackLayout Spacing="5">
                 <Label Text="Latest Flow Outs" FontSize="22" HorizontalOptions="Center"                        
                        Padding="10,0,0,0"/>
                 <BoxView
                         Color="DarkSlateBlue"
-                        HeightRequest="2"
+                        HeightRequest="1"
                         HorizontalOptions="Fill"/>
                 <CollectionView x:Name="ColView" ItemsSource="{Binding LatestExpenditures}" HorizontalOptions="FillAndExpand">
                     <CollectionView.EmptyView>
@@ -46,9 +44,11 @@
 
                                 <StackLayout Grid.Column="0">
                                     <Label Text="{Binding Reason}" FontAttributes="Bold"
-                                           TextColor="{StaticResource WildBlueYonder}"/>
+                                           TextColor="{AppThemeBinding Dark={StaticResource WildBlueYonder}, Light=black}"/>
+                                    
                                     <Label Text="{Binding Category}" FontSize="10" FontAttributes="Italic"
-                                           TextColor="{StaticResource Secondary}"/>
+                                           TextColor="{AppThemeBinding Dark={StaticResource Secondary}, Light=blue}"
+                                           Opacity="{AppThemeBinding Light=0.8}"/>
                                 </StackLayout>
 
                                 <StackLayout Grid.Column="1" HorizontalOptions="End">
@@ -62,7 +62,7 @@
                                     </Label>
                                     <Label Text="{Binding DateSpent, StringFormat='{0:MM/dd/yyyy}'}" FontSize="10"
                                             HorizontalTextAlignment="End" FontAttributes="Italic"
-                                           Opacity="0.5"/>
+                                           Opacity="{AppThemeBinding Dark=0.5, Light=0.8}"/>
                                 </StackLayout>
                             </Grid>
 

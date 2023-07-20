@@ -14,16 +14,8 @@
              x:Name="page">
 
     <toolkit:DockLayout>
-        <VerticalStackLayout toolkit:DockLayout.DockPosition="Top" >
-            <Label HorizontalOptions="End" Margin="5" FontAttributes="Bold">
-                <Label.Text>
-                    <MultiBinding StringFormat="{} Balance : {0:n2} {1}">
-                        <Binding Path="ActiveUser.PocketMoney"/>
-                        <Binding Path="ActiveUser.UserCurrency"/>
-                    </MultiBinding>
-                </Label.Text>
-            </Label>
-            <Label HorizontalOptions="End" Margin="5,0,5,5" FontAttributes="Italic"
+        <VerticalStackLayout toolkit:DockLayout.DockPosition="Top" Spacing="5">
+            <Label HorizontalOptions="End" Margin="5,0" FontAttributes="Italic"
                    TextColor="AliceBlue">
                 <Label.Text>
                     <MultiBinding StringFormat="{} Resulting Balance : {0:n2} {1}">
@@ -32,7 +24,7 @@
                     </MultiBinding>
                 </Label.Text>
             </Label>
-            <Label HorizontalOptions="End" Margin="5,0,5,5" FontAttributes="Italic" FontSize="13"
+            <Label HorizontalOptions="End" Margin="5,0" FontAttributes="Italic" FontSize="13"
                                 TextColor="AliceBlue">
                 <Label.Text>
                     <MultiBinding StringFormat="{} Flow Out's Amount : {0:n2} {1}">
@@ -53,10 +45,10 @@
                         Margin="10"
                         SubmitCommand="{Binding UpSertExpenditureCommand}">
             <VerticalStackLayout Spacing="5">
-                <material:DatePickerField Title="Date Spent" 
-                                                MinimumDate="01/01/2022" 
+                <material:DatePickerField Title="Date Spent" MinimumDate="01/01/2022" 
                             MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
-                            Date="{Binding SingleExpenditureDetails.DateSpent}">
+                            Date="{Binding SingleExpenditureDetails.DateSpent}"
+                            TextColor="{AppThemeBinding Light=black, Dark=white}">
                     <material:DatePickerField.Validations>
                         <validation:RequiredValidation/>
                     </material:DatePickerField.Validations>
@@ -87,8 +79,6 @@
                         <validation:NumericValidation/>
                     </material:TextField.Validations>
                 </material:TextField>
-                
-
             </Grid>
             <material:EditorField Title="Reason" Text="{Binding SingleExpenditureDetails.Reason}">
                 <material:EditorField.Validations>
@@ -115,8 +105,6 @@
                 </ListView.ItemTemplate>
             </ListView>
         
-
-            
             <ImageButton Source="{AppThemeBinding Dark=save_icon_d, Light=save_icon_l}" input:FormView.IsSubmitButton="True"/>
             
 

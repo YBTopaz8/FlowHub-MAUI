@@ -78,11 +78,16 @@ public partial class ManageDebtsVM : ObservableObject
     {
         get => SingleDebtDetails.Deadline.HasValue;
     }
+
+    ViewDebtBottomSheet debtBS;
     [RelayCommand]
     public async Task ViewDebtSheet(DebtModel debt)
     {
         SingleDebtDetails = debt;
-        _ = await Drawer.Open(new ViewDebtBottomSheet(this));
+        debtBS = new ViewDebtBottomSheet(this);
+        await Drawer.Open(debtBS);
+        //_ = await Drawer.Open(new ViewDebtBottomSheet(this));
+
     }
     private void ApplyChanges()
     {
@@ -121,6 +126,8 @@ public partial class ManageDebtsVM : ObservableObject
                 var toast = Toast.Make(text, duration, fontSize);
                 await toast.Show(cancellationTokenSource.Token);
                 ApplyChanges();
+                await Drawer.Close(debtBS);
+
             }
         }
         catch (Exception ex)

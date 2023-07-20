@@ -14,5 +14,18 @@ public partial class UserSettingsPageM
     {
         base.OnAppearing();
         viewModel.PageLoadedCommand.Execute(null);
+
+        var theme = AppThemesSettings.ThemeSettings.Theme;
+        switch (theme)
+        {
+            case 0:
+               // LightThemeToggler.IsEnabled = true;
+            //    DarkThemeToggler.IsEnabled = false;
+                break;
+            case 1:
+            //    LightThemeToggler.IsEnabled = false;
+              //  DarkThemeToggler.IsEnabled = true;
+                break;
+        }
     }
 }

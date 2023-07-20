@@ -8,8 +8,9 @@
              x:DataType="viewModel:UserSettingsVM"
              Title="My Profile">
 
-    <toolkit:DockLayout>
-        <Border toolkit:DockLayout.DockPosition="Top" Stroke="transparent" BackgroundColor="{AppThemeBinding Light=White, Dark=#171717}" StrokeShape="RoundRectangle 0,0,25,25">
+    <toolkit:DockLayout BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}">
+        <Border toolkit:DockLayout.DockPosition="Top" Stroke="transparent" 
+                BackgroundColor="{AppThemeBinding Light=White, Dark=#171717}" StrokeShape="RoundRectangle 0,0,25,25">
             <VerticalStackLayout>
                 <Grid RowDefinitions="70,*" Margin="5">
 
@@ -27,11 +28,10 @@
                         </VerticalStackLayout>
                     </HorizontalStackLayout>
 
-                    <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End">
+                    <VerticalStackLayout Grid.Column="1" HorizontalOptions="End">
+                        
                         <Border HeightRequest="40" WidthRequest="40"
-                                BackgroundColor="{AppThemeBinding Dark=#201F24}"
-                            Stroke="transparent"
-                            StrokeShape="RoundRectangle 20">
+                            Stroke="transparent" StrokeShape="RoundRectangle 20">
                             <Border.Shadow>
                                 <Shadow Offset="5,8"
                                     Opacity="0.1"/>
@@ -39,7 +39,7 @@
                             <ImageButton HeightRequest="25" Source="{AppThemeBinding Dark=edit_d, Light=edit_l}" 
                                             Command="{Binding GoToEditUserSettingsPageCommand}"/>
                         </Border>
-                    </HorizontalStackLayout>
+                    </VerticalStackLayout>
                 </Grid>
 
                 <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Spacing="10">
@@ -101,17 +101,17 @@
             </VerticalStackLayout>
         </Border>
         <ScrollView VerticalScrollBarVisibility="Always">
-            <VerticalStackLayout Padding="10" BackgroundColor="{AppThemeBinding Light=#EEF1F6}">
+            <VerticalStackLayout Padding="10">
                 <VerticalStackLayout.Resources>
                     <ResourceDictionary>
                         <Style TargetType="Rectangle">
-                            <Setter Property="Fill" Value="{AppThemeBinding Light=#E7EBF4, Dark=#1E1E1E}"/>
-                            <Setter Property="HeightRequest" Value="3"/>
+                            <Setter Property="Fill" Value="{AppThemeBinding Light=darkslateblue, Dark=#1E1E1E}"/>
+                            <Setter Property="HeightRequest" Value="2"/>
                         </Style>
 
                     </ResourceDictionary>
                 </VerticalStackLayout.Resources>
-
+                <Rectangle />
                 <VerticalStackLayout Margin="5,15" Spacing="10">
                     <Label Text="Name" FontSize="13" />
                     <Label Text="{Binding UserName}" FontSize="15" FontAttributes="Bold"/>

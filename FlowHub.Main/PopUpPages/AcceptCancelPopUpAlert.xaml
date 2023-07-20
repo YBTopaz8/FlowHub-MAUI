@@ -12,7 +12,7 @@
         StrokeThickness="0"
         StrokeShape="RoundRectangle 8">
 
-        <VerticalStackLayout BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=White}" Spacing="20" Padding="15">
+        <VerticalStackLayout Spacing="20" Padding="15">
             <VerticalStackLayout.Resources>
                 <ResourceDictionary>
                     <Style TargetType="Label">
@@ -34,10 +34,10 @@
             <HorizontalStackLayout HorizontalOptions="EndAndExpand" Spacing="8">
                 
                 <Button Text="Cancel" FontSize="18" BackgroundColor="Transparent" 
-                        TextColor="{AppThemeBinding Dark={StaticResource Primary},Light= StaticResource Cyan200Accent}"
+                        TextColor="{AppThemeBinding Dark={StaticResource NegativeActionBtnDark},Light= {StaticResource NegativeActionBtnDark} }"
                         Clicked="OnNoButtonClicked"/>
                 <Button Text="Yes" FontSize="20" BackgroundColor="Transparent" FontAttributes="Bold"
-                        TextColor="{StaticResource Cyan200Accent}"
+                        TextColor="{AppThemeBinding Dark={StaticResource Primary},Light= {StaticResource Primary}}"
                         Clicked="OnYesButtonClicked"/>
             </HorizontalStackLayout>
         </VerticalStackLayout>

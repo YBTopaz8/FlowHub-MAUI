@@ -3,20 +3,44 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="FlowHub.Main.Views.Mobile.Settings.ApplicationSettingsPageM"
-             Title="ApplicationSettingsPageM">
+             xmlns:vm="clr-namespace:FlowHub.Main.Views.Mobile.Settings"
+             x:DataType="vm:ApplicationSettingsPageM"
+             xmlns:utils="clr-namespace:FlowHub.Main.Utilities"
+             Title="Application Settings"
+             x:Name="Page">
+    <ContentPage.Resources>
+        <utils:InverseBoolConverter x:Key="VisibilityToggler"/>
+    </ContentPage.Resources>
     <toolkit:DockLayout>
-        <!--<Label toolkit:DockLayout.DockPosition="Top" Text="Top" HeightRequest="50" />
-        <Label toolkit:DockLayout.DockPosition="Bottom" Text="Bottom" HorizontalOptions="Center" />
-        <Label toolkit:DockLayout.DockPosition="Left" Text="Left" WidthRequest="80" />
-        <Label toolkit:DockLayout.DockPosition="Right" Text="Right" WidthRequest="90" />
-        <Label Text="Center" />-->
-        <Label Text="FlowHub - v0.1.0 Made With Love :D " HorizontalOptions="Center" Margin="2" FontSize="19"/>
-        <Label Text="By Yvan Brunel" HorizontalOptions="Center" Margin="2" FontSize="19"/>
+
+        <Border HeightRequest="50" WidthRequest="50" HorizontalOptions="End" Margin="5"
+                Stroke="darkslateblue" StrokeShape="RoundRectangle 20" 
+                StrokeThickness="1" ToolTipProperties.Text="Click Here to Switch Themes">
+            <Border.Shadow>
+                <Shadow Offset="7,10" Opacity="20"/>
+            </Border.Shadow>
+            
+            <HorizontalStackLayout>
+                <ImageButton HeightRequest="30" x:Name="darkBtns" HorizontalOptions="Start"
+                         Source="darkmoon" IsVisible="{Binding IsLightTheme}"
+                         Clicked="ThemeToggler_Clicked"/>
+
+                <ImageButton HeightRequest="30" HorizontalOptions="Start"
+                         Source="lightsun" IsVisible="{Binding IsVisible, Source={x:Reference darkBtns}, Converter={StaticResource VisibilityToggler}}"
+                         Clicked="ThemeToggler_Clicked"/>
+            </HorizontalStackLayout>   
+            
+        </Border>
+        <Label Text="FlowHub - v0.8.5 Made With Love :D " HorizontalOptions="Center" Margin="2" FontSize="19"/>
+        
+        <Label Text="By Yvan Brunel" HorizontalTextAlignment="Center" Margin="2" FontSize="19"/>
+        
         <Label Text="Tap Here to view GitHub Repo" HorizontalTextAlignment="Center" VerticalOptions="Start" HeightRequest="30"
                FontSize="21">
             <Label.GestureRecognizers>
                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
             </Label.GestureRecognizers>
         </Label>
+
     </toolkit:DockLayout>
 </ContentPage>

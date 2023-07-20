@@ -2,6 +2,8 @@ namespace FlowHub.DataAccess.Repositories;
 
 public class SettingsServiceRepository : ISettingsServiceRepository
 {
+
+
     public Task<T> GetPreference<T>(string key, T defaultValue)
     {
         var result = Preferences.Default.Get<T>(key, defaultValue);

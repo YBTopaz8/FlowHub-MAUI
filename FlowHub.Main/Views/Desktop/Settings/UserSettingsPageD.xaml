@@ -91,7 +91,8 @@
                     
                     <Label Text="Personal Info" FontAttributes="Bold" FontSize="22" toolkit:DockLayout.DockPosition="Left"/>
                     
-                    <HorizontalStackLayout Spacing="80" HorizontalOptions="CenterAndExpand" toolkit:DockLayout.DockPosition="Top" x:Name="UserDetailsView" 
+                    <HorizontalStackLayout Spacing="80" HorizontalOptions="CenterAndExpand" 
+                                           toolkit:DockLayout.DockPosition="Top" x:Name="UserDetailsView" 
                                             IsVisible="{Binding IsNotInEditingMode}">
 
                         <VerticalStackLayout>
@@ -137,7 +138,8 @@
                     </HorizontalStackLayout>
 
 <!--Section for what to show when editing user details-->
-                    <HorizontalStackLayout HorizontalOptions="Center" toolkit:DockLayout.DockPosition="Top" IsVisible="{Binding IsVisible, Source={x:Reference UserDetailsView}, Converter={StaticResource InverseBoolConverter}}" >
+                    <HorizontalStackLayout HorizontalOptions="Center" toolkit:DockLayout.DockPosition="Top" 
+                                           IsVisible="{Binding IsVisible, Source={x:Reference UserDetailsView}, Converter={StaticResource InverseBoolConverter}}" >
                         <input:FormView Orientation="Horizontal" Spacing="55" SubmitCommand="{Binding UpdateUserInformationCommand}">
                             <material:TextField Title="User name" Text="{Binding ActiveUser.Username}">
                                 <validation:RequiredValidation Message="Please enter your Username"/>
