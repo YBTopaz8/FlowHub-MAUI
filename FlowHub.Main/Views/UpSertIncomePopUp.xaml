@@ -23,7 +23,7 @@
             <VerticalStackLayout.Resources>
                 <ResourceDictionary>
                     <Style TargetType="Label">
-                        <Setter Property="TextColor" Value="{AppThemeBinding Light=dark, Dark=AliceBlue}"/>
+                        <Setter Property="TextColor" Value="{AppThemeBinding Light=black, Dark=AliceBlue}"/>
                     </Style>
                 </ResourceDictionary>
             </VerticalStackLayout.Resources>
