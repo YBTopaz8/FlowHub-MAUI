@@ -3,7 +3,7 @@ namespace FlowHub.Main.Views.Desktop.Expenditures;
 public partial class ManageExpendituresPageD : ContentPage
 {
     readonly ManageExpendituresVM viewModel;
-    readonly Animation rotation;
+    
     public ManageExpendituresPageD(ManageExpendituresVM vm)
     {
         InitializeComponent();
@@ -15,8 +15,6 @@ public partial class ManageExpendituresPageD : ContentPage
     {
         base.OnAppearing();
         await viewModel.PageloadedAsync();
-
-        //ExpDG.SortedColumnIndex = 0;
     }
 
     private async void ExportToPDFImageButton_Clicked(object sender, EventArgs e)

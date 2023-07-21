@@ -62,7 +62,7 @@
                                 </Border.GestureRecognizers>
                                 
                                 <VerticalStackLayout Spacing="5">
-                                    <Label HorizontalOptions="Center" TextColor="{AppThemeBinding Dark={StaticResource White},Light={StaticResource Black} }"
+                                    <Label HorizontalOptions="Center" TextColor="{AppThemeBinding Dark=White,Light=Black}"
                                         FontSize="16" FontAttributes="Bold">
                                         <Label.Triggers>
                                             <DataTrigger TargetType="Label"

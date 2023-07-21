@@ -149,6 +149,7 @@
                               LegendTextSize="37"
                               TooltipTextSize="47"
                               LegendPosition="Right"
+                              LegendTextPaint="{Binding LegendTextPaintL}"
                               ChartPointPointerDownCommand="{Binding PieChartClickCommand}"/>
                     </Border>
 

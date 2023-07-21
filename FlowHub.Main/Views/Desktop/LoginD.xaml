@@ -13,17 +13,16 @@
              >
     <VerticalStackLayout>
 
-        <VerticalStackLayout Spacing="10" BackgroundColor="{AppThemeBinding Dark=#1A1A1A, Light=#EEF1F6}" >
+        <VerticalStackLayout Spacing="10">
 
             <VerticalStackLayout BackgroundColor="{AppThemeBinding Dark=#201F24, Light=white}" >
 
                 <Image Source="{AppThemeBinding Dark=user_icon_d.png, Light=user_icon_l.png}" Grid.Row="0" HorizontalOptions="Center" HeightRequest="65"/>
-                <VerticalStackLayout Grid.Row="1" HorizontalOptions="Center">
-                    <Label Text="Hello." FontSize="Title" FontAttributes="Bold"/>
-                    <Label Text="Welcome to FlowHub" FontSize="Title" Margin="0,0,0,20" FontAttributes="Bold"/>
-                    
-                </VerticalStackLayout>
-              
+                
+                <Label Text="Hello." FontSize="Title" FontAttributes="Bold"
+                       HorizontalTextAlignment="Center"/>
+                <Label Text="Welcome to FlowHub" FontSize="Title" HorizontalTextAlignment="Center" 
+                        Margin="0,0,0,20" FontAttributes="Bold"/>
                 
                 <Border x:Name="LoginSignUpTab" 
                         BackgroundColor="{AppThemeBinding Dark=#1A1A1A, Light=#EEF1F6}" 
@@ -53,10 +52,10 @@
                         </Grid.Resources>
 
                             <Border Grid.Column="0" IsVisible="True" x:Name="LoginFocused"
-                                BackgroundColor="{AppThemeBinding Dark=#201F24, Light=white}"
+                                BackgroundColor="{AppThemeBinding Dark=#201F24, Light={StaticResource BackGroundLight}}"
                                 HorizontalOptions="Center" WidthRequest="100" Margin="0,10">
                             
-                            <Label Text="Login" TextColor="BlueViolet" 
+                            <Label Text="Login" TextColor="DarkSlateBlue" 
                                    HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
                             
                         </Border>
@@ -67,7 +66,9 @@
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="LoginUnFocused_Tapped"/>
                             </Border.GestureRecognizers>
-                            <Label Text="Login" TextColor="{AppThemeBinding Light=#9FA3AE}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                            <Label Text="Login" Opacity="0.4" 
+                                   HorizontalOptions="CenterAndExpand" TextColor="{AppThemeBinding Dark=white}"
+                                   VerticalOptions="CenterAndExpand"/>
                             
                         </Border>
                         
@@ -79,14 +80,15 @@
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="SignUpUnFocused_Tapped"/>
                             </Border.GestureRecognizers>
-                            <Label Text="Sign Up" TextColor="{AppThemeBinding Light=#9FA3AE}"
+                            <Label Text="Sign Up" Opacity="0.4" TextColor="{AppThemeBinding Dark=white}"
                                    HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
                         </Border>
 
                         <Border IsVisible="false"  x:Name="SignUpFocused"
-                                Grid.Column="1" HorizontalOptions="Center" WidthRequest="120" Margin="0,10"
-                                BackgroundColor="{AppThemeBinding Dark=#201F24, Light=white}">
-                            <Label Text="Sign Up" TextColor="BlueViolet"
+                                Grid.Column="1" HorizontalOptions="Center" 
+                                WidthRequest="120" Margin="0,10"
+                                BackgroundColor="{AppThemeBinding Dark=#201F24, Light={StaticResource BackGroundLight}}">
+                            <Label Text="Sign Up" TextColor="DarkSlateBlue"
                                    HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
                         </Border>
                     </Grid>
@@ -119,11 +121,8 @@
                             </material:TextField.Attachments>
                         </material:TextField>
                         
-                        <Button Text="Login" BackgroundColor="DarkSlateBlue" FontAttributes="Bold" 
-                            FontSize="20"
-                            TextColor="White" x:Name="LoginButton" input:FormView.IsSubmitButton="True"/>
-
-                        <Button Text="Login Online" BackgroundColor="BlueViolet" FontAttributes="Bold" 
+                       
+                        <Button Text="Login Online" BackgroundColor="DarkSlateBlue" FontAttributes="Bold" 
                             FontSize="20" x:Name="LoginOnlineBtn" Clicked="LoginOnlineBtn_Clicked"
                             TextColor="White" input:FormView.IsSubmitButton="True"/>
 
@@ -171,13 +170,14 @@
 
                         <Grid ColumnDefinitions="340,*" >
                             <material:CheckBox Grid.Column="0" TextFontSize="16"
-                                IsChecked="{Binding RegisterAccountOnline}" Text="Register Account Online (Requires Internet)"/>
+                                IsChecked="{Binding RegisterAccountOnline}" Text="Register Account Online (Requires Internet)"
+                                               TextColor="{AppThemeBinding Light=black, Dark=white}"/>
                             <ImageButton Grid.Column="1"
                                 Source="information" HeightRequest="25" HorizontalOptions="End"/>
                         </Grid>
                         <Button Text="Register Account" BackgroundColor="DarkSlateBlue" FontAttributes="Bold" 
                                 FontSize="20"
-                                TextColor="White"
+                                
                                 input:FormView.IsSubmitButton="True"/>
 
                     </input:FormView>

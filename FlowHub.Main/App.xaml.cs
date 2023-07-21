@@ -6,14 +6,13 @@ public partial class App : Application
     {
         InitializeComponent();
 #if ANDROID
-
         MainPage = new AppShellMobile();
-        AppThemesSettings.ThemeSettings.SetTheme();
-
 #elif WINDOWS
 
         MainPage = new AppShell();
 #endif
+
+        AppThemesSettings.ThemeSettings.SetTheme();
     }
 
     protected override Window CreateWindow(IActivationState activationState)

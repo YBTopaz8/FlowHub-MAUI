@@ -174,10 +174,6 @@ public partial class LoginVM : ObservableObject
         IsBusy = true;
         UsersModel User = new();
 
-        CancellationTokenSource cancellationTokenSource = new();
-        const ToastDuration duration = ToastDuration.Short;
-        const double fontSize = 14;
-
         if (IsLoginOnlineButtonClicked)
         {
             User = await userRepo.GetUserOnlineAsync(CurrentUser);

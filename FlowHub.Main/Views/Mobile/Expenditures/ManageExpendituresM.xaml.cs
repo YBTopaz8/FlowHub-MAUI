@@ -5,7 +5,7 @@ namespace FlowHub.Main.Views.Mobile.Expenditures;
 public partial class ManageExpendituresM : ContentPage
 {
     private readonly ManageExpendituresVM viewModel;
-    readonly Animation rotation;
+    
     public ManageExpendituresM(ManageExpendituresVM vm)
     {
         InitializeComponent();
@@ -49,40 +49,4 @@ public partial class ManageExpendituresM : ContentPage
             PrintProgressBarIndic.IsVisible = false;
         }
     }
-
-    private void FilterOption_Clicked(object sender, EventArgs e)
-    {
-        //var FadeOut = filterOptionsContainer.FadeTo(0, 350, easing: Easing.Linear);
-        //var MoveUp = filterOptionsContainer.TranslateTo(0, -30,350, Easing.Linear);
-        //var MoveColViewUp = ColView.TranslateTo(0, -30,350, Easing.Linear);
-        //_ = await Task.WhenAll(FadeOut, MoveUp, MoveColViewUp);
-        //filterExpander.IsExpanded = false;
-        //filterOptionsContainer.TranslationY= 0;
-        //ColView.TranslationY= 0;
-        //await filterOptionsContainer.FadeTo(1, 0);
-    }
-
-    /*
-     * This snippet can be used if i ever want to allow multi selection
-    private void ColView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        var previous = e.PreviousSelection;
-        var current = e.CurrentSelection.ToList();
-        
-        Debug.WriteLine(current.GetType());
-    }
-
-    private void CheckBox_CheckChanged(object sender, EventArgs e)
-    {
-        if (selMode.IsChecked)
-        {
-            ColView.SelectionMode = SelectionMode.Multiple;
-        }
-        else
-        {
-            ColView.SelectedItems.Clear();
-            ColView.SelectionMode = SelectionMode.None;
-        }
-    }
-    */
 }

@@ -12,7 +12,6 @@ public class DateToDueDateStringConverter : IValueConverter
     {
         if (value is DebtModel debt)
         {
-
             if (debt.IsPaidCompletely)
             {
                 if (debt.DatePaidCompletely is null)

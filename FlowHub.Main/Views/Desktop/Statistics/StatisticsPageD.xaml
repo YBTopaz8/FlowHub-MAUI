@@ -18,16 +18,20 @@
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
         <HorizontalStackLayout HorizontalOptions="Center" Spacing="15">
-            <material:PickerField ItemsSource="{Binding MonthNames}" SelectedItem="{Binding SelectedMonthName}" BorderColor="DarkSlateGray"
+            <material:PickerField ItemsSource="{Binding MonthNames}" SelectedItem="{Binding SelectedMonthName}"
+                                  BorderColor="DarkSlateGray"
                                   SelectedValueChangedCommand="{Binding PopulateDataGridWithSelectedMonthDataCommand}"
-                                  Title="Month"/>
+                                  Title="Month"
+                                  TextColor="{AppThemeBinding Light=black,Dark=white}"/>
             <material:PickerField ItemsSource="{Binding YearNames}" SelectedItem="{Binding SelectedYearValue}" BorderColor="DarkSlateGray" x:Name="YearPicker"
                                   SelectedValueChangedCommand="{Binding PopulateDataGridWithSelectedMonthDataCommand}"
                                   Title="Year"/>
         </HorizontalStackLayout>
-        <Label Text="test total" IsVisible="False" toolkit:DockLayout.DockPosition="Bottom" HorizontalOptions="Center"/>
+        <Label Text="test total" IsVisible="False" 
+               toolkit:DockLayout.DockPosition="Bottom" HorizontalOptions="Center"/>
 
-        <HorizontalStackLayout Spacing="15" toolkit:DockLayout.DockPosition="Top" HorizontalOptions="CenterAndExpand">
+        <HorizontalStackLayout Spacing="15" toolkit:DockLayout.DockPosition="Top"
+                               HorizontalOptions="CenterAndExpand">
             <HorizontalStackLayout.Resources>
                 <ResourceDictionary>
                     <Style TargetType="Border">
@@ -62,9 +66,9 @@
                     </Label>
                 </VerticalStackLayout>
             </Border>
-            <Border 
+            <Border
                 ToolTipProperties.Text="{Binding SmallestExpenditureTooltipText}">
-                <VerticalStackLayout>
+                <VerticalStackLayout >
                     <Label Text="Lowest Flow Cost" FontSize="20"/>
                     <Label HorizontalTextAlignment="Center">
                         <Label.Text>
@@ -116,19 +120,19 @@
             </Border>
             <Border StrokeThickness="0">
                 <lvc:PieChart HeightRequest="350" WidthRequest="400" x:Name="myPieChart"
-                              Title="{Binding MyPieCategoriesTitle}"
-                              Series="{Binding MyPieSeries}"
-                              LegendPosition="Right"
-                              LegendTextPaint="{Binding LegendTextPaint}"/>
+                              Title="{Binding MyPieCategoriesTitle}" Series="{Binding MyPieSeries}"
+                              
+                              LegendPosition="Right" LegendTextPaint="{Binding LegendTextPaintL}"/>
             </Border>
             
         </HorizontalStackLayout>
 
-        <dg:DataGrid ItemsSource="{Binding ExpendituresForSelectedMonth}" BackgroundColor="#201F24"
+        <dg:DataGrid ItemsSource="{Binding ExpendituresForSelectedMonth}" BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}"
                          HorizontalOptions="Center" MinimumHeightRequest="360" 
                          WidthRequest="1200" RowHeight="50"
-                         HeaderHeight="40" BorderColor="Transparent"
-                         HeaderBackground="DarkSlateGray" VerticalOptions="Fill">
+                         HeaderHeight="40" HeaderBackground="DarkSlateBlue" 
+                         VerticalOptions="Fill"
+                         BorderColor="{AppThemeBinding Dark=transparent, Light=DarkSlateBlue}">
             <dg:DataGrid.NoDataView>
                 <VerticalStackLayout Margin="40,20" MinimumWidthRequest="400">
                     <Image WidthRequest="70"
@@ -144,16 +148,16 @@
                 <dg:DataGridColumn Title="Date Spent" PropertyName="DateSpent" SortingEnabled="True">
                     <dg:DataGridColumn.CellTemplate>
                         <DataTemplate x:DataType="models:ExpendituresModel">
-                            <Label Text="{Binding ., StringFormat='{0:ddd, MMMM dd, yyyy}'}" TextColor="White" 
-                                   HorizontalTextAlignment="Center"
-                                   VerticalTextAlignment="Center" BackgroundColor="#201F24"/>
+                            <Label Text="{Binding ., StringFormat='{0:ddd, MMMM dd, yyyy}'}"
+                                   HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                   BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}"/>
                         </DataTemplate>
                     </dg:DataGridColumn.CellTemplate>
                 </dg:DataGridColumn>
                 <dg:DataGridColumn Title="Description" PropertyName="Reason" Width="300">
                     <dg:DataGridColumn.CellTemplate>
                         <DataTemplate x:DataType="models:ExpendituresModel">
-                            <Label Text="{Binding .}" TextColor="White" BackgroundColor="#201F24" 
+                            <Label Text="{Binding .}" BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}"
                                     VerticalTextAlignment="Center" HorizontalTextAlignment="Center" HorizontalOptions="FillAndExpand"/>
                         </DataTemplate>
                     </dg:DataGridColumn.CellTemplate>
@@ -161,8 +165,10 @@
                 <dg:DataGridColumn Title="Category" PropertyName="Category">
                     <dg:DataGridColumn.CellTemplate>
                         <DataTemplate x:DataType="models:ExpendituresModel">
-                            <Label Text="{Binding .}" TextColor="White" BackgroundColor="#201F24" 
-                                    VerticalTextAlignment="Center" HorizontalTextAlignment="Center" HorizontalOptions="FillAndExpand"/>
+                            <Label Text="{Binding .}"
+                                    VerticalTextAlignment="Center" HorizontalTextAlignment="Center" 
+                                   HorizontalOptions="FillAndExpand"
+                                   BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}"/>
 
                         </DataTemplate>
                     </dg:DataGridColumn.CellTemplate>
@@ -170,8 +176,9 @@
                 <dg:DataGridColumn Title="Amount Spent" SortingEnabled="False">
                     <dg:DataGridColumn.CellTemplate>
                         <DataTemplate x:DataType="models:ExpendituresModel">
-                            <Label TextColor="White" BackgroundColor="#201F24" 
-                                    VerticalTextAlignment="Center" HorizontalTextAlignment="Center" HorizontalOptions="FillAndExpand">
+                            <Label VerticalTextAlignment="Center" HorizontalTextAlignment="Center" 
+                                   HorizontalOptions="FillAndExpand"
+                                   BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}">
                                 <Label.Text>
                                     <MultiBinding StringFormat="{} {0:n2} {1}">
                                         <Binding Path="AmountSpent"/>

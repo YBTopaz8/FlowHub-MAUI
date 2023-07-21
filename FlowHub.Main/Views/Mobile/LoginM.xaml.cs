@@ -30,8 +30,8 @@ public partial class LoginM : ContentPage
     }
     protected override async void OnAppearing()
     {
-        await viewModel.PageLoaded();
         base.OnAppearing();
+        await viewModel.PageLoaded();
         bool HasLoginRemembered = viewModel.HasLoginRemembered;
         bool isLoginFormVisible = viewModel.IsLoginFormVisible;
 

@@ -63,7 +63,6 @@ public partial class UpSertDebtVM : ObservableObject
         HasDeadLine = SingleDebtDetails.Deadline is not null;
     }
 
-
     [RelayCommand]
     public async Task UpSertDebt()
     {

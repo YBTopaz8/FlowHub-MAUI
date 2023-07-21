@@ -73,8 +73,10 @@ public partial class StatisticsPageVM : ObservableObject
     double biggestAmountInAMonth;
     [ObservableProperty]
     double smallestAmountInAMonth;
-
-    SolidColorPaint LegentTextPaint = new(SKColors.White);
+    [ObservableProperty]
+    SolidColorPaint legendTextPaintL = new (SKColors.DarkSlateBlue);
+    [ObservableProperty]
+    SolidColorPaint legendTextPaintD = new(SKColors.White);
 
     [ObservableProperty]
     string biggestExpenditureTooltipText;
@@ -85,6 +87,22 @@ public partial class StatisticsPageVM : ObservableObject
     {
         if (!IsLoaded)
         {
+            if (GroupedExpenditures is null)
+            {
+                // Update expList
+                var expList = expendituresService.OfflineExpendituresList
+                    .Where(x => !x.IsDeleted)
+                    .OrderByDescending(x => x.DateSpent).ToList();
+
+                // Update groupedData
+                var groupedData = expList.GroupBy(e => e.DateSpent.Date)
+                    .Select(g => new DateGroup(g.Key, g.ToList()))
+                    .ToList();
+
+                // Update GroupedExpenditures
+                GroupedExpenditures = new ObservableCollection<DateGroup>(groupedData);
+                OnPropertyChanged(nameof(GroupedExpenditures));
+            }
             CalculateMonthNames();
             CalculateYearNames();
             SelectedMonthName = DateTime.Now.ToString("MMMM");
@@ -264,7 +282,7 @@ public partial class StatisticsPageVM : ObservableObject
             .ToObservableCollection();
     }
 
-    string? lastPieCategory = null;
+    string lastPieCategory;
     [RelayCommand]
     public async Task PieChartClick(ChartPoint point)
     {

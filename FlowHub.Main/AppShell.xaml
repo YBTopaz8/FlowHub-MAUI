@@ -8,6 +8,7 @@
         xmlns:viewsIncomes="clr-namespace:FlowHub.Main.Views.Desktop.Incomes"
         xmlns:viewsSettings="clr-namespace:FlowHub.Main.Views.Desktop.Settings"
         xmlns:viewsStatistics="clr-namespace:FlowHub.Main.Views.Desktop.Statistics"
+        xmlns:viewsHolds="clr-namespace:FlowHub.Main.Views.Desktop.Debts"
         Shell.NavBarIsVisible="False"
         Shell.FlyoutBehavior="Disabled"
         CurrentItem ="{x:Reference login}">
@@ -43,11 +44,10 @@
                           Route="Statistics"/>
         </Tab>
         
-        <Tab Title="Planning">
-            <ShellContent Title="Monthly Plannings"/>
-
-            <ShellContent Title="Project Plannings"
-               />
+        <Tab Title="Flow Holds">
+            <ShellContent Title="Flow Holds" Icon="{AppThemeBinding Dark=time_to_pay_d, Light=time_to_pay_l}"
+                          ContentTemplate="{DataTemplate viewsHolds:ManageDebtsPageD}"
+                          Route="ManageDebts"/>
 
         </Tab>
         <Tab Title="Settings" Route="UserSettings">
@@ -56,7 +56,7 @@
                            ContentTemplate="{DataTemplate viewsSettings:UserSettingsPageD}"
                 Route="UserSettings"/>
 
-            <ShellContent  Title="Application Settings"        
+            <ShellContent  Title="Application Settings" IsVisible="False"   
                 Route="AppSettings"/>
         </Tab>
     </FlyoutItem>

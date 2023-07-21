@@ -50,5 +50,4 @@ public partial class UpSertDebtPageM : ContentPage
             AmountTextField.Text = "";
         }
     }
-
 }

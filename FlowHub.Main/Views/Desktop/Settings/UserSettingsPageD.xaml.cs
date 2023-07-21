@@ -1,13 +1,14 @@
 namespace FlowHub.Main.Views.Desktop.Settings;
 
 public partial class UserSettingsPageD : ContentPage
-{
+{   
     UserSettingsVM viewModel;
     public UserSettingsPageD(UserSettingsVM vm)
     {
         InitializeComponent();
         viewModel = vm;
         BindingContext = viewModel;
+        viewModel.SetThemeConfig();
     }
     protected override void OnAppearing()
     {

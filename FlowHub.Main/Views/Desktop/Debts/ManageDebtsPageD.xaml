@@ -2,11 +2,114 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FlowHub.Main.Views.Desktop.Debts.ManageDebtsPageD"
-             Title="ManageDebtsPageD">
+             xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"      
+             xmlns:utilities="clr-namespace:FlowHub.Main.Utilities" 
+             xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
+             xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Debts"
+             x:DataType="viewModels:ManageDebtsVM"
+             x:Name="Page">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <utilities:DateToDueDateStringConverter x:Key="DueDateConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+
+        <dg:DataGrid ItemsSource="{Binding DebtsList}" BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}"
+                     WidthRequest="1000" HeaderBackground="DarkSlateBlue"
+                     RowHeight="50" HeaderHeight="40"
+                     BorderColor="{AppThemeBinding Dark=transparent, Light=darkslateblue}"
+                     HorizontalOptions="CenterAndExpand"
+                     x:Name="DebtDG">
+            
+            <dg:DataGrid.NoDataView>
+                <VerticalStackLayout Margin="40,20" MinimumWidthRequest="400">
+                    <Image WidthRequest="70"
+                                        HeightRequest="60"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Center"
+                                        Source="search_property.png"/>
+                    <Label Text="No Flow Holds Available..." FontSize="21" HorizontalOptions="Center" Margin="30"/>
+                </VerticalStackLayout>
+            </dg:DataGrid.NoDataView>
+            <!--Equivalent of emptyview-->
+
+            <dg:DataGrid.Columns>
+                <dg:DataGridColumn Title="Due Status" SortingEnabled="False">
+                    <dg:DataGridColumn.CellTemplate>
+                        <DataTemplate x:DataType="models:DebtModel">
+                            <Label FontSize="16" HorizontalOptions="FillAndExpand" 
+                                   VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
+                                   BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label"
+                                                        Binding="{Binding DebtType}" Value="Lent">
+                                        <Setter Property="Text">
+                                            <Setter.Value>
+                                                <MultiBinding StringFormat="{} {0} Owes You {1} {2}">
+                                                    <Binding Path="PersonOrOrganization.Name"/>
+                                                    <Binding Path="Amount"/>
+                                                    <Binding Path=".Currency"/>
+                                                </MultiBinding>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Label.Triggers>
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{} You Owe {1} {2} To {0}">
+                                        <Binding Path="PersonOrOrganization.Name"/>
+                                        <Binding Path="Amount"/>
+                                        <Binding Path="Currency"/>
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                        </DataTemplate>
+                    </dg:DataGridColumn.CellTemplate>
+                </dg:DataGridColumn>
+
+                <dg:DataGridColumn Title="Contact" PropertyName="PersonOrOrganization.PhoneNumber" SortingEnabled="False">
+                    <dg:DataGridColumn.CellTemplate>
+                        <DataTemplate x:DataType="models:DebtModel">
+                            <Label VerticalTextAlignment="Center"  BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}"
+                                   HorizontalTextAlignment="Center" HorizontalOptions="FillAndExpand" FontSize="16"
+                                   Text="{Binding .}"/>
+                        </DataTemplate>
+                    </dg:DataGridColumn.CellTemplate>
+                </dg:DataGridColumn>
+
+                <dg:DataGridColumn Title="Deadline" SortingEnabled="False">
+                    <dg:DataGridColumn.CellTemplate>
+                        <DataTemplate x:DataType="models:DebtModel">
+                            <Label  VerticalTextAlignment="Center" BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}"
+                                   HorizontalTextAlignment="Center" HorizontalOptions="FillAndExpand"
+                                   Text="{Binding ., Converter={StaticResource DueDateConverter}}"/>
+                        </DataTemplate>
+                    </dg:DataGridColumn.CellTemplate>
+                </dg:DataGridColumn>
+
+                <dg:DataGridColumn Title="Actions" Width="0.8*" SortingEnabled="False">
+                    <dg:DataGridColumn.CellTemplate>
+                        <DataTemplate x:DataType="models:DebtModel">
+                            <ContentView HorizontalOptions="Fill" BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}">
+                                <HorizontalStackLayout  HorizontalOptions="CenterAndExpand">
+                                    <ImageButton Source="{AppThemeBinding Dark=done_undone_d.png, Light = done_undone_l.png}" WidthRequest="50"
+                                                 Command="{Binding Source={x:Reference Page}, Path=BindingContext.ToggleDebtCompletionStatusCommand}"
+                                                 CommandParameter="{Binding .}"/>
+
+                                    <ImageButton Source="{AppThemeBinding Dark= edit_d.png, Light= edit_l.png}" WidthRequest="50" 
+                                                 Command="{Binding Source={x:Reference Page}, Path=BindingContext.GoToEditDebtCommand}"
+                                                CommandParameter="{Binding .}" />
+
+                                    <ImageButton Source="{AppThemeBinding Dark= view_d.png, Light= view_l.png}" WidthRequest="50" 
+                                                 Command="{Binding Source={x:Reference Page}, Path=BindingContext.ViewDebtSheetCommand}"
+                                                CommandParameter="{Binding .}" />
+                                </HorizontalStackLayout>
+                            </ContentView>
+                        </DataTemplate>
+                    </dg:DataGridColumn.CellTemplate>
+                </dg:DataGridColumn>
+            </dg:DataGrid.Columns>
+        </dg:DataGrid>
     </VerticalStackLayout>
 </ContentPage>

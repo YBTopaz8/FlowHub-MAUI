@@ -166,4 +166,22 @@ public partial class UserSettingsVM : ObservableObject
             Taxes.Remove(Selectedtax);
         }
     }
+
+    //section for themes in windows version. i'll revise this later
+    [ObservableProperty]
+    int selectedTheme;
+    [ObservableProperty]
+    bool isLightTheme;
+
+    public void SetThemeConfig()
+    {
+        SelectedTheme = AppThemesSettings.ThemeSettings.Theme;
+        IsLightTheme = SelectedTheme == 0;
+    }
+    [RelayCommand]
+    public void ThemeToggler()
+    {
+        SelectedTheme = AppThemesSettings.ThemeSettings.SwitchTheme();
+        IsLightTheme = !IsLightTheme;
+    }
 }

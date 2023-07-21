@@ -23,23 +23,21 @@
         </Label>
 
         <VerticalStackLayout HorizontalOptions="Start" toolkit:DockLayout.DockPosition="Right">
-            <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png}" HeightRequest="60"
+            <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" HeightRequest="60"
                          BackgroundColor="Transparent"
                          Command="{Binding ShowAddIncomePopUpCommand}"
                          ToolTipProperties.Text="Add New Flow In"/>
-            <ImageButton Source="{AppThemeBinding Dark=save_to_pdf_d.png}" HeightRequest="60"
-                         IsVisible="false"/>
+            <ImageButton Source="{AppThemeBinding Dark=save_to_pdf_d.png, Light=save_to_pdf_l.png}" HeightRequest="60"
+                         />
             <ProgressBar IsVisible="false" x:Name="PrintProgressBarIndic" ProgressColor="DarkSlateBlue" WidthRequest="50"/>
-            <ImageButton Source="{AppThemeBinding Dark=sync_icon_d.png, Light=sync_icon_l.png}" 
-                         HeightRequest="55" x:Name="SyncButton"
-                         IsEnabled="False"/>
+           
 
         </VerticalStackLayout>
 
-        <dg:DataGrid ItemsSource="{Binding IncomesList}" BackgroundColor="#201F24"
+        <dg:DataGrid ItemsSource="{Binding IncomesList}" BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}"
                      WidthRequest="1000" HeaderBackground="DarkSlateBlue"
                      RowHeight="50" HeaderHeight="40" 
-                     BorderColor="Transparent" HorizontalOptions="CenterAndExpand"
+                     BorderColor="{AppThemeBinding Light=darkslateblue, Dark=transparent}" HorizontalOptions="CenterAndExpand"
                      x:Name="IncDG">
             <dg:DataGrid.NoDataView>
                 <VerticalStackLayout Margin="40,20" MinimumWidthRequest="400" >
@@ -60,9 +58,9 @@
                                    SortingEnabled="True">
                     <dg:DataGridColumn.CellTemplate>
                         <DataTemplate x:DataType="models:IncomeModel">
-                            <Label Text="{Binding ., StringFormat='{0:ddd, MMMM dd, yyyy}'}" TextColor="White" 
-                                   HorizontalTextAlignment="Center"
-                                   VerticalTextAlignment="Center" BackgroundColor="#201F24"/>
+                            <Label Text="{Binding ., StringFormat='{0:ddd, MMMM dd, yyyy}'}"
+                                   HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                   BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}"/>
                         </DataTemplate>
                     </dg:DataGridColumn.CellTemplate>
                 </dg:DataGridColumn>
@@ -70,9 +68,9 @@
                 <dg:DataGridColumn Title="Reason" PropertyName="Reason" SortingEnabled="True">
                     <dg:DataGridColumn.CellTemplate>
                         <DataTemplate x:DataType="models:IncomeModel">
-                            <Label Text="{Binding .}" TextColor="White" 
+                            <Label Text="{Binding .}" BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}"
                                    HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
-                                   BackgroundColor="#201F24" HorizontalOptions="FillAndExpand"/>
+                                   HorizontalOptions="FillAndExpand"/>
                         </DataTemplate>
                     </dg:DataGridColumn.CellTemplate>
                 </dg:DataGridColumn>
@@ -80,7 +78,7 @@
                 <dg:DataGridColumn Title="Amount Received" SortingEnabled="False">
                     <dg:DataGridColumn.CellTemplate>
                         <DataTemplate x:DataType="models:IncomeModel">
-                            <Label TextColor="White" BackgroundColor="#201F24" 
+                            <Label BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}"
                                    VerticalTextAlignment="Center" HorizontalTextAlignment="Center" 
                                    HorizontalOptions="FillAndExpand">
                                 <Label.Text>
@@ -97,7 +95,7 @@
                 <dg:DataGridColumn Title="Actions" Width="0.8*" SortingEnabled="False">
                     <dg:DataGridColumn.CellTemplate>
                         <DataTemplate x:DataType="models:IncomeModel">
-                            <ContentView HorizontalOptions="Fill" BackgroundColor="#201F24">
+                            <ContentView HorizontalOptions="Fill" BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}">
                                 <HorizontalStackLayout  HorizontalOptions="CenterAndExpand">
                                     <ImageButton Source="{AppThemeBinding Light=edit_l.png, Dark=edit_d.png}" WidthRequest="50"
                                                      Command="{Binding Source={x:Reference page}, 

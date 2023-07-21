@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="FlowHub.Main.Views.Mobile.Settings.ApplicationSettingsPageM"
-             xmlns:vm="clr-namespace:FlowHub.Main.Views.Mobile.Settings"
-             x:DataType="vm:ApplicationSettingsPageM"
+             xmlns:viewModel="clr-namespace:FlowHub.Main.ViewModels.Settings"                   
+             x:DataType="viewModel:UserSettingsVM"
              xmlns:utils="clr-namespace:FlowHub.Main.Utilities"
              Title="Application Settings"
              x:Name="Page">
@@ -20,24 +20,22 @@
                 HeightRequest="30"
                Margin="2" FontSize="19"/>
         </VerticalStackLayout>
-        <Border HeightRequest="50" WidthRequest="50" HorizontalOptions="End" Margin="5"
-                Stroke="darkslateblue" StrokeShape="RoundRectangle 20" 
-                StrokeThickness="1" ToolTipProperties.Text="Click Here to Switch Themes">
-            <Border.Shadow>
-                <Shadow Offset="4,15" Opacity="0.3"/>
-            </Border.Shadow>
-
-            <HorizontalStackLayout BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundLight}, Light={StaticResource BackGroundDark}}">
-                <ImageButton HeightRequest="30" x:Name="darkBtns" HorizontalOptions="Start"
-                         Source="darkmoon" IsVisible="{Binding IsLightTheme}"
-                         Clicked="ThemeToggler_Clicked"/>
-
-                <ImageButton HeightRequest="30" HorizontalOptions="Start"
-                         Source="lightsun" IsVisible="{Binding IsVisible, Source={x:Reference darkBtns}, Converter={StaticResource VisibilityToggler}}"
-                         Clicked="ThemeToggler_Clicked"/>
-            </HorizontalStackLayout>   
+        
+            <Button HorizontalOptions="End" Margin="5"
+                Command="{Binding ThemeTogglerCommand}" Text="Light" 
+                    BackgroundColor="{AppThemeBinding Dark=white,Light=black}" TextColor="{AppThemeBinding Dark=black, Light=white}"
+                    ToolTipProperties.Text="Click to Switch to Light Theme">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button" Binding="{Binding IsLightTheme}" Value="true">
+                        <Setter Property="Text" Value="Dark"/>
+                        <Setter Property="ToolTipProperties.Text" Value="Click to Switch to Dark Theme"/>
+                    </DataTrigger>
+                </Button.Triggers>
+                <Button.Shadow>
+                    <Shadow Offset="4,15" Opacity="0.3" Brush="{AppThemeBinding Dark=white,Light=black}"/>
+                </Button.Shadow>
+            </Button>
             
-        </Border>
         <VerticalStackLayout>
 
             <Label Text="Tap Here to view GitHub Repo" HorizontalTextAlignment="Center" 

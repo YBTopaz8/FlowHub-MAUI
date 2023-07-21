@@ -127,7 +127,6 @@ public partial class ManageDebtsVM : ObservableObject
                 await toast.Show(cancellationTokenSource.Token);
                 ApplyChanges();
                 await Drawer.Close(debtBS);
-
             }
         }
         catch (Exception ex)

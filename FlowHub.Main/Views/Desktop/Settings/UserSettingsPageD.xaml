@@ -11,7 +11,8 @@
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:converters="clr-namespace:FlowHub.Main.Utilities"
              Title="My Profile"
-             x:Name="settingsPage">
+             
+             x:Name="Page">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
@@ -19,11 +20,23 @@
     </ContentPage.Resources>
     <toolkit:DockLayout>
         <VerticalStackLayout toolkit:DockLayout.DockPosition="Left" Margin="35,35,45,0" Spacing="20">
+            <Button Command="{Binding ThemeTogglerCommand}" Text="Switch To Light" 
+                    BackgroundColor="{AppThemeBinding Dark=white,Light=black}" TextColor="{AppThemeBinding Dark=black, Light=white}"
+                    ToolTipProperties.Text="Click to Switch to Light Theme">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button" Binding="{Binding IsLightTheme}" Value="true">
+                        <Setter Property="Text" Value="Switch To Dark"/>
+                        <Setter Property="ToolTipProperties.Text" Value="Click to Switch to Dark Theme"/>
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
             <Button Text="My Profile"/>
             <Button Text="Security"/>
             <Button Text="Data Export"/>
             <Button Text="Log Out" BackgroundColor="DarkRed" Command="{Binding LogOutUserCommand}"/>
+            
         </VerticalStackLayout>
+
         <VerticalStackLayout Margin="25,20,20,0">        
             <Image Source="{AppThemeBinding Dark=user_icon_d.png, Light=user_icon_l.png}" HeightRequest="80"/>
             <Label Text="{Binding UserName}" FontSize="38" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
@@ -87,7 +100,10 @@
             <Border Margin="0,5" BackgroundColor="Transparent"
                         StrokeThickness="0.7">
                 <toolkit:DockLayout Margin="10,20">
-                    <Button Text="Edit" toolkit:DockLayout.DockPosition="Right" VerticalOptions="Start" x:Name="EditUserDetailsBtn" Clicked="EditUserDetailsBtn_Clicked" IsVisible="{Binding IsNotInEditingMode}"/>
+                    <Button Text="Edit" toolkit:DockLayout.DockPosition="Right" 
+                            VerticalOptions="Start" x:Name="EditUserDetailsBtn" 
+                            Clicked="EditUserDetailsBtn_Clicked" 
+                            IsVisible="{Binding IsNotInEditingMode}"/>
                     
                     <Label Text="Personal Info" FontAttributes="Bold" FontSize="22" toolkit:DockLayout.DockPosition="Left"/>
                     
@@ -177,7 +193,7 @@
                                 </ListView>
                                 <ImageButton Source="add_btn_d.png" Command="{Binding AddTaxCommand}" WidthRequest="35"/>
                             </VerticalStackLayout>
-                            <ImageButton Source="save_icon_d.png" input:FormView.IsSubmitButton="True" />
+                            <ImageButton Source="{AppThemeBinding Light=save_icon_l.png, Dark=save_icon_d.png}" input:FormView.IsSubmitButton="True" />
                         </input:FormView>
                             
                     </HorizontalStackLayout>

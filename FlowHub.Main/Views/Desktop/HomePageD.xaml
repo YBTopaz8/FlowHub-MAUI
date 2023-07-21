@@ -5,10 +5,7 @@
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels"
              Shell.TabBarIsVisible="True"
-             x:DataType="viewModels:HomePageVM"
-             BackgroundColor="{StaticResource BackGroundDark}">
-
-
+             x:DataType="viewModels:HomePageVM">
     <Shell.BackButtonBehavior>
         <BackButtonBehavior IsVisible="True"/>
     </Shell.BackButtonBehavior>
@@ -51,7 +48,10 @@
                 WidthRequest="450"                
                 Stroke="DarkSlateBlue"
                 StrokeThickness="2"
-                StrokeShape="RoundRectangle 8">
+                StrokeShape="RoundRectangle 10">
+                <Border.Shadow>
+                    <Shadow Offset="10,25" Opacity="0.2"/>
+                </Border.Shadow>
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Latest Flow Outs" FontSize="25" HorizontalOptions="Center" Padding="10,0,0,0"/>
                     <BoxView
@@ -76,8 +76,12 @@
                                         </Grid.ColumnDefinitions>
 
                                         <StackLayout Grid.Column="0">
-                                            <Label Text="{Binding Reason}" FontAttributes="Bold"/>
-                                            <Label Text="{Binding Category}" FontSize="11" FontAttributes="Italic"/>
+                                            <Label Text="{Binding Reason}" FontAttributes="Bold"
+                                                   TextColor="{AppThemeBinding Dark={StaticResource WildBlueYonder}, Light=black}"/>
+                                            
+                                            <Label Text="{Binding Category}" FontSize="11" FontAttributes="Italic"
+                                                   TextColor="{AppThemeBinding Dark={StaticResource Secondary}, Light=blue}"
+                                                    Opacity="{AppThemeBinding Light=0.7}"/>
                                         </StackLayout>
 
                                         <StackLayout Grid.Column="1" HorizontalOptions="End">
@@ -89,13 +93,13 @@
                                                     </MultiBinding>
                                                 </Label.Text>
                                             </Label>
-                                            <Label Text="{Binding DateSpent, StringFormat='{0:ddd, MMM dd}'}" FontSize="11" HorizontalTextAlignment="End" FontAttributes="Italic"/>
+                                            <Label Text="{Binding DateSpent, StringFormat='{0:ddd, MM/dd/yy}'}"
+                                                   Opacity="{AppThemeBinding Dark=0.5, Light=0.5}"
+                                                   FontSize="11" HorizontalTextAlignment="End" FontAttributes="Italic"/>
                                         </StackLayout>
                                     </Grid>
                                     <BoxView  Color="DarkSlateBlue" HeightRequest="0.5" HorizontalOptions="Fill"/>
                                 </VerticalStackLayout>
-                               
-
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
@@ -106,15 +110,13 @@
             <!-- End Section for Expenditure display-->
 
             <!-- Begin Section for income display-->
-            <Border
-                Grid.Column="1"
-                Grid.Row="0"
-                Margin="1"
-                Padding="5"
-                Stroke="DarkSlateBlue"
-                WidthRequest="450"
-                StrokeThickness="2"
-                StrokeShape="RoundRectangle 8">
+            <Border Grid.Column="1" Grid.Row="0"
+                Margin="1" Padding="5"
+                Stroke="DarkSlateBlue" WidthRequest="450"
+                StrokeThickness="2" StrokeShape="RoundRectangle 8">
+                <Border.Shadow>
+                    <Shadow Offset="10,25" Opacity="0.2"/>
+                </Border.Shadow>
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Latest Flow Ins" FontSize="25" HorizontalOptions="Center" Padding="10,0,0,0"/>
                     <BoxView
@@ -128,6 +130,35 @@
                                 <Label Text="No Flow In Available..." HorizontalOptions="Center" VerticalOptions="Center" />
                             </VerticalStackLayout>
                         </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:IncomeModel">
+                                <VerticalStackLayout>
+                                    <Grid Margin="10,5">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Grid.Column="0" Text="{Binding Reason}" FontAttributes="Bold"/>
+
+                                        <StackLayout Grid.Column="1" HorizontalOptions="End">
+                                            <Label FontAttributes="Bold">
+                                                <Label.Text>
+                                                    <MultiBinding StringFormat="{}{0:n2} {1}">
+                                                        <Binding Path="AmountReceived"/>
+                                                        <Binding Path="Currency"/>
+                                                    </MultiBinding>
+                                                </Label.Text>
+                                            </Label>
+                                            <Label Text="{Binding DateReceived, StringFormat='{0:ddd, MMM dd}'}"
+                                                   Opacity="{AppThemeBinding Dark=0.5, Light=0.8}"
+                                                   FontSize="11" HorizontalTextAlignment="End" FontAttributes="Italic"/>
+                                        </StackLayout>
+                                    </Grid>
+                                    <BoxView  Color="DarkSlateBlue" HeightRequest="0.5" HorizontalOptions="Fill"/>
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
                     </CollectionView>
 
                 </VerticalStackLayout>
@@ -144,7 +175,9 @@
                              BackgroundColor="Transparent"
                              Command="{Binding GoToAddExpenditurePageCommand}"
                              ToolTipProperties.Text="Add New Expenditure"/>
-
+                <Border.Shadow>
+                    <Shadow Offset="6,8" Opacity="1"/>
+                </Border.Shadow>
             </Border>
             <Border IsVisible="false"
                 Grid.Column="1"

@@ -60,7 +60,7 @@
                                             </MultiBinding>
                                         </Label.Text>
                                     </Label>
-                                    <Label Text="{Binding DateSpent, StringFormat='{0:MM/dd/yyyy}'}" FontSize="10"
+                                    <Label Text="{Binding DateSpent, StringFormat='{0:ddd, MM/dd/yyyy}'}" FontSize="10"
                                             HorizontalTextAlignment="End" FontAttributes="Italic"
                                            Opacity="{AppThemeBinding Dark=0.5, Light=0.8}"/>
                                 </StackLayout>
