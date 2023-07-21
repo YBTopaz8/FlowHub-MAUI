@@ -67,7 +67,7 @@
                                 <TapGestureRecognizer Tapped="LoginUnFocused_Tapped"/>
                             </Border.GestureRecognizers>
                             <Label Text="Login" Opacity="0.4" 
-                                   HorizontalOptions="CenterAndExpand" TextColor="{AppThemeBinding Dark=white}"
+                                   HorizontalOptions="CenterAndExpand" TextColor="{AppThemeBinding Dark=white, Light=black}"
                                    VerticalOptions="CenterAndExpand"/>
                             
                         </Border>
@@ -80,7 +80,7 @@
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="SignUpUnFocused_Tapped"/>
                             </Border.GestureRecognizers>
-                            <Label Text="Sign Up" Opacity="0.4" TextColor="{AppThemeBinding Dark=white}"
+                            <Label Text="Sign Up" Opacity="0.4" TextColor="{AppThemeBinding Dark=white, Light=black}"
                                    HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
                         </Border>
 
@@ -88,7 +88,7 @@
                                 Grid.Column="1" HorizontalOptions="Center" 
                                 WidthRequest="120" Margin="0,10"
                                 BackgroundColor="{AppThemeBinding Dark=#201F24, Light={StaticResource BackGroundLight}}">
-                            <Label Text="Sign Up" TextColor="DarkSlateBlue"
+                            <Label Text="Sign Up" TextColor="DarkSlateBlue" 
                                    HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
                         </Border>
                     </Grid>
