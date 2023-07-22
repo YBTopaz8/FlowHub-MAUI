@@ -12,46 +12,42 @@
     <ContentPage.ToolbarItems>
         <!--<ToolbarItem IconImageSource="filter_d" Command="{Binding ShowFilterPopUpPageCommand}"/>-->
     </ContentPage.ToolbarItems>
-    <toolkit:DockLayout Margin="5,0">
-        <Label toolkit:DockLayout.DockPosition="Top" FontSize="20" 
+
+    <AbsoluteLayout>
+        <toolkit:DockLayout Margin="5,0" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+            <Label toolkit:DockLayout.DockPosition="Top" FontSize="20" 
                FontAttributes="Bold" HorizontalOptions="Center">
-            <Label.GestureRecognizers>
-                <TapGestureRecognizer NumberOfTapsRequired="2" Tapped="TapGestureRecognizer_Tapped"/>
-            </Label.GestureRecognizers>
-            <Label.Text>
-                <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
-                    <Binding Path="UserPocketMoney"/>
-                    <Binding Path="UserCurrency"/>
-                </MultiBinding>
-            </Label.Text>
-        </Label>
-        <Grid toolkit:DockLayout.DockPosition="Top" HeightRequest="30" Margin="10,3">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20*"/>
-                <ColumnDefinition Width="100*"/>
-                <ColumnDefinition Width="50*"/>
-            </Grid.ColumnDefinitions>
-            
-            <VerticalStackLayout Grid.Column="0">
-                <ImageButton Source="{AppThemeBinding Dark=save_to_pdf_d.png, Light=save_to_pdf_l.png}"  Clicked="ExportToPDFImageButton_Clicked"/>
-                <ProgressBar IsVisible="false" x:Name="PrintProgressBarIndic" ProgressColor="DarkSlateBlue" WidthRequest="50"/>
-            </VerticalStackLayout>
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer NumberOfTapsRequired="2" Tapped="TapGestureRecognizer_Tapped"/>
+                </Label.GestureRecognizers>
+                <Label.Text>
+                    <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
+                        <Binding Path="UserPocketMoney"/>
+                        <Binding Path="UserCurrency"/>
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+            <Grid toolkit:DockLayout.DockPosition="Top" HeightRequest="30" Margin="10,3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-            <HorizontalStackLayout Grid.Column="2" HorizontalOptions="End">
-                <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding ShowAddIncomePopUpCommand}" IsVisible="false"/>
-            </HorizontalStackLayout>
-        </Grid>
+                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Start">
+                    <ImageButton Source="{AppThemeBinding Dark=save_to_pdf_d.png, Light=save_to_pdf_l.png}"  Clicked="ExportToPDFImageButton_Clicked"/>
+                    <ProgressBar IsVisible="false" x:Name="PrintProgressBarIndic" ProgressColor="DarkSlateBlue" WidthRequest="50"/>
+                </VerticalStackLayout>
 
-        <Label toolkit:DockLayout.DockPosition="Top" Text="{Binding IncTitle}" FontSize="20" Margin="5" FontAttributes="Bold" HorizontalOptions="Center"/>
+                <ImageButton x:Name="pie_chart" Grid.Column="1" Source="{AppThemeBinding Dark=pie_chart, Light=pie_chart_l}" 
+                    HorizontalOptions="End" IsVisible="false" WidthRequest="35"
+                    VerticalOptions="Center" />
+            </Grid>
 
-        <Grid toolkit:DockLayout.DockPosition="Bottom" HeightRequest="65" Margin="10,10">
-            
-            <Label FontSize="17" Grid.ColumnSpan="2" HorizontalOptions="Center" VerticalOptions="End" Margin="5">
+            <Label toolkit:DockLayout.DockPosition="Top" Text="{Binding IncTitle}" FontSize="20" Margin="5" FontAttributes="Bold" HorizontalOptions="Center"/>
+
+            <Label FontSize="17" Margin="3" toolkit:DockLayout.DockPosition="Bottom"
+                   FontAttributes="Bold" HorizontalTextAlignment="Center"
+                   HorizontalOptions="Center" VerticalOptions="End">
                 <Label.Text>
                     <MultiBinding StringFormat="{} {2} Flow In(s) worth {0:n2} {1}">
                         <Binding Path="TotalAmount"/>
@@ -61,63 +57,71 @@
                 </Label.Text>
             </Label>
 
-            <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" Command="{Binding ShowAddIncomePopUpCommand}"
-                         VerticalOptions="Start" HorizontalOptions="End" Margin="0,0,10,0" Grid.Column="1"/>
-        </Grid>
-       
-        <CollectionView IsVisible="true" ItemsSource="{Binding IncomesList}" EmptyView="No Flow Ins Available..." >
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:IncomeModel">
-                    
-                    <SwipeView>
-                        <SwipeView.LeftItems>
-                            <SwipeItem 
+            <CollectionView IsVisible="true" ItemsSource="{Binding IncomesList}" EmptyView="No Flow Ins Available..." >
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:IncomeModel">
+
+                        <SwipeView>
+                            <SwipeView.LeftItems>
+                                <SwipeItem 
                                         Command="{Binding Source={x:Reference page}, Path=BindingContext.ShowEditIncomePopUpCommand}"
                                         CommandParameter="{Binding .}" IconImageSource="{AppThemeBinding Dark= edit_d.png, Light= edit_l.png}" 
                                         BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
-                        </SwipeView.LeftItems>
+                            </SwipeView.LeftItems>
 
-                        <SwipeView.RightItems>
-                            <SwipeItem 
+                            <SwipeView.RightItems>
+                                <SwipeItem 
                                     Command="{Binding Source={x:Reference page}, Path=BindingContext.DeleteIncomeBtnCommand}"
                                     CommandParameter="{Binding .}" IconImageSource="{AppThemeBinding Dark= delete_d.png, Light = delete_l.png}" 
                                     BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
-                        </SwipeView.RightItems>
+                            </SwipeView.RightItems>
 
-                        <Border Padding="5" Margin="6,2"
+                            <Border Padding="5" Margin="6,2"
                                 HorizontalOptions="FillAndExpand">
 
-                            <VerticalStackLayout>
-                                <Label HorizontalOptions="Center" FontSize="18" FontAttributes="Bold"
+                                <VerticalStackLayout>
+                                    <Label HorizontalOptions="Center" FontSize="18" FontAttributes="Bold"
                                         Text="{Binding DateReceived, StringFormat='{0:MMMM dd, yyyy}'}"/>
 
-                                <FlexLayout JustifyContent="SpaceBetween" Direction="Row"
+                                    <FlexLayout JustifyContent="SpaceBetween" Direction="Row"
                                             Margin="10,0">
-                                    <Label Text="{Binding Reason, StringFormat='{0}'}" FontSize="16"
+                                        <Label Text="{Binding Reason, StringFormat='{0}'}" FontSize="16"
                                             FontAttributes="Bold"/>
-                                            
-                                    <Label FontSize="16"
+
+                                        <Label FontSize="16"
                                             FontAttributes="Bold">
-                                        <Label.Text>
-                                            <MultiBinding StringFormat="{} {0:n2} {1}">
-                                                <Binding Path="AmountReceived"/>
-                                                <Binding Path="Currency"/>
-                                            </MultiBinding>
-                                        </Label.Text>
-                                    </Label>
-                                            
-                                </FlexLayout>
-                            </VerticalStackLayout>
-                        </Border>
+                                            <Label.Text>
+                                                <MultiBinding StringFormat="{} {0:n2} {1}">
+                                                    <Binding Path="AmountReceived"/>
+                                                    <Binding Path="Currency"/>
+                                                </MultiBinding>
+                                            </Label.Text>
+                                        </Label>
 
-                    </SwipeView>
-                        
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                                    </FlexLayout>
+                                </VerticalStackLayout>
+                            </Border>
 
-       
-    </toolkit:DockLayout>
+                        </SwipeView>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
 
+        </toolkit:DockLayout>
+
+        <Button
+                Command="{Binding ShowAddIncomePopUpCommand}"                
+                WidthRequest="55" HeightRequest="55"
+                CornerRadius="26" Padding="0"
+                BackgroundColor="DarkSlateBlue" BorderColor="DarkSlateBlue" 
+                Text="+" TextColor="White"
+                FontSize="40" Margin="0,0,15,30"
+                AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                ToolTipProperties.Text="Add New Flow Out"
+                />
+    </AbsoluteLayout>
+    
 </ContentPage>
