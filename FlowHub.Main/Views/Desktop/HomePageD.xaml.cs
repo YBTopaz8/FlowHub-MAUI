@@ -36,6 +36,7 @@ public partial class HomePageD : ContentPage
     {
         if (StartAction is 1)
         {
+            viewModel.isFromShortCut = true;
             MainThread.BeginInvokeOnMainThread(async () => await viewModel.GoToAddExpenditurePage());       
         }
     }

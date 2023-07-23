@@ -69,7 +69,7 @@
                            FontAttributes="Italic" FontSize="13">
                         <Label.Text>
                             <MultiBinding StringFormat="{} Flow Out's Amount : {0:n2} {1}">
-                                <Binding Path="TotalAmountSpent"/>
+                                <Binding Path="SingleExpenditureDetails.AmountSpent"/>
                                 <Binding Path="ActiveUser.UserCurrency"/>
                             </MultiBinding>
                         </Label.Text>

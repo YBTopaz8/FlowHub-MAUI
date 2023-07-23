@@ -19,19 +19,9 @@ public partial class HomePageVM : ObservableObject
         userRepo = usersRepository;
         incomeRepo = incomeRepository;
         debtRepo = debtRepository;
-        expenditureRepo.OfflineExpendituresListChanged += OnChangesDetected;
-        incomeRepo.OfflineIncomesListChanged += OnChangesDetected;
+        expenditureRepo.OfflineExpendituresListChanged += OnExpendituresChanged;
+        incomeRepo.OfflineIncomesListChanged += OnIncomesChanged;
         userRepo.OfflineUserDataChanged += OnUserDataChanged;
-    }
-
-    private void OnUserDataChanged()
-    {
-        PocketMoney = userRepo.OfflineUser.PocketMoney;
-    }
-
-    private async void OnChangesDetected()
-    {
-        await InitializeEverything();
     }
 
     [ObservableProperty]
@@ -63,45 +53,46 @@ public partial class HomePageVM : ObservableObject
         if (userRepo.OfflineUser is not null)
         {
             PocketMoney = userRepo.OfflineUser.PocketMoney;
+            Username = userRepo.OfflineUser.Username;
+            UserCurrency = userRepo.OfflineUser.UserCurrency;
 
         }
     }
-    private async Task InitializeEverything()
+    private void OnExpendituresChanged()
     {
-        try
-        {
-            string userId = await settingsService.GetPreference<string>("Id", "error");
-            userRepo.OfflineUser = await userRepo.GetUserAsync(userId);
-            var user = userRepo.OfflineUser;
-            ActiveUser = user;
+        InitializeExpenditures();
+    }
+    private void OnIncomesChanged()
+    {
+        InitializeIncomes();
+    }
+    private void OnUserDataChanged()
+    {
+        PocketMoney = userRepo.OfflineUser.PocketMoney;
+    }
 
-            Username = ActiveUser.Username;
-            PocketMoney = ActiveUser.PocketMoney;
-            UserCurrency = ActiveUser.UserCurrency;
-            //var ListOfExp = await expenditureRepo.GetAllExpendituresAsync();
-            var ListOfExp = expenditureRepo.OfflineExpendituresList;
-            LatestExpenditures = ListOfExp.Count != 0
-                ? ListOfExp
-                .Where(x => !x.IsDeleted)
-                .OrderByDescending(s => s.DateSpent)
-                .Take(5)
-                .ToObservableCollection()
-                : new ObservableCollection<ExpendituresModel>();
-
-            var ListOfInc = incomeRepo.OfflineIncomesList;
-            LatestIncomes = ListOfInc.Count != 0
-                ? ListOfInc
-                .Where(predicate: x => !x.IsDeleted)
-                .OrderByDescending(s => s.DateReceived)
-                .Take(5)
-                .ToObservableCollection()
-                : new ObservableCollection<IncomeModel>();
-            //await debtRepo.GetAllDebtAsync();
-        }
-        catch (Exception ex)
-        {
-            await Shell.Current.DisplayAlert("Error home", ex.Message, "OK");
-        }
+    private void InitializeExpenditures()
+    {
+        //var ListOfExp = await expenditureRepo.GetAllExpendituresAsync();
+        var ListOfExp = expenditureRepo.OfflineExpendituresList;
+        LatestExpenditures = ListOfExp.Count != 0
+            ? ListOfExp
+            .Where(x => !x.IsDeleted)
+            .OrderByDescending(s => s.DateSpent)
+            .Take(5)
+            .ToObservableCollection()
+            : new ObservableCollection<ExpendituresModel>();
+    }
+    private void InitializeIncomes()
+    {
+        var ListOfInc = incomeRepo.OfflineIncomesList;
+        LatestIncomes = ListOfInc.Count != 0
+            ? ListOfInc
+            .Where(predicate: x => !x.IsDeleted)
+            .OrderByDescending(s => s.DateReceived)
+            .Take(5)
+            .ToObservableCollection()
+            : new ObservableCollection<IncomeModel>();
     }
 
     private async Task SyncAndNotifyAsync()
@@ -127,19 +118,7 @@ public partial class HomePageVM : ObservableObject
         }
     }
 
-    [RelayCommand]
-    public void GetTotal()
-    {
-        try
-        {
-            var expList = expenditureRepo.OfflineExpendituresList;
-            TotalExp = expList.Count;
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex.Message);
-        }
-    }
+    public bool isFromShortCut;
     [RelayCommand]
     public async Task GoToAddExpenditurePage()
     {
@@ -147,7 +126,8 @@ public partial class HomePageVM : ObservableObject
         const string pageTitle = "Add New Flow Out";
         const bool isAdd = true;
 
-        var NewUpSertVM = new UpSertExpenditureVM(expenditureRepo, userRepo, newExpenditure, pageTitle, isAdd, ActiveUser);
+        var NewUpSertVM = new UpSertExpenditureVM(expenditureRepo, userRepo,
+            newExpenditure, pageTitle, isAdd, userRepo.OfflineUser);
         var newUpSertExpPopUp= new UpSertExpendituresPopUp(NewUpSertVM);
         try
         {
@@ -160,7 +140,11 @@ public partial class HomePageVM : ObservableObject
             else
             {
 #if WINDOWS
-                await Shell.Current.DisplayAlert("Add New Flow Out", "Please fill in the details", "Ok"); 
+                if (isFromShortCut)
+                {
+                    await Shell.Current.DisplayAlert("Add New Flow Out", "Please fill in the details", "Ok");
+                    isFromShortCut = false;
+                }
 #endif
                 var UpSertResult = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(newUpSertExpPopUp);
 

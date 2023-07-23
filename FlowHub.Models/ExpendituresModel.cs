@@ -3,14 +3,29 @@ using System.ComponentModel;
 
 namespace FlowHub.Models;
 
-public class ExpendituresModel
+public class ExpendituresModel : INotifyPropertyChanged
 {
+    double amountSpent;
     [BsonId]
     public string Id { get; set; }
     public DateTime DateSpent { get; set; }
     public double UnitPrice { get; set; }
     public double Quantity { get; set; } = 1;
-    public double AmountSpent { get; set; }
+    public double AmountSpent
+    {
+        get => amountSpent;
+        set
+        {
+            amountSpent = value;
+            OnPropertyChanged(nameof(AmountSpent));
+        }
+    }
+
+    private void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
     public List<TaxModel>? Taxes { get; set; }
     public string? Reason { get; set; }
     public bool IncludeInReport { get; set; } = true;
@@ -22,6 +37,8 @@ public class ExpendituresModel
     public string? PlatformModel { get; set; }
     public bool IsDeleted { get; set; }
     public string UserId { get; set; }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 }
 
 public enum ExpenditureCategory
@@ -87,7 +104,6 @@ public static class ExpenditureCategoryDescriptions
                 descriptions.Add(attribute?.Description ?? string.Empty);
             }
         }
-
         return descriptions;
     }
 }

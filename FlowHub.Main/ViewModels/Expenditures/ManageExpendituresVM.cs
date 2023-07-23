@@ -65,7 +65,7 @@ public partial class ManageExpendituresVM : ObservableObject
 
         UserPocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
-        await expendituresService.GetAllExpendituresAsync();
+        //await expendituresService.GetAllExpendituresAsync();
         //  filterOption = "Filter_Curr_Month";
 
         GetAllExp();

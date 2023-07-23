@@ -121,7 +121,7 @@ public partial class UpSertExpenditureVM : ObservableObject
     {
         SingleExpenditureDetails.Id = Guid.NewGuid().ToString();
         SingleExpenditureDetails.Currency = ActiveUser.UserCurrency;
-        SingleExpenditureDetails.AmountSpent = TotalAmountSpent;
+        
         SingleExpenditureDetails.AddedDateTime = DateTime.UtcNow;
         SingleExpenditureDetails.UserId = userRepo.OfflineUser.UserIDOnline;
 
@@ -150,6 +150,8 @@ public partial class UpSertExpenditureVM : ObservableObject
     public void CancelBtn()
     {
         Debug.WriteLine("Action cancelled by user");
+        SingleExpenditureDetails.AmountSpent = _initialExpenditureAmount;
+        SingleExpenditureDetails.UnitPrice = _initialExpenditureAmount; 
         ThisPopUpResult = PopupResult.Cancel;
         ClosePopUp = true;
     }
@@ -157,12 +159,13 @@ public partial class UpSertExpenditureVM : ObservableObject
     public void UnitPriceOrQuantityChanged()
     {
         SingleExpenditureDetails.AmountSpent = SingleExpenditureDetails.UnitPrice * SingleExpenditureDetails.Quantity;
-        TotalAmountSpent = SingleExpenditureDetails.AmountSpent;
+        TotalAmountSpent = _initialExpenditureAmount - SingleExpenditureDetails.AmountSpent;
+        //TotalAmountSpent = SingleExpenditureDetails.AmountSpent;
         if (IsAddTaxesChecked)
         {
             ApplyTax();
         }
-        ResultingBalance = _initialUserPocketMoney - SingleExpenditureDetails.AmountSpent;
+        ResultingBalance = _initialUserPocketMoney + TotalAmountSpent;
     }
 
     [ObservableProperty]

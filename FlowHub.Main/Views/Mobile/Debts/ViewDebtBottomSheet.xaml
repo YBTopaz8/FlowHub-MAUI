@@ -145,12 +145,12 @@
             
         </FlexLayout>
 
-        <ImageButton Source="{AppThemeBinding Dark=delete_d, Light=delete_l}" HorizontalOptions="End"
+        <ImageButton Source="{AppThemeBinding Dark=delete_d.png, Light=delete_l.png}" HorizontalOptions="End"
                      Command="{Binding DeleteDebtCommand}" CommandParameter="{Binding SingleDebtDetails}"
-                     HeightRequest="30" Margin="0,5,0,0"
+                     HeightRequest="{OnPlatform WinUI=60}" Margin="0,5,0,0"
                      ToolTipProperties.Text="Delete This Debt"/>
-        <ImageButton Source="{AppThemeBinding Light=phone_l, Dark=phone_dsb}" HorizontalOptions="Center" 
-                     Command="{Binding OpenPhoneDialerCommand}" HeightRequest="40"                      
+        <ImageButton Source="{AppThemeBinding Light=phone_l.png, Dark=phone_dsb.png}" HorizontalOptions="Center" 
+                     Command="{Binding OpenPhoneDialerCommand}" HeightRequest="60" IsVisible="{OnPlatform WinUI=false, Android=true}"
                      ToolTipProperties.Text="Launch A Phone Call"/>
     </VerticalStackLayout>
 </base:DrawerView>

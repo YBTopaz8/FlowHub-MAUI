@@ -96,7 +96,7 @@ public partial class ManageDebtsVM : ObservableObject
                     .Where(x => !x.IsDeleted)
                     .OrderByDescending(x => x.UpdateDateTime)
                     .ToList();
-        DebtsList.Clear();
+        DebtsList?.Clear();
         DebtsList = new ObservableCollection<DebtModel>(debtList);
 
         TotalBorrowed = debtList.Count(x => x.DebtType == DebtType.Borrowed);//.Sum(x => x.Amount);
@@ -112,7 +112,8 @@ public partial class ManageDebtsVM : ObservableObject
         string text;
         try
         {
-            var response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Delete Flow Hold ?"));
+            //var response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Delete Flow Hold ?"));
+            var response = await Shell.Current.DisplayAlert("Confirm Action", "Delete Flow Hold ?", "Yes", "No");
             if (response)
             {
                 debt.PlatformModel = DeviceInfo.Current.Model;

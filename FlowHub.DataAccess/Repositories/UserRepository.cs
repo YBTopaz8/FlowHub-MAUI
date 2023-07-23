@@ -74,11 +74,6 @@ public class UserRepository : IUsersRepository
 
         await AddUserAsync(OnlineUser);
 
-        //if(OfflineUser is not null)
-        //{
-        //    OfflineUser.UserIDOnline = OnlineUser.Id;
-        //    _ = await UpdateUserAsync(OfflineUser);
-        //}
         OfflineUserDataChanged?.Invoke();
         return OfflineUser;
     }

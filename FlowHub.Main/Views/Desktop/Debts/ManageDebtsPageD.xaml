@@ -21,6 +21,7 @@
                      RowHeight="50" HeaderHeight="40"
                      BorderColor="{AppThemeBinding Dark=transparent, Light=darkslateblue}"
                      HorizontalOptions="CenterAndExpand"
+                     VerticalOptions="FillAndExpand"
                      x:Name="DebtDG">
             
             <dg:DataGrid.NoDataView>
