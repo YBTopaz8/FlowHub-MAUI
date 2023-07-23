@@ -19,12 +19,15 @@
             ContentTemplate="{DataTemplate views:HomePageM}"
             Route="HomePageM"/>
 
-        <ShellContent Title="Flow Outs" Icon="{AppThemeBinding Dark= initiate_money_transfer_d,Light= initiate_money_transfer_d}"
-                ContentTemplate="{DataTemplate viewsExp:ManageExpendituresM}"/>
+        <ShellContent Title="Flow Outs" 
+                      Icon="{AppThemeBinding Dark= initiate_money_transfer_d,Light= initiate_money_transfer_d}"
+                      ContentTemplate="{DataTemplate viewsExp:ManageExpendituresM}"
+                      Route="ManageExpendituresM"/>
 
 
         <ShellContent Title="Flow Ins" Icon="{AppThemeBinding Dark=request_money_d.png, Light=request_money_l.png}"
-                      ContentTemplate="{DataTemplate viewsInc:ManageIncomesM}"/>
+                      ContentTemplate="{DataTemplate viewsInc:ManageIncomesM}"
+                      Route="ManageIncomesM"/>
 
         <ShellContent Title="Flow Insights" Icon="graph_d.png" 
                       IsVisible="False" ContentTemplate="{DataTemplate viewsStats:StatisticsPageM}"/>

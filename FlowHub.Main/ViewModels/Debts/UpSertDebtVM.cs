@@ -91,6 +91,7 @@ public partial class UpSertDebtVM : ObservableObject
 
         if (!await debtRepo.AddDebtAsync(SingleDebtDetails))
         {
+            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Failed to Add Flow Hold"));
             return;
         }
         const string toastNotifMessage = "Flow Hold Added";
@@ -103,6 +104,7 @@ public partial class UpSertDebtVM : ObservableObject
     {
         if (!await debtRepo.UpdateDebtAsync(SingleDebtDetails))
         {
+            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Failed to Update Flow Hold"));
             return;
         }
 

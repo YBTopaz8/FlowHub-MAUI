@@ -4,7 +4,7 @@ namespace FlowHub.DataAccess.Repositories;
 
 public class DebtRepository : IDebtRepository
 {
-    private const string DebtsCollectionName = "Debts";
+    private const string DebtsCollectionName = "DebtsCollection";
     LiteDatabaseAsync db;
     private ILiteCollectionAsync<DebtModel> AllDebts;
     IMongoDatabase DBOnline;
@@ -37,21 +37,23 @@ public class DebtRepository : IDebtRepository
     {
         try
         {
-            using (db = await OpenDB())
+            await OpenDB();
+            
+            string userId = usersRepo.OfflineUser.Id;
+            string userCurrency = usersRepo.OfflineUser.UserCurrency;
+            if (usersRepo.OfflineUser.UserIDOnline != string.Empty)
             {
-                string userId = usersRepo.OfflineUser.Id;
-                string userCurrency = usersRepo.OfflineUser.UserCurrency;
-                if (usersRepo.OfflineUser.UserIDOnline != string.Empty)
-                {
-                    userId = usersRepo.OfflineUser.UserIDOnline;
-                }
-                OfflineDebtList = await AllDebts.Query()
-                    .Where(x => x.UserId == userId)
-                    .OrderByDescending(x => x.UpdateDateTime)
-                    .ToListAsync();
-                OfflineDebtList ??= Enumerable.Empty<DebtModel>().ToList();
-                return OfflineDebtList;
+                userId = usersRepo.OfflineUser.UserIDOnline;
             }
+            OfflineDebtList = await AllDebts.Query()
+                .Where(x => x.UserId == userId)
+                .OrderByDescending(x => x.UpdateDateTime)
+                .ToListAsync();
+
+            db.Dispose();
+            OfflineDebtList ??= Enumerable.Empty<DebtModel>().ToList();
+            return OfflineDebtList;
+            
         }
         catch (Exception ex)
         {
@@ -103,7 +105,7 @@ public class DebtRepository : IDebtRepository
         var filtersDebt = Builders<DebtModel>.Filter.Eq("UserId", usersRepo.OnlineUser.Id) &
             Builders<DebtModel>.Filter.Eq("Currency", usersRepo.OfflineUser.UserCurrency);
 
-        AllDebtsOnline ??= DBOnline.GetCollection<DebtModel>(DebtsCollectionName);
+        AllDebtsOnline ??= DBOnline.GetCollection<DebtModel>("Debts");
         OnlineDebtList = await AllDebtsOnline.Find(filtersDebt).ToListAsync();
     }
 
@@ -171,33 +173,35 @@ public class DebtRepository : IDebtRepository
         debt.UpdateDateTime = DateTime.UtcNow;
         try
         {
-            using (db = await OpenDB())
+            await OpenDB();
+            
+            if (await AllDebts.InsertAsync(debt) is not null)
             {
-                if (await AllDebts.InsertAsync(debt) is not null)
+                OfflineDebtList.Add(debt);
+                Debug.WriteLine("Added local debt");
+                if (!IsBatchUpdate)
                 {
-                    OfflineDebtList.Add(debt);
-                    Debug.WriteLine("Added local debt");
-                    if (!IsBatchUpdate)
-                    {
-                        OfflineDebtListChanged?.Invoke();
-                        Debug.WriteLine("NOTIFIED");
-                    }
-                    if (!IsSyncing && Connectivity.NetworkAccess == NetworkAccess.Internet)
-                    {
-                        await AddDebtOnlineAsync(debt);
-                    }
-                    return true;
+                    OfflineDebtListChanged?.Invoke();
+                    Debug.WriteLine("NOTIFIED");
                 }
-                else
+                if (!IsSyncing && Connectivity.NetworkAccess == NetworkAccess.Internet)
                 {
-                    Debug.WriteLine("Failed to add local debt");
-                    return false;
+                    await AddDebtOnlineAsync(debt);
                 }
+                db.Dispose();
+                return true;
             }
+            else
+            {
+                Debug.WriteLine("Failed to add local debt");
+                return false;
+            }
+            
         }
         catch (Exception ex)
         {
             Debug.WriteLine("Failed to add local debt: " + ex.Message);
+            db.Dispose();
             return false;
         }
     }
@@ -207,30 +211,30 @@ public class DebtRepository : IDebtRepository
 
         try
         {
-            using (db = await OpenDB())
+            await OpenDB();
+            if (await AllDebts.UpdateAsync(debt))
             {
-                if (await AllDebts.UpdateAsync(debt))
-                {
-                    Debug.WriteLine("Debt updated locally");
+                Debug.WriteLine("Debt updated locally");
 
-                    int index = OfflineDebtList.FindIndex(x => x.Id == debt.Id);
-                    OfflineDebtList[index] = debt;
-                    if (!IsBatchUpdate)
-                    {
-                        OfflineDebtListChanged?.Invoke();
-                    }
-                    if (!IsSyncing && Connectivity.NetworkAccess == NetworkAccess.Internet)
-                    {
-                        await UpdateDebtOnlineAsync(debt);
-                    }
-                    return true;
-                }
-                else
+                int index = OfflineDebtList.FindIndex(x => x.Id == debt.Id);
+                OfflineDebtList[index] = debt;
+                if (!IsBatchUpdate)
                 {
-                    Debug.WriteLine("Failed to update local debt");
-                    return false;
+                    OfflineDebtListChanged?.Invoke();
                 }
+                if (!IsSyncing && Connectivity.NetworkAccess == NetworkAccess.Internet)
+                {
+                    await UpdateDebtOnlineAsync(debt);
+                }
+                db.Dispose();
+                return true;
             }
+            else
+            {
+                Debug.WriteLine("Failed to update local debt");
+                return false;
+            }
+            
         }
         catch (Exception ex)
         {
@@ -244,28 +248,30 @@ public class DebtRepository : IDebtRepository
         debt.IsDeleted = true;
         try
         {
-            using (db = await OpenDB())
+            await OpenDB();
+            
+            if (await AllDebts.UpdateAsync(debt))
             {
-                if (await AllDebts.UpdateAsync(debt))
+                OfflineDebtList.Remove(debt);
+                Debug.WriteLine("Debt deleted locally");
+                if (!IsBatchUpdate)
                 {
-                    OfflineDebtList.Remove(debt);
-                    Debug.WriteLine("Debt deleted locally");
-                    if (!IsBatchUpdate)
-                    {
-                        OfflineDebtListChanged?.Invoke();
-                    }
-                    if (!IsSyncing && Connectivity.NetworkAccess == NetworkAccess.Internet)
-                    {
-                        await DeleteDebtOnlineAsync(debt);
-                    }
-                    return true;
+                    OfflineDebtListChanged?.Invoke();
                 }
-                else
+                if (!IsSyncing && Connectivity.NetworkAccess == NetworkAccess.Internet)
                 {
-                    Debug.WriteLine("Failed to delete local debt");
-                    return false;
+                    await DeleteDebtOnlineAsync(debt);
                 }
+                db.Dispose();
+                return true;
             }
+            else
+            {
+                Debug.WriteLine("Failed to delete local debt");
+                db.Dispose();
+                return false;
+            }
+            
         }
         catch (Exception ex)
         {

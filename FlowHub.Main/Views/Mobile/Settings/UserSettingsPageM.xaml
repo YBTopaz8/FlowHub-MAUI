@@ -157,7 +157,9 @@
                         </ListView.ItemTemplate>
                     </ListView>
                 </VerticalStackLayout>
-                <ImageButton Source="{AppThemeBinding Dark=logout_icon_d.png, Light=logout_icon_l.png}" HorizontalOptions="Center" HeightRequest="80" Command="{Binding LogOutUserCommand}"/>
+                <ImageButton Source="{AppThemeBinding Dark=logout_icon_d.png, Light=logout_icon_l.png}" 
+                             HorizontalOptions="Center" HeightRequest="80" 
+                             Command="{Binding LogOutUserCommand}"/>
 
             </VerticalStackLayout>
         </ScrollView>

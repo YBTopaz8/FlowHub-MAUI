@@ -5,7 +5,7 @@ public class LoginNavs
 {
     public async Task GoToHomePage()
     {
-        await Shell.Current.GoToAsync("//HomePage");
+        await Shell.Current.GoToAsync("//HomePageD");
     }
     public async Task GoToLoginInPage()
     {

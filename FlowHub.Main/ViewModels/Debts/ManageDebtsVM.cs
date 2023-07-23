@@ -96,6 +96,7 @@ public partial class ManageDebtsVM : ObservableObject
                     .Where(x => !x.IsDeleted)
                     .OrderByDescending(x => x.UpdateDateTime)
                     .ToList();
+        DebtsList.Clear();
         DebtsList = new ObservableCollection<DebtModel>(debtList);
 
         TotalBorrowed = debtList.Count(x => x.DebtType == DebtType.Borrowed);//.Sum(x => x.Amount);
@@ -188,8 +189,15 @@ public partial class ManageDebtsVM : ObservableObject
         }
     }
 
-    private void HandleDebtsListUpdated()
+    private async void HandleDebtsListUpdated()
     {
-        ApplyChanges();
+        try
+        {
+            ApplyChanges();
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error debts", ex.Message, "OK");
+        }
     }
 }

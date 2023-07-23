@@ -181,30 +181,31 @@ public class IncomeRepository : IIncomeRepository
     {
         try
         {
-            using (db = await OpenDB())
+            await OpenDB();
+            
+            if (await AllIncomes.InsertAsync(newIncome) is not null)
             {
-                if (await AllIncomes.InsertAsync(newIncome) is not null)
+                OfflineIncomesList.Add(newIncome);
+                Debug.WriteLine("Income inserted Locally");
+                if (!IsBatchUpdate)
                 {
-                    OfflineIncomesList.Add(newIncome);
-                    Debug.WriteLine("Income inserted Locally");
-                    if (!IsBatchUpdate)
-                    {
-                        OfflineIncomesListChanged?.Invoke();
-                    }
+                    OfflineIncomesListChanged?.Invoke();
+                }
 
-                    if (!IsSyncing && Connectivity.NetworkAccess == NetworkAccess.Internet)
-                    {
-                        OnlineIncomesList.Add(newIncome);
-                        await AddIncomeOnlineAsync(newIncome);
-                    }
-                    return true;
-                }
-                else
+                if (!IsSyncing && Connectivity.NetworkAccess == NetworkAccess.Internet)
                 {
-                    Debug.WriteLine("Error while adding Income");
-                    return false;
+                    OnlineIncomesList.Add(newIncome);
+                    await AddIncomeOnlineAsync(newIncome);
                 }
+            db.Dispose();
+            return true;
             }
+            else
+            {
+                Debug.WriteLine("Error while adding Income");
+                return false;
+            }
+            
         }
         catch (Exception ex)
         {
@@ -217,31 +218,31 @@ public class IncomeRepository : IIncomeRepository
     {
         try
         {
-            using (db = await OpenDB())
+            await OpenDB();
+            if (await AllIncomes.UpdateAsync(income))
             {
-                if (await AllIncomes.UpdateAsync(income))
-                {
-                    Debug.WriteLine("Income updated Locally");
+                Debug.WriteLine("Income updated Locally");
 
-                    int index = OfflineIncomesList.FindIndex(x => x.Id == income.Id);
-                    OfflineIncomesList[index] = income;
-                    if (!IsBatchUpdate)
-                    {
-                        OfflineIncomesListChanged?.Invoke();
-                    }
-
-                    if (!IsSyncing && Connectivity.NetworkAccess == NetworkAccess.Internet)
-                    {
-                        await UpdateIncomeOnlineAsync(income);
-                    }
-                    return true;
-                }
-                else
+                int index = OfflineIncomesList.FindIndex(x => x.Id == income.Id);
+                OfflineIncomesList[index] = income;
+                if (!IsBatchUpdate)
                 {
-                    Debug.WriteLine("Error while updating Income");
-                    return false;
+                    OfflineIncomesListChanged?.Invoke();
                 }
+
+                if (!IsSyncing && Connectivity.NetworkAccess == NetworkAccess.Internet)
+                {
+                    await UpdateIncomeOnlineAsync(income);
+                }
+                db.Dispose();
+                return true;
             }
+            else
+            {
+                Debug.WriteLine("Error while updating Income");
+                return false;
+            }
+            
         }
         catch (Exception ex)
         {
@@ -256,29 +257,29 @@ public class IncomeRepository : IIncomeRepository
 
         try
         {
-            using (db = await OpenDB())
+            await OpenDB();
+            if (await AllIncomes.UpdateAsync(income))
             {
-                if (await AllIncomes.UpdateAsync(income))
+                OfflineIncomesList.Remove(income);
+                Debug.WriteLine("Income deleted Locally");
+                if (!IsBatchUpdate)
                 {
-                    OfflineIncomesList.Remove(income);
-                    Debug.WriteLine("Income deleted Locally");
-                    if (!IsBatchUpdate)
-                    {
-                        OfflineIncomesListChanged?.Invoke();
-                    }
+                    OfflineIncomesListChanged?.Invoke();
+                }
 
-                    if (Connectivity.NetworkAccess == NetworkAccess.Internet)
-                    {
-                        await DeleteIncomeOnlineAsync(income);
-                    }
-                    return true;
-                }
-                else
+                if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                 {
-                    Debug.WriteLine("Error while deleting Income");
-                    return false;
+                    await DeleteIncomeOnlineAsync(income);
                 }
+                db.Dispose();
+                return true;
             }
+            else
+            {
+                Debug.WriteLine("Error while deleting Income");
+                return false;
+            }
+            
         }
         catch (Exception ex)
         {

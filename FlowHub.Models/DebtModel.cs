@@ -9,7 +9,7 @@ public class DebtModel
         DebtType = DebtType.Lent;
     }
     [BsonId]
-    public string? Id { get; set; }
+    public string Id { get; set; }
     public required double Amount { get; set; }
     public DebtType DebtType { get; set; }
     public required PersonOrOrganizationModel PersonOrOrganization { get; set; }

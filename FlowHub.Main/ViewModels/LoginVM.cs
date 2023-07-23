@@ -4,10 +4,6 @@ public partial class LoginVM : ObservableObject
 {
     private readonly ISettingsServiceRepository settingsRepo;
     private readonly IUsersRepository userRepo;
-    private readonly IExpendituresRepository expenditureRepo;
-    private readonly IIncomeRepository incomeRepo;
-    private readonly IDebtRepository debtRepo;
-    private readonly IDataAccessRepo dataAccessRepo;
     private readonly CountryAndCurrencyCodes countryAndCurrency = new();
 
     readonly LoginNavs NavFunctions = new();
@@ -16,10 +12,6 @@ public partial class LoginVM : ObservableObject
     {
         settingsRepo = sessionServiceRepository;
         userRepo = userRepository;
-        expenditureRepo = expRepository;
-        incomeRepo = incomeRepository;
-        debtRepo = debtRepository;
-        this.dataAccessRepo = dataAccessRepo;
     }
 
     [ObservableProperty]

@@ -20,7 +20,7 @@
              Route="Home">
             <ShellContent Title="Home Page" 
                 ContentTemplate="{DataTemplate views:HomePageD}"        
-                Route="HomePage"/>
+                Route="HomePageD"/>
 
             <ShellContent Title="Log Out"/>
             <ShellContent Title="Exit" />
@@ -29,13 +29,13 @@
         <Tab Title="Flow Outs" Icon="{AppThemeBinding Dark= initiate_money_transfer_d.png,Light= initiate_money_transfer_d.png}">
             <ShellContent Title="Manage Flow Outs" Icon="{AppThemeBinding Dark= initiate_money_transfer_d.png,Light= initiate_money_transfer_d.png}"
                 ContentTemplate="{DataTemplate viewsExpenditures:ManageExpendituresPageD}"
-                Route="ManageExpenditures"/>
+                Route="ManageExpendituresD"/>
         </Tab>
 
         <Tab Title="Flow In" Icon="{AppThemeBinding Dark=request_money_d.png, Light=request_money_l.png}">
             <ShellContent Title="Manage Incomes" Icon="{AppThemeBinding Dark=request_money_d.png, Light=request_money_l.png}"
                           ContentTemplate="{DataTemplate viewsIncomes:ManageIncomesD}"
-                          Route="ManageIncomes"/>
+                          Route="ManageIncomesD"/>
         </Tab>
 
         <Tab Title="Flow Insights" Icon="{AppThemeBinding Dark=graph_d.png, Light=graph_l.png}" >

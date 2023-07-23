@@ -5,14 +5,20 @@ namespace FlowHub.Main.ViewModels.Expenditures;
 public partial class ManageExpendituresVM : ObservableObject
 {
     readonly IExpendituresRepository expendituresService;
-    readonly IUsersRepository userService;
+    readonly IUsersRepository userRepo;
 
     public ManageExpendituresVM(IExpendituresRepository expendituresRepository, IUsersRepository usersRepository)
     {
         expendituresService = expendituresRepository;
-        userService = usersRepository;
+        userRepo = usersRepository;
         ExpendituresCat = ExpenditureCategoryDescriptions.Descriptions;
         expendituresService.OfflineExpendituresListChanged += HandleExpendituresListUpdated;
+        userRepo.OfflineUserDataChanged += HandleUserDataChanged;
+    }
+
+    private void HandleUserDataChanged()
+    {
+        UserPocketMoney = userRepo.OfflineUser.PocketMoney;
     }
 
     [ObservableProperty]
@@ -54,7 +60,7 @@ public partial class ManageExpendituresVM : ObservableObject
 
     public async Task PageloadedAsync()
     {
-        UsersModel user = userService.OfflineUser;
+        UsersModel user = userRepo.OfflineUser;
         ActiveUser = user;
 
         UserPocketMoney = ActiveUser.PocketMoney;
@@ -66,8 +72,12 @@ public partial class ManageExpendituresVM : ObservableObject
     }
 
     bool IsLoaded;
+
+    [ObservableProperty]
+    public int startAction;
     [RelayCommand]
     //Function to show very single expenditure from DB
+
     public void GetAllExp()
     {
         try
@@ -75,7 +85,6 @@ public partial class ManageExpendituresVM : ObservableObject
             if (!IsLoaded)
             {
                 ExpTitle = "All Flow Outs";
-
                 ApplyChanges();
 
                 IsBusy = false;
@@ -89,9 +98,16 @@ public partial class ManageExpendituresVM : ObservableObject
         }
     }
 
-    private void HandleExpendituresListUpdated()
+    private async void HandleExpendituresListUpdated()
     {
-        ApplyChanges();
+        try
+        {
+            ApplyChanges();
+        }
+        catch (Exception ex)
+        {
+           await Shell.Current.DisplayAlert("Error Exp", ex.Message, "OK");
+        }
     }
 
     private void ApplyChanges()
@@ -150,8 +166,13 @@ public partial class ManageExpendituresVM : ObservableObject
     }
     private async Task AddEditExpediture(ExpendituresModel expenditure, string pageTitle, bool isAdd)
     {
-        var NewUpSertVM = new UpSertExpenditureVM(expendituresService, userService, expenditure, pageTitle, isAdd, ActiveUser);
-        await Shell.Current.ShowPopupAsync(new UpSertExpendituresPopUp(NewUpSertVM));
+        var NewUpSertVM = new UpSertExpenditureVM(expendituresService, userRepo, expenditure, pageTitle, isAdd, ActiveUser);
+        var result = (PopUpCloseResult) await Shell.Current.ShowPopupAsync(new UpSertExpendituresPopUp(NewUpSertVM));
+        if(result.Result == PopupResult.OK)
+        {
+            var resultingBalance = (double)result.Data;
+            UserPocketMoney = resultingBalance;
+        }
     }
 
     [RelayCommand]
@@ -192,7 +213,7 @@ public partial class ManageExpendituresVM : ObservableObject
                 ActiveUser.TotalExpendituresAmount -= expenditure.AmountSpent;
                 ActiveUser.PocketMoney += expenditure.AmountSpent;
                 UserPocketMoney += expenditure.AmountSpent;
-                await userService.UpdateUserAsync(ActiveUser);
+                await userRepo.UpdateUserAsync(ActiveUser);
             }
             else
             {

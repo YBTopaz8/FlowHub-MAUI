@@ -2,14 +2,12 @@
 
 //This is the view model for the HOME PAGE
 namespace FlowHub.Main.ViewModels;
-
-[QueryProperty(nameof(TotalExp), nameof(TotalExp))]
 public partial class HomePageVM : ObservableObject
 {
-    public readonly IExpendituresRepository expenditureRepo;
+    private readonly IExpendituresRepository expenditureRepo;
     private readonly ISettingsServiceRepository settingsService;
-    private readonly IUsersRepository userService;
-    public readonly IIncomeRepository incomeRepo;
+    private readonly IUsersRepository userRepo;
+    private  readonly IIncomeRepository incomeRepo;
     private readonly IDebtRepository debtRepo;
 
     public HomePageVM(IExpendituresRepository expendituresRepository, ISettingsServiceRepository settingsServiceRepo,
@@ -18,11 +16,17 @@ public partial class HomePageVM : ObservableObject
     {
         expenditureRepo = expendituresRepository;
         settingsService = settingsServiceRepo;
-        userService = usersRepository;
+        userRepo = usersRepository;
         incomeRepo = incomeRepository;
         debtRepo = debtRepository;
         expenditureRepo.OfflineExpendituresListChanged += OnChangesDetected;
         incomeRepo.OfflineIncomesListChanged += OnChangesDetected;
+        userRepo.OfflineUserDataChanged += OnUserDataChanged;
+    }
+
+    private void OnUserDataChanged()
+    {
+        PocketMoney = userRepo.OfflineUser.PocketMoney;
     }
 
     private async void OnChangesDetected()
@@ -31,9 +35,10 @@ public partial class HomePageVM : ObservableObject
     }
 
     [ObservableProperty]
-    ObservableCollection<ExpendituresModel> _latestExpenditures;
+    ObservableCollection<ExpendituresModel> latestExpenditures = new();
+
     [ObservableProperty]
-    ObservableCollection<IncomeModel> _latestIncomes;
+    ObservableCollection<IncomeModel> latestIncomes = new();
 
     [ObservableProperty]
     public int totalExp;
@@ -50,46 +55,60 @@ public partial class HomePageVM : ObservableObject
 
     public async Task DisplayInfo()
     {
-        await InitializeEverything();
-
         await SyncAndNotifyAsync();
-    }
 
+    }
+    public void GetUserData()
+    {
+        if (userRepo.OfflineUser is not null)
+        {
+            PocketMoney = userRepo.OfflineUser.PocketMoney;
+
+        }
+    }
     private async Task InitializeEverything()
     {
-        string Id = await settingsService.GetPreference<string>("Id", "error");
+        try
+        {
+            string userId = await settingsService.GetPreference<string>("Id", "error");
+            userRepo.OfflineUser = await userRepo.GetUserAsync(userId);
+            var user = userRepo.OfflineUser;
+            ActiveUser = user;
 
-        var user = userService.OfflineUser;
-        ActiveUser = user;
+            Username = ActiveUser.Username;
+            PocketMoney = ActiveUser.PocketMoney;
+            UserCurrency = ActiveUser.UserCurrency;
+            //var ListOfExp = await expenditureRepo.GetAllExpendituresAsync();
+            var ListOfExp = expenditureRepo.OfflineExpendituresList;
+            LatestExpenditures = ListOfExp.Count != 0
+                ? ListOfExp
+                .Where(x => !x.IsDeleted)
+                .OrderByDescending(s => s.DateSpent)
+                .Take(5)
+                .ToObservableCollection()
+                : new ObservableCollection<ExpendituresModel>();
 
-        Username = ActiveUser.Username;
-        PocketMoney = ActiveUser.PocketMoney;
-        UserCurrency = ActiveUser.UserCurrency;
-        var ListOfExp = await expenditureRepo.GetAllExpendituresAsync();
-
-        LatestExpenditures = ListOfExp.Count != 0
-            ? ListOfExp
-            .Where(x => !x.IsDeleted)
-            .OrderByDescending(s => s.DateSpent)
-            .Take(5)
-            .ToObservableCollection()
-            : new ObservableCollection<ExpendituresModel>();
-
-        var ListOfInc = await incomeRepo.GetAllIncomesAsync();
-        LatestIncomes = ListOfInc.Count != 0
-            ? ListOfInc
-            .Where(predicate: x => !x.IsDeleted)
-            .OrderByDescending(s => s.DateReceived)
-            .Take(5)
-            .ToObservableCollection()
-            : new ObservableCollection<IncomeModel>();
-        await debtRepo.GetAllDebtAsync();
+            var ListOfInc = incomeRepo.OfflineIncomesList;
+            LatestIncomes = ListOfInc.Count != 0
+                ? ListOfInc
+                .Where(predicate: x => !x.IsDeleted)
+                .OrderByDescending(s => s.DateReceived)
+                .Take(5)
+                .ToObservableCollection()
+                : new ObservableCollection<IncomeModel>();
+            //await debtRepo.GetAllDebtAsync();
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error home", ex.Message, "OK");
+        }
     }
 
     private async Task SyncAndNotifyAsync()
     {
         try
         {
+
             await Task.WhenAll(expenditureRepo.SynchronizeExpendituresAsync(), debtRepo.SynchronizeDebtsAsync(), incomeRepo.SynchronizeIncomesAsync());
 
             CancellationTokenSource cts = new();
@@ -124,28 +143,39 @@ public partial class HomePageVM : ObservableObject
     [RelayCommand]
     public async Task GoToAddExpenditurePage()
     {
-        if (ActiveUser is null)
-        {
-            Debug.WriteLine("Can't Open PopUp");
-            await Shell.Current.DisplayAlert("Wait", "Cannot go", "Ok");
-        }
-        else
-        {
-            var newExpenditure = new ExpendituresModel() { DateSpent = DateTime.Now };
-            const string pageTitle = "Add New Flow Out";
-            const bool isAdd = true;
+        var newExpenditure = new ExpendituresModel() { DateSpent = DateTime.Now };
+        const string pageTitle = "Add New Flow Out";
+        const bool isAdd = true;
 
-            var NewUpSertVM = new UpSertExpenditureVM(expenditureRepo, userService, newExpenditure, pageTitle, isAdd, ActiveUser);
-            var UpSertResult = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new UpSertExpendituresPopUp(NewUpSertVM));
+        var NewUpSertVM = new UpSertExpenditureVM(expenditureRepo, userRepo, newExpenditure, pageTitle, isAdd, ActiveUser);
+        var newUpSertExpPopUp= new UpSertExpendituresPopUp(NewUpSertVM);
+        try
+        {
 
-            if (UpSertResult.Result == PopupResult.OK)
+            if (ActiveUser is null)
             {
-                ExpendituresModel exp = (ExpendituresModel)UpSertResult.Data;
-                //add logic if this exp is the latest in terms of datetime
-                LatestExpenditures.Add(exp);
-                LatestExpenditures = LatestExpenditures.OrderByDescending(s => s.DateSpent).Take(5).ToObservableCollection();
-                PocketMoney -= exp.AmountSpent;
+                Debug.WriteLine("Can't Open PopUp");
+                await Shell.Current.DisplayAlert("Wait", "Cannot go", "Ok");
             }
+            else
+            {
+#if WINDOWS
+                await Shell.Current.DisplayAlert("Add New Flow Out", "Please fill in the details", "Ok"); 
+#endif
+                var UpSertResult = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(newUpSertExpPopUp);
+
+                if (UpSertResult.Result == PopupResult.OK)
+                {
+                    ExpendituresModel exp = (ExpendituresModel)UpSertResult.Data;
+                    //add logic if this exp is the latest in terms of datetime
+
+                    PocketMoney -= exp.AmountSpent;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"PopUp Exception on {DeviceInfo.Platform} : {ex.Message}");
         }
     }
 }

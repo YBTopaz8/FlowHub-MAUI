@@ -53,7 +53,8 @@ public partial class UpSertExpendituresPopUp : Popup
                 Close(new PopUpCloseResult() { Data = null, Result = PopupResult.Cancel });
                 return;
             }
-            Close(new PopUpCloseResult() { Data = viewModel.SingleExpenditureDetails, Result = viewModel.ThisPopUpResult });
+            
+            Close(new PopUpCloseResult() { Data = viewModel.ResultingBalance, Result = viewModel.ThisPopUpResult });
         }
     }
 

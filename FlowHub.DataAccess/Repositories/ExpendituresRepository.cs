@@ -205,6 +205,7 @@ public class ExpendituresRepository : IExpendituresRepository
                     OnlineExpendituresList.Add(expenditure);
                     await AddExpenditureOnlineAsync(expenditure);
                 }
+                //db.Dispose();
                 return true;
             }
             else
@@ -224,35 +225,39 @@ public class ExpendituresRepository : IExpendituresRepository
     {
         try
         {
-            using (db = await OpenDB())
-            {
-                if (await AllExpenditures.UpdateAsync(expenditure))
-                {
-                    Debug.WriteLine("Expenditure updated locally");
+            await OpenDB();
 
-                    int index = OfflineExpendituresList.FindIndex(x => x.Id == expenditure.Id);
-                    OfflineExpendituresList[index] = expenditure;
-                    if (!IsBatchUpdate)
-                    {
-                        OfflineExpendituresListChanged?.Invoke();
-                    }
-                    if (!IsSyncing && Connectivity.NetworkAccess == NetworkAccess.Internet)
-                    {
-                        await UpdateExpenditureOnlineAsync(expenditure);
-                    }
-                    return true;
-                }
-                else
+            if (await AllExpenditures.UpdateAsync(expenditure))
+            {
+                Debug.WriteLine("Expenditure updated locally");
+
+                int index = OfflineExpendituresList.FindIndex(x => x.Id == expenditure.Id);
+                OfflineExpendituresList[index] = expenditure;
+                if (!IsBatchUpdate)
                 {
-                    Debug.WriteLine("Failed to update Expenditure");
-                    return false;
+                    OfflineExpendituresListChanged?.Invoke();
                 }
+                if (!IsSyncing && Connectivity.NetworkAccess == NetworkAccess.Internet)
+                {
+                    await UpdateExpenditureOnlineAsync(expenditure);
+                }
+                return true;
             }
+            else
+            {
+                Debug.WriteLine("Failed to update Expenditure");
+                return false;
+            }
+
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
             return false;
+        }
+        finally
+        {
+            db.Dispose();
         }
     }
 
@@ -261,28 +266,28 @@ public class ExpendituresRepository : IExpendituresRepository
         expenditure.IsDeleted = true;
         try
         {
-            using (db = await OpenDB())
+            await OpenDB();
+            
+            if (await AllExpenditures.UpdateAsync(expenditure))
             {
-                if (await AllExpenditures.UpdateAsync(expenditure))
+                OfflineExpendituresList.Remove(expenditure);
+                Debug.WriteLine("Expenditure deleted locally");
+                if (!IsBatchUpdate)
                 {
-                    OfflineExpendituresList.Remove(expenditure);
-                    Debug.WriteLine("Expenditure deleted locally");
-                    if (!IsBatchUpdate)
-                    {
-                        OfflineExpendituresListChanged?.Invoke();
-                    }
-                    if (!IsSyncing && Connectivity.NetworkAccess == NetworkAccess.Internet)
-                    {
-                        await DeleteExpenditureOnlineAsync(expenditure);
-                    }
-                    return true;
+                    OfflineExpendituresListChanged?.Invoke();
                 }
-                else
+                if (!IsSyncing && Connectivity.NetworkAccess == NetworkAccess.Internet)
                 {
-                    Debug.WriteLine("Failed to delete Expenditure");
-                    return false;
+                    await DeleteExpenditureOnlineAsync(expenditure);
                 }
+                return true;
             }
+            else
+            {
+                Debug.WriteLine("Failed to delete Expenditure");
+                return false;
+            }
+            
         }
         catch (Exception ex)
         {

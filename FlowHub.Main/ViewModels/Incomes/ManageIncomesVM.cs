@@ -74,9 +74,16 @@ public partial class ManageIncomesVM : ObservableObject
         }
     }
 
-    private void HandleIncomesListUpdated()
+    private async void HandleIncomesListUpdated()
     {
-        ApplyChanges();
+        try
+        {
+            ApplyChanges();
+        }
+        catch (Exception ex)
+        {
+           await Shell.Current.DisplayAlert("Error incomes", ex.Message, "OK");
+        }
     }
 
     private void ApplyChanges()

@@ -15,7 +15,9 @@ public partial class UpSertExpenditureVM : ObservableObject
         IsAdd = isAdd;
         ActiveUser = activeUser;
         ExpenditureCategory = Enum.GetValues(typeof(ExpenditureCategory)).Cast<ExpenditureCategory>().ToList();
+        userRepo.OfflineUserDataChanged += UserRepo_OfflineUserDataChanged;
     }
+
 
     [ObservableProperty]
     ExpendituresModel singleExpenditureDetails = new() { DateSpent = DateTime.Now };
@@ -59,6 +61,13 @@ public partial class UpSertExpenditureVM : ObservableObject
 
         ResultingBalance = ActiveUser.PocketMoney;
         TotalAmountSpent = SingleExpenditureDetails.AmountSpent;
+    }
+    private void UserRepo_OfflineUserDataChanged()
+    {
+        ResultingBalance = userRepo.OfflineUser.PocketMoney;
+        _initialUserPocketMoney = userRepo.OfflineUser.PocketMoney;
+        _initialTotalExpAmount = userRepo.OfflineUser.TotalExpendituresAmount;
+        ActiveUser = userRepo.OfflineUser;
     }
 
     [RelayCommand]

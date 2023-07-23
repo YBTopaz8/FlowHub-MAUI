@@ -19,6 +19,13 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             })
+            .ConfigureEssentials(essentials =>
+            {
+                essentials
+                .AddAppAction("add_flow_out", "Add Flow Out", "Add a Flow Out")
+                //.AddAppAction("add_flow_in", "Add Flow In", "Add a Flow In", "request_money_d.png")
+                .OnAppAction(App.HandleAppActions);
+            })
             .UseMauiCommunityToolkit();
 
         builder.ConfigureMauiHandlers(handlers =>
