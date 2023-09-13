@@ -45,68 +45,83 @@ public class DebtRepository : IDebtRepository
             {
                 userId = usersRepo.OfflineUser.UserIDOnline;
             }
-            OfflineDebtList = await AllDebts.Query()
+            //await AllDebts.DeleteAllAsync();
+            
+            OfflineDebtList = await AllDebts.Query().ToListAsync();
+            var ss = OfflineDebtList
                 .Where(x => x.UserId == userId)
-                .OrderByDescending(x => x.UpdateDateTime)
-                .ToListAsync();
+                .OrderByDescending(x => x.UpdateDateTime);
 
-            db.Dispose();
-            OfflineDebtList ??= Enumerable.Empty<DebtModel>().ToList();
+            //OfflineDebtList ??= Enumerable.Empty<DebtModel>().ToList();
             return OfflineDebtList;
             
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex.Message);
+            Debug.WriteLine(ex.InnerException.Message);
+            Debug.WriteLine("Get all Debts fxn Exception: "+ex.Message);
             return Enumerable.Empty<DebtModel>().ToList();
+        }
+        finally 
+        { 
+            db.Dispose();
+            
         }
     }
 
     async Task LoadOnlineDB()
     {
-        if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+        try
         {
-            return;
-        }
-        if (OnlineDebtList is not null)
-        {
-            return;
-        }
 
-        if (DBOnline is null)
-        {
-            onlineRepository.GetOnlineConnection();
-            DBOnline = onlineRepository.OnlineMongoDatabase;
-        }
-
-        if (usersRepo.OnlineUser is null)
-        {
-            try
+            if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
             {
-                var filterUserCredentials = Builders<UsersModel>.Filter.Eq("Email", usersRepo.OfflineUser.Email) &
-                    Builders<UsersModel>.Filter.Eq("Password", usersRepo.OfflineUser.Password);
-                usersRepo.OnlineUser = await DBOnline.GetCollection<UsersModel>("Users").Find(filterUserCredentials).FirstOrDefaultAsync();
-                if (usersRepo.OnlineUser is null)
+                return;
+            }
+            if (OnlineDebtList is not null)
+            {
+                return;
+            }
+
+            if (DBOnline is null)
+            {
+                onlineRepository.GetOnlineConnection();
+                DBOnline = onlineRepository.OnlineMongoDatabase;
+            }
+
+            if (usersRepo.OnlineUser is null)
+            {
+                try
                 {
-                    await Shell.Current.DisplayAlert("Error", "User not found", "Ok");
-                    Debug.WriteLine("User not found");
-                    return;
+                    var filterUserCredentials = Builders<UsersModel>.Filter.Eq("Email", usersRepo.OfflineUser.Email) &
+                        Builders<UsersModel>.Filter.Eq("Password", usersRepo.OfflineUser.Password);
+                    usersRepo.OnlineUser = await DBOnline.GetCollection<UsersModel>("Users").Find(filterUserCredentials).FirstOrDefaultAsync();
+                    if (usersRepo.OnlineUser is null)
+                    {
+                        await Shell.Current.DisplayAlert("Error", "User not found", "Ok");
+                        Debug.WriteLine("User not found");
+                        return;
+                    }
+                    else
+                    {
+                        usersRepo.OfflineUser.UserIDOnline = usersRepo.OnlineUser.Id;
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    usersRepo.OfflineUser.UserIDOnline = usersRepo.OnlineUser.Id;
+                    Debug.WriteLine($"Exception Message {ex.Message}");
                 }
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Exception Message {ex.Message}");
-            }
-        }
-        var filtersDebt = Builders<DebtModel>.Filter.Eq("UserId", usersRepo.OnlineUser.Id) &
-            Builders<DebtModel>.Filter.Eq("Currency", usersRepo.OfflineUser.UserCurrency);
+            var filtersDebt = Builders<DebtModel>.Filter.Eq("UserId", usersRepo.OnlineUser.Id) &
+                Builders<DebtModel>.Filter.Eq("Currency", usersRepo.OfflineUser.UserCurrency);
 
-        AllDebtsOnline ??= DBOnline.GetCollection<DebtModel>("Debts");
-        OnlineDebtList = await AllDebtsOnline.Find(filtersDebt).ToListAsync();
+            AllDebtsOnline ??= DBOnline.GetCollection<DebtModel>("Debts");
+            OnlineDebtList = await AllDebtsOnline.Find(filtersDebt).ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("ERROR WHEN LOADING ONLINE DB " + ex.Message + " " + ex.InnerException.Message);
+        }
     }
 
     bool IsSyncing;
@@ -149,23 +164,42 @@ public class DebtRepository : IDebtRepository
 
             foreach (var itemID in OfflineDebtDict.Keys.Except(OnlineDebtDict.Keys))
             {
-                await AddDebtOnlineAsync(OfflineDebtDict[itemID]);
-                OnlineDebtList.Add(OfflineDebtDict[itemID]);
+                try
+                {
+                    await AddDebtOnlineAsync(OfflineDebtDict[itemID]);
+                    OnlineDebtList.Add(OfflineDebtDict[itemID]);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
             }
             foreach (var itemID in OnlineDebtDict.Keys.Except(OfflineDebtDict.Keys))
             {
-                await AddDebtAsync(OnlineDebtDict[itemID]);
-                OfflineDebtList.Add(OnlineDebtDict[itemID]);
+                try
+                {
+                    await AddDebtAsync(OnlineDebtDict[itemID]);
+                    OfflineDebtList.Add(OnlineDebtDict[itemID]);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
             }
 
-            await usersRepo.UpdateUserOnlineGetSetLatestValues(usersRepo.OnlineUser);
-            IsSyncing = false;
-            IsBatchUpdate = false;
-            OfflineDebtListChanged?.Invoke();
+            
         }
         catch (Exception ex)
         {
             Debug.WriteLine("Debts Sync exception" + ex.Message);
+        }
+        finally
+        {
+            IsBatchUpdate = false;
+            OfflineDebtListChanged?.Invoke();
+            IsSyncing = false;
+            await usersRepo.UpdateUserOnlineGetSetLatestValues(usersRepo.OnlineUser);
+
         }
     }
     public async Task<bool> AddDebtAsync(DebtModel debt)
@@ -187,6 +221,7 @@ public class DebtRepository : IDebtRepository
                 if (!IsSyncing && Connectivity.NetworkAccess == NetworkAccess.Internet)
                 {
                     await AddDebtOnlineAsync(debt);
+                    Debug.WriteLine("not notified");
                 }
                 db.Dispose();
                 return true;
@@ -238,7 +273,7 @@ public class DebtRepository : IDebtRepository
         }
         catch (Exception ex)
         {
-            Debug.WriteLine("Exception when doing local dept update " + ex.Message);
+            Debug.WriteLine("Exception when doing local dept update " + ex.InnerException.Message);
             return false;
         }
     }
@@ -290,6 +325,7 @@ public class DebtRepository : IDebtRepository
     async Task UpdateDebtOnlineAsync(DebtModel debtItem)
     {
         await AllDebtsOnline.ReplaceOneAsync(debt => debt.Id == debtItem.Id, debtItem);
+        Debug.WriteLine("Updated online debt");
     }
     async Task DeleteDebtOnlineAsync(DebtModel debtItem)
     {

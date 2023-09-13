@@ -1,9 +1,5 @@
 ﻿using FlowHub.Main.Utilities.BottomSheet;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Org.BouncyCastle.Asn1.X509;
 
 namespace FlowHub.Main.ViewModels.Debts;
 
@@ -18,20 +14,66 @@ public partial class ManageDebtsVM : ObservableObject
         usersRepo = usersRepository;
         debtRepo.OfflineDebtListChanged += HandleDebtsListUpdated;
     }
+    //[ObservableProperty]
+    //ObservableCollection<DebtModel> debtsList;
     [ObservableProperty]
-    ObservableCollection<DebtModel> debtsList;
+    ObservableCollection<DebtModel> borrowedCompletedList;
+    [ObservableProperty]
+    ObservableCollection<DebtModel> lentCompletedList;
+    [ObservableProperty]
+    ObservableCollection<DebtModel> borrowedPendingList;
+    [ObservableProperty]
+    ObservableCollection<DebtModel> lentPendingList;
+    
+
     [ObservableProperty]
     int totalDebts;
+
     [ObservableProperty]
-    int totalLent;
+    int totalLentCount;
     [ObservableProperty]
-    int totalBorrowed;
+    double totalLentCompletedAmount;
+    [ObservableProperty]
+    double totalLentPendingAmount;
+
+    [ObservableProperty]
+    int totalBorrowedCount;
+    [ObservableProperty]
+    double totalBorrowedCompletedAmount;
+    [ObservableProperty]
+    double totalBorrowedPendingAmount;
+
     [ObservableProperty]
     UsersModel activeUser;
     [ObservableProperty]
     DebtModel singleDebtDetails;
 
     bool IsLoaded;
+
+    [ObservableProperty]
+    string userCurrency;
+
+    [ObservableProperty]
+    bool isShowCompletedChecked;
+    [ObservableProperty]
+    bool isShowPendingChecked;
+    
+    [ObservableProperty]
+    bool isShowBorrowedChecked;
+    [ObservableProperty]
+    bool isShowLentChecked;
+
+    [ObservableProperty]
+    int totalPendingBorrowCount;
+    [ObservableProperty]
+    int totalPendingLentCount;
+    
+    [ObservableProperty]
+    int totalCompletedBorrowCount;
+    [ObservableProperty]
+    int totalCompletedLentCount;
+
+    
     public void PageLoaded()
     {
         try
@@ -40,6 +82,8 @@ public partial class ManageDebtsVM : ObservableObject
             {
                 ApplyChanges();
                 IsLoaded = true;
+                ActiveUser = usersRepo.OfflineUser;
+                UserCurrency = ActiveUser.UserCurrency;
             }
         }
         catch (Exception ex)
@@ -54,11 +98,12 @@ public partial class ManageDebtsVM : ObservableObject
         var navParams = new Dictionary<string, object>()
         {
             {"SingleDebtDetails", new DebtModel()
-            {
-              Amount = 0,
-              PersonOrOrganization = new PersonOrOrganizationModel(),
-              Currency = usersRepo.OfflineUser.UserCurrency
-            } },
+                {
+                  Amount = 0,
+                  PersonOrOrganization = new PersonOrOrganizationModel(),
+                  Currency = usersRepo.OfflineUser.UserCurrency
+                } 
+            },
             {"PageTitle", "Add Debt" }
         };
         await Shell.Current.GoToAsync(nameof(UpSertDebtPageM), true, navParams);
@@ -86,21 +131,76 @@ public partial class ManageDebtsVM : ObservableObject
         SingleDebtDetails = debt;
         debtBS = new ViewDebtBottomSheet(this);
         await Drawer.Open(debtBS);
-        //_ = await Drawer.Open(new ViewDebtBottomSheet(this));
+        
 
     }
-    private void ApplyChanges()
-    {
-        List<DebtModel> debtList = new();
-        debtList = debtRepo.OfflineDebtList
-                    .Where(x => !x.IsDeleted)
-                    .OrderByDescending(x => x.UpdateDateTime)
-                    .ToList();
-        DebtsList?.Clear();
-        DebtsList = new ObservableCollection<DebtModel>(debtList);
 
-        TotalBorrowed = debtList.Count(x => x.DebtType == DebtType.Borrowed);//.Sum(x => x.Amount);
-        TotalLent = debtList.Count(x => x.DebtType == DebtType.Lent);//.Sum(x => x.Amount);
+    [ObservableProperty]
+    List<string> listOfPeopleNames;
+    public void ApplyChanges()
+    {
+        var filteredAndSortedDebts = debtRepo.OfflineDebtList
+                        .Where(x => !x.IsDeleted)
+                        .OrderByDescending(x => x.UpdateDateTime).ToList();
+
+        ListOfPeopleNames = filteredAndSortedDebts
+            .Select(x => x.PersonOrOrganization.Name)
+            .Distinct()
+            .ToList();
+        RedoCountsAndAmountsCalculation(filteredAndSortedDebts);
+    }
+
+    private void RedoCountsAndAmountsCalculation(List<DebtModel> filteredAndSortedDebts)
+    {
+        
+        BorrowedCompletedList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
+                    .Where(x => x.DebtType == DebtType.Borrowed && x.IsPaidCompletely));
+
+        LentCompletedList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
+            .Where(x => x.DebtType == DebtType.Lent && x.IsPaidCompletely));
+
+        BorrowedPendingList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
+            .Where(x => x.DebtType == DebtType.Borrowed && !x.IsPaidCompletely));
+        LentPendingList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
+            .Where(x => x.DebtType == DebtType.Lent && !x.IsPaidCompletely));
+
+        TotalPendingBorrowCount = BorrowedPendingList.Count;
+        TotalCompletedBorrowCount = BorrowedCompletedList.Count;
+        TotalPendingLentCount = LentPendingList.Count;
+        TotalCompletedLentCount = LentCompletedList.Count;
+
+        TotalBorrowedCompletedAmount = BorrowedCompletedList.Sum(x => x.Amount);
+        TotalBorrowedPendingAmount = BorrowedPendingList.Sum(x => x.Amount);
+        TotalLentCompletedAmount = LentCompletedList.Sum(x => x.Amount);
+        TotalLentPendingAmount = LentPendingList.Sum(x => x.Amount);
+
+        TotalBorrowedCount = TotalPendingBorrowCount + TotalCompletedBorrowCount;
+        TotalLentCount = TotalPendingLentCount + TotalCompletedLentCount;
+
+        
+
+    }
+
+    
+    [RelayCommand]
+    async Task SearchCommand(string query)
+    {
+        
+        try
+        {
+            var ListOfDebts = debtRepo.OfflineDebtList
+                .Where(
+                        d=> d.PersonOrOrganization?.Name
+                        .Contains(query, StringComparison.OrdinalIgnoreCase) ?? false)
+                .ToList();
+
+            RedoCountsAndAmountsCalculation(ListOfDebts);
+            
+        }
+        catch (TaskCanceledException ex)
+        {
+            Debug.WriteLine(ex.ToString());
+        }
     }
 
     [RelayCommand]
@@ -150,17 +250,65 @@ public partial class ManageDebtsVM : ObservableObject
             var response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert(message));
             if (response)
             {
-                if (!debt.IsPaidCompletely)
+                bool completedSwapper = !debt.IsPaidCompletely;
+                
+                if (debt.IsPaidCompletely) // to mark as pending
                 {
-                    debt.IsPaidCompletely = true;
-                    debt.DatePaidCompletely = DateTime.Now;
-                    text = "Flow Hold Marked as Completed";
+                    debt.IsPaidCompletely = completedSwapper; // to unpaid completely
+                    debt.DatePaidCompletely = null;
+                    if (debt.Deadline.HasValue)
+                    {
+                        var diff = DateTime.Now.Date - debt.Deadline.Value.Date;
+                        if (diff.TotalDays == 1)
+                        {
+                            debt.DisplayText = $"Due in {-diff.TotalDays} day";
+                        }
+                        if (diff.TotalDays > 1)
+                        {
+                            debt.DisplayText = $"Due past {diff.TotalDays} days!";
+                        }
+                        else if (diff.TotalDays < 0)
+                        {
+                            debt.DisplayText = $"Due in {-diff.TotalDays} days";
+                        }
+                        else
+                        {
+                            debt.DisplayText = "Due today";
+                        }
+                        
+                    }
+                    else
+                    {
+                        debt.DisplayText = "Pending No Deadline Set";
+                    }
+                    text = "Flow Hold Marked as Pending";
                 }
                 else
                 {
-                    debt.IsPaidCompletely = false;
-                    debt.Deadline = null;
-                    text = "Flow Hold Marked as Pending";
+                    debt.IsPaidCompletely = completedSwapper;
+                    debt.DatePaidCompletely = DateTime.Now;
+
+                    if (debt.Deadline.HasValue)
+                    {
+                        var DatePaidDiff = DateTime.Now.Date - debt.DatePaidCompletely?.Date;
+                        if (DatePaidDiff.Value.TotalDays == 1)
+                        {
+                            debt.DisplayText = "Paid 1 day ago";
+                        }
+                        else if (DatePaidDiff.Value.TotalDays == 0)
+                        {
+                            debt.DisplayText = "Paid today";
+                        }
+                        else
+                        {
+                            debt.DisplayText = $"Paid {DatePaidDiff.Value.TotalDays} days ago";
+                        }
+                    }
+                    else
+                    {
+                        debt.DisplayText = "Paid Today";
+                    }
+                    text = "Flow Hold Marked as Completed";
                 }
                 await debtRepo.UpdateDebtAsync(debt);
 
@@ -190,7 +338,7 @@ public partial class ManageDebtsVM : ObservableObject
         }
     }
 
-    private async void HandleDebtsListUpdated()
+    private void HandleDebtsListUpdated()
     {
         try
         {
@@ -198,7 +346,8 @@ public partial class ManageDebtsVM : ObservableObject
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Error debts", ex.Message, "OK");
+            //await Shell.Current.DisplayAlert("Error debts", ex.Message, "OK");
+            Debug.WriteLine("Error when added debts "+ ex.Message);
         }
     }
 }

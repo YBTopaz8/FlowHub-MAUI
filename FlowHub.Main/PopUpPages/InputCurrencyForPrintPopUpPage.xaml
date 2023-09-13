@@ -40,10 +40,12 @@
                 <Picker x:Name="CurrencyPicker" Title="Select a Currency" IsVisible="{Binding IsChecked, Source={x:Reference ChangeCurrencyCheckBox}}"/>
             </HorizontalStackLayout>
             <HorizontalStackLayout HorizontalOptions="EndAndExpand" Spacing="5">
-                <Button Text="Yes"
-                        Clicked="OnYesButtonClicked"/>
-                <Button Text="Cancel"
-                        Clicked="OnNoButtonClicked"/>
+                <Button Text="Cancel" FontSize="18" BackgroundColor="Transparent" 
+                TextColor="{AppThemeBinding Dark={StaticResource NegativeActionBtnDark},Light= {StaticResource NegativeActionBtnDark} }"
+                Clicked="OnNoButtonClicked"/>
+            <Button Text="Yes" FontSize="20" BackgroundColor="Transparent" FontAttributes="Bold"
+                TextColor="{AppThemeBinding Dark={StaticResource Primary},Light= {StaticResource Primary}}"
+                Clicked="OnYesButtonClicked"/>
             </HorizontalStackLayout>
         </VerticalStackLayout>
     </Border>

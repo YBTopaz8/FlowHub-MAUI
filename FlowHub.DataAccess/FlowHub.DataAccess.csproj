@@ -28,8 +28,8 @@
   
 	<ItemGroup>
 	  <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.2.1" />
-	  <PackageReference Include="LiteDB.Async" Version="0.1.6" />
-	  <PackageReference Include="MongoDB.Driver" Version="2.20.0" />
+	  <PackageReference Include="LiteDB.Async" Version="0.1.7" />
+	  <PackageReference Include="MongoDB.Driver" Version="2.21.0" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Maui.Core.Extensions;
+using CommunityToolkit.Mvvm.Messaging;
+using Plugin.Maui.AddToCalendar;
 
 //This is the view model for the HOME PAGE
 namespace FlowHub.Main.ViewModels;
@@ -81,7 +83,8 @@ public partial class HomePageVM : ObservableObject
             .OrderByDescending(s => s.DateSpent)
             .Take(5)
             .ToObservableCollection()
-            : new ObservableCollection<ExpendituresModel>();
+            : null;
+            //: new ObservableCollection<ExpendituresModel>();
     }
     private void InitializeIncomes()
     {
@@ -99,7 +102,6 @@ public partial class HomePageVM : ObservableObject
     {
         try
         {
-
             await Task.WhenAll(expenditureRepo.SynchronizeExpendituresAsync(), debtRepo.SynchronizeDebtsAsync(), incomeRepo.SynchronizeIncomesAsync());
 
             CancellationTokenSource cts = new();
@@ -118,10 +120,14 @@ public partial class HomePageVM : ObservableObject
         }
     }
 
+    [ObservableProperty]
+    string selectedCalendarItem;
+
     public bool isFromShortCut;
     [RelayCommand]
     public async Task GoToAddExpenditurePage()
     {
+
         var newExpenditure = new ExpendituresModel() { DateSpent = DateTime.Now };
         const string pageTitle = "Add New Flow Out";
         const bool isAdd = true;
@@ -155,11 +161,14 @@ public partial class HomePageVM : ObservableObject
 
                     PocketMoney -= exp.AmountSpent;
                 }
-            }
+            } 
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"PopUp Exception on {DeviceInfo.Platform} : {ex.Message}");
         }
     }
+
+    
+
 }

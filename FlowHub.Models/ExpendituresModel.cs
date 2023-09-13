@@ -36,7 +36,7 @@ public class ExpendituresModel : INotifyPropertyChanged
     public ExpenditureCategory Category { get; set; } = ExpenditureCategory.None;
     public string? PlatformModel { get; set; }
     public bool IsDeleted { get; set; }
-    public string UserId { get; set; }
+    public string? UserId { get; set; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 }

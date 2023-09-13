@@ -121,7 +121,11 @@
                 AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize"
                 AbsoluteLayout.LayoutFlags="PositionProportional"
                 ToolTipProperties.Text="Add New Flow Out"
-                />
+                >
+            <Button.Shadow>
+                <Shadow Offset="5,15" Opacity="0.6"/>
+            </Button.Shadow>
+        </Button>
     </AbsoluteLayout>
     
 </ContentPage>

@@ -44,7 +44,9 @@ public class PopUpSheet : ContentPage
     async void OnCloseBackgroundClicked(object sender, EventArgs args)
     {
         if (IsCloseOnBackgroundClick)
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Close();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
     }
 
     public TaskCompletionSource<object> CallBackResult = new();
@@ -56,7 +58,9 @@ public class PopUpSheet : ContentPage
         if (!IsCloseOnBackgroundClick)
             return true;
 
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         Close();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         return true;
     }
 
@@ -81,8 +85,11 @@ public class PopUpSheet : ContentPage
     public static async Task<T> Open<T>(PopUpSheet page) where T : new()
     {
         if (isBusy)
+#pragma warning disable IDE0034 // Simplify 'default' expression
             return default(T);
+#pragma warning restore IDE0034 // Simplify 'default' expression
         isBusy = true;
+#pragma warning disable CS0168 // Variable is declared but never used
         try
         {
             if (Application.Current?.MainPage != null)
@@ -99,6 +106,7 @@ public class PopUpSheet : ContentPage
             isBusy = false;
             return default(T);
         }
+#pragma warning restore CS0168 // Variable is declared but never used
     }
 
     public static async Task<string> Open(PopUpSheet page)
@@ -106,6 +114,7 @@ public class PopUpSheet : ContentPage
         if (isBusy)
             return null;
         isBusy = true;
+#pragma warning disable CS0168 // Variable is declared but never used
         try
         {
             if (Application.Current?.MainPage != null)
@@ -122,6 +131,7 @@ public class PopUpSheet : ContentPage
             isBusy = false;
             return "";
         }
+#pragma warning restore CS0168 // Variable is declared but never used
     }
 
     public static async Task Close(object returnValue = null)

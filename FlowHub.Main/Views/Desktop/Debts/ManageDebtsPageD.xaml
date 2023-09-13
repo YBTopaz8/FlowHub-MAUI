@@ -16,7 +16,7 @@
     </ContentPage.Resources>
     <VerticalStackLayout>
 
-        <dg:DataGrid ItemsSource="{Binding DebtsList}" BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}"
+        <dg:DataGrid ItemsSource="{Binding BorrowedCompletedList}" BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}"
                      WidthRequest="1000" HeaderBackground="DarkSlateBlue"
                      RowHeight="50" HeaderHeight="40"
                      BorderColor="{AppThemeBinding Dark=transparent, Light=darkslateblue}"

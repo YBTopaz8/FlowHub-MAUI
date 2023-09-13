@@ -1,6 +1,7 @@
 ﻿
 using CommunityToolkit.Maui;
 using InputKit.Handlers;
+using Plugin.Maui.AddToCalendar;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using UraniumUI;
 
@@ -18,6 +19,7 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                fonts.AddFontAwesomeIconFonts();
             })
             .ConfigureEssentials(essentials =>
             {
@@ -26,6 +28,8 @@ public static class MauiProgram
                 //.AddAppAction("add_flow_in", "Add Flow In", "Add a Flow In", "request_money_d.png")
                 .OnAppAction(App.HandleAppActions);
             })
+            .UseUraniumUI()
+            .UseUraniumUIMaterial()
             .UseMauiCommunityToolkit();
 
         builder.ConfigureMauiHandlers(handlers =>
@@ -33,10 +37,12 @@ public static class MauiProgram
 #if ANDROID
             handlers.AddHandler(typeof(Shell), typeof(MyShellRenderer));
 #endif
+            
             handlers.AddInputKitHandlers();
             handlers.AddUraniumUIHandlers();
         });
 
+        builder.Services.AddSingleton<IAddToCalendar>(AddToCalendarService.Default);
         /*----------------------- REGISTERING Repositories ------------------------------------------------------------------------*/
 
         builder.Services.AddSingleton<IExpendituresRepository, ExpendituresRepository>();
@@ -125,8 +131,12 @@ public static class MauiProgram
         builder.Services.AddSingleton<SingleMonthStatsPageM>();
 
         /* -- Section for Debts --*/
-        builder.Services.AddSingleton<ManageDebtsPageM>();
+        builder.Services.AddSingleton<DebtsOverviewPageM>();
+
+        builder.Services.AddSingleton<ManageBorrowingsPageM>();
+        builder.Services.AddSingleton<ManageLendingsPageM>();
         builder.Services.AddSingleton<UpSertDebtPageM>();
+
         /*--------------------------------------------------------------------------------------------------------------------------------*/
         return builder.Build();
     }

@@ -62,17 +62,9 @@
         </Label>
 
         <CollectionView x:Name="ColView" IsVisible="true" ItemsSource="{Binding GroupedExpenditures}" 
-                        IsGrouped="True"
-                        HorizontalOptions="Center">
-            <CollectionView.EmptyView>
-                <ContentView>
-                    <VerticalStackLayout HorizontalOptions="Center"
-                                         VerticalOptions="Center">
-                        <Label Text="No Flow Outs Available..."/>
-                    </VerticalStackLayout>
-                </ContentView>
-            </CollectionView.EmptyView>
-
+                        IsGrouped="True" HorizontalOptions="Center"
+                        EmptyView="No Flow Outs Available...">
+            
             <CollectionView.GroupHeaderTemplate>
                 <DataTemplate x:DataType="viewModels:DateGroup">
                     <Label Text="{Binding Date, StringFormat='{0:ddd, MMMM dd, yyyy}'}" 
@@ -170,7 +162,10 @@
                 AbsoluteLayout.LayoutFlags="PositionProportional"
                 Margin="0,0,15,30"
                 ToolTipProperties.Text="Add New Flow Out"
-            
-                />
+            >
+            <Button.Shadow>
+                <Shadow Offset="5,15" Opacity="0.6"/>
+            </Button.Shadow>
+        </Button>
     </AbsoluteLayout>
 </ContentPage>

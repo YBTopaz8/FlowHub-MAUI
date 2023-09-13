@@ -64,7 +64,8 @@ public class ExpendituresRepository : IExpendituresRepository
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex.Message);
+            Debug.WriteLine(ex.InnerException.Message);
+            Debug.WriteLine("Get all EXP fxn Exception: " + ex.Message);
             return Enumerable.Empty<ExpendituresModel>().ToList();
         }
     }
@@ -174,15 +175,19 @@ public class ExpendituresRepository : IExpendituresRepository
                 await AddExpenditureAsync(OnlineExpendituresDict[itemID]);
             }
 
-            await usersRepo.UpdateUserOnlineGetSetLatestValues(usersRepo.OfflineUser);
-            IsSyncing = false;
-            IsBatchUpdate = false;
-            OfflineExpendituresListChanged?.Invoke();
         }
         catch (Exception ex)
         {
             await db.RollbackAsync();
             Debug.WriteLine("Expenditures Sync Exception Message : " + ex.Message);
+        }
+        finally
+        {
+            await usersRepo.UpdateUserOnlineGetSetLatestValues(usersRepo.OfflineUser);
+            IsSyncing = false;
+            IsBatchUpdate = false;
+            OfflineExpendituresListChanged?.Invoke();
+
         }
     }
     /*--------- SECTION FOR OFFLINE CRUD OPERATIONS----------*/

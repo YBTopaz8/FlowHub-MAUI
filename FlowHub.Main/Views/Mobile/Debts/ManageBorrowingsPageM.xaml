@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<uranium:UraniumContentPage x:Class="FlowHub.Main.Views.Mobile.Debts.ManageBorrowingsPageM"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"  
+             xmlns:materialAttach="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material" 
+             xmlns:local="clr-namespace:FlowHub.Main.Views.Mobile.Debts"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}">
+    <VerticalStackLayout>
+        <Label Text="Welcome to .NET MAsssUI!!!"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"/>
+    </VerticalStackLayout>
+</uranium:UraniumContentPage>

@@ -63,7 +63,7 @@ public class IncomeRepository : IIncomeRepository
         catch (Exception ex)
         {
             Debug.WriteLine(ex.InnerException.Message);
-            Debug.WriteLine(ex.Message);
+            Debug.WriteLine("Get all INC fxn Exception: " + ex.Message);
             OfflineIncomesList ??= Enumerable.Empty<IncomeModel>().ToList();
             return OfflineIncomesList;
         }
@@ -166,14 +166,18 @@ public class IncomeRepository : IIncomeRepository
                 OfflineIncomesList.Add(OnlineIncomeDict[itemID]);
             }
 
-            await usersRepo.UpdateUserOnlineGetSetLatestValues(usersRepo.OnlineUser);
-            IsSyncing = false;
-            IsBatchUpdate = false;
-            OfflineIncomesListChanged?.Invoke();
         }
         catch (Exception ex)
         {
             Debug.WriteLine("Income Sync Exception Message : " + ex.Message);
+        }
+        finally
+        {
+            IsSyncing = false;
+            IsBatchUpdate = false;
+            OfflineIncomesListChanged?.Invoke();
+            await usersRepo.UpdateUserOnlineGetSetLatestValues(usersRepo.OnlineUser);           
+
         }
     }
 

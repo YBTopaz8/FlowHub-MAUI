@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<uranium:UraniumContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlowHub.Main.Views.Mobile.Debts.DebtsOverviewPageM"      
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"  
+             xmlns:materialAttach="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material" 
+             xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
+             xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Debts"
+             x:DataType="viewModels:ManageDebtsVM"
+             x:Name="Page"
+             Title="Flow Holds"
+             xmlns:utilities="clr-namespace:FlowHub.Main.Utilities"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}">
+
+
+    <AbsoluteLayout >
+        <VerticalStackLayout AbsoluteLayout.LayoutBounds="0,0,1,1"
+                    AbsoluteLayout.LayoutFlags="All" Margin="8,3">
+            <Label HorizontalTextAlignment="Center" Text="Lendings" 
+                     FontSize="21" FontAttributes="Bold"
+                     toolkit:DockLayout.DockPosition="Top"/>
+            <Border BackgroundColor="{AppThemeBinding Light= #E0F7FA, Dark=#303030}" x:Name="LentBrdr"
+                    StrokeThickness="1.0" Margin="0,0,0,10"
+                    Stroke="{AppThemeBinding Dark=#3C4043}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="LentBrdr_Tapped"/>
+                </Border.GestureRecognizers>
+
+                <Grid Margin="10,5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                      
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Text="Total Amount Lent" FontSize="14" HorizontalTextAlignment="Center"
+                           Grid.Row="0" Grid.Column="0"/>
+                    <Label HorizontalTextAlignment="Center"
+                        Grid.Row="1" Grid.Column="0"
+                        FontAttributes="Bold" FontSize="16">
+                        <Label.Text>
+                            <MultiBinding StringFormat="{}{0:n2} {1}">
+                                <Binding Path="TotalLentPendingAmount"/>
+                                <Binding Path="UserCurrency"/>
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                    <Label Text="Total Number of Lendings" FontSize="14"  
+                           HorizontalTextAlignment="Center" 
+                           Grid.Row="0" Grid.Column="1"/>
+                    <Label Text="{Binding TotalLentCount}" HorizontalTextAlignment="Center"
+                           Grid.Row="1" Grid.Column="1"
+                           FontAttributes="Bold" FontSize="16"/>
+
+                    <Label Text="Total Pending Lendings" FontSize="14"  HorizontalTextAlignment="Center"
+                           Grid.Row="2" Grid.Column="0"/>
+                    <Label Text="{Binding TotalPendingLentCount}" HorizontalTextAlignment="Center"
+                           Grid.Row="3" Grid.Column="0"
+                           FontAttributes="Bold" FontSize="16"/>
+                    <Label Text="Total Completed Lendings" FontSize="14"
+                           Grid.Row="2" Grid.Column="1"/>
+                    <Label Text="{Binding TotalCompletedLentCount}" HorizontalTextAlignment="Center"
+                           Grid.Row="3" Grid.Column="1"
+                           FontAttributes="Bold" FontSize="16"/>
+                </Grid>
+
+            </Border >
+
+            <Label HorizontalTextAlignment="Center" Text="Borrowings" 
+                FontSize="21" FontAttributes="Bold"
+                toolkit:DockLayout.DockPosition="Top"/>
+            <Border BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#3C4043}" x:Name="BorrowBrdr"
+                    StrokeThickness="1.0" Stroke="{AppThemeBinding Dark=#303030}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="BorrowBrdr_Tapped"/>
+                </Border.GestureRecognizers>
+                <Grid Margin="10,5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Text="Total Amount Borrowed" FontSize="14" HorizontalTextAlignment="Center"
+                       Grid.Row="0" Grid.Column="0"/>
+                    <Label HorizontalTextAlignment="Center"
+                    Grid.Row="1" Grid.Column="0"
+                    FontAttributes="Bold" FontSize="16">
+                        <Label.Text>
+                            <MultiBinding StringFormat="{}{0:n2} {1}">
+                                <Binding Path="TotalBorrowedPendingAmount"/>
+                                <Binding Path="UserCurrency"/>
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                    <Label Text="Total Number of Borrows" FontSize="14" HorizontalTextAlignment="Center"
+                       Grid.Row="0" Grid.Column="1"/>
+                    <Label Text="{Binding TotalBorrowedCount}" HorizontalTextAlignment="Center"
+                       Grid.Row="1" Grid.Column="1"
+                       FontAttributes="Bold" FontSize="16"/>
+
+                    <Label Text="Total Pending Borrows" FontSize="14" HorizontalTextAlignment="Center"
+                       Grid.Row="2" Grid.Column="0"/>
+                    <Label Text="{Binding TotalPendingBorrowCount}" HorizontalTextAlignment="Center"
+                       Grid.Row="3" Grid.Column="0"
+                       FontAttributes="Bold" FontSize="16"/>
+                    <Label Text="Total Completed Borrows" FontSize="14" HorizontalTextAlignment="Center"
+                       Grid.Row="2" Grid.Column="1"/>
+                    <Label Text="{Binding TotalCompletedBorrowCount}" HorizontalTextAlignment="Center"
+                       Grid.Row="3" Grid.Column="1"
+                       FontAttributes="Bold" FontSize="16"/>
+                </Grid>
+            </Border>
+            
+        </VerticalStackLayout>
+
+        <!-- Your FAB -->
+        <Button             
+            Command="{Binding GoToAddDebtCommand}"
+            WidthRequest="55" HeightRequest="55"
+            CornerRadius="26" Padding="0"
+            BackgroundColor="DarkSlateBlue" BorderColor="DarkSlateBlue"
+            Text="+" TextColor="White"
+            FontSize="40" AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            Margin="0,0,15,30">
+            <Button.Shadow>
+                <Shadow Offset="5,15" Opacity="0.6"/>
+            </Button.Shadow>
+        </Button>
+
+    </AbsoluteLayout>
+
+    
+</uranium:UraniumContentPage>

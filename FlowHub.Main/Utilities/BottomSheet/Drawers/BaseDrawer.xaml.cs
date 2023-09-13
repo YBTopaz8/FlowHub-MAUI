@@ -10,21 +10,37 @@ public partial class BaseDrawer : PopUpSheet
         pgContentView.Add(view);
         view.CallBackReturn = new Command((object obj) =>
         {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             CloseBottomSheet(obj);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         });
     }
 
     public double BackgroundOpacity = .4;
 
+#pragma warning disable IDE0044 // Add readonly modifier
+#pragma warning disable IDE0051 // Remove unused private members
     bool isFirstCache;
+#pragma warning restore IDE0051 // Remove unused private members
+#pragma warning restore IDE0044 // Add readonly modifier
     double sizeScroll;
+#pragma warning disable IDE0052 // Remove unread private members
     double screenWidth;
+#pragma warning restore IDE0052 // Remove unread private members
     double screenHeight;
     double y;
     double ypan;
+#pragma warning disable IDE0044 // Add readonly modifier
     double headHeight = 380;
+#pragma warning restore IDE0044 // Add readonly modifier
+#pragma warning disable IDE0044 // Add readonly modifier
     double minFree = 70;
+#pragma warning restore IDE0044 // Add readonly modifier
+#pragma warning disable IDE0044 // Add readonly modifier
+#pragma warning disable IDE0051 // Remove unused private members
     bool isFull = false;
+#pragma warning restore IDE0051 // Remove unused private members
+#pragma warning restore IDE0044 // Add readonly modifier
     bool isFirst = true;
     double baseY;
 
@@ -56,12 +72,16 @@ public partial class BaseDrawer : PopUpSheet
         if (baseY == 0)
         {
             pgContentScroll.HeightRequest = screenHeight;
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             pgContentScroll.ScrollToAsync(0, 0, false);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
 
         y = baseY;
         ypan = 0;
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         pgBottomSheet.TranslateTo(0, baseY, 400, Easing.CubicOut); //change opening speed here
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         await Task.Delay(300);
         ChangeBorder(baseY == 0);
     }
@@ -69,7 +89,9 @@ public partial class BaseDrawer : PopUpSheet
     public async Task CloseBottomSheet(object obj = null)
     {
         pgBottomSheet.CancelAnimations();
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         Close(obj);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         await pgBottomSheet.TranslateTo(0, screenHeight + 50, 400, Easing.CubicOut);
         y = pgBottomSheet.TranslationY;
         pgContentScroll.HeightRequest = sizeScroll;
@@ -102,7 +124,9 @@ public partial class BaseDrawer : PopUpSheet
                 {
                     if (pgBottomSheet.TranslationY - startedY < minFree)
                     {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                         pgBottomSheet.TranslateTo(0, 0, 100, Easing.CubicOut);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                         ChangeBorder(true);
                         y = 0;
                     }
@@ -119,7 +143,9 @@ public partial class BaseDrawer : PopUpSheet
                     {
                         if (pgBottomSheet.TranslationY - startedY < minFree)
                         {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                             pgBottomSheet.TranslateTo(0, 0, 100, Easing.CubicOut);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                             ChangeBorder(true);
                             y = 0;
                         }
@@ -132,7 +158,9 @@ public partial class BaseDrawer : PopUpSheet
                     {
                         if (pgBottomSheet.TranslationY - baseY + (minFree * 2) < minFree)
                         {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                             pgBottomSheet.TranslateTo(0, 0, 300, Easing.CubicOut);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                             await Task.Delay(100);
                             ChangeBorder(true);
                             y = 0;
@@ -156,9 +184,13 @@ public partial class BaseDrawer : PopUpSheet
         }
     }
 
+#pragma warning disable IDE1006 // Naming Styles
     public void pgBackground_Clicked(System.Object sender, System.EventArgs e)
+#pragma warning restore IDE1006 // Naming Styles
     {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         CloseBottomSheet();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
     }
 
     private void ChangeBorder(bool isZero)

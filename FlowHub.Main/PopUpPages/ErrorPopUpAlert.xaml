@@ -5,7 +5,7 @@
              x:Class="FlowHub.Main.PopUpPages.ErrorPopUpAlert"
              CanBeDismissedByTappingOutsideOfPopup="False"
              Size="328,170"
-           Color="Transparent">
+            Color="Transparent">
     
     <Border 
         Stroke="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=White}"
@@ -36,7 +36,9 @@
             <Label x:Name="DisplayErrorText" FontSize="20" HorizontalTextAlignment="Center"/>
 
             <HorizontalStackLayout HorizontalOptions="EndAndExpand" VerticalOptions="End">
-                <Button Text="OK" FontSize="15" VerticalOptions="End" HorizontalOptions="End"
+                <Button Text="OK" FontSize="15" 
+                        VerticalOptions="End" HorizontalOptions="End"
+                        TextColor="DarkSlateBlue" FontAttributes="Bold"
                         Clicked="OnOKButtonClicked"/>
                 
             </HorizontalStackLayout>

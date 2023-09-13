@@ -27,13 +27,9 @@
                         Color="DarkSlateBlue"
                         HeightRequest="1"
                         HorizontalOptions="Fill"/>
-                <CollectionView x:Name="ColView" ItemsSource="{Binding LatestExpenditures}" HorizontalOptions="FillAndExpand">
-                    <CollectionView.EmptyView>
-                        <VerticalStackLayout VerticalOptions="Center">
-                            <Image Source="nothing_found.png" MaximumHeightRequest="50"/>
-                            <Label Text="No Flow Outs Available..." HorizontalOptions="Center" VerticalOptions="Center" />
-                        </VerticalStackLayout>
-                    </CollectionView.EmptyView>
+                <CollectionView x:Name="ColView" ItemsSource="{Binding LatestExpenditures}" 
+                                EmptyView="No items to display" HorizontalOptions="FillAndExpand">
+                    
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:ExpendituresModel">
                             <Grid Margin="10,5">

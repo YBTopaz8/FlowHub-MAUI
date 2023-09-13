@@ -160,7 +160,7 @@ public partial class UpSertExpenditureVM : ObservableObject
     {
         SingleExpenditureDetails.AmountSpent = SingleExpenditureDetails.UnitPrice * SingleExpenditureDetails.Quantity;
         TotalAmountSpent = _initialExpenditureAmount - SingleExpenditureDetails.AmountSpent;
-        //TotalAmountSpent = SingleExpenditureDetails.AmountSpent;
+        
         if (IsAddTaxesChecked)
         {
             ApplyTax();

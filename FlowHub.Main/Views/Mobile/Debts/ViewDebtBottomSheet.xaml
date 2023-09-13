@@ -139,7 +139,7 @@
                     </Label.Triggers>
                 </Label>
                 <Label Text="{Binding SingleDebtDetails.PersonOrOrganization.PhoneNumber}"/>
-                <Label Text="{Binding SingleDebtDetails.Notes, Converter={StaticResource NotesConverter}}"/>
+                <Label Text="{Binding SingleDebtDetails.Notes, Converter={StaticResource NotesConverter}}" FontSize="13"/>
             </VerticalStackLayout>
             
             

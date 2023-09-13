@@ -23,7 +23,7 @@
 		<ApplicationVersion>1</ApplicationVersion>
 
     
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">30.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">28.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<AssemblyVersion>1.3.6.0</AssemblyVersion>
@@ -41,26 +41,26 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android33.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhubmaui</ApplicationId>
-	  <ApplicationDisplayVersion>0.9.1</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>0.9.6</ApplicationDisplayVersion>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android33.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhubmaui</ApplicationId>
-	  <ApplicationDisplayVersion>0.9.1</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>0.9.6</ApplicationDisplayVersion>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhubmaui</ApplicationId>
-	  <ApplicationDisplayVersion>0.9.1</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>0.9.6</ApplicationDisplayVersion>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationId>com.yvanbrunel.flowhubmaui</ApplicationId>
-	  <ApplicationDisplayVersion>0.9.1</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>0.9.6</ApplicationDisplayVersion>
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
@@ -125,18 +125,20 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="akgul.Maui.DataGrid" Version="2.0.0" />
+		<PackageReference Include="akgul.Maui.DataGrid" Version="3.0.0" />
 		<PackageReference Include="CommunityToolkit.Diagnostics" Version="8.2.1" />
-		<PackageReference Include="CommunityToolkit.Maui" Version="5.2.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="5.3.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
-		<PackageReference Include="HarfBuzzSharp" Version="2.8.2.3" />
-		<PackageReference Include="itext7" Version="8.0.0" />
-		<PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.0" />
-		<PackageReference Include="LiteDB.Async" Version="0.1.6" />
+		<PackageReference Include="HarfBuzzSharp" Version="2.8.2.5" />
+		<PackageReference Include="itext7" Version="8.0.1" />
+		<PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.1" />
+		<PackageReference Include="LiteDB.Async" Version="0.1.7" />
 		<PackageReference Include="LiveChartsCore.SkiaSharpView.Maui" Version="2.0.0-beta.603" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
-		<PackageReference Include="SkiaSharp" Version="2.88.3" />
-		<PackageReference Include="UraniumUI.Material" Version="2.5.3" />
+		<PackageReference Include="Plugin.Maui.AddToCalendar" Version="1.0.0" />
+		<PackageReference Include="SkiaSharp" Version="2.88.5" />
+		<PackageReference Include="UraniumUI.Icons.FontAwesome" Version="2.5.5" />
+		<PackageReference Include="UraniumUI.Material" Version="2.5.5" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -202,10 +204,16 @@
 	  <MauiXaml Update="Views\Desktop\Statistics\StatisticsPageD.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Mobile\Debts\ManageBorrowingsPageM.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Mobile\Debts\ManageLendingsPageM.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Mobile\Debts\ViewDebtBottomSheet.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Mobile\Debts\ManageDebtsPageM.xaml">
+	  <MauiXaml Update="Views\Mobile\Debts\DebtsOverviewPageM.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Mobile\Debts\UpSertDebtPageM.xaml">
@@ -266,6 +274,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Include="..\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Update="Platforms\Windows\NavigationsMethods\HomePageNavs.cs">
 	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
 	  </Compile>
@@ -300,6 +312,12 @@
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>Resources.resx</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Mobile\Debts\DebtsOverviewPageM.xaml.cs">
+	    <DependentUpon>DebtsOverviewPageM.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Mobile\Debts\ManageBorrowingsPageM.xaml.cs">
+	    <DependentUpon>ManageBorrowingsPageM.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\Mobile\Debts\ViewDebtBottomSheet.xaml.cs">
 	    <DependentUpon>ViewDebtBottomSheet.xaml</DependentUpon>

@@ -46,7 +46,7 @@
                 <material:RadioButton Text="Borrow" x:Name="IsBorrowedRBtn"
                                       IsChecked="{Binding IsBorrow}"
                                       CircleColor="{AppThemeBinding Light=darkslateblue}"
-                                      TextColor="{AppThemeBinding Light=black, Dark=white}"/>                
+                                      TextColor="{AppThemeBinding Light=black, Dark=white}"/>
             </HorizontalStackLayout>
             
             <Grid ColumnSpacing="5">
@@ -58,8 +58,7 @@
                 <material:TextField Grid.Column="0" Title="Amount" x:Name="AmountTextField"
                                     Text="{Binding SingleDebtDetails.Amount}" Focused="TextField_Focused"
                                     Keyboard="Numeric">
-                    <validation:RequiredValidation Message="Amount can't be less than 0"/>
-                    
+                    <validation:RequiredValidation Message=""/>                    
                     <validation:MinValueValidation MinValue="0.1"/>
                 </material:TextField>
                 <Label Grid.Column="1" FontSize="18"
@@ -72,10 +71,9 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                
+                </Grid.ColumnDefinitions>                
                     
-                    <material:TextField x:Name="PersonName" Text="{Binding SingleDebtDetails.PersonOrOrganization.Name}">
+                <material:TextField x:Name="PersonName" Text="{Binding SingleDebtDetails.PersonOrOrganization.Name}">
                         <validation:RequiredValidation/>
                         <material:TextField.Triggers>
                             <DataTrigger TargetType="material:TextField"
@@ -89,17 +87,22 @@
                         </material:TextField.Triggers>
                     </material:TextField>
 
-
                 <ImageButton Grid.Column="1" Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}"                             
                              Clicked="ImageButton_Clicked"/>
             </Grid>
+            <material:AutoCompleteTextField ItemsSource="{Binding ListOfPersonsNames}" IsVisible="false"
+                                            Text="{Binding SingleDebtDetails.PersonOrOrganization.Name}"
+                                            AllowClear="True" >
+            </material:AutoCompleteTextField>
             <material:TextField Title="Contact"
                                 Text="{Binding SingleDebtDetails.PersonOrOrganization.PhoneNumber}"
                                 x:Name="PersonNumber"/>
 
-            <material:EditorField Title="Note"
-                                  Text="{Binding SingleDebtDetails.Notes}"/>
-            
+            <material:EditorField Title="Note*"
+                                  Text="{Binding SingleDebtDetails.Notes}">
+                
+            </material:EditorField>
+
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>

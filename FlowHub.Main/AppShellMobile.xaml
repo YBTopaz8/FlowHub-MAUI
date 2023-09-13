@@ -24,7 +24,6 @@
                       ContentTemplate="{DataTemplate viewsExp:ManageExpendituresM}"
                       Route="ManageExpendituresM"/>
 
-
         <ShellContent Title="Flow Ins" Icon="{AppThemeBinding Dark=request_money_d.png, Light=request_money_l.png}"
                       ContentTemplate="{DataTemplate viewsInc:ManageIncomesM}"
                       Route="ManageIncomesM"/>
@@ -36,8 +35,8 @@
                       Icon="{AppThemeBinding Dark=monthly_planned_icon_d.png, Light=monthly_planned_icon_l.png}"
                       ContentTemplate="{DataTemplate viewsPlannedExp:ManageMonthlyPlannedExpendituresPageM}"/>
 
-        <ShellContent Title="Flow Holds" Icon="{AppThemeBinding Dark=time_to_pay_d, Light=time_to_pay_l}"
-                      ContentTemplate="{DataTemplate viewsDebts:ManageDebtsPageM}"/>
+        <ShellContent Title="Flow Hold" Icon="{AppThemeBinding Dark=time_to_pay_d, Light=time_to_pay_l}"
+                      ContentTemplate="{DataTemplate viewsDebts:DebtsOverviewPageM}"/>
         
         <Tab Title="Settings" Icon="{AppThemeBinding Dark=settings_d.png, Light=settings_l.png}">
 
