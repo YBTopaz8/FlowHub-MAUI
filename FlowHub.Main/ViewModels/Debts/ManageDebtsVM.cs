@@ -314,6 +314,7 @@ public partial class ManageDebtsVM : ObservableObject
 
                 var toast = Toast.Make(text, duration, fontSize);
                 await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
+                ApplyChanges();
             }
         }
         catch (Exception ex)

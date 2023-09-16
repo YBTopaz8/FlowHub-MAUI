@@ -65,7 +65,7 @@
                     <Label Text="{Binding TotalPendingLentCount}" HorizontalTextAlignment="Center"
                            Grid.Row="3" Grid.Column="0"
                            FontAttributes="Bold" FontSize="16"/>
-                    <Label Text="Total Completed Lendings" FontSize="14"
+                    <Label Text="Total Completed Lendings" FontSize="14" HorizontalTextAlignment="Center"
                            Grid.Row="2" Grid.Column="1"/>
                     <Label Text="{Binding TotalCompletedLentCount}" HorizontalTextAlignment="Center"
                            Grid.Row="3" Grid.Column="1"

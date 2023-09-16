@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.Messaging;
 using Plugin.Maui.AddToCalendar;
+using System.Collections.Specialized;
 
 //This is the view model for the HOME PAGE
 namespace FlowHub.Main.ViewModels;
@@ -24,6 +25,8 @@ public partial class HomePageVM : ObservableObject
         expenditureRepo.OfflineExpendituresListChanged += OnExpendituresChanged;
         incomeRepo.OfflineIncomesListChanged += OnIncomesChanged;
         userRepo.OfflineUserDataChanged += OnUserDataChanged;
+
+        UpdateIsSyncing();
     }
 
     [ObservableProperty]
@@ -43,8 +46,16 @@ public partial class HomePageVM : ObservableObject
     public double pocketMoney;
 
     [ObservableProperty]
+    bool isSyncing;
+
+    [ObservableProperty]
     private UsersModel activeUser = new();
 
+
+    void UpdateIsSyncing()
+    {
+        IsSyncing = LatestExpenditures.Count < 1;
+    }
     public async Task DisplayInfo()
     {
         await SyncAndNotifyAsync();
@@ -77,14 +88,15 @@ public partial class HomePageVM : ObservableObject
     {
         //var ListOfExp = await expenditureRepo.GetAllExpendituresAsync();
         var ListOfExp = expenditureRepo.OfflineExpendituresList;
+
         LatestExpenditures = ListOfExp.Count != 0
             ? ListOfExp
             .Where(x => !x.IsDeleted)
             .OrderByDescending(s => s.DateSpent)
             .Take(5)
             .ToObservableCollection()
-            : null;
-            //: new ObservableCollection<ExpendituresModel>();
+            :  new ObservableCollection<ExpendituresModel>();
+        UpdateIsSyncing();
     }
     private void InitializeIncomes()
     {

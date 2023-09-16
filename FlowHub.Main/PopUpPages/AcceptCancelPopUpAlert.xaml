@@ -33,10 +33,10 @@
 
             <HorizontalStackLayout HorizontalOptions="EndAndExpand" Spacing="8">
                 
-                <Button Text="Cancel" FontSize="18" BackgroundColor="Transparent" 
+                <Button Text="Cancel" FontSize="17" BackgroundColor="Transparent" 
                         TextColor="{AppThemeBinding Dark={StaticResource NegativeActionBtnDark},Light= {StaticResource NegativeActionBtnDark} }"
                         Clicked="OnNoButtonClicked"/>
-                <Button Text="Yes" FontSize="20" BackgroundColor="Transparent" FontAttributes="Bold"
+                <Button Text="Yes" FontSize="18" BackgroundColor="Transparent" FontAttributes="Bold"
                         TextColor="{AppThemeBinding Dark={StaticResource Primary},Light= {StaticResource Primary}}"
                         Clicked="OnYesButtonClicked"/>
             </HorizontalStackLayout>

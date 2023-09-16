@@ -27,9 +27,8 @@
                         Color="DarkSlateBlue"
                         HeightRequest="1"
                         HorizontalOptions="Fill"/>
-                <CollectionView x:Name="ColView" ItemsSource="{Binding LatestExpenditures}" 
-                                EmptyView="No items to display" HorizontalOptions="FillAndExpand">
-                    
+                <CollectionView x:Name="ColView" ItemsSource="{Binding LatestExpenditures}">
+                   
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:ExpendituresModel">
                             <Grid Margin="10,5">
@@ -66,6 +65,8 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
+                <ActivityIndicator IsRunning="{Binding IsSyncing}" IsVisible="{Binding IsSyncing}" Color="DarkSlateBlue" HorizontalOptions="Center"/>
+                <Label Text="Loading..." IsVisible="{Binding IsSyncing}" HorizontalOptions="Center"/>
             </VerticalStackLayout>
             
         </Border>

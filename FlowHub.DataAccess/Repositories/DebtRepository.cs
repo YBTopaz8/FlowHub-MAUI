@@ -4,7 +4,7 @@ namespace FlowHub.DataAccess.Repositories;
 
 public class DebtRepository : IDebtRepository
 {
-    private const string DebtsCollectionName = "DebtsCollection";
+    private const string DebtsCollectionName = "Debts";
     LiteDatabaseAsync db;
     private ILiteCollectionAsync<DebtModel> AllDebts;
     IMongoDatabase DBOnline;
@@ -45,8 +45,9 @@ public class DebtRepository : IDebtRepository
             {
                 userId = usersRepo.OfflineUser.UserIDOnline;
             }
-            //await AllDebts.DeleteAllAsync();
-            
+            // await AllDebts.DeleteAllAsync();
+
+            //await db.DropCollectionAsync(DebtsCollectionName);
             OfflineDebtList = await AllDebts.Query().ToListAsync();
             var ss = OfflineDebtList
                 .Where(x => x.UserId == userId)
@@ -64,8 +65,7 @@ public class DebtRepository : IDebtRepository
         }
         finally 
         { 
-            db.Dispose();
-            
+            db.Dispose();            
         }
     }
 

@@ -29,13 +29,15 @@ public partial class ManageLendingsPageM : UraniumUI.Pages.UraniumContentPage
             if (searchBar.Text.Length >= 2)
             {
                 viewModel.SearchCommandCommand.Execute(searchBar.Text);
+                PendingLentExpander.IsExpanded = true;
+                CompletedLentExpander.IsExpanded = true;
             }
             else
             {
                 viewModel.ApplyChanges();
+                PendingLentExpander.IsExpanded = false;
+                CompletedLentExpander.IsExpanded = false;
             }
-            PendingLentExpander.IsExpanded = false;
-            CompletedLentExpander.IsExpanded = false;
         }
         
     }
