@@ -2,6 +2,7 @@
 using CommunityToolkit.Maui;
 using InputKit.Handlers;
 using Plugin.Maui.AddToCalendar;
+using Plugin.Maui.CalendarStore;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using UraniumUI;
 
@@ -43,6 +44,7 @@ public static class MauiProgram
         });
 
         builder.Services.AddSingleton(AddToCalendarService.Default);
+        builder.Services.AddSingleton(CalendarStore.Default);
         /*----------------------- REGISTERING Repositories ------------------------------------------------------------------------*/
 
         builder.Services.AddSingleton<IExpendituresRepository, ExpendituresRepository>();

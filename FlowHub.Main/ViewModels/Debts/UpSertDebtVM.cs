@@ -1,6 +1,7 @@
 ﻿
 using CommunityToolkit.Maui.Core;
 using Plugin.Maui.AddToCalendar;
+using Plugin.Maui.CalendarStore;
 using System.ComponentModel;
 
 namespace FlowHub.Main.ViewModels.Debts;
@@ -10,13 +11,14 @@ public partial class UpSertDebtVM : ObservableObject
 {
     readonly IDebtRepository debtRepo;
     readonly IUsersRepository userRepo;
-    private readonly IAddToCalendar addToCalendarService;
+    private readonly ICalendarStore calendarStoreRepo;
 
-    public UpSertDebtVM(IDebtRepository debtRepository, IUsersRepository usersRepository, IAddToCalendar ATCService)
+    public UpSertDebtVM(IDebtRepository debtRepository, IUsersRepository usersRepository, ICalendarStore calendarStore)
     {
         debtRepo = debtRepository;
         userRepo = usersRepository;
-        addToCalendarService = ATCService;
+        calendarStoreRepo = calendarStore;
+        
     }
 
     [ObservableProperty]
@@ -140,12 +142,12 @@ public partial class UpSertDebtVM : ObservableObject
             SingleDebtDetails.Deadline = null;
             SingleDebtDetails.DatePaidCompletely = null;
         }
-        //this saves the debt to db and online
-        if (!await debtRepo.AddDebtAsync(SingleDebtDetails))
-        {
-            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Failed to Add Flow Hold"));
-            return;
-        }
+        ////this saves the debt to db and online
+        //if (!await debtRepo.AddDebtAsync(SingleDebtDetails))
+        //{
+        //    await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Failed to Add Flow Hold"));
+        //    return;
+        //}
 
         if (HasDeadLine is true && SingleDebtDetails.Deadline is not null)
         {
@@ -159,22 +161,43 @@ public partial class UpSertDebtVM : ObservableObject
             {
                 return;
             }
-            var calendarsAccountsProfiles = addToCalendarService.GetCalendarList();
+            var calendarsAccountsProfiles = await calendarStoreRepo.GetCalendars();
+
+                        
+            if (calendarsAccountsProfiles is null || calendarsAccountsProfiles.Count() == 0)
+            {
+                await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("No Accounts found on this Device"));
+                const string toastNotifMessageError = "Flow Hold Not Added";
+                var toasts = Toast.Make(toastNotifMessageError, duration, fontSize);
+                await toasts.Show(cts.Token);
+                await ManageExpendituresNavs.ReturnOnce();
+
+            }
+
+            string calendarProfileID = calendarsAccountsProfiles.FirstOrDefault(x => x.Name == "FlowHub")?.Id ?? string.Empty;
+            if (string.IsNullOrEmpty(calendarProfileID))
+            {
+                calendarProfileID = await calendarStoreRepo.CreateCalendar("FlowHub");
+            }
             
-            SelectedCalendarItem = await Shell.Current.DisplayActionSheet("Select Calendar Profile", "Cancel", null, calendarsAccountsProfiles.ToArray());
+           
+            DateTimeOffset debtDateStart = DateTimeOffset.Now;
+            DateTimeOffset debtDateEnd = DateTimeOffset.Now.AddMinutes(30);
 
-            DateTime debtDateStart = DateTime.Now;
-            DateTime debtDateEnd = DateTime.Now.AddMinutes(30);
+            var NewCalendarEvent = new CalendarEvent(Guid.NewGuid().ToString(), calendarProfileID,
+                $"FlowHold Due Reminder ! {Environment.NewLine}" +
+                   $"{(SingleDebtDetails.DebtType == DebtType.Lent ? $"{SingleDebtDetails.PersonOrOrganization.Name} Owes You" : $"You Owe {SingleDebtDetails.PersonOrOrganization.Name}")} {SingleDebtDetails.Amount} {SingleDebtDetails.Currency}");
 
-            addToCalendarService.CreateCalendarEvent(
-            title: $"FlowHold Due Reminder ! {Environment.NewLine}" +
-                   $"{(SingleDebtDetails.DebtType == DebtType.Lent ? $"{SingleDebtDetails.PersonOrOrganization.Name} Owes You" : $"You Owe {SingleDebtDetails.PersonOrOrganization.Name}")} {SingleDebtDetails.Amount} {SingleDebtDetails.Currency}",
-            description: $"NOTE: {SingleDebtDetails.Notes} {Environment.NewLine}" +
-                         $"{(SingleDebtDetails.DebtType == DebtType.Lent ? $"{SingleDebtDetails.PersonOrOrganization.Name} Owes You" : $"You Owe {SingleDebtDetails.PersonOrOrganization.Name}")} {SingleDebtDetails.Amount} {SingleDebtDetails.Currency}",
-            location: null,
-            startDate: debtDateStart,
-            endDate: debtDateEnd,
-            calendarName: SelectedCalendarItem);
+            await calendarStoreRepo.CreateEvent(NewCalendarEvent);
+            //addToCalendarService.CreateCalendarEvent(
+            //title: $"FlowHold Due Reminder ! {Environment.NewLine}" +
+            //       $"{(SingleDebtDetails.DebtType == DebtType.Lent ? $"{SingleDebtDetails.PersonOrOrganization.Name} Owes You" : $"You Owe {SingleDebtDetails.PersonOrOrganization.Name}")} {SingleDebtDetails.Amount} {SingleDebtDetails.Currency}",
+            //description: $"NOTE: {SingleDebtDetails.Notes} {Environment.NewLine}" +
+            //             $"{(SingleDebtDetails.DebtType == DebtType.Lent ? $"{SingleDebtDetails.PersonOrOrganization.Name} Owes You" : $"You Owe {SingleDebtDetails.PersonOrOrganization.Name}")} {SingleDebtDetails.Amount} {SingleDebtDetails.Currency}",
+            //location: null,
+            //startDate: debtDateStart,
+            //endDate: debtDateEnd,
+            //calendarName: SelectedCalendarItem);
 
         }
         const string toastNotifMessage = "Flow Hold Added";
