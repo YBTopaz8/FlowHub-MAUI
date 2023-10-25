@@ -22,12 +22,7 @@
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
 
-    
-<<<<<<< Updated upstream
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">28.0</SupportedOSPlatformVersion>
-=======
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">29.0</SupportedOSPlatformVersion>
->>>>>>> Stashed changes
+
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<AssemblyVersion>1.3.6.0</AssemblyVersion>
@@ -130,9 +125,9 @@
 
 	<ItemGroup>
 		<PackageReference Include="akgul.Maui.DataGrid" Version="3.0.0" />
-		<PackageReference Include="CommunityToolkit.Diagnostics" Version="8.2.1" />
+		<PackageReference Include="CommunityToolkit.Diagnostics" Version="8.2.2" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="6.0.0" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="HarfBuzzSharp" Version="7.3.0" />
 		<PackageReference Include="itext7" Version="8.0.1" />
 		<PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.1" />
