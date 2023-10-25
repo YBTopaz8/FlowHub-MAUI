@@ -12,6 +12,8 @@ public partial class UpSertExpendituresPopUp : Popup
         BindingContext = vm;
         viewModel.PageLoaded();
 
+#if ANDROID
+        Size = new Size(230, 390);
         //#if ANDROID
         //        var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
         //        var orientation = mainDisplayInfo.Orientation;
@@ -37,7 +39,7 @@ public partial class UpSertExpendituresPopUp : Popup
         //        //else if(smallestWidth)
 
         //        Size = new Size(popupWidth, popupHeight);
-#if WINDOWS
+#elif WINDOWS
         Size = new Size(400, 420);
 #endif
         viewModel.PropertyChanged += ViewModel_PropertyChanged;

@@ -12,10 +12,16 @@
     <ContentPage.ToolbarItems>
         <!--<ToolbarItem IconImageSource="filter_d" Command="{Binding ShowFilterPopUpPageCommand}"/>-->
     </ContentPage.ToolbarItems>
+<<<<<<< Updated upstream
 
     <AbsoluteLayout>
         <toolkit:DockLayout Margin="5,0" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
             <Label toolkit:DockLayout.DockPosition="Top" FontSize="20" 
+=======
+    <AbsoluteLayout>
+        <toolkit:DockLayout Margin="5,0" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+            <Label toolkit:DockLayout.DockPosition="Top" FontSize="16" HorizontalTextAlignment="Center"
+>>>>>>> Stashed changes
                FontAttributes="Bold" HorizontalOptions="Center">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer NumberOfTapsRequired="2" Tapped="TapGestureRecognizer_Tapped"/>
@@ -27,13 +33,18 @@
                     </MultiBinding>
                 </Label.Text>
             </Label>
+<<<<<<< Updated upstream
             <Grid toolkit:DockLayout.DockPosition="Top" HeightRequest="30" Margin="10,3">
+=======
+            <Grid toolkit:DockLayout.DockPosition="Top">
+>>>>>>> Stashed changes
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
                 <VerticalStackLayout Grid.Column="0" HorizontalOptions="Start">
+<<<<<<< Updated upstream
                     <ImageButton Source="{AppThemeBinding Dark=save_to_pdf_d.png, Light=save_to_pdf_l.png}"  Clicked="ExportToPDFImageButton_Clicked"/>
                     <ProgressBar IsVisible="false" x:Name="PrintProgressBarIndic" ProgressColor="DarkSlateBlue" WidthRequest="50"/>
                 </VerticalStackLayout>
@@ -46,6 +57,24 @@
             <Label toolkit:DockLayout.DockPosition="Top" Text="{Binding IncTitle}" FontSize="20" Margin="5" FontAttributes="Bold" HorizontalOptions="Center"/>
 
             <Label FontSize="17" Margin="3" toolkit:DockLayout.DockPosition="Bottom"
+=======
+                    <ImageButton Source="{AppThemeBinding Dark=save_to_pdf_d.png, Light=save_to_pdf_l.png}" 
+                                 WidthRequest="35"
+                                 Clicked="ExportToPDFImageButton_Clicked"/>
+                    <ProgressBar IsVisible="false" x:Name="PrintProgressBarIndic" ProgressColor="DarkSlateBlue" WidthRequest="35"/>
+                </VerticalStackLayout>
+
+                <ImageButton x:Name="pie_chart" Grid.Column="1" Source="{AppThemeBinding Dark=pie_chart, Light=pie_chart_l}" 
+                    HorizontalOptions="End" IsVisible="true" WidthRequest="35"
+                    VerticalOptions="Center" />
+            </Grid>
+
+            <Label toolkit:DockLayout.DockPosition="Top" Text="{Binding IncTitle}"
+                   FontSize="20" Margin="5" FontAttributes="Bold" HorizontalOptions="Center"/>
+
+
+            <Label FontSize="14" Margin="3" toolkit:DockLayout.DockPosition="Bottom"
+>>>>>>> Stashed changes
                    FontAttributes="Bold" HorizontalTextAlignment="Center"
                    HorizontalOptions="Center" VerticalOptions="End">
                 <Label.Text>
@@ -103,11 +132,36 @@
                             </Border>
 
                         </SwipeView>
+<<<<<<< Updated upstream
 
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+=======
+>>>>>>> Stashed changes
 
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </toolkit:DockLayout>
+        <Button
+                Command="{Binding ShowAddIncomePopUpCommand}"                
+                WidthRequest="35"
+                HeightRequest="35"
+                CornerRadius="26"
+                Padding="0"
+                BackgroundColor="DarkSlateBlue"
+                BorderColor="DarkSlateBlue"
+                Text="+"
+                TextColor="White"
+                FontSize="20"
+                AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                Margin="0,0,15,30"
+                ToolTipProperties.Text="Add New Flow In"
+                />
+
+    </AbsoluteLayout >
 
         </toolkit:DockLayout>
 

@@ -178,9 +178,9 @@
 
                         <Grid ColumnDefinitions="340,*" >
                             <material:CheckBox Grid.Column="0" TextFontSize="16" 
-                                IsChecked="{Binding RegisterAccountOnline}" Text="Register Account Online (Requires Internet)"
-                                               Color="{AppThemeBinding Light=black, Dark=white}"
-                                               />
+                                IsChecked="{Binding RegisterAccountOnline}" Text="Register Account Online"
+                                               Color="{AppThemeBinding Light=black, Dark=white}" />
+                            
                             <ImageButton Grid.Column="1"
                                 Source="information" HeightRequest="25" HorizontalOptions="End"/>
                         </Grid>
@@ -195,16 +195,26 @@
 
 
             <!--Section for QUICK Login begins below-->
+<<<<<<< Updated upstream
                 <VerticalStackLayout x:Name="QuickLogin" IsVisible="false" 
                                      Spacing="15" VerticalOptions="Center" 
                                      Margin="0,200,0,0">
+=======
+                <VerticalStackLayout x:Name="QuickLogin" IsVisible="false" Spacing="15" 
+                                     VerticalOptions="Center" Margin="0,100,0,0"
+                                     HorizontalOptions="Center">
+>>>>>>> Stashed changes
                 <Label x:Name="WelcomeLabel" Text="{Binding Username ,StringFormat='Signed in as {0}'}" 
-                       FontAttributes="Bold"
+                       FontAttributes="Bold" HorizontalTextAlignment="Center"
                        FontSize="Title" HorizontalOptions="Center"/>
 
                 <Button Text="Quick Login" TextColor="White" 
+<<<<<<< Updated upstream
                         FontSize="20" FontAttributes="Bold"
                         HeightRequest="50"
+=======
+                        FontSize="12" FontAttributes="Bold"
+>>>>>>> Stashed changes
                         x:Name="QuickLoginBtn" Clicked="QuickLoginBtn_Clicked" Margin="70,70,70,0" />
 
                

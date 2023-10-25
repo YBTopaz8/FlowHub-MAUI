@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlowHub.Main.Views.Mobile.Debts.ManageDebtsPageM"      
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"       
+             xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
+             xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Debts"
+             x:DataType="viewModels:ManageDebtsVM"
+             x:Name="Page"
+             Title="Flow Holds"
+             xmlns:utilities="clr-namespace:FlowHub.Main.Utilities"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <utilities:DateToDueDateStringConverter x:Key="DueDateConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <AbsoluteLayout>
+        <!-- The content of your page here. This could be any layout/view.-->
+        
+        <VerticalStackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All"
+                             Margin="8,3">
+            <CollectionView ItemsSource="{Binding DebtsList}">
+                <CollectionView.EmptyView>
+                    <ContentView>
+                        <VerticalStackLayout HorizontalOptions="Center"
+                                         VerticalOptions="Center">
+                            <Label Text="No Flow Holds Available..."/>
+                        </VerticalStackLayout>
+                    </ContentView>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:DebtModel">
+
+                        <SwipeView HorizontalOptions="FillAndExpand" Margin="0,2" 
+                                   Threshold="200">
+                            
+                            <SwipeView.LeftItems>
+                                    <SwipeItem
+                                    Command="{Binding Source={x:Reference Page}, Path=BindingContext.ToggleDebtCompletionStatusCommand}"
+                                    CommandParameter="{Binding .}"
+                                    IconImageSource="{AppThemeBinding Dark=done_undone_d, Light = done_undone_l}" 
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
+                                             
+                            </SwipeView.LeftItems>
+                            <SwipeView.RightItems>
+                                <SwipeItem 
+                                        Command="{Binding Source={x:Reference Page}, Path=BindingContext.GoToEditDebtCommand}"
+                                        CommandParameter="{Binding .}"
+                                        IconImageSource="{AppThemeBinding Dark= edit_d, Light= edit_l}"
+                                         BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
+                            </SwipeView.RightItems>
+
+                            <Border HorizontalOptions="EndAndExpand" 
+                                    Margin="6,2" Padding="5" 
+                                    StrokeThickness="1">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer NumberOfTapsRequired="2"
+                                        Command="{Binding Source={x:Reference Page}, Path=BindingContext.ViewDebtSheetCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                </Border.GestureRecognizers>
+                                
+                                <VerticalStackLayout Spacing="5">
+                                    <Label HorizontalOptions="Center" TextColor="{AppThemeBinding Dark=White,Light=Black}"
+                                        FontSize="16" FontAttributes="Bold">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label"
+                                                        Binding="{Binding DebtType}" Value="Lent">
+                                                <Setter Property="Text">
+                                                    <Setter.Value>
+                                                        <MultiBinding StringFormat="{} {0} Owes You {1} {2}">
+                                                            <Binding Path="PersonOrOrganization.Name"/>
+                                                            <Binding Path="Amount"/>
+                                                            <Binding Path="Currency"/>
+                                                        </MultiBinding>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{} You Owe {1} {2} To {0}">
+                                                <Binding Path="PersonOrOrganization.Name"/>
+                                                <Binding Path="Amount"/>
+                                                <Binding Path="Currency"/>
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+                                    
+                                    <FlexLayout JustifyContent="SpaceBetween" Margin="5,0">
+
+                                        <Label Text="{Binding PersonOrOrganization.PhoneNumber}" FontSize="12"
+                                       TextColor="{AppThemeBinding Dark={StaticResource Cyan200Accent}, Light=black}"
+                                               Opacity="{AppThemeBinding Light=0.6}"/>
+                                        
+                                        <Label Text="{Binding ., Converter={StaticResource DueDateConverter}}" FontSize="12"
+                                       TextColor="{AppThemeBinding Dark={StaticResource WildBlueYonder}, Light={StaticResource Primary}}"/>
+                                    </FlexLayout>
+
+                                </VerticalStackLayout>
+                            </Border>
+
+                        </SwipeView>                       
+                        
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            
+        </VerticalStackLayout>
+
+        <!-- Your FAB -->
+        <Button             
+                Command="{Binding GoToAddDebtCommand}"
+                WidthRequest="35" HeightRequest="35"
+                CornerRadius="26" Padding="0"
+                BackgroundColor="DarkSlateBlue" BorderColor="DarkSlateBlue"
+                Text="+" TextColor="White"
+                FontSize="20" Margin="0,0,15,30"
+                AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                ToolTipProperties.Text="Add New Flow Hold"
+                />
+    </AbsoluteLayout>
+</ContentPage>

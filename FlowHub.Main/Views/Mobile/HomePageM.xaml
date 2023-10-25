@@ -5,28 +5,30 @@
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels"
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              x:DataType="viewModels:HomePageVM">
-    <VerticalStackLayout>
-        <Label FontSize="21" HorizontalTextAlignment="Center" FontAttributes="Bold" Margin="10">
-            <Label.Text>
-                <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
-                    <Binding Path="PocketMoney"/>
-                    <Binding Path="UserCurrency"/>
-                </MultiBinding>
-            </Label.Text>
-        </Label>
-        <!-- Begin Section for Expenditure display-->
-        <Border Margin="10" Padding="5"
+    <ScrollView>
+        <VerticalStackLayout>
+            <Label FontSize="21" HorizontalTextAlignment="Center" FontAttributes="Bold" Margin="10">
+                <Label.Text>
+                    <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
+                        <Binding Path="PocketMoney"/>
+                        <Binding Path="UserCurrency"/>
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+            <!-- Begin Section for Expenditure display-->
+            <Border Margin="10" Padding="5"
                 StrokeShape="RoundRectangle 10">
-            <Border.Shadow>
-                <Shadow Offset="10,25" Opacity="0.2"/>
-            </Border.Shadow>
-            <VerticalStackLayout Spacing="5">
-                <Label Text="Latest Flow Outs" FontSize="22" HorizontalOptions="Center"                        
+                <Border.Shadow>
+                    <Shadow Offset="10,25" Opacity="0.2"/>
+                </Border.Shadow>
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Latest Flow Outs" FontSize="22" HorizontalOptions="Center"                        
                        Padding="10,0,0,0"/>
-                <BoxView
+                    <BoxView
                         Color="DarkSlateBlue"
                         HeightRequest="1"
                         HorizontalOptions="Fill"/>
+<<<<<<< Updated upstream
                 <CollectionView x:Name="ColView" ItemsSource="{Binding LatestExpenditures}">
                    
                     <CollectionView.ItemTemplate>
@@ -36,16 +38,33 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
+=======
+                    <CollectionView x:Name="ColView" ItemsSource="{Binding LatestExpenditures}" HorizontalOptions="FillAndExpand">
+                        <CollectionView.EmptyView>
+                            <VerticalStackLayout VerticalOptions="Center">
+                                <Image Source="nothing_found.png" MaximumHeightRequest="50"/>
+                                <Label Text="No Flow Outs Available..." HorizontalOptions="Center" VerticalOptions="Center" />
+                            </VerticalStackLayout>
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:ExpendituresModel">
+                                <Grid Margin="10,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+>>>>>>> Stashed changes
 
-                                <StackLayout Grid.Column="0">
-                                    <Label Text="{Binding Reason}" FontAttributes="Bold"
+                                    <StackLayout Grid.Column="0">
+                                        <Label Text="{Binding Reason}" FontAttributes="Bold"
                                            TextColor="{AppThemeBinding Dark={StaticResource WildBlueYonder}, Light=black}"/>
-                                    
-                                    <Label Text="{Binding Category}" FontSize="10" FontAttributes="Italic"
+
+                                        <Label Text="{Binding Category}" FontSize="10" FontAttributes="Italic"
                                            TextColor="{AppThemeBinding Dark={StaticResource Secondary}, Light=blue}"
                                            Opacity="{AppThemeBinding Light=0.8}"/>
-                                </StackLayout>
+                                    </StackLayout>
 
+<<<<<<< Updated upstream
                                 <StackLayout Grid.Column="1" HorizontalOptions="End">
                                     <Label FontAttributes="Bold" HorizontalTextAlignment="End">
                                         <Label.Text>
@@ -56,15 +75,28 @@
                                         </Label.Text>
                                     </Label>
                                     <Label Text="{Binding DateSpent, StringFormat='{0:ddd, MM/dd/yyyy}'}" FontSize="10"
+=======
+                                    <StackLayout Grid.Column="1" HorizontalOptions="End">
+                                        <Label FontAttributes="Bold">
+                                            <Label.Text>
+                                                <MultiBinding StringFormat="{}{0:n2} {1}">
+                                                    <Binding Path="AmountSpent"/>
+                                                    <Binding Path="Currency"/>
+                                                </MultiBinding>
+                                            </Label.Text>
+                                        </Label>
+                                        <Label Text="{Binding DateSpent, StringFormat='{0:ddd, MM/dd/yyyy}'}" FontSize="10"
+>>>>>>> Stashed changes
                                             HorizontalTextAlignment="End" FontAttributes="Italic"
                                            Opacity="{AppThemeBinding Dark=0.5, Light=0.8}"/>
-                                </StackLayout>
-                            </Grid>
+                                    </StackLayout>
+                                </Grid>
 
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
+<<<<<<< Updated upstream
                 <ActivityIndicator IsRunning="{Binding IsSyncing}" IsVisible="{Binding IsSyncing}" Color="DarkSlateBlue" HorizontalOptions="Center"/>
                 <Label Text="Loading..." IsVisible="{Binding IsSyncing}" HorizontalOptions="Center"/>
             </VerticalStackLayout>
@@ -72,10 +104,19 @@
         </Border>
         <VerticalStackLayout HorizontalOptions="Center">
             <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}"
+=======
+                </VerticalStackLayout>
+
+            </Border>
+            <VerticalStackLayout HorizontalOptions="Center">
+                <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}"
+>>>>>>> Stashed changes
                          Command="{Binding GoToAddExpenditurePageCommand}"/>
+            </VerticalStackLayout>
+
+            <!-- End Section for Expenditure display-->
+
         </VerticalStackLayout>
 
-        <!-- End Section for Expenditure display-->
-
-    </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

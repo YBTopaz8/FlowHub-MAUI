@@ -12,8 +12,9 @@ public partial class UpSertIncomePopUp : Popup
         viewModel = vm;
         BindingContext = vm;
         viewModel.PageLoaded();
-
-#if WINDOWS
+#if ANDROID
+        Size = new Size(230, 340);
+#elif WINDOWS
         Size = new Size(400, 350);
 #endif
         viewModel.PropertyChanged += ViewModel_PropertyChanged;
