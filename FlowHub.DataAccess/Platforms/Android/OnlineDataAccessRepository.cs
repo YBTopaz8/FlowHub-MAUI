@@ -7,7 +7,12 @@ public class OnlineDataAccessRepository : IOnlineCredentialsRepository
     {
         if (Connectivity.Current.NetworkAccess.Equals(NetworkAccess.Internet))
         {
-            IMongoDatabase db = new MongoClient("<< YOUR ATLAS CONNECTION STRING >>")
+            IMongoDatabase db = new MongoClient("<< YOUR ATLAS CONNECTION STRING " +
+                "YOU CAN FIND IT IN YOUR MONGODB ATLAS" +
+                "GO TO YOUR DATABSE UNDER DEPLOYMENT" +
+                "YOU'LL SEE YOUR CLUSTER (OR CREATE ONE IF INEXISTANT)" +
+                "ON YOUR CLUSTER THERE WILL BE A CONNECT BUTTON, CLICK ON IT AND CLICK DRIVERS" +
+                "FOR ANDROID, USE DRIVER : C#/.NET AND VERSION 2.4 or Later!!!!>>")
                 .GetDatabase("<<YOUR DB NAME>>");
             OnlineMongoDatabase = db;
         }
