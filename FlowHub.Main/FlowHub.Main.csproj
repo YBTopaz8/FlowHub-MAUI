@@ -127,18 +127,18 @@
 	<ItemGroup>
 		<PackageReference Include="akgul.Maui.DataGrid" Version="3.0.0" />
 		<PackageReference Include="CommunityToolkit.Diagnostics" Version="8.2.1" />
-		<PackageReference Include="CommunityToolkit.Maui" Version="5.3.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="6.0.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
-		<PackageReference Include="HarfBuzzSharp" Version="2.8.2.5" />
+		<PackageReference Include="HarfBuzzSharp" Version="7.3.0" />
 		<PackageReference Include="itext7" Version="8.0.1" />
 		<PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.1" />
 		<PackageReference Include="LiteDB.Async" Version="0.1.7" />
 		<PackageReference Include="LiveChartsCore.SkiaSharpView.Maui" Version="2.0.0-beta.603" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="Plugin.Maui.AddToCalendar" Version="1.0.0" />
-		<PackageReference Include="SkiaSharp" Version="2.88.5" />
-		<PackageReference Include="UraniumUI.Icons.FontAwesome" Version="2.5.5" />
-		<PackageReference Include="UraniumUI.Material" Version="2.5.5" />
+		<PackageReference Include="SkiaSharp" Version="2.88.6" />
+		<PackageReference Include="UraniumUI.Icons.FontAwesome" Version="2.5.6" />
+		<PackageReference Include="UraniumUI.Material" Version="2.5.6" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -181,6 +181,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Desktop\Debts\ManageDebtsPageD.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Desktop\ExitApp.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Desktop\Expenditures\ManageExpendituresPageD.xaml">

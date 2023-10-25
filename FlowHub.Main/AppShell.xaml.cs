@@ -6,6 +6,8 @@ public partial class AppShell : Shell
     {
         InitializeComponent();
 
+        Routing.RegisterRoute(nameof(ExitApp), typeof(ExitApp));
+
         Routing.RegisterRoute(nameof(HomePageD), typeof(HomePageD));
         Routing.RegisterRoute(nameof(LoginD), typeof(LoginD));
 

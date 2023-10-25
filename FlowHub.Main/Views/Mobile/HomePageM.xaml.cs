@@ -1,8 +1,14 @@
+using SkiaSharp;
+using SkiaSharp.Views.Maui.Controls;
+
 namespace FlowHub.Main.Views.Mobile;
 
 [QueryProperty(nameof(StartAction), nameof(StartAction))]
 public partial class HomePageM : ContentPage
 {
+    SKCanvasView canvasView;
+
+
     int startAction;
     public int StartAction
     {
@@ -40,4 +46,6 @@ public partial class HomePageM : ContentPage
             MainThread.BeginInvokeOnMainThread(async () => await viewModel.GoToAddExpenditurePage());
         }
     }
+
+
 }

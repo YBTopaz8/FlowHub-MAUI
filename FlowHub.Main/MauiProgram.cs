@@ -84,6 +84,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<UpSertDebtVM>();
         /*------------------------REGISTERING DESKTOP VIEWS ----------------------------------------------------------------------------*/
 
+        builder.Services.AddSingleton<ExitApp>();
+
         /*-- Section for HomePage AND Login --*/
         builder.Services.AddSingleton<HomePageD>();
         builder.Services.AddSingleton<LoginD>();

@@ -141,7 +141,9 @@ public partial class ManageDebtsVM : ObservableObject
     {
         var filteredAndSortedDebts = debtRepo.OfflineDebtList
                         .Where(x => !x.IsDeleted)
-                        .OrderByDescending(x => x.UpdateDateTime).ToList();
+                        .OrderByDescending(x => x.UpdateDateTime)
+                        .Distinct()
+                        .ToList();
 
         ListOfPeopleNames = filteredAndSortedDebts
             .Select(x => x.PersonOrOrganization.Name)

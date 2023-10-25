@@ -35,7 +35,9 @@
             <Label x:Name="DisplayAlertText"  FontSize="18"/>
 
             <HorizontalStackLayout Spacing="8"> 
-                <material:CheckBox Text="Change Currency" x:Name="ChangeCurrencyCheckBox" Margin="5,0" CheckChanged="ChangeCurrencyCheckBox_CheckChanged"/>
+                <material:CheckBox Text="Change Currency" x:Name="ChangeCurrencyCheckBox" 
+                                   Margin="5,0" CheckChanged="ChangeCurrencyCheckBox_CheckChanged"
+                                   TextColor="{AppThemeBinding Dark=White}"/>
                 
                 <Picker x:Name="CurrencyPicker" Title="Select a Currency" IsVisible="{Binding IsChecked, Source={x:Reference ChangeCurrencyCheckBox}}"/>
             </HorizontalStackLayout>
@@ -43,7 +45,7 @@
                 <Button Text="Cancel" FontSize="18" BackgroundColor="Transparent" 
                 TextColor="{AppThemeBinding Dark={StaticResource NegativeActionBtnDark},Light= {StaticResource NegativeActionBtnDark} }"
                 Clicked="OnNoButtonClicked"/>
-            <Button Text="Yes" FontSize="20" BackgroundColor="Transparent" FontAttributes="Bold"
+            <Button Text="Yes" FontSize="19" BackgroundColor="Transparent" FontAttributes="Bold"
                 TextColor="{AppThemeBinding Dark={StaticResource Primary},Light= {StaticResource Primary}}"
                 Clicked="OnYesButtonClicked"/>
             </HorizontalStackLayout>

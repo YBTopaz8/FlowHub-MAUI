@@ -47,7 +47,7 @@
                                 </StackLayout>
 
                                 <StackLayout Grid.Column="1" HorizontalOptions="End">
-                                    <Label FontAttributes="Bold">
+                                    <Label FontAttributes="Bold" HorizontalTextAlignment="End">
                                         <Label.Text>
                                             <MultiBinding StringFormat="{}{0:n2} {1}">
                                                 <Binding Path="AmountSpent"/>

@@ -12,7 +12,7 @@
         Shell.NavBarIsVisible="False"
         Shell.FlyoutBehavior="Disabled"
         CurrentItem ="{x:Reference login}">
-    
+
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems"  
                 Route="FileTab">
 
@@ -23,7 +23,9 @@
                 Route="HomePageD"/>
 
             <ShellContent Title="Log Out"/>
-            <ShellContent Title="Exit" />
+            <ShellContent Title="Exit" 
+                          ContentTemplate="{DataTemplate views:ExitApp}"
+                          Route="ExitApp"/>
         </Tab>
 
         <Tab Title="Flow Outs" Icon="{AppThemeBinding Dark= initiate_money_transfer_d.png,Light= initiate_money_transfer_d.png}">

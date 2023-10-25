@@ -3,6 +3,7 @@ namespace FlowHub.Main.Views.Desktop;
 [QueryProperty(nameof(StartAction), nameof(StartAction))]
 public partial class HomePageD : ContentPage
 {
+
     int startAction;
     public int StartAction
     {
@@ -20,7 +21,9 @@ public partial class HomePageD : ContentPage
         InitializeComponent();
         viewModel = vm;
         BindingContext = vm;
+
     }
+
     bool _isInitialized;
     protected override async void OnAppearing()
     {
@@ -40,4 +43,6 @@ public partial class HomePageD : ContentPage
             MainThread.BeginInvokeOnMainThread(async () => await viewModel.GoToAddExpenditurePage());       
         }
     }
+
+
 }

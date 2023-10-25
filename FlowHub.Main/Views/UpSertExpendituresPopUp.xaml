@@ -109,7 +109,7 @@
                 <HorizontalStackLayout HorizontalOptions="Center" Margin="0,15,0,0" Spacing="15">
                     <Button input:FormView.IsSubmitButton="True"
                                             Text="Save Flow Out" BackgroundColor="{StaticResource SaveBtnColor}" TextColor="White" 
-                                            FontSize="20" FontAttributes="Bold"/>
+                                            FontSize="19" FontAttributes="Bold"/>
 
                     <Button Command="{Binding CancelBtnCommand}"
                                             Text="Cancel" BackgroundColor="{StaticResource NegativeActionBtnDark}" TextColor="White"
