@@ -20,7 +20,7 @@
         
         <VerticalStackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All"
                              Margin="8,3">
-            <CollectionView ItemsSource="{Binding DebtsList}">
+            <CollectionView>
                 <CollectionView.EmptyView>
                     <ContentView>
                         <VerticalStackLayout HorizontalOptions="Center"

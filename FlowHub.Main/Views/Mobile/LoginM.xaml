@@ -22,8 +22,8 @@
                        FontAttributes="Bold" HorizontalTextAlignment="Center"/>
                 <Label Text="Welcome to FlowHub" FontSize="Title" 
                        Margin="0,0,0,40" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
-                    
-                
+
+
 
                 <Border x:Name="LoginSignUpTab" 
                         BackgroundColor="{AppThemeBinding Dark=#1A1A1A, Light=grey}"
@@ -129,12 +129,12 @@
 
                         <ImageButton Source="{AppThemeBinding Dark=login_online_d, Light=login_online_l}"
                                      Clicked="LoginOnlineBtn_Clicked" x:Name="LoginButton" input:FormView.IsSubmitButton="True"/>
-                        
+
 
                     </input:FormView>
 
                 </VerticalStackLayout>
-                
+
                 <!--Section for Registration begins below-->
                 <VerticalStackLayout x:Name="RegisterForm" Opacity="0" Margin="25">
                     <input:FormView SubmitCommand="{Binding GoToHomePageFromRegisterCommand}" Spacing="20">
@@ -151,10 +151,10 @@
                         </material:TextField>
                         <material:TextField Title="Password" Text="{Binding CurrentUser.Password}"
                                             Icon="{AppThemeBinding Dark=password_d.png, Light=password_l.png}">
-                            <validation:RequiredValidation/>                            
+                            <validation:RequiredValidation/>
                             <material:TextField.Attachments>
                                 <material:TextFieldPasswordShowHideAttachment/>
-                            </material:TextField.Attachments>                            
+                            </material:TextField.Attachments>
                         </material:TextField>
 
                         <material:TextField Title="Current Balance" Text="{Binding PocketMoney}" Icon="{AppThemeBinding Dark=pocket_money_icon_d.png, Light=pocket_money_icon_l.png}" Keyboard="Numeric">
@@ -174,13 +174,13 @@
                                 <validation:RequiredValidation/>
                             </material:PickerField.Validations>
                         </material:PickerField>
-                            
+
 
                         <Grid ColumnDefinitions="340,*" >
                             <material:CheckBox Grid.Column="0" TextFontSize="16" 
-                                IsChecked="{Binding RegisterAccountOnline}" Text="Register Account Online"
-                                               Color="{AppThemeBinding Light=black, Dark=white}" />
-                            
+                                IsChecked="{Binding RegisterAccountOnline}" Text="Register Account Online (Requires Internet)"
+                                               Color="{AppThemeBinding Light=black, Dark=white}"
+                                               />
                             <ImageButton Grid.Column="1"
                                 Source="information" HeightRequest="25" HorizontalOptions="End"/>
                         </Grid>
@@ -190,37 +190,27 @@
                                 FontSize="20" input:FormView.IsSubmitButton="True"/>
 
                     </input:FormView>
-               
+
                 </VerticalStackLayout>
 
 
-            <!--Section for QUICK Login begins below-->
-<<<<<<< Updated upstream
+                <!--Section for QUICK Login begins below-->
                 <VerticalStackLayout x:Name="QuickLogin" IsVisible="false" 
                                      Spacing="15" VerticalOptions="Center" 
                                      Margin="0,200,0,0">
-=======
-                <VerticalStackLayout x:Name="QuickLogin" IsVisible="false" Spacing="15" 
-                                     VerticalOptions="Center" Margin="0,100,0,0"
-                                     HorizontalOptions="Center">
->>>>>>> Stashed changes
-                <Label x:Name="WelcomeLabel" Text="{Binding Username ,StringFormat='Signed in as {0}'}" 
-                       FontAttributes="Bold" HorizontalTextAlignment="Center"
+                    <Label x:Name="WelcomeLabel" Text="{Binding Username ,StringFormat='Signed in as {0}'}" 
+                       FontAttributes="Bold"
                        FontSize="Title" HorizontalOptions="Center"/>
 
-                <Button Text="Quick Login" TextColor="White" 
-<<<<<<< Updated upstream
+                    <Button Text="Quick Login" TextColor="White" 
                         FontSize="20" FontAttributes="Bold"
                         HeightRequest="50"
-=======
-                        FontSize="12" FontAttributes="Bold"
->>>>>>> Stashed changes
                         x:Name="QuickLoginBtn" Clicked="QuickLoginBtn_Clicked" Margin="70,70,70,0" />
 
-               
-            </VerticalStackLayout>
 
-        </VerticalStackLayout>
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

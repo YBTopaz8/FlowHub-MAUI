@@ -14,86 +14,84 @@
         <ToolbarItem IconImageSource="filter_d" Command="{Binding ShowFilterPopUpPageCommand}" />
     </ContentPage.ToolbarItems>-->
     <AbsoluteLayout>
-    
-    <toolkit:DockLayout Margin="5,0" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
-            <Label toolkit:DockLayout.DockPosition="Top" FontSize="16" FontAttributes="Bold" 
-                   HorizontalOptions="Center" HorizontalTextAlignment="Center">
-                <Label.Text>
-                <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
-                    <Binding Path="UserPocketMoney"/>
-                    <Binding Path="UserCurrency"/>
-                </MultiBinding>
-            </Label.Text>
-        </Label>
 
-        <Grid toolkit:DockLayout.DockPosition="Top">
+        <toolkit:DockLayout Margin="5,0" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+            <Label toolkit:DockLayout.DockPosition="Top" FontSize="21" FontAttributes="Bold" HorizontalOptions="Center" >
+                <Label.Text>
+                    <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
+                        <Binding Path="UserPocketMoney"/>
+                        <Binding Path="UserCurrency"/>
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+
+            <Grid toolkit:DockLayout.DockPosition="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
                 <VerticalStackLayout Grid.Column="0" HorizontalOptions="Start" BackgroundColor="Transparent">
-                    <ImageButton Clicked="ExportToPDFImageButton_Clicked" BackgroundColor="Transparent" WidthRequest="35"
+                    <ImageButton Clicked="ExportToPDFImageButton_Clicked" BackgroundColor="Transparent"
                         Source="{AppThemeBinding Dark=save_to_pdf_d.png, Light=save_to_pdf_l.png}" />
                     <ProgressBar IsVisible="false" x:Name="PrintProgressBarIndic" ProgressColor="DarkSlateBlue" WidthRequest="50"/>
                 </VerticalStackLayout>
 
                 <ImageButton x:Name="pie_chart" Grid.Column="1" Source="{AppThemeBinding Dark=pie_chart, Light=pie_chart_l}" 
-                    HorizontalOptions="End" IsVisible="{Binding ShowStatisticBtn}" WidthRequest="35"
+                    HorizontalOptions="End" IsVisible="{Binding ShowStatisticBtn}"
                     VerticalOptions="Center" Command="{Binding GoToSpecificStatsPageCommand}"/>
             </Grid>
 
-        <HorizontalStackLayout toolkit:DockLayout.DockPosition="Top" HorizontalOptions="Center" x:Name="SyncIndicator">
-            <Label Text="Syncing..." IsVisible="{Binding IsBusy}" Margin="0,0,0,0" FontSize="13" />
-            <ActivityIndicator IsRunning="{Binding IsBusy}" HeightRequest="20" IsVisible="{Binding IsBusy}"/>
-        </HorizontalStackLayout>
+            <HorizontalStackLayout toolkit:DockLayout.DockPosition="Top" HorizontalOptions="Center" x:Name="SyncIndicator">
+                <Label Text="Syncing..." IsVisible="{Binding IsBusy}" Margin="0,0,0,0" FontSize="13" />
+                <ActivityIndicator IsRunning="{Binding IsBusy}" HeightRequest="20" IsVisible="{Binding IsBusy}"/>
+            </HorizontalStackLayout>
 
-        <Label toolkit:DockLayout.DockPosition="Top" Text="{Binding ExpTitle}" FontSize="20" 
-               Margin="5" FontAttributes="Bold" HorizontalOptions="Center"/>
-               
-        <Label FontSize="14" Margin="3" toolkit:DockLayout.DockPosition="Bottom"
-               FontAttributes="Bold" HorizontalTextAlignment="Center"
+            <Label toolkit:DockLayout.DockPosition="Top" Text="{Binding ExpTitle}" FontSize="20" Margin="5" FontAttributes="Bold" HorizontalOptions="Center"/>
+
+            <Label FontSize="17" Margin="3" toolkit:DockLayout.DockPosition="Bottom"
+               FontAttributes="Bold"
                HorizontalOptions="Center" VerticalOptions="End">
-            <Label.Text>
-                <MultiBinding StringFormat="{} {2} Flow Out(s) worth {0:n2} {1}">
-                    <Binding Path="TotalAmount"/>
-                    <Binding Path="UserCurrency"/>
-                    <Binding Path="TotalExpenditures"/>
-                </MultiBinding>
-            </Label.Text>
-        </Label>
+                <Label.Text>
+                    <MultiBinding StringFormat="{} {2} Flow Out(s) worth {0:n2} {1}">
+                        <Binding Path="TotalAmount"/>
+                        <Binding Path="UserCurrency"/>
+                        <Binding Path="TotalExpenditures"/>
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
 
-        <CollectionView x:Name="ColView" IsVisible="true" ItemsSource="{Binding GroupedExpenditures}" 
+            <CollectionView x:Name="ColView" IsVisible="true" ItemsSource="{Binding GroupedExpenditures}" 
                         IsGrouped="True" HorizontalOptions="Center"
                         EmptyView="No Flow Outs Available...">
-            
-            <CollectionView.GroupHeaderTemplate>
-                <DataTemplate x:DataType="viewModels:DateGroup">
-                    <Label Text="{Binding Date, StringFormat='{0:ddd, MMMM dd, yyyy}'}" 
+
+                <CollectionView.GroupHeaderTemplate>
+                    <DataTemplate x:DataType="viewModels:DateGroup">
+                        <Label Text="{Binding Date, StringFormat='{0:ddd, MMMM dd, yyyy}'}" 
                            BackgroundColor="{AppThemeBinding Dark={StaticResource BorderDark}, Light={StaticResource Secondary}}"
                            TextColor="{AppThemeBinding Dark={StaticResource Secondary}, Light=black}" 
                            FontAttributes="Bold,Italic" FontSize="12" Padding="10,3"/>
-                </DataTemplate>
-            </CollectionView.GroupHeaderTemplate>
-            <CollectionView.GroupFooterTemplate>
-                <DataTemplate x:DataType="viewModels:DateGroup">
-                    <Label FontAttributes="Bold"
+                    </DataTemplate>
+                </CollectionView.GroupHeaderTemplate>
+                <CollectionView.GroupFooterTemplate>
+                    <DataTemplate x:DataType="viewModels:DateGroup">
+                        <Label FontAttributes="Bold"
                            FontSize="12" Margin="10,5" HorizontalOptions="End"
                            Opacity="0.5">
-                        <Label.Text>
-                            <MultiBinding StringFormat="{}{0} Flows, Total : {1:n2} {2}">
-                                <Binding Path="TotalCount"/>
-                                <Binding Path="TotalAmount"/>
-                                <Binding Path="Currency"/>
-                            </MultiBinding>
-                        </Label.Text>
-                    </Label>                    
-                </DataTemplate>
-            </CollectionView.GroupFooterTemplate>
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:ExpendituresModel">                    
-                            <!--set to fill and expand for it to take the whole width of the screen-->
-                        <SwipeView HorizontalOptions="FillAndExpand" Margin="0,2" BackgroundColor="Transparent">                        
+                            <Label.Text>
+                                <MultiBinding StringFormat="{}{0} Flows, Total : {1:n2} {2}">
+                                    <Binding Path="TotalCount"/>
+                                    <Binding Path="TotalAmount"/>
+                                    <Binding Path="Currency"/>
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
+                    </DataTemplate>
+                </CollectionView.GroupFooterTemplate>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:ExpendituresModel">
+                        <!--set to fill and expand for it to take the whole width of the screen-->
+                        <SwipeView HorizontalOptions="FillAndExpand" Margin="0,2" BackgroundColor="Transparent">
                             <SwipeView.LeftItems>
                                 <SwipeItems>
                                     <SwipeItem 
@@ -142,31 +140,32 @@
 
                             </Border>
                         </SwipeView>
-                    
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
 
-       
-    </toolkit:DockLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+
+        </toolkit:DockLayout>
         <Button
                 Command="{Binding ShowAddExpenditurePopUpCommand}"                
-                WidthRequest="35" HeightRequest="35"
-                CornerRadius="26" Padding="0"
-                BackgroundColor="DarkSlateBlue" BorderColor="DarkSlateBlue"
-                Text="+" TextColor="White"
-                FontSize="20" Margin="0,0,15,30"
+                WidthRequest="55"
+                HeightRequest="55"
+                CornerRadius="26"
+                Padding="0"
+                BackgroundColor="DarkSlateBlue"
+                BorderColor="DarkSlateBlue"
+                Text="+"
+                TextColor="White"
+                FontSize="40"
                 AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize"
                 AbsoluteLayout.LayoutFlags="PositionProportional"
+                Margin="0,0,15,30"
                 ToolTipProperties.Text="Add New Flow Out"
-<<<<<<< Updated upstream
             >
             <Button.Shadow>
                 <Shadow Offset="5,15" Opacity="0.6"/>
             </Button.Shadow>
         </Button>
-=======
-                />
->>>>>>> Stashed changes
     </AbsoluteLayout>
 </ContentPage>

@@ -42,7 +42,7 @@ public static class MauiProgram
             handlers.AddUraniumUIHandlers();
         });
 
-        builder.Services.AddSingleton<IAddToCalendar>(AddToCalendarService.Default);
+        builder.Services.AddSingleton(AddToCalendarService.Default);
         /*----------------------- REGISTERING Repositories ------------------------------------------------------------------------*/
 
         builder.Services.AddSingleton<IExpendituresRepository, ExpendituresRepository>();

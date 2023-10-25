@@ -18,7 +18,7 @@
             <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
-    
+
     <VerticalStackLayout Margin="8">
         <input:FormView Spacing="5" SubmitCommand="{Binding UpSertDebtCommand}">
             <input:FormView.Resources>
@@ -40,33 +40,28 @@
 
             <HorizontalStackLayout Spacing="7" HorizontalOptions="Center">
                 <material:RadioButton Text="Lend" IsChecked="{Binding IsLent}" x:Name="IsLentRBtn"                                      
-                                      CircleColor="{AppThemeBinding Light=darkslateblue, Dark=white}"
-                                      TextColor="{AppThemeBinding Light=black, Dark=white}"/>
-                
-                <material:RadioButton Text="Borrow" x:Name="IsBorrowedRBtn"
-                                      IsChecked="{Binding IsBorrow}"
-<<<<<<< Updated upstream
                                       CircleColor="{AppThemeBinding Light=darkslateblue}"
                                       TextColor="{AppThemeBinding Light=black, Dark=white}"/>
-=======
-                                      CircleColor="{AppThemeBinding Light=darkslateblue, Dark=white}"
-                                      TextColor="{AppThemeBinding Light=black, Dark=white}"/>                
->>>>>>> Stashed changes
+
+                <material:RadioButton Text="Borrow" x:Name="IsBorrowedRBtn"
+                                      IsChecked="{Binding IsBorrow}"
+                                      CircleColor="{AppThemeBinding Light=darkslateblue}"
+                                      TextColor="{AppThemeBinding Light=black, Dark=white}"/>
             </HorizontalStackLayout>
-            
+
             <Grid ColumnSpacing="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                
+
                 <material:TextField Grid.Column="0" Title="Amount" x:Name="AmountTextField"
                                     Text="{Binding SingleDebtDetails.Amount}" Focused="TextField_Focused"
                                     Keyboard="Numeric">
-                    <validation:RequiredValidation Message=""/>                    
+                    <validation:RequiredValidation Message=""/>
                     <validation:MinValueValidation MinValue="0.1"/>
                 </material:TextField>
-                <Label Grid.Column="1" FontSize="14"
+                <Label Grid.Column="1" FontSize="18"
                        FontAttributes="Bold"
                        VerticalTextAlignment="Center"
                        Text="{Binding SingleDebtDetails.Currency}"/>
@@ -76,46 +71,36 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
-<<<<<<< Updated upstream
-                </Grid.ColumnDefinitions>                
-                    
-                <material:TextField x:Name="PersonName" Text="{Binding SingleDebtDetails.PersonOrOrganization.Name}">
-=======
                 </Grid.ColumnDefinitions>
-                
-                    <material:TextField x:Name="PersonName" Text="{Binding SingleDebtDetails.PersonOrOrganization.Name}">
->>>>>>> Stashed changes
-                        <validation:RequiredValidation/>
-                        <material:TextField.Triggers>
-                            <DataTrigger TargetType="material:TextField" 
+
+                <material:TextField x:Name="PersonName" Text="{Binding SingleDebtDetails.PersonOrOrganization.Name}">
+                    <validation:RequiredValidation/>
+                    <material:TextField.Triggers>
+                        <DataTrigger TargetType="material:TextField"
                                          Binding="{Binding IsLent}" Value="true">
-                                <Setter Property="Title" Value="Lend To"/>
-                            </DataTrigger>
-                            <DataTrigger TargetType="material:TextField"
+                            <Setter Property="Title" Value="Lend To"/>
+                        </DataTrigger>
+                        <DataTrigger TargetType="material:TextField"
                                          Binding="{Binding IsLent}" Value="false">
-                                <Setter Property="Title" Value="Borrow From"/>
-                            </DataTrigger>
-                        </material:TextField.Triggers>
-                    </material:TextField>
+                            <Setter Property="Title" Value="Borrow From"/>
+                        </DataTrigger>
+                    </material:TextField.Triggers>
+                </material:TextField>
 
                 <ImageButton Grid.Column="1" Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}"                             
                              Clicked="ImageButton_Clicked"/>
             </Grid>
-<<<<<<< Updated upstream
             <material:AutoCompleteTextField ItemsSource="{Binding ListOfPersonsNames}" IsVisible="false"
                                             Text="{Binding SingleDebtDetails.PersonOrOrganization.Name}"
                                             AllowClear="True" >
             </material:AutoCompleteTextField>
             <material:TextField Title="Contact"
-=======
-            <material:TextField Title="Contact" IsTextPredictionEnabled="True"
->>>>>>> Stashed changes
                                 Text="{Binding SingleDebtDetails.PersonOrOrganization.PhoneNumber}"
                                 x:Name="PersonNumber"/>
 
             <material:EditorField Title="Note*"
                                   Text="{Binding SingleDebtDetails.Notes}">
-                
+
             </material:EditorField>
 
             <Grid>
@@ -131,18 +116,18 @@
 
                     </Switch>
                 </HorizontalStackLayout>
-                
+
                 <material:DatePickerField Grid.Column="1" Title="Deadline" MinimumDate="01/01/2022"
                                           IsVisible="{Binding IsToggled, Source={x:Reference DeadlineSwitch}}"
                                           Date="{Binding SingleDebtDetails.Deadline, StringFormat='{0:MMMM dd, yyyy}'}"
-                                          TextColor="{AppThemeBinding Dark=white, Light=black}" TitleColor="{AppThemeBinding Light=black, Dark=white}"/>
+                                          TextColor="{AppThemeBinding Dark=white, Light=black}" TitleColor="{AppThemeBinding Light=black}"/>
             </Grid>
 
             <Button Text="Save" WidthRequest="80" HorizontalOptions="Center" 
                     input:FormView.IsSubmitButton="True"
                     />
             <VerticalStackLayout>
-                
+
             </VerticalStackLayout>
         </input:FormView>
     </VerticalStackLayout>

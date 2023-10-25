@@ -34,7 +34,7 @@
             </VerticalStackLayout.Resources>
             <Label Text="{Binding PageTitle}" HorizontalOptions="Center" Margin="0,10,0,0" 
                TextDecorations="Underline" FontAttributes="Bold"
-               FontSize="22"/>
+               FontSize="23"/>
 
             <input:FormView Spacing="5" Margin="8,0"
                     SubmitCommand="{Binding UpSertExpenditureCommand}">
@@ -56,8 +56,8 @@
                 </input:FormView.Resources>
 
                 <VerticalStackLayout  toolkit:DockLayout.DockPosition="Top" >
-                    <Label HorizontalOptions="End" Margin="8,8" HorizontalTextAlignment="End"
-                           FontAttributes="Italic" FontSize="10">
+                    <Label HorizontalOptions="End" Margin="8,8" 
+                           FontAttributes="Italic" FontSize="13">
                         <Label.Text>
                             <MultiBinding StringFormat="{} Resulting Balance : {0:n2} {1}">
                                 <Binding Path="ResultingBalance"/>
@@ -65,8 +65,8 @@
                             </MultiBinding>
                         </Label.Text>
                     </Label>
-                    <Label HorizontalOptions="End" Margin="8,2" HorizontalTextAlignment="End" 
-                           FontAttributes="Italic" FontSize="10">
+                    <Label HorizontalOptions="End" Margin="8,2" 
+                           FontAttributes="Italic" FontSize="13">
                         <Label.Text>
                             <MultiBinding StringFormat="{} Flow Out's Amount : {0:n2} {1}">
                                 <Binding Path="SingleExpenditureDetails.AmountSpent"/>
@@ -90,16 +90,16 @@
                                     x:Name="UnitPrice" Focused="UnitPrice_Focused"
                                     TextChanged="UnitPrice_TextChanged"
                                     Text="{Binding SingleExpenditureDetails.UnitPrice}" Keyboard="Numeric" >
-                       
+
                 </material:TextField>
-               
+
 
                 <material:PickerField Title="Category" ItemsSource="{Binding ExpenditureCategory}"
                                       TextColor="{AppThemeBinding Light=black, Dark=white}"
-                                      SelectedItem="{Binding SingleExpenditureDetails.Category}"/> 
-                
+                                      SelectedItem="{Binding SingleExpenditureDetails.Category}"/>
+
                 <material:EditorField Title="Reason" Text="{Binding SingleExpenditureDetails.Reason}" 
-                                      IsTextPredictionEnabled="True" TitleColor="{AppThemeBinding Light=black, Dark=white}"
+                                      IsTextPredictionEnabled="True" TitleColor="{AppThemeBinding Light=black}"
                                       TextColor="{AppThemeBinding Light=black, Dark=white}">
                     <material:EditorField.Validations>
                         <validation:RequiredValidation/>
@@ -109,22 +109,18 @@
                 <HorizontalStackLayout HorizontalOptions="Center" Margin="0,15,0,0" Spacing="15">
                     <Button input:FormView.IsSubmitButton="True"
                                             Text="Save Flow Out" BackgroundColor="{StaticResource SaveBtnColor}" TextColor="White" 
-<<<<<<< Updated upstream
-                                            FontSize="19" FontAttributes="Bold"/>
-=======
-                                            FontSize="12" FontAttributes="Bold"/>
->>>>>>> Stashed changes
+                                            FontSize="20" FontAttributes="Bold"/>
 
                     <Button Command="{Binding CancelBtnCommand}"
                                             Text="Cancel" BackgroundColor="{StaticResource NegativeActionBtnDark}" TextColor="White"
-                                            FontSize="12" />
+                                            FontSize="16" />
 
                 </HorizontalStackLayout>
 
 
             </input:FormView>
-        
+
         </VerticalStackLayout>
-  
+
     </Border>
 </mct:Popup>
