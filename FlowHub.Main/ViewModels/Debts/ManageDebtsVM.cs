@@ -185,23 +185,23 @@ public partial class ManageDebtsVM : ObservableObject
 
     
     [RelayCommand]
-    async Task SearchCommand(string query)
+    void SearchBar(string query)
     {
         
         try
         {
             var ListOfDebts = debtRepo.OfflineDebtList
-                .Where(
-                        d=> d.PersonOrOrganization?.Name
-                        .Contains(query, StringComparison.OrdinalIgnoreCase) ?? false)
-                .ToList();
+            .Where(d =>
+                d.PersonOrOrganization?.Name?.Contains(query, StringComparison.OrdinalIgnoreCase) ?? false
+            )
+            .ToList();
 
             RedoCountsAndAmountsCalculation(ListOfDebts);
             
         }
-        catch (TaskCanceledException ex)
+        catch (Exception ex)
         {
-            Debug.WriteLine(ex.ToString());
+            Debug.WriteLine($"FLOW HOLD EXCEPTION : {ex.Message}");
         }
     }
 

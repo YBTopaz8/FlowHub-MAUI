@@ -21,6 +21,6 @@ public partial class ManageBorrowingsPageM : UraniumUI.Pages.UraniumContentPage
 
         SearchBar searchBar = (SearchBar)sender;
         //DebtsSearchBar.ItemsSource = DataService.GetSearchResults(searchBar.Text);
-        viewModel.SearchCommandCommand.Execute(searchBar.Text);
+        viewModel.SearchBarCommand.Execute(searchBar.Text);
     }
 }

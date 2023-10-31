@@ -28,7 +28,7 @@ public partial class ManageLendingsPageM : UraniumUI.Pages.UraniumContentPage
             SearchBar searchBar = (SearchBar)sender;
             if (searchBar.Text.Length >= 2)
             {
-                viewModel.SearchCommandCommand.Execute(searchBar.Text);
+                viewModel.SearchBarCommand.Execute(searchBar.Text);
                 PendingLentExpander.IsExpanded = true;
                 CompletedLentExpander.IsExpanded = true;
             }
