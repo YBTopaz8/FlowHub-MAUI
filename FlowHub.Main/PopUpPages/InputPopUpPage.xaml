@@ -44,10 +44,10 @@
             </material:TextField>
 
             <HorizontalStackLayout HorizontalOptions="EndAndExpand" Spacing="5">
-                <Button Text="OK"
+                <Button Text="OK" BackgroundColor="DarkSlateBlue"
                         Clicked="OnOKButtonClicked"/>
                 <Button Text="Cancel"
-                        Clicked="OnCancelButtonClicked"/>
+                        Clicked="OnCancelButtonClicked" BackgroundColor="Red"/>
                 <Button Text="Delete" x:Name="DeleteButton" IsVisible="false"
                         Clicked="OnDeleteButton_Clicked"/>
             </HorizontalStackLayout>

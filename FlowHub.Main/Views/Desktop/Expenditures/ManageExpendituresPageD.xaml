@@ -46,7 +46,8 @@
             </Label>
         </HorizontalStackLayout>
 
-        <VerticalStackLayout HorizontalOptions="Start" toolkit:DockLayout.DockPosition="Right">
+        <VerticalStackLayout HorizontalOptions="Start" toolkit:DockLayout.DockPosition="Right" 
+                             BackgroundColor="Transparent">
             <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" HeightRequest="60" 
                     BackgroundColor="Transparent"
                     Command="{Binding ShowAddExpenditurePopUpCommand}"
@@ -64,9 +65,10 @@
                          Command="{Binding GoToSpecificStatsPageCommand}"/>
         </VerticalStackLayout>
 
-        <dg:DataGrid ItemsSource="{Binding ExpendituresList}" BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}"
-                     WidthRequest="1000" HeaderBackground="DarkSlateBlue"
-                     RowHeight="50" HeaderHeight="40"
+   
+        <dg:DataGrid ItemsSource="{Binding ExpendituresList}" 
+                     WidthRequest="1000" HeaderBackground="{AppThemeBinding Light=#CBCBCB,Dark=#201F24}"
+                     ActiveRowColor="{AppThemeBinding Light=#CBCBCB}"
                      BorderColor="{AppThemeBinding Dark=transparent, Light=DarkSlateBlue}" HorizontalOptions="CenterAndExpand" 
                      x:Name="ExpDG">
             <dg:DataGrid.NoDataView>
@@ -81,12 +83,12 @@
             </dg:DataGrid.NoDataView> <!--Equivalent of emptyview-->
             
             <dg:DataGrid.Columns>
+                
                 <dg:DataGridColumn Title="Date Spent" PropertyName="DateSpent" SortingEnabled="True">
                     <dg:DataGridColumn.CellTemplate>
                         <DataTemplate x:DataType="models:ExpendituresModel">
-                            <Label Text="{Binding ., StringFormat='{0:ddd, MMMM dd, yyyy}'}" 
-                                   HorizontalTextAlignment="Center" VerticalTextAlignment="Center" 
-                                   BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}"/>
+                            <Label Text="{Binding ., StringFormat='{0:ddd, MMMM dd, yyyy}'}"
+                                   HorizontalOptions="Center"/>
                         </DataTemplate>
                     </dg:DataGridColumn.CellTemplate>
                 </dg:DataGridColumn>
@@ -94,9 +96,10 @@
                 <dg:DataGridColumn Title="Description" PropertyName="Reason" Width="300">
                     <dg:DataGridColumn.CellTemplate>
                         <DataTemplate x:DataType="models:ExpendituresModel">
-                            <Label Text="{Binding .}"  BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}"
+                            <Label Text="{Binding .}"  
                                     VerticalTextAlignment="Center" HorizontalTextAlignment="Center" 
-                                   HorizontalOptions="FillAndExpand"/>
+                                   HorizontalOptions="FillAndExpand"
+                                   LineBreakMode="WordWrap" />
                         </DataTemplate>
                     </dg:DataGridColumn.CellTemplate>
                 </dg:DataGridColumn>
@@ -104,7 +107,7 @@
                 <dg:DataGridColumn Title="Category" PropertyName="Category">
                     <dg:DataGridColumn.CellTemplate>
                         <DataTemplate x:DataType="models:ExpendituresModel">
-                            <Label Text="{Binding .}" BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}"
+                            <Label Text="{Binding .}" 
                                     VerticalTextAlignment="Center" HorizontalTextAlignment="Center" HorizontalOptions="FillAndExpand"/>
                         </DataTemplate>
                     </dg:DataGridColumn.CellTemplate>
@@ -113,7 +116,7 @@
                 <dg:DataGridColumn Title="Amount Spent" SortingEnabled="False">
                     <dg:DataGridColumn.CellTemplate>
                         <DataTemplate x:DataType="models:ExpendituresModel">
-                            <Label BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}"
+                            <Label
                                     VerticalTextAlignment="Center" HorizontalTextAlignment="Center" HorizontalOptions="FillAndExpand">
                                 <Label.Text>
                                     <MultiBinding StringFormat="{} {0:n2} {1}">
@@ -130,16 +133,18 @@
                     <dg:DataGridColumn.CellTemplate>
                         <DataTemplate x:DataType="models:ExpendituresModel">
                             <ContentView HorizontalOptions="Fill" 
-                                         BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}">
+                                         >
                                 <HorizontalStackLayout  HorizontalOptions="CenterAndExpand">
-                                    <ImageButton Source="{AppThemeBinding Light=edit_l.png, Dark=edit_d.png}" WidthRequest="50"
+                                    <ImageButton Source="{AppThemeBinding Light=edit_l.png, Dark=edit_d.png}" WidthRequest="50" HeightRequest="45"
                                                      Command="{Binding Source={x:Reference page}, 
                                                 Path=BindingContext.ShowEditExpenditurePopUpCommand}"  
-                                                       CommandParameter="{Binding .}" />
-                                    <ImageButton Source="{AppThemeBinding Light=delete_l.png, Dark=delete_d.png}" WidthRequest="50" 
+                                                       CommandParameter="{Binding .}"
+                                                 ToolTipProperties.Text="Edit Flow Out"/>
+                                    <ImageButton Source="{AppThemeBinding Light=delete_l.png, Dark=delete_d.png}" WidthRequest="50" HeightRequest="45"
                                                      Command="{Binding Source={x:Reference page}, 
                                                 Path=BindingContext.DeleteExpenditureBtnCommand}"  
-                                                       CommandParameter="{Binding .}"  />
+                                                       CommandParameter="{Binding .}"  
+                                                 ToolTipProperties.Text="Delete Flow Out"/>
                                 </HorizontalStackLayout>
                             </ContentView>
                         </DataTemplate>

@@ -31,7 +31,7 @@ public partial class UserSettingsPageD : ContentPage
     {
         if (UserDetailsView.IsVisible)
         {
-            viewModel.IsNotInEditingMode = false;
+            //viewModel.IsNotInEditingMode = false;
         }
     }
 }

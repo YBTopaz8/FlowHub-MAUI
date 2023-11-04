@@ -7,11 +7,13 @@ public partial class ManageDebtsVM : ObservableObject
 {
     private readonly IDebtRepository debtRepo;
     private readonly IUsersRepository usersRepo;
+    private readonly UpSertDebtVM upSertDebtVM;
 
-    public ManageDebtsVM(IDebtRepository debtRepository, IUsersRepository usersRepository)
+    public ManageDebtsVM(IDebtRepository debtRepository, IUsersRepository usersRepository, UpSertDebtVM upSertDebtViewModel)
     {
         debtRepo = debtRepository;
         usersRepo = usersRepository;
+        upSertDebtVM = upSertDebtViewModel;
         debtRepo.OfflineDebtListChanged += HandleDebtsListUpdated;
     }
     //[ObservableProperty]
@@ -101,7 +103,7 @@ public partial class ManageDebtsVM : ObservableObject
                 {
                   Amount = 0,
                   PersonOrOrganization = new PersonOrOrganizationModel(),
-                  Currency = usersRepo.OfflineUser.UserCurrency
+                  Currency = UserCurrency
                 } 
             },
             {"PageTitle", "Add Debt" }
@@ -129,9 +131,11 @@ public partial class ManageDebtsVM : ObservableObject
     public async Task ViewDebtSheet(DebtModel debt)
     {
         SingleDebtDetails = debt;
+#if ANDROID
         debtBS = new ViewDebtBottomSheet(this);
-        await Drawer.Open(debtBS);
-        
+        await Drawer.Open(debtBS); 
+#endif
+
 
     }
 
@@ -156,15 +160,19 @@ public partial class ManageDebtsVM : ObservableObject
     {
         
         BorrowedCompletedList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
-                    .Where(x => x.DebtType == DebtType.Borrowed && x.IsPaidCompletely));
+            .Where(x => x.DebtType == DebtType.Borrowed && x.IsPaidCompletely)
+            .OrderBy(x => x.AddedDateTime));
 
         LentCompletedList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
-            .Where(x => x.DebtType == DebtType.Lent && x.IsPaidCompletely));
+            .Where(x => x.DebtType == DebtType.Lent && x.IsPaidCompletely)
+            .OrderBy(x => x.AddedDateTime));
 
         BorrowedPendingList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
-            .Where(x => x.DebtType == DebtType.Borrowed && !x.IsPaidCompletely));
+            .Where(x => x.DebtType == DebtType.Borrowed && !x.IsPaidCompletely)
+            .OrderBy(x => x.AddedDateTime));
         LentPendingList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
-            .Where(x => x.DebtType == DebtType.Lent && !x.IsPaidCompletely));
+            .Where(x => x.DebtType == DebtType.Lent && !x.IsPaidCompletely)
+            .OrderBy(x => x.AddedDateTime));
 
         TotalPendingBorrowCount = BorrowedPendingList.Count;
         TotalCompletedBorrowCount = BorrowedCompletedList.Count;
@@ -203,6 +211,13 @@ public partial class ManageDebtsVM : ObservableObject
         {
             Debug.WriteLine($"FLOW HOLD EXCEPTION : {ex.Message}");
         }
+    }
+
+    [RelayCommand]
+    void UpSertDebt()
+    {
+        
+
     }
 
     [RelayCommand]

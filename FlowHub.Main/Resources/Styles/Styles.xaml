@@ -18,7 +18,7 @@
     </Style>
 
     <Style TargetType="Border">
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=white}"/>
         <Setter Property="Stroke" Value="{StaticResource Primary}" />
         <Setter Property="StrokeShape" Value="RoundRectangle 10"/>
         <Setter Property="StrokeThickness" Value="2"/>
@@ -26,7 +26,7 @@
 
     
     <Style TargetType="VerticalStackLayout">
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}"/>        
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=white, Dark={StaticResource BackGroundDark}}"/>        
     </Style>
     <Style TargetType="AbsoluteLayout">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}"/>
@@ -408,7 +408,7 @@
         
     </Style>
     <Style TargetType="material:DataGrid">
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource DataGridColorDark}}"/>
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=white, Dark={StaticResource DataGridColorDark}}"/>
     </Style>
 
     <Style TargetType="material:CheckBox">

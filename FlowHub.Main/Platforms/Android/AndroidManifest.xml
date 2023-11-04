@@ -13,5 +13,5 @@
 			<data android:scheme="tel" />
 		</intent>
 	</queries>
-	<uses-sdk android:minSdkVersion="28" />
+	<uses-sdk android:minSdkVersion="31" android:targetSdkVersion="33" />
 </manifest>

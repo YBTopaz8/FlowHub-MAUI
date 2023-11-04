@@ -93,8 +93,8 @@ public partial class SingleMonthStatsPageVM : ObservableObject
             (point) => $"{point.Model.Reason}",
             Mapping = (exp, point) =>
             {
-                point.PrimaryValue = (double)exp.AmountSpent;
-                point.SecondaryValue = point.Context.Entity.EntityIndex;
+                point.PrimaryValue= (double)exp.AmountSpent;
+                point.SecondaryValue = point.Index;
                 point.TertiaryValue = ListOfExpenditures.IndexOf(exp);
             },
             Stroke = new SolidColorPaint(SKColors.DarkSlateBlue) { StrokeThickness = 4 },

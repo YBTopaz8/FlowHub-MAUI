@@ -129,9 +129,16 @@ public class DebtRepository : IDebtRepository
 
     public async Task SynchronizeDebtsAsync()
     {
+        await GetAllDebtAsync();
+        if (!Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
+        {
+            IsBatchUpdate = false;
+            OfflineDebtListChanged?.Invoke();
+            IsSyncing = false;
+            return;
+        }
         try
         {
-            await GetAllDebtAsync();
             await LoadOnlineDB();
             if (usersRepo.OnlineUser is null)
             {
@@ -187,7 +194,7 @@ public class DebtRepository : IDebtRepository
                 }
             }
 
-            
+
         }
         catch (Exception ex)
         {
@@ -200,7 +207,7 @@ public class DebtRepository : IDebtRepository
             IsSyncing = false;
             await usersRepo.UpdateUserOnlineGetSetLatestValues(usersRepo.OnlineUser);
 
-        }
+        } 
     }
     public async Task<bool> AddDebtAsync(DebtModel debt)
     {

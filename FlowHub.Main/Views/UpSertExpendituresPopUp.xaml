@@ -17,14 +17,15 @@
              x:Name="page">
 
     <Border Margin="13,10"        
-        Stroke="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=White}"
-        StrokeThickness="0" StrokeShape="RoundRectangle 12">
+        Stroke="{AppThemeBinding Dark=#0E131A, Light=#CBCBCB}"
+        StrokeThickness="0" StrokeShape="RoundRectangle 12"
+            BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#CBCBCB}">
         <Border.Resources>
             <ResourceDictionary>
                 <utilities:EnumConverter x:Key="EnumConverter"/>
             </ResourceDictionary>
         </Border.Resources>
-        <VerticalStackLayout>
+        <VerticalStackLayout BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#CBCBCB}">
             <VerticalStackLayout.Resources>
                 <ResourceDictionary>
                     <Style TargetType="Label">
@@ -55,7 +56,8 @@
                     </ResourceDictionary>
                 </input:FormView.Resources>
 
-                <VerticalStackLayout  toolkit:DockLayout.DockPosition="Top" >
+                <VerticalStackLayout  toolkit:DockLayout.DockPosition="Top"
+                                      BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#CBCBCB}">
                     <Label HorizontalOptions="End" Margin="8,8" 
                            FontAttributes="Italic" FontSize="13">
                         <Label.Text>
@@ -77,8 +79,8 @@
                 </VerticalStackLayout>
 
                 <material:DatePickerField MinimumDate="01/01/2022" Title="Date Spent" 
-                                            MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
-                                            Date="{Binding SingleExpenditureDetails.DateSpent}"
+                                        MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
+                                        Date="{Binding SingleExpenditureDetails.DateSpent}"
                                           TextColor="{AppThemeBinding Light=black, Dark=white}">
 
                     <material:DatePickerField.Validations>
@@ -89,6 +91,7 @@
                 <material:TextField Grid.Column="0" Title="Price"
                                     x:Name="UnitPrice" Focused="UnitPrice_Focused"
                                     TextChanged="UnitPrice_TextChanged"
+                                    AccentColor="#CBCBCB"
                                     Text="{Binding SingleExpenditureDetails.UnitPrice}" Keyboard="Numeric" >
 
                 </material:TextField>

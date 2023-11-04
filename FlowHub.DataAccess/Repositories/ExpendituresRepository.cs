@@ -131,9 +131,16 @@ public class ExpendituresRepository : IExpendituresRepository
 
     public async Task SynchronizeExpendituresAsync()
     {
+        await GetAllExpendituresAsync();
+        if (!Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
+        {
+            IsSyncing = false;
+            IsBatchUpdate = false;
+            OfflineExpendituresListChanged?.Invoke();
+            return;
+        }
         try
         {
-            await GetAllExpendituresAsync();
             await LoadOnlineDB();
             if (usersRepo.OnlineUser is null)
             {
@@ -189,6 +196,8 @@ public class ExpendituresRepository : IExpendituresRepository
             OfflineExpendituresListChanged?.Invoke();
 
         }
+
+        
     }
     /*--------- SECTION FOR OFFLINE CRUD OPERATIONS----------*/
     public async Task<bool> AddExpenditureAsync(ExpendituresModel expenditure)

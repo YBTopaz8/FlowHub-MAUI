@@ -14,4 +14,13 @@ public partial class ManageIncomesD : ContentPage
     {
         base.OnAppearing();
     }
+    private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        PopUpCloseResult result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new InputPopUpPage(InputType.Numeric, new List<string>() { "Amount" }, "Enter New Pocket Money"));
+        if (result.Result is PopupResult.OK)
+        {
+            double NewAmount = (double)result.Data;
+            await viewModel.ResetUserPocketMoney(NewAmount);
+        }
+    }
 }

@@ -199,7 +199,7 @@ public partial class StatisticsPageVM : ObservableObject
             {
                 Values = values,
                 TooltipLabelFormatter = (chartpoint) =>
-                $"{AllDataAvailableMonths[chartpoint.Context.Entity.EntityIndex]} : {chartpoint.PrimaryValue:n2} {Currency}",
+                $"{AllDataAvailableMonths[chartpoint.Index]} : {chartpoint.PrimaryValue:n2} {Currency}",
             }
         };
         XAxes = new Axis[]
@@ -253,7 +253,7 @@ public partial class StatisticsPageVM : ObservableObject
             return;
         }
 
-        int currentIndex = point.Context.Entity.EntityIndex;
+        int currentIndex = point.Index;
         if (currentIndex == lastIndex)
         {
             return;
@@ -491,7 +491,7 @@ public partial class StatisticsPageVM : ObservableObject
             Mapping = (testt, point) =>
             {
                 point.PrimaryValue = (double)testt.AmountSpent;
-                point.SecondaryValue = point.Context.Entity.EntityIndex;
+                point.SecondaryValue = point.Index;
             },
         };
 
@@ -505,7 +505,7 @@ public partial class StatisticsPageVM : ObservableObject
             Mapping = (testt, point) =>
             {
                 point.PrimaryValue = (double)testt.AmountSpent;
-                point.SecondaryValue = point.Context.Entity.EntityIndex;
+                point.SecondaryValue = point.Index;
             },
             Stroke = new SolidColorPaint(SKColors.DarkSlateBlue) { StrokeThickness = 4 },
 

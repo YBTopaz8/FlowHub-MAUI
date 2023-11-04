@@ -46,7 +46,7 @@
     <Color x:Key="SecondaryContainer">#E8DEF8</Color>
     <Color x:Key="SecondaryContainerDark">#4A4458</Color>
     <Color x:Key="Surface">#FFFBFE</Color>
-    <Color x:Key="SurfaceDark">#1C1B1F</Color>
+    <Color x:Key="SurfaceDark">#201F24</Color>
 
     <!-- Color Paletter 'Power' from Twitter -->
 

@@ -15,7 +15,7 @@
 
         <VerticalStackLayout Spacing="10">
 
-            <VerticalStackLayout BackgroundColor="{AppThemeBinding Dark=#201F24, Light=white}" >
+            <VerticalStackLayout BackgroundColor="{AppThemeBinding Dark=#201F24, Light=#CBCBCB}" >
 
                 <Image Source="{AppThemeBinding Dark=user_icon_d.png, Light=user_icon_l.png}" Grid.Row="0" HorizontalOptions="Center" HeightRequest="65"/>
                 

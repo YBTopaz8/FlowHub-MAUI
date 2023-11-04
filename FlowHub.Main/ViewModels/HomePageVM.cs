@@ -58,7 +58,9 @@ public partial class HomePageVM : ObservableObject
     }
     public async Task DisplayInfo()
     {
+        
         await SyncAndNotifyAsync();
+        
 
     }
     public void GetUserData()

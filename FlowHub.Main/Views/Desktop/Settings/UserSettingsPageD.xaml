@@ -11,7 +11,7 @@
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:converters="clr-namespace:FlowHub.Main.Utilities"
              Title="My Profile"
-             
+             BackgroundColor="{AppThemeBinding Dark=#1C1B1F, Light={StaticResource BackGroundLight}}"
              x:Name="Page">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -19,9 +19,10 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <toolkit:DockLayout>
-        <VerticalStackLayout toolkit:DockLayout.DockPosition="Left" Margin="35,35,45,0" Spacing="20">
+        <VerticalStackLayout toolkit:DockLayout.DockPosition="Left" Margin="35,35,45,0" Spacing="20"
+                             BackgroundColor="{AppThemeBinding Dark=transparent}">
             <Button Command="{Binding ThemeTogglerCommand}" Text="Switch To Light" 
-                    BackgroundColor="{AppThemeBinding Dark=white,Light=black}" TextColor="{AppThemeBinding Dark=black, Light=white}"
+                    BackgroundColor="{AppThemeBinding Dark=White,Light=black}" TextColor="{AppThemeBinding Dark=black, Light=white}"
                     ToolTipProperties.Text="Click to Switch to Light Theme">
                 <Button.Triggers>
                     <DataTrigger TargetType="Button" Binding="{Binding IsLightTheme}" Value="true">
@@ -37,7 +38,17 @@
             
         </VerticalStackLayout>
 
-        <VerticalStackLayout Margin="25,20,20,0">        
+        <VerticalStackLayout Margin="25,20,20,0"
+                             BackgroundColor="{AppThemeBinding Light=White,Dark=transparent}">
+            <VerticalStackLayout.Resources>
+                <ResourceDictionary>
+                    <Style TargetType="Label">
+                        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=white}"/>
+                        <Setter Property="TextColor" Value="{AppThemeBinding Light=black}"/>
+                        
+                    </Style>
+                </ResourceDictionary>
+            </VerticalStackLayout.Resources>
             <Image Source="{AppThemeBinding Dark=user_icon_d.png, Light=user_icon_l.png}" HeightRequest="80"/>
             <Label Text="{Binding UserName}" FontSize="38" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
 
@@ -46,7 +57,7 @@
                 <toolkit:DockLayout Margin="10,10" >
                     <Label Text="Finances" FontAttributes="Bold" FontSize="22" />
                     <HorizontalStackLayout Spacing="80" HorizontalOptions="CenterAndExpand">
-                        <VerticalStackLayout HorizontalOptions="Start">
+                        <VerticalStackLayout HorizontalOptions="Start" BackgroundColor="Transparent">
                             <Label FontAttributes="Bold" FontSize="20" >
                                 <Label.Text>
                                     <MultiBinding StringFormat="{}{0:n2} {1}">
@@ -58,7 +69,7 @@
                             <Label Text="Total Flow Out" FontSize="13" HorizontalTextAlignment="Center"/>
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout>
+                        <VerticalStackLayout BackgroundColor="Transparent">
                             <Label FontAttributes="Bold" FontSize="20">
                                 <Label.Text>
                                     <MultiBinding StringFormat="{} {0:n2} {1}">
@@ -70,7 +81,7 @@
                             <Label Text="Total Flow In" FontSize="13" HorizontalTextAlignment="Center"/>
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout>
+                        <VerticalStackLayout BackgroundColor="Transparent">
                             <VerticalStackLayout.GestureRecognizers>
                                 <TapGestureRecognizer NumberOfTapsRequired="2" Command="{Binding DeleteIdsCollectionCommand}"/>
                             </VerticalStackLayout.GestureRecognizers>
@@ -111,24 +122,24 @@
                                            toolkit:DockLayout.DockPosition="Top" x:Name="UserDetailsView" 
                                             IsVisible="{Binding IsNotInEditingMode}">
 
-                        <VerticalStackLayout>
-                            <Label Text="Name" FontSize="13"/>
+                        <VerticalStackLayout BackgroundColor="Transparent">
+                            <Label Text="Name" FontSize="13" HorizontalTextAlignment="Center"/>
                             <Label Text="{Binding UserName}" FontSize="20"/>
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout>
-                            <Label Text="Email" FontSize="13"/>
+                        <VerticalStackLayout BackgroundColor="Transparent">
+                            <Label Text="Email" FontSize="13" HorizontalTextAlignment="Center"/>
                             <Label Text="{Binding UserEmail}" FontSize="20"/>
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout>
-                            <Label Text="Country" FontSize="13"/>
-                            <Label Text="{Binding UserCountry}" FontSize="20"/>
+                        <VerticalStackLayout BackgroundColor="Transparent">
+                            <Label Text="Country" FontSize="13" HorizontalTextAlignment="Center"/>
+                            <Label Text="{Binding UserCountry}" FontSize="20" />
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout>
-                            <Label Text="Currency" FontSize="13"/>
-                            <Label Text="{Binding UserCurrency}" FontSize="20"/>
+                        <VerticalStackLayout BackgroundColor="Transparent">
+                            <Label Text="Currency" FontSize="13" HorizontalTextAlignment="Center"/>
+                            <Label Text="{Binding UserCurrency}" FontSize="20" HorizontalTextAlignment="Center"/>
                         </VerticalStackLayout>
                         
                         <VerticalStackLayout IsVisible="false"> 

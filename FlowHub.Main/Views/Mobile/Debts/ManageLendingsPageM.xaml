@@ -70,7 +70,7 @@
                                   BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
 
                                     </SwipeView.LeftItems>
-                                    <SwipeView.RightItems>
+                                <SwipeView.RightItems>
                                         <SwipeItem 
                                   Command="{Binding Source={x:Reference Page}, Path=BindingContext.GoToEditDebtCommand}"
                                   CommandParameter="{Binding .}"
@@ -102,8 +102,8 @@
                                             <FlexLayout JustifyContent="SpaceBetween" Margin="5,0">
 
                                                 <Label Text="{Binding PersonOrOrganization.PhoneNumber}" FontSize="12"
-                                                  TextColor="{AppThemeBinding Dark={StaticResource Cyan200Accent}, Light=black}"
-                                                 Opacity="{AppThemeBinding Light=0.6}"/>
+                                                    TextColor="{AppThemeBinding Dark={StaticResource Cyan200Accent}, Light=black}"
+                                                    Opacity="{AppThemeBinding Light=0.6}"/>
                                                 <Label Text="{Binding DisplayText}" FontSize="12"
                                                     TextColor="{AppThemeBinding Dark={StaticResource WildBlueYonder}, Light={StaticResource Primary}}"/>
                                             </FlexLayout>
@@ -213,9 +213,6 @@
                     </Label>
                 </VerticalStackLayout>
             </uranium:ExpanderView>
-
-           
-
 
         </toolkit:DockLayout>
     </AbsoluteLayout>

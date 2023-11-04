@@ -120,6 +120,14 @@ public class IncomeRepository : IIncomeRepository
     bool IsSyncing;
     public async Task SynchronizeIncomesAsync()
     {
+        await GetAllIncomesAsync();
+        if (!Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
+        {
+            IsSyncing = false;
+            IsBatchUpdate = false;
+            OfflineIncomesListChanged?.Invoke();
+            return;
+        }
         try
         {
             await GetAllIncomesAsync();

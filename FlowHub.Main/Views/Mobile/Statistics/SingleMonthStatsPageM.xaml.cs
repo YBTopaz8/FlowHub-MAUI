@@ -29,13 +29,13 @@ public partial class SingleMonthStatsPageM : ContentPage
         {
             obj = point;
             SelectedTitle.Text = "Selected Flow Out Details";
-            var SelectedExpIndex = Convert.ToInt32(point.TertiaryValue);
+            var SelectedExpIndex = Convert.ToInt32(point.Coordinate.TertiaryValue);
             viewModel.ChangeSelectedExp(SelectedExpIndex);
         }
     }
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
-        Debug.WriteLine($"Double Tapped {obj.PrimaryValue} {obj.SecondaryValue}");
+        Debug.WriteLine($"Double Tapped {obj.Coordinate.PrimaryValue} {obj.Coordinate.SecondaryValue}");
     }
 }

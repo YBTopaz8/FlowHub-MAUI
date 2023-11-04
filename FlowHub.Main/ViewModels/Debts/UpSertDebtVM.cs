@@ -179,16 +179,25 @@ public partial class UpSertDebtVM : ObservableObject
             {
                 calendarProfileID = await calendarStoreRepo.CreateCalendar("FlowHub");
             }
-            
+
+            var ss = await calendarStoreRepo.GetEvents();
            
             DateTimeOffset debtDateStart = DateTimeOffset.Now;
             DateTimeOffset debtDateEnd = DateTimeOffset.Now.AddMinutes(30);
 
-            var NewCalendarEvent = new CalendarEvent(Guid.NewGuid().ToString(), calendarProfileID,
-                $"FlowHold Due Reminder ! {Environment.NewLine}" +
-                   $"{(SingleDebtDetails.DebtType == DebtType.Lent ? $"{SingleDebtDetails.PersonOrOrganization.Name} Owes You" : $"You Owe {SingleDebtDetails.PersonOrOrganization.Name}")} {SingleDebtDetails.Amount} {SingleDebtDetails.Currency}");
+            var NewCalendarEvent = new CalendarEvent("a,4,2", "b,9,1f","test"
+                );
+            //var NewCalendarEvent = new CalendarEvent("a,4,2", "b,9,1f",
+            //    $"FlowHold Due Reminder ! {Environment.NewLine}" +
+            //       $"{(SingleDebtDetails.DebtType == DebtType.Lent ? $"{SingleDebtDetails.PersonOrOrganization.Name} Owes You" : $"You Owe {SingleDebtDetails.PersonOrOrganization.Name}")} {SingleDebtDetails.Amount} {SingleDebtDetails.Currency}"
+            //    );
 
-            await calendarStoreRepo.CreateEvent(NewCalendarEvent);
+            var eventID= await calendarStoreRepo.CreateAllDayEvent("b,9,1f", "testss", "testing",
+                "home", DateTimeOffset.Now, DateTimeOffset.Now.AddHours(5));
+            //await calendarStoreRepo.CreateEvent(NewCalendarEvent);
+
+            //windows goes b,9,1f = 8brunel
+
             //addToCalendarService.CreateCalendarEvent(
             //title: $"FlowHold Due Reminder ! {Environment.NewLine}" +
             //       $"{(SingleDebtDetails.DebtType == DebtType.Lent ? $"{SingleDebtDetails.PersonOrOrganization.Name} Owes You" : $"You Owe {SingleDebtDetails.PersonOrOrganization.Name}")} {SingleDebtDetails.Amount} {SingleDebtDetails.Currency}",
@@ -199,11 +208,13 @@ public partial class UpSertDebtVM : ObservableObject
             //endDate: debtDateEnd,
             //calendarName: SelectedCalendarItem);
 
+            Debug.WriteLine("Event ID " + eventID);
         }
         const string toastNotifMessage = "Flow Hold Added";
         var toast = Toast.Make(toastNotifMessage, duration, fontSize);
         await toast.Show(cts.Token);
-        await ManageExpendituresNavs.ReturnOnce();
+
+       // await ManageExpendituresNavs.ReturnOnce();
         
     }
 
@@ -219,7 +230,7 @@ public partial class UpSertDebtVM : ObservableObject
         const string toastNotifMessage = "Flow Hold Updated";
         var toast = Toast.Make(toastNotifMessage, duration, fontSize);
         await toast.Show(cts.Token);
-        await ManageExpendituresNavs.ReturnOnce();
+        //await ManageExpendituresNavs.ReturnOnce();
     }
 
     [RelayCommand]
