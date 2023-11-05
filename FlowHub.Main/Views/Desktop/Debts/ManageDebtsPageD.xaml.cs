@@ -88,11 +88,7 @@ public partial class ManageDebtsPageD : UraniumContentPage
         return memoryStream;
     }
 
-    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
-    {
-        Debug.WriteLine("Tapped");
-    }
-
+   
     private void AmountTextField_Focused(object sender, FocusEventArgs e)
     {
         if (AmountTextField.Text == "1")
@@ -103,6 +99,7 @@ public partial class ManageDebtsPageD : UraniumContentPage
 
     private void AddNewFlowHoldBtn_Clicked(object sender, EventArgs e)
     {
+
         UpSertVM.SingleDebtDetails = new DebtModel()
         {
             Amount = 1,

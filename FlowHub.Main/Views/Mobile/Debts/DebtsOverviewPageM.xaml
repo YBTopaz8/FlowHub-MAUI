@@ -6,6 +6,8 @@
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"  
              xmlns:materialAttach="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material" 
+             xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"  
+             xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Debts"
              x:DataType="viewModels:ManageDebtsVM"
@@ -127,9 +129,10 @@
             
         </VerticalStackLayout>
 
+        
         <!-- Your FAB -->
         <Button             
-            Command="{Binding GoToAddDebtCommand}"
+            Clicked="AddNewFlowHoldBtn_Clicked"
             WidthRequest="55" HeightRequest="55"
             CornerRadius="26" Padding="0"
             BackgroundColor="DarkSlateBlue" BorderColor="DarkSlateBlue"
@@ -144,5 +147,108 @@
 
     </AbsoluteLayout>
 
-    
+    <uranium:UraniumContentPage.Attachments>
+
+        <materialAttach:BottomSheetView x:Name="bottomSheet" CloseOnTapOutside="False"
+                                        DisablePageWhenOpened="true" BorderColor="Blue"
+                                        x:DataType="viewModels:UpSertDebtVM"
+                                        >
+
+            <input:FormView Spacing="5" SubmitCommand="{Binding UpSertDebtCommand}" Margin="5">
+                <HorizontalStackLayout Spacing="7" HorizontalOptions="Center">
+                    <material:RadioButton Text="Lend" IsChecked="{Binding IsLent}" x:Name="IsLentRBtn"                                      
+                          CircleColor="{AppThemeBinding Light=darkslateblue, Dark=darkslateblue}" Color="DarkSlateBlue"
+                          TextColor="{AppThemeBinding Light=black, Dark=white}"/>
+
+                    <material:RadioButton Text="Borrow" x:Name="IsBorrowedRBtn"
+                          IsChecked="{Binding IsBorrow}"
+                          CircleColor="{AppThemeBinding Light=darkslateblue, Dark=darkslateblue}" Color="DarkSlateBlue"
+                          TextColor="{AppThemeBinding Light=black, Dark=white}"/>
+                </HorizontalStackLayout>
+
+                <Grid ColumnSpacing="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <material:TextField Grid.Column="0" Title="Amount" x:Name="AmountTextField"
+                        Text="{Binding SingleDebtDetails.Amount}" Focused="AmountTextField_Focused"
+                        Keyboard="Numeric">
+                        <validation:RequiredValidation Message=""/>
+                        <validation:MinValueValidation MinValue="0.1"/>
+                    </material:TextField>
+                    <Label Grid.Column="1" FontSize="18"
+                   FontAttributes="Bold"
+                   VerticalTextAlignment="Center"
+                   Text="{Binding SingleDebtDetails.Currency}"/>
+                </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <material:TextField x:Name="PersonName" Text="{Binding SingleDebtDetails.PersonOrOrganization.Name}">
+                        <validation:RequiredValidation/>
+                        <material:TextField.Triggers>
+                            <DataTrigger TargetType="material:TextField"
+                             Binding="{Binding IsLent}" Value="true">
+                                <Setter Property="Title" Value="Lend To"/>
+                            </DataTrigger>
+                            <DataTrigger TargetType="material:TextField"
+                             Binding="{Binding IsLent}" Value="false">
+                                <Setter Property="Title" Value="Borrow From"/>
+                            </DataTrigger>
+                        </material:TextField.Triggers>
+                    </material:TextField>
+
+                    <ImageButton Grid.Column="1" Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}"/>
+                </Grid>
+                <material:AutoCompleteTextField ItemsSource="{Binding ListOfPersonsNames}" IsVisible="false"
+                                Text="{Binding SingleDebtDetails.PersonOrOrganization.Name}"
+                                AllowClear="True" >
+                </material:AutoCompleteTextField>
+                <material:TextField Title="Contact"
+                    Text="{Binding SingleDebtDetails.PersonOrOrganization.PhoneNumber}"
+                    x:Name="PersonNumber"/>
+
+                <material:EditorField Title="Notes*"
+                      TextColor="{AppThemeBinding Light=black, Dark=white}"
+                      AccentColor="White"
+                      Text="{Binding SingleDebtDetails.Notes}">
+
+                </material:EditorField>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <HorizontalStackLayout Grid.Column="0" Margin="6,0">
+                        <Label Text="Deadline" VerticalTextAlignment="Center"/>
+                        <Switch OnColor="DarkSlateBlue" ThumbColor="{AppThemeBinding Dark=white, Light=gray}"                             
+                        x:Name="DeadlineSwitch"
+                        IsToggled="{Binding HasDeadLine}"/>
+
+
+                    </HorizontalStackLayout>
+
+                    <material:DatePickerField Grid.Column="1" Title="Deadline" MinimumDate="01/01/2022"
+                              IsVisible="{Binding IsToggled, Source={x:Reference DeadlineSwitch}}"
+                              Date="{Binding SingleDebtDetails.Deadline, StringFormat='{0:MMMM dd, yyyy}'}"
+                                              AccentColor="White"
+                              TextColor="{AppThemeBinding Dark=white, Light=black}" TitleColor="{AppThemeBinding Light=black, Dark=white}"/>
+                </Grid>
+
+                <Button Text="Save" WidthRequest="80" HorizontalOptions="Center" 
+                    input:FormView.IsSubmitButton="True"
+                    />
+                <VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </input:FormView>
+        </materialAttach:BottomSheetView>
+    </uranium:UraniumContentPage.Attachments>
 </uranium:UraniumContentPage>

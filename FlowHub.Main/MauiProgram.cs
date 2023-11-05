@@ -20,6 +20,7 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                fonts.AddMaterialIconFonts();
                 fonts.AddFontAwesomeIconFonts();
             })
             .ConfigureEssentials(essentials =>
@@ -31,6 +32,7 @@ public static class MauiProgram
             })
             .UseUraniumUI()
             .UseUraniumUIMaterial()
+            .UseUraniumUIBlurs()
             .UseMauiCommunityToolkit();
 
         builder.ConfigureMauiHandlers(handlers =>

@@ -1,14 +1,17 @@
 namespace FlowHub.Main.Views.Mobile.Debts;
 
-public partial class DebtsOverviewPageM : UraniumUI.Pages.UraniumContentPage
+public partial class DebtsOverviewPageM : UraniumContentPage
 {
     readonly ManageDebtsVM viewModel;
+    readonly UpSertDebtVM UpSertVM;
 
-    public DebtsOverviewPageM(ManageDebtsVM vm)
+    public DebtsOverviewPageM(ManageDebtsVM vm, UpSertDebtVM upSertDebt)
     {
         InitializeComponent();
         viewModel = vm;
+        UpSertVM = upSertDebt;
         BindingContext = vm;
+        bottomSheet.BindingContext = UpSertVM;
     }
     protected override void OnAppearing()
     {
@@ -27,6 +30,26 @@ public partial class DebtsOverviewPageM : UraniumUI.Pages.UraniumContentPage
         await Shell.Current.GoToAsync(nameof(ManageBorrowingsPageM), true);
     }
 
+    private void AmountTextField_Focused(object sender, FocusEventArgs e)
+    {
+        if (AmountTextField.Text == "1")
+        {
+            AmountTextField.Text = "";
+        }
+    }
+    private void AddNewFlowHoldBtn_Clicked(object sender, EventArgs e)
+    {
+        UpSertVM.SingleDebtDetails = new DebtModel()
+        {
+            Amount = 1,
+            PersonOrOrganization = new PersonOrOrganizationModel(),
+            Currency = viewModel.UserCurrency
+        };
+
+        UpSertVM.PageLoaded();
+        bottomSheet.IsPresented = true;
+        
+    }
 
     /*
     private async void SearchBarViewToggler_Clicked(object sender, EventArgs e)

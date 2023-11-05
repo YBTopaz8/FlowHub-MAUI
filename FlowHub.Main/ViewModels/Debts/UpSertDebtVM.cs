@@ -1,8 +1,4 @@
-﻿
-using CommunityToolkit.Maui.Core;
-using Plugin.Maui.AddToCalendar;
-using Plugin.Maui.CalendarStore;
-using System.ComponentModel;
+﻿using Plugin.Maui.CalendarStore;
 
 namespace FlowHub.Main.ViewModels.Debts;
 
@@ -70,6 +66,7 @@ public partial class UpSertDebtVM : ObservableObject
     public void PageLoaded()
     {
         DebtType = SingleDebtDetails.DebtType;
+        
         IsLent = DebtType == DebtType.Lent;
         HasDeadLine = SingleDebtDetails.Deadline is not null;
         ListOfPersons = debtRepo.OfflineDebtList.Select(x => x.PersonOrOrganization )
@@ -191,9 +188,11 @@ public partial class UpSertDebtVM : ObservableObject
             //    $"FlowHold Due Reminder ! {Environment.NewLine}" +
             //       $"{(SingleDebtDetails.DebtType == DebtType.Lent ? $"{SingleDebtDetails.PersonOrOrganization.Name} Owes You" : $"You Owe {SingleDebtDetails.PersonOrOrganization.Name}")} {SingleDebtDetails.Amount} {SingleDebtDetails.Currency}"
             //    );
+            DateTimeOffset randomDate = new DateTimeOffset(2023, 11, 6, 11, 10, 0, TimeSpan.Zero);
+            DateTimeOffset endRandomDate = new DateTimeOffset(2023, 11, 6, 17, 21, 0, TimeSpan.Zero);
 
-            var eventID= await calendarStoreRepo.CreateAllDayEvent("b,9,1f", "testss", "testing",
-                "home", DateTimeOffset.Now, DateTimeOffset.Now.AddHours(5));
+            var eventID= await calendarStoreRepo.CreateEvent("2", "test Yvan"+DateTime.Now.ToString("dddd, dd MMMM yyyy"), "testing",
+                "home", randomDate, endRandomDate);
             //await calendarStoreRepo.CreateEvent(NewCalendarEvent);
 
             //windows goes b,9,1f = 8brunel

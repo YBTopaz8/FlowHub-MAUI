@@ -6,6 +6,7 @@
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material" 
              xmlns:materialAttach="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material" 
+             xmlns:materialIcons="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
              xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"  
              xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
              xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
@@ -13,10 +14,13 @@
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Debts"
              x:DataType="viewModels:ManageDebtsVM"
+             xmlns:converters="clr-namespace:FlowHub.Main.Utilities"
              
              x:Name="Page">
     <ContentPage.Resources>
         <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
+            
             <utilities:DateToDueDateStringConverter x:Key="DueDateConverter"/>          
             
             <LinearGradientBrush x:Key="CardGradientBrush" StartPoint="0.5,0" EndPoint="0.5,1">
@@ -130,6 +134,8 @@
                 </VerticalStackLayout>
             </Border>
         </HorizontalStackLayout>
+        
+
         <Label Text="{Binding TotalLentPendingAmount}" HorizontalTextAlignment="Center"/>
 
 
@@ -204,14 +210,18 @@
     </VerticalStackLayout>
 
     <uranium:UraniumContentPage.Attachments>
-        <materialAttach:BackdropView Title="Filter Flows">
+        <materialAttach:BackdropView Title="Filter Flows" x:Name="backDropView"
+                                     IconImageSource="{FontImageSource FontFamily=MaterialRegular, Glyph={x:Static materialIcons:MaterialRegular.Add_circle}, Color=White}"
+                                     BackgroundColor="Red">
             <VerticalStackLayout>
+                <Label Text="Filter 1"/>
+                <Label Text="Filter 1"/>
                 <Label Text="Filter 1"/>
             </VerticalStackLayout>
         </materialAttach:BackdropView>
 
         <materialAttach:BottomSheetView x:Name="bottomSheet" CloseOnTapOutside="False"
-                                        DisablePageWhenOpened="true"
+                                        DisablePageWhenOpened="true" BorderColor="Blue"
                                         x:DataType="viewModels:UpSertDebtVM">
             
             <input:FormView Spacing="5" SubmitCommand="{Binding UpSertDebtCommand}">

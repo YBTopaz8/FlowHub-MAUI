@@ -46,6 +46,8 @@ global using CommunityToolkit.Maui.Core.Extensions;
 global using System.Collections.ObjectModel;
 global using System.Globalization;
 
+global using UraniumUI.Pages;
+
 namespace FlowHub.Main.Utilities;
 
 public class Usings

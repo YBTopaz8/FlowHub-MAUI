@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<uranium:UraniumContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FlowHub.Main.Views.Mobile.Debts.UpSertDebtPageM"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"  
              xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
@@ -12,7 +12,7 @@
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Debts"
              x:DataType="viewModels:UpSertDebtVM"             
              xmlns:converters="clr-namespace:FlowHub.Main.Utilities"
-             Title="Flow Hold Details">
+             >
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
@@ -40,12 +40,12 @@
 
             <HorizontalStackLayout Spacing="7" HorizontalOptions="Center">
                 <material:RadioButton Text="Lend" IsChecked="{Binding IsLent}" x:Name="IsLentRBtn"                                      
-                                      CircleColor="{AppThemeBinding Light=darkslateblue}"
+                                      CircleColor="{AppThemeBinding Light=darkslateblue, Dark=white}" Color="DarkSlateBlue"
                                       TextColor="{AppThemeBinding Light=black, Dark=white}"/>
 
                 <material:RadioButton Text="Borrow" x:Name="IsBorrowedRBtn"
                                       IsChecked="{Binding IsBorrow}"
-                                      CircleColor="{AppThemeBinding Light=darkslateblue}"
+                                      CircleColor="{AppThemeBinding Light=darkslateblue, Dark=white}" Color="DarkSlateBlue"
                                       TextColor="{AppThemeBinding Light=black, Dark=white}"/>
             </HorizontalStackLayout>
 
@@ -131,4 +131,4 @@
             </VerticalStackLayout>
         </input:FormView>
     </VerticalStackLayout>
-</ContentPage>
+</uranium:UraniumContentPage>

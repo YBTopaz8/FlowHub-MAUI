@@ -1,6 +1,8 @@
+
+
 namespace FlowHub.Main.Views.Mobile.Debts;
 
-public partial class UpSertDebtPageM : ContentPage
+public partial class UpSertDebtPageM : UraniumContentPage
 {
     private readonly UpSertDebtVM viewModel;
 
@@ -14,8 +16,7 @@ public partial class UpSertDebtPageM : ContentPage
     {
         base.OnAppearing();
         viewModel.PageLoaded();
-        IsBorrowedRBtn.IsChecked = !viewModel.IsLent;
-        IsLentRBtn.IsChecked = viewModel.IsLent;
+        
     }
     private async void ImageButton_Clicked(object sender, EventArgs e)
     {

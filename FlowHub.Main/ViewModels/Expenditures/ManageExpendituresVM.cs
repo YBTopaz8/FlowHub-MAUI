@@ -69,6 +69,8 @@ public partial class ManageExpendituresVM : ObservableObject
         //  filterOption = "Filter_Curr_Month";
 
         GetAllExp();
+
+      
     }
 
     bool IsLoaded;
