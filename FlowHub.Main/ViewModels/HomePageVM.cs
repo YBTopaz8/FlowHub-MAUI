@@ -1,9 +1,4 @@
-﻿using CommunityToolkit.Maui.Core.Extensions;
-using CommunityToolkit.Mvvm.Messaging;
-using Plugin.Maui.AddToCalendar;
-using System.Collections.Specialized;
-
-//This is the view model for the HOME PAGE
+﻿//This is the view model for the HOME PAGE
 namespace FlowHub.Main.ViewModels;
 public partial class HomePageVM : ObservableObject
 {

@@ -151,8 +151,11 @@
 
         <materialAttach:BottomSheetView x:Name="bottomSheet" CloseOnTapOutside="False"
                                         DisablePageWhenOpened="true" BorderColor="Blue"
-                                        x:DataType="viewModels:UpSertDebtVM"
+                                        x:DataType="viewModels:UpSertDebtVM"  IsPresented="{Binding IsBottomSheetOpened}"
                                         >
+            <materialAttach:BottomSheetView.Header>
+                <BoxView HeightRequest="0"/>
+            </materialAttach:BottomSheetView.Header>
 
             <input:FormView Spacing="5" SubmitCommand="{Binding UpSertDebtCommand}" Margin="5">
                 <HorizontalStackLayout Spacing="7" HorizontalOptions="Center">
@@ -204,22 +207,22 @@
                         </material:TextField.Triggers>
                     </material:TextField>
 
-                    <ImageButton Grid.Column="1" Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}"/>
+                    <ImageButton Grid.Column="1" Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}"
+                                 Clicked="ImageButton_Clicked"/>
                 </Grid>
-                <material:AutoCompleteTextField ItemsSource="{Binding ListOfPersonsNames}" IsVisible="false"
-                                Text="{Binding SingleDebtDetails.PersonOrOrganization.Name}"
-                                AllowClear="True" >
-                </material:AutoCompleteTextField>
-                <material:TextField Title="Contact"
-                    Text="{Binding SingleDebtDetails.PersonOrOrganization.PhoneNumber}"
-                    x:Name="PersonNumber"/>
 
-                <material:EditorField Title="Notes*"
+                <material:EditorField Title="Notes (required)"
                       TextColor="{AppThemeBinding Light=black, Dark=white}"
                       AccentColor="White"
                       Text="{Binding SingleDebtDetails.Notes}">
-
                 </material:EditorField>
+                
+                <material:TextField Title="Contact"
+                    Text="{Binding SingleDebtDetails.PersonOrOrganization.PhoneNumber}"
+                    x:Name="PersonNumber">
+                    <validation:RequiredValidation/>
+                </material:TextField>
+
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -229,7 +232,7 @@
                     <HorizontalStackLayout Grid.Column="0" Margin="6,0">
                         <Label Text="Deadline" VerticalTextAlignment="Center"/>
                         <Switch OnColor="DarkSlateBlue" ThumbColor="{AppThemeBinding Dark=white, Light=gray}"                             
-                        x:Name="DeadlineSwitch"
+                        x:Name="DeadlineSwitch" PropertyChanged="DeadlineSwitch_PropertyChanged"
                         IsToggled="{Binding HasDeadLine}"/>
 
 
@@ -238,16 +241,14 @@
                     <material:DatePickerField Grid.Column="1" Title="Deadline" MinimumDate="01/01/2022"
                               IsVisible="{Binding IsToggled, Source={x:Reference DeadlineSwitch}}"
                               Date="{Binding SingleDebtDetails.Deadline, StringFormat='{0:MMMM dd, yyyy}'}"
-                                              AccentColor="White"
-                              TextColor="{AppThemeBinding Dark=white, Light=black}" TitleColor="{AppThemeBinding Light=black, Dark=white}"/>
+                              AccentColor="White" x:Name="FlowHoldDeadline"
+                              TextColor="{AppThemeBinding Dark=white, Light=black}" 
+                              TitleColor="{AppThemeBinding Light=black, Dark=white}"/>
                 </Grid>
 
                 <Button Text="Save" WidthRequest="80" HorizontalOptions="Center" 
                     input:FormView.IsSubmitButton="True"
                     />
-                <VerticalStackLayout>
-
-                </VerticalStackLayout>
             </input:FormView>
         </materialAttach:BottomSheetView>
     </uranium:UraniumContentPage.Attachments>

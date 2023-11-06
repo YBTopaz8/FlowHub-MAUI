@@ -24,6 +24,8 @@ public partial class UpSertDebtVM : ObservableObject
     string pageTitle;
     [ObservableProperty]
     bool hasDeadLine;
+    [ObservableProperty]
+    bool isBottomSheetOpened;
 
     bool isLent;
     bool isBorrow;
@@ -167,7 +169,8 @@ public partial class UpSertDebtVM : ObservableObject
                 const string toastNotifMessageError = "Flow Hold Not Added";
                 var toasts = Toast.Make(toastNotifMessageError, duration, fontSize);
                 await toasts.Show(cts.Token);
-                await ManageExpendituresNavs.ReturnOnce();
+                IsBottomSheetOpened = false;
+                return;
 
             }
 
@@ -185,7 +188,7 @@ public partial class UpSertDebtVM : ObservableObject
             DateTimeOffset deadlineOffsetEnd = deadlineOffsetStart.AddMinutes(30);
 
             var eventID= await calendarStoreRepo.CreateEventWithReminder(calendarProfileID, "FlowHold Due Reminder !",
-                $"{(SingleDebtDetails.DebtType == DebtType.Lent ? $"{SingleDebtDetails.PersonOrOrganization.Name} Owes You" : $"You Owe {SingleDebtDetails.PersonOrOrganization.Name}")} {SingleDebtDetails.Amount} {SingleDebtDetails.Currency}",
+                $"{(SingleDebtDetails.DebtType == DebtType.Lent ? $"{SingleDebtDetails.PersonOrOrganization.Name} Owes You" : $"You Owe {SingleDebtDetails.PersonOrOrganization.Name}")} {SingleDebtDetails.Amount} {SingleDebtDetails.Currency} {Environment.NewLine}{SingleDebtDetails.PhoneAddress}",
                 "FlowHub App", deadlineOffsetStart, deadlineOffsetEnd, 30);
             
             Debug.WriteLine("Event ID " + eventID);
@@ -193,8 +196,7 @@ public partial class UpSertDebtVM : ObservableObject
         const string toastNotifMessage = "Flow Hold Added";
         var toast = Toast.Make(toastNotifMessage, duration, fontSize);
         await toast.Show(cts.Token);
-
-       // await ManageExpendituresNavs.ReturnOnce();
+        IsBottomSheetOpened = false;
         
     }
 
@@ -210,7 +212,7 @@ public partial class UpSertDebtVM : ObservableObject
         const string toastNotifMessage = "Flow Hold Updated";
         var toast = Toast.Make(toastNotifMessage, duration, fontSize);
         await toast.Show(cts.Token);
-        //await ManageExpendituresNavs.ReturnOnce();
+        IsBottomSheetOpened = false;
     }
 
     [RelayCommand]

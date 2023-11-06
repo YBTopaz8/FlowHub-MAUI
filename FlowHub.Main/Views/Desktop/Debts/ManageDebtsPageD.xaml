@@ -38,9 +38,8 @@
                    x:Name="DebtsSearchBar"/>
         
         <HorizontalStackLayout HorizontalOptions="Center">
-
             <material:DataGrid ItemsSource="{Binding LentPendingList}" HorizontalOptions="Center" 
-                Margin="20,0,20,0" MinimumWidthRequest="800" 
+                Margin="20,0,20,0" MinimumWidthRequest="800" HeightRequest="300"
                 BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#D8D8D8}"
                 LineSeparatorColor="Black">
                 <material:DataGrid.Resources>
@@ -221,9 +220,9 @@
         </materialAttach:BackdropView>
 
         <materialAttach:BottomSheetView x:Name="bottomSheet" CloseOnTapOutside="False"
-                                        DisablePageWhenOpened="true" BorderColor="Blue"
+                                        DisablePageWhenOpened="true" IsVisible="true"
                                         x:DataType="viewModels:UpSertDebtVM">
-            
+                        
             <input:FormView Spacing="5" SubmitCommand="{Binding UpSertDebtCommand}">
                 <HorizontalStackLayout Spacing="7" HorizontalOptions="Center">
                     <material:RadioButton Text="Lend" IsChecked="{Binding IsLent}" x:Name="IsLentRBtn"                                      

@@ -43,12 +43,49 @@ public partial class DebtsOverviewPageM : UraniumContentPage
         {
             Amount = 1,
             PersonOrOrganization = new PersonOrOrganizationModel(),
-            Currency = viewModel.UserCurrency
+            Currency = viewModel.UserCurrency,
+            
+
         };
 
         UpSertVM.PageLoaded();
         bottomSheet.IsPresented = true;
         
+    }
+
+    private void DeadlineSwitch_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+
+        if(e.PropertyName == "IsToggled")
+        {            
+            FlowHoldDeadline.Date = DateTime.Now;
+        }
+    }
+
+    private async void ImageButton_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            var status = await Permissions.CheckStatusAsync<Permissions.ContactsRead>();
+            if (status != PermissionStatus.Granted)
+            {
+                status = await Permissions.RequestAsync<Permissions.ContactsRead>();
+            }
+
+            var PickedContact = await Contacts.Default.PickContactAsync();
+            if (PickedContact is null)
+            {
+                Debug.WriteLine("Contact not picked");
+            }
+
+            string namePrefix = PickedContact.DisplayName;
+            PersonName.Text = namePrefix;
+            PersonNumber.Text = PickedContact.Phones.FirstOrDefault()?.PhoneNumber;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("Permission denied " + ex.Message);
+        }
     }
 
     /*
