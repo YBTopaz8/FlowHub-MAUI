@@ -138,7 +138,6 @@
 		<PackageReference Include="LiveChartsCore.SkiaSharpView.Maui" Version="2.0.0-rc1.2" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="Plugin.Maui.AddToCalendar" Version="1.0.0" />
-		<PackageReference Include="Plugin.Maui.CalendarStore" Version="1.0.0" />
 		<PackageReference Include="SkiaSharp" Version="2.88.6" />
 		<PackageReference Include="UraniumUI.Blurs" Version="2.5.6" />
 		<PackageReference Include="UraniumUI.Icons.FontAwesome" Version="2.5.6" />
@@ -147,6 +146,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\Plugin.Maui.CalendarStoree\src\Plugin.Maui.CalendarStore\Plugin.Maui.CalendarStore.csproj" />
 	  <ProjectReference Include="..\FlowHub.DataAccess\FlowHub.DataAccess.csproj" />
 	  <ProjectReference Include="..\FlowHub.Models\FlowHub.Models.csproj" />
 	</ItemGroup>

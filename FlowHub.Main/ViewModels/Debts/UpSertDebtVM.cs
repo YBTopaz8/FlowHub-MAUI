@@ -171,42 +171,23 @@ public partial class UpSertDebtVM : ObservableObject
 
             }
 
-            string calendarProfileID = calendarsAccountsProfiles.FirstOrDefault(x => x.Name == "FlowHub")?.Id ?? string.Empty;
-            if (string.IsNullOrEmpty(calendarProfileID))
+            var selectedProfile = await Shell.Current.DisplayActionSheet("Select Calendar Profie", "Cancel", null, calendarsAccountsProfiles.Select(x => x.Name).ToArray());
+            if (selectedProfile == "Cancel")
             {
-                calendarProfileID = await calendarStoreRepo.CreateCalendar("FlowHub");
+                return;
             }
+            var calendarProfileID = calendarsAccountsProfiles
+                .Where(x => x.Name == selectedProfile)
+                .Select(x => x.Id)
+                .FirstOrDefault();
 
-            var ss = await calendarStoreRepo.GetEvents();
-           
-            DateTimeOffset debtDateStart = DateTimeOffset.Now;
-            DateTimeOffset debtDateEnd = DateTimeOffset.Now.AddMinutes(30);
+            DateTimeOffset deadlineOffsetStart = new DateTimeOffset(SingleDebtDetails.Deadline.Value).AddHours(12);
+            DateTimeOffset deadlineOffsetEnd = deadlineOffsetStart.AddMinutes(30);
 
-            var NewCalendarEvent = new CalendarEvent("a,4,2", "b,9,1f","test"
-                );
-            //var NewCalendarEvent = new CalendarEvent("a,4,2", "b,9,1f",
-            //    $"FlowHold Due Reminder ! {Environment.NewLine}" +
-            //       $"{(SingleDebtDetails.DebtType == DebtType.Lent ? $"{SingleDebtDetails.PersonOrOrganization.Name} Owes You" : $"You Owe {SingleDebtDetails.PersonOrOrganization.Name}")} {SingleDebtDetails.Amount} {SingleDebtDetails.Currency}"
-            //    );
-            DateTimeOffset randomDate = new DateTimeOffset(2023, 11, 6, 11, 10, 0, TimeSpan.Zero);
-            DateTimeOffset endRandomDate = new DateTimeOffset(2023, 11, 6, 17, 21, 0, TimeSpan.Zero);
-
-            var eventID= await calendarStoreRepo.CreateEvent("2", "test Yvan"+DateTime.Now.ToString("dddd, dd MMMM yyyy"), "testing",
-                "home", randomDate, endRandomDate);
-            //await calendarStoreRepo.CreateEvent(NewCalendarEvent);
-
-            //windows goes b,9,1f = 8brunel
-
-            //addToCalendarService.CreateCalendarEvent(
-            //title: $"FlowHold Due Reminder ! {Environment.NewLine}" +
-            //       $"{(SingleDebtDetails.DebtType == DebtType.Lent ? $"{SingleDebtDetails.PersonOrOrganization.Name} Owes You" : $"You Owe {SingleDebtDetails.PersonOrOrganization.Name}")} {SingleDebtDetails.Amount} {SingleDebtDetails.Currency}",
-            //description: $"NOTE: {SingleDebtDetails.Notes} {Environment.NewLine}" +
-            //             $"{(SingleDebtDetails.DebtType == DebtType.Lent ? $"{SingleDebtDetails.PersonOrOrganization.Name} Owes You" : $"You Owe {SingleDebtDetails.PersonOrOrganization.Name}")} {SingleDebtDetails.Amount} {SingleDebtDetails.Currency}",
-            //location: null,
-            //startDate: debtDateStart,
-            //endDate: debtDateEnd,
-            //calendarName: SelectedCalendarItem);
-
+            var eventID= await calendarStoreRepo.CreateEventWithReminder(calendarProfileID, "FlowHold Due Reminder !",
+                $"{(SingleDebtDetails.DebtType == DebtType.Lent ? $"{SingleDebtDetails.PersonOrOrganization.Name} Owes You" : $"You Owe {SingleDebtDetails.PersonOrOrganization.Name}")} {SingleDebtDetails.Amount} {SingleDebtDetails.Currency}",
+                "FlowHub App", deadlineOffsetStart, deadlineOffsetEnd, 30);
+            
             Debug.WriteLine("Event ID " + eventID);
         }
         const string toastNotifMessage = "Flow Hold Added";
