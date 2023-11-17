@@ -32,6 +32,10 @@ public partial class HomePageM : UraniumContentPage
     bool _isInitialized;
     protected override async void OnAppearing()
     {
+        if (UpSertExpbSheet.IsPresented)
+        {
+            UpSertExpbSheet.IsPresented = false;
+        }
         base.OnAppearing();     
         viewModel.GetUserData();
         if (!_isInitialized)
@@ -57,15 +61,9 @@ public partial class HomePageM : UraniumContentPage
         };
 
         UpSertExpVM.PageLoaded();
-        UpSertExpbSheet.IsPresented = true; 
+        UpSertExpbSheet.IsPresented = true;
+        Shell.Current.IsEnabled = false;
+        
     }
 
-    protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
-    {
-        base.OnNavigatedFrom(args);
-        if (UpSertExpbSheet.IsPresented)
-        {
-            UpSertExpbSheet.IsPresented = false;
-        }
-    }
 }
