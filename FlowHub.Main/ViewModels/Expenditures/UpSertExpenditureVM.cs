@@ -5,15 +5,10 @@ public partial class UpSertExpenditureVM : ObservableObject
     readonly IExpendituresRepository expenditureRepo;
     readonly IUsersRepository userRepo;
 
-    public UpSertExpenditureVM(IExpendituresRepository expendituresRepository, IUsersRepository usersRepository, ExpendituresModel singleExpendituresDetails,
-                                string pageTitle, bool isAdd, UsersModel activeUser)
+    public UpSertExpenditureVM(IExpendituresRepository expendituresRepository, IUsersRepository usersRepository)
     {
         expenditureRepo = expendituresRepository;
         userRepo = usersRepository;
-        SingleExpenditureDetails = singleExpendituresDetails;
-        PageTitle = pageTitle;
-        IsAdd = isAdd;
-        ActiveUser = activeUser;
         ExpenditureCategory = Enum.GetValues(typeof(ExpenditureCategory)).Cast<ExpenditureCategory>().ToList();
         userRepo.OfflineUserDataChanged += UserRepo_OfflineUserDataChanged;
     }
@@ -29,13 +24,13 @@ public partial class UpSertExpenditureVM : ObservableObject
     UsersModel _activeUser;
 
     [ObservableProperty]
-    bool isAdd;
-
-    [ObservableProperty]
     double totalAmountSpent;
 
     [ObservableProperty]
     double resultingBalance;
+
+    [ObservableProperty]
+    bool isBottomSheetOpened;
 
     [ObservableProperty]
     PopupResult thisPopUpResult;
@@ -51,6 +46,7 @@ public partial class UpSertExpenditureVM : ObservableObject
     double _initialTotalExpAmount;
     public void PageLoaded()
     {
+        ActiveUser = userRepo.OfflineUser;
         _initialUserPocketMoney = ActiveUser.PocketMoney;
         _initialExpenditureAmount = SingleExpenditureDetails.AmountSpent;
         _initialTotalExpAmount = ActiveUser.TotalExpendituresAmount;
@@ -93,6 +89,7 @@ public partial class UpSertExpenditureVM : ObservableObject
         {
             await AddExpenditureAsync(14, cancellationTokenSource, duration);
         }
+        IsBottomSheetOpened = false;
         ThisPopUpResult = PopupResult.OK;
         ClosePopUp = true;
     }

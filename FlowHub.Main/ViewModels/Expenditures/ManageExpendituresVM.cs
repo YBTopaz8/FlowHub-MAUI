@@ -6,11 +6,14 @@ public partial class ManageExpendituresVM : ObservableObject
 {
     readonly IExpendituresRepository expendituresService;
     readonly IUsersRepository userRepo;
+    private readonly UpSertExpenditureVM upSertExpenditureVM;
 
-    public ManageExpendituresVM(IExpendituresRepository expendituresRepository, IUsersRepository usersRepository)
+    public ManageExpendituresVM(IExpendituresRepository expendituresRepository, IUsersRepository usersRepository,
+        UpSertExpenditureVM upSertExpenditureVM)
     {
         expendituresService = expendituresRepository;
         userRepo = usersRepository;
+        this.upSertExpenditureVM = upSertExpenditureVM;
         ExpendituresCat = ExpenditureCategoryDescriptions.Descriptions;
         expendituresService.OfflineExpendituresListChanged += HandleExpendituresListUpdated;
         userRepo.OfflineUserDataChanged += HandleUserDataChanged;
@@ -65,12 +68,8 @@ public partial class ManageExpendituresVM : ObservableObject
 
         UserPocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
-        //await expendituresService.GetAllExpendituresAsync();
-        //  filterOption = "Filter_Curr_Month";
-
         GetAllExp();
 
-      
     }
 
     bool IsLoaded;
@@ -154,22 +153,22 @@ public partial class ManageExpendituresVM : ObservableObject
         else
         {
             var newExpenditure = new ExpendituresModel() { DateSpent = DateTime.Now };
-            const string pageTitle = "Add New Flow Out";
-            const bool isAdd = true;
+            
+            upSertExpenditureVM.SingleExpenditureDetails = newExpenditure;
 
-            await AddEditExpediture(newExpenditure, pageTitle, isAdd);
+            await AddEditExpediture();
         }
     }
 
     [RelayCommand]
     public async Task ShowEditExpenditurePopUp(ExpendituresModel expenditure)
     {
-        await AddEditExpediture(expenditure, "Edit Flow Out", false);
+        upSertExpenditureVM.SingleExpenditureDetails = expenditure;
+        await AddEditExpediture();
     }
-    private async Task AddEditExpediture(ExpendituresModel expenditure, string pageTitle, bool isAdd)
+    private async Task AddEditExpediture()
     {
-        var NewUpSertVM = new UpSertExpenditureVM(expendituresService, userRepo, expenditure, pageTitle, isAdd, ActiveUser);
-        var result = (PopUpCloseResult) await Shell.Current.ShowPopupAsync(new UpSertExpendituresPopUp(NewUpSertVM));
+        var result = (PopUpCloseResult) await Shell.Current.ShowPopupAsync(new UpSertExpendituresPopUp(upSertExpenditureVM));
         if(result.Result == PopupResult.OK)
         {
             var resultingBalance = (double)result.Data;

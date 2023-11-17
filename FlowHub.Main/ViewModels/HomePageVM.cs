@@ -136,14 +136,10 @@ public partial class HomePageVM : ObservableObject
     [RelayCommand]
     public async Task GoToAddExpenditurePage()
     {
-
         var newExpenditure = new ExpendituresModel() { DateSpent = DateTime.Now };
-        const string pageTitle = "Add New Flow Out";
-        const bool isAdd = true;
 
-        var NewUpSertVM = new UpSertExpenditureVM(expenditureRepo, userRepo,
-            newExpenditure, pageTitle, isAdd, userRepo.OfflineUser);
-        var newUpSertExpPopUp= new UpSertExpendituresPopUp(NewUpSertVM);
+        var NewUpSertVM = new UpSertExpenditureVM(expenditureRepo, userRepo);
+        var newUpSertExpPopUp = new UpSertExpendituresPopUp(NewUpSertVM);
         try
         {
 
@@ -170,7 +166,7 @@ public partial class HomePageVM : ObservableObject
 
                     PocketMoney -= exp.AmountSpent;
                 }
-            } 
+            }
         }
         catch (Exception ex)
         {

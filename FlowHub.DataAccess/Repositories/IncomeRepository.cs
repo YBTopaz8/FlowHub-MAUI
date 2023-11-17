@@ -121,6 +121,7 @@ public class IncomeRepository : IIncomeRepository
     public async Task SynchronizeIncomesAsync()
     {
         await GetAllIncomesAsync();
+        
         if (!Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
         {
             IsSyncing = false;

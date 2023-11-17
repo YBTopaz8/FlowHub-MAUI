@@ -12,7 +12,6 @@ public partial class ManageDebtsPageD : UraniumContentPage
         viewModel = vm;
         UpSertVM = upSertDebt;
         BindingContext = vm;
-        bottomSheet.BindingContext = UpSertVM;
     }
     protected override void OnAppearing()
     {
@@ -89,23 +88,4 @@ public partial class ManageDebtsPageD : UraniumContentPage
     }
 
    
-    private void AmountTextField_Focused(object sender, FocusEventArgs e)
-    {
-        if (AmountTextField.Text == "1")
-        {
-            AmountTextField.Text = "";
-        }
-    }
-
-    private void AddNewFlowHoldBtn_Clicked(object sender, EventArgs e)
-    {
-
-        UpSertVM.SingleDebtDetails = new DebtModel()
-        {
-            Amount = 1,
-            PersonOrOrganization = new PersonOrOrganizationModel(),
-            Currency = viewModel.UserCurrency
-        };
-        bottomSheet.IsPresented = true;
-    }
 }

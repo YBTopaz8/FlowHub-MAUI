@@ -3,6 +3,7 @@ using CommunityToolkit.Maui;
 using InputKit.Handlers;
 using Plugin.Maui.CalendarStore;
 using SkiaSharp.Views.Maui.Controls.Hosting;
+
 using UraniumUI;
 
 namespace FlowHub.Main;
@@ -29,6 +30,7 @@ public static class MauiProgram
                 //.AddAppAction("add_flow_in", "Add Flow In", "Add a Flow In", "request_money_d.png")
                 .OnAppAction(App.HandleAppActions);
             })
+            
             .UseUraniumUI()
             .UseUraniumUIMaterial()
             .UseUraniumUIBlurs()
@@ -44,9 +46,8 @@ public static class MauiProgram
             handlers.AddUraniumUIHandlers();
         });
 
-        builder.Services.AddSingleton(CalendarStore.Default);
         /*----------------------- REGISTERING Repositories ------------------------------------------------------------------------*/
-
+        builder.Services.AddSingleton(CalendarStore.Default);
         builder.Services.AddSingleton<IExpendituresRepository, ExpendituresRepository>();
         builder.Services.AddSingleton<IIncomeRepository, IncomeRepository>();
         builder.Services.AddSingleton<IDebtRepository, DebtRepository>();
@@ -139,7 +140,7 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<ManageBorrowingsPageM>();
         builder.Services.AddSingleton<ManageLendingsPageM>();
-        builder.Services.AddSingleton<UpSertDebtPageM>();
+        builder.Services.AddSingleton<SingleDebtDetailsPageM>();
 
         /*--------------------------------------------------------------------------------------------------------------------------------*/
         return builder.Build();

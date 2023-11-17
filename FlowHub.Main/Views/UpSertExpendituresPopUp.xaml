@@ -19,7 +19,7 @@
     <Border Margin="13,10"        
         Stroke="{AppThemeBinding Dark=#0E131A, Light=#CBCBCB}"
         StrokeThickness="0" StrokeShape="RoundRectangle 12"
-            BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#CBCBCB}">
+        BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#CBCBCB}">
         <Border.Resources>
             <ResourceDictionary>
                 <utilities:EnumConverter x:Key="EnumConverter"/>

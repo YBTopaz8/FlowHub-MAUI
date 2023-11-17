@@ -18,8 +18,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin.Maui.CalendarStore", "..\Plugin.Maui.CalendarStoree\src\Plugin.Maui.CalendarStore\Plugin.Maui.CalendarStore.csproj", "{D878CDDE-4504-4B1D-8101-EA29BA091776}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,14 +54,6 @@ Global
 		{2DAE4FA3-F7FB-463B-B074-511746628C6C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2DAE4FA3-F7FB-463B-B074-511746628C6C}.Release|x64.ActiveCfg = Release|Any CPU
 		{2DAE4FA3-F7FB-463B-B074-511746628C6C}.Release|x64.Build.0 = Release|Any CPU
-		{D878CDDE-4504-4B1D-8101-EA29BA091776}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D878CDDE-4504-4B1D-8101-EA29BA091776}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D878CDDE-4504-4B1D-8101-EA29BA091776}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{D878CDDE-4504-4B1D-8101-EA29BA091776}.Debug|x64.Build.0 = Debug|Any CPU
-		{D878CDDE-4504-4B1D-8101-EA29BA091776}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D878CDDE-4504-4B1D-8101-EA29BA091776}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D878CDDE-4504-4B1D-8101-EA29BA091776}.Release|x64.ActiveCfg = Release|Any CPU
-		{D878CDDE-4504-4B1D-8101-EA29BA091776}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

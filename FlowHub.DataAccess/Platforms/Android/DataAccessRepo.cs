@@ -9,7 +9,7 @@ public class DataAccessRepo : IDataAccessRepo
     {
         string path;
 
-        path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SavingTracker.db");
+        path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SavingsTracker.db");
         // string path = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments).AbsolutePath;
 
         db = new LiteDatabaseAsync(path);
@@ -20,7 +20,7 @@ public class DataAccessRepo : IDataAccessRepo
     {
         string path;
 
-        path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SavingTracker.db");
+        path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SavingsTracker.db");
         if (File.Exists(path))
         {
             try

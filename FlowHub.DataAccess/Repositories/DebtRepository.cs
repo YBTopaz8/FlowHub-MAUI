@@ -130,7 +130,8 @@ public class DebtRepository : IDebtRepository
     public async Task SynchronizeDebtsAsync()
     {
         await GetAllDebtAsync();
-        if (!Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
+        
+        if(!Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
         {
             IsBatchUpdate = false;
             OfflineDebtListChanged?.Invoke();
@@ -242,7 +243,7 @@ public class DebtRepository : IDebtRepository
         }
         catch (Exception ex)
         {
-            Debug.WriteLine("Failed to add local debt: " + ex.Message);
+            Debug.WriteLine("Failed to add local debt: " + ex.InnerException.Message);
             db.Dispose();
             return false;
         }

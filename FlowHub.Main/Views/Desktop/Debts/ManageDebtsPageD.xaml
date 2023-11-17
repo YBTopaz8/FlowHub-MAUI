@@ -39,19 +39,27 @@
         
         <HorizontalStackLayout HorizontalOptions="Center">
             <material:DataGrid ItemsSource="{Binding LentPendingList}" HorizontalOptions="Center" 
-                Margin="20,0,20,0" MinimumWidthRequest="800" HeightRequest="300"
+                Margin="20,0,20,0" MinimumWidthRequest="800" HeightRequest="600"
                 BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#D8D8D8}"
                 LineSeparatorColor="Black">
+
                 <material:DataGrid.Resources>
-
+                    <ResourceDictionary>
+                        <MenuFlyout x:Key="labelContextMenu">                            
+                            <MenuFlyoutItem Text="{Binding .}"/>
+                            <MenuFlyoutItem Text="test2"/>
+                        </MenuFlyout>
+                    </ResourceDictionary>
                 </material:DataGrid.Resources>
-
                 <material:DataGrid.Columns>
-
-                    <material:DataGridColumn Title="Date Added" >
+                    
+                    <material:DataGridColumn Title="Date Added">
                         <material:DataGridColumn.CellItemTemplate>
                             <DataTemplate x:DataType="models:DebtModel">
-                                <Label Text="{Binding AddedDateTime, StringFormat='{0:ddd, MMM dd, yyyy}'}" Margin="10"/>
+                                <Label Text="{Binding AddedDateTime, StringFormat='{0:ddd, MMM dd, yyyy}'}" 
+                                       Margin="10"
+                                       FlyoutBase.ContextFlyout="{StaticResource labelContextMenu}">                                    
+                                </Label>
                             </DataTemplate>
                         </material:DataGridColumn.CellItemTemplate>
                     </material:DataGridColumn>
@@ -59,7 +67,7 @@
                     <material:DataGridColumn Title="Amount (CAD)">
                         <material:DataGridColumn.CellItemTemplate>
                             <DataTemplate x:DataType="models:DebtModel">
-                                <Label Text="{Binding Amount}" HorizontalTextAlignment="Center" Margin="10"/>
+                                <Label Text="{Binding Amount, StringFormat='{0:n2}'}" HorizontalTextAlignment="Center" Margin="10"/>
                             </DataTemplate>
                         </material:DataGridColumn.CellItemTemplate>
                     </material:DataGridColumn>
@@ -68,7 +76,7 @@
                         <material:DataGridColumn.CellItemTemplate>
                             <DataTemplate x:DataType="models:DebtModel">
                                 <Label Text="{Binding PersonOrOrganization.Name}" Margin="10"
-                    ToolTipProperties.Text="{Binding Notes}"/>
+                                ToolTipProperties.Text="{Binding Notes}"/>
                             </DataTemplate>
                         </material:DataGridColumn.CellItemTemplate>
                     </material:DataGridColumn>
@@ -93,9 +101,15 @@
                     <material:DataGridColumn Title="Action">
                         <material:DataGridColumn.CellItemTemplate>
                             <DataTemplate>
-                                <Button Text="View"
-                        Command="{Binding Source={x:Reference Page}, Path=BindingContext.ViewDebtSheetCommand}"
-                        CommandParameter="{Binding .}"/>
+                                <HorizontalStackLayout>
+                                    <Button Text="Edit"
+                                        Command="{Binding Source={x:Reference Page}, Path=BindingContext.ShowEditDebtPopUpCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                    <Button Text="View"
+                                        Command="{Binding Source={x:Reference Page}, Path=BindingContext.ShowDebtDetailsCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                </HorizontalStackLayout>
+                                
                             </DataTemplate>
                         </material:DataGridColumn.CellItemTemplate>
                     </material:DataGridColumn>
@@ -104,9 +118,136 @@
 
             </material:DataGrid>
 
-            <Button Text="Add" x:Name="AddNewFlowHoldBtn" Clicked="AddNewFlowHoldBtn_Clicked"/>
+            <Button Text="Add" x:Name="AddNewFlowHoldBtn" Command="{Binding ShowAddDebtPopUpCommand}"/>
+
+            <Border WidthRequest="500" IsVisible="{Binding ShowSingleSebt}">
+                <VerticalStackLayout Margin="10">
+                   
+                    <Label FontSize="16" HorizontalOptions="Center" LineBreakMode="CharacterWrap"
+                            FontAttributes="Bold" Text="{Binding TitleText}"
+                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Cyan200Accent}}"/>
+
+                    <Rectangle Fill="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Cyan200Accent}}"
+                        HeightRequest="2" Margin="0,5,0,10"/>
+
+                    <FlexLayout Margin="3,0" JustifyContent="SpaceBetween" >
+                        <VerticalStackLayout Spacing="10">
+                            <VerticalStackLayout.Resources>
+                                <ResourceDictionary>
+                                    <Style TargetType="Label">
+                                        <Setter Property="FontSize" Value="16"/>
+                                    </Style>
+                                </ResourceDictionary>
+                            </VerticalStackLayout.Resources>
+                            <Label Text="Flow Direction :"/>
+                            <Label Text="Flow Due: ">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label"
+                                     Binding="{Binding IsDeadlineSet}" Value="false">
+                                        <Setter Property="IsVisible" Value="False"/>
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                            <Label Text="Flow Completion : " />
+                            <Label Text="Contact : "/>
+                            <Label Text="Notes : "/>
+
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="8">
+                            <VerticalStackLayout.Resources>
+                                <ResourceDictionary>
+                                    <Style TargetType="Label">
+                                        <Setter Property="FontSize" Value="16"/>
+                                        <Setter Property="FontAttributes" Value="Bold"/>
+                                        <Setter Property="TextColor" Value="{StaticResource WildBlueYonder}"/>
+                                        <Setter Property="HorizontalOptions" Value="End"/>
+                                    </Style>
+                                </ResourceDictionary>
+                            </VerticalStackLayout.Resources>
+
+
+                            <Label>
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label"
+                                        Binding="{Binding SingleDebtDetails.DebtType}" Value="Lent">
+                                        <Setter Property="Text" Value="Flow In"/>
+                                    </DataTrigger>
+
+                                    <DataTrigger TargetType="Label"
+                                        Binding="{Binding SingleDebtDetails.DebtType}" 
+                                        Value="Borrowed">
+                                        <Setter Property="Text" Value="Flow Out"/>
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+
+                            <Label Text="{Binding SingleDebtDetails.Deadline, StringFormat='{0:ddd, MMM dd, yyyy}'}" >
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label"
+                                     Binding="{Binding SingleDebtDetails.Deadline.HasValue}" Value="False">
+                                        <Setter Property="Text" Value="No Deadline Set"/>
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+
+                            <Label>
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label"
+                            Binding="{Binding SingleDebtDetails.IsPaidCompletely}" Value="True">
+                                        <Setter Property="Text" Value="Completed"/>
+                                    </DataTrigger>
+
+                                    <DataTrigger TargetType="Label"
+                             Binding="{Binding SingleDebtDetails.IsPaidCompletely}" 
+                             Value="False">
+                                        <Setter Property="Text" Value="Pending"/>
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                            <Label Text="{Binding SingleDebtDetails.PersonOrOrganization.PhoneNumber}"/>
+                            <Label Text="{Binding SingleDebtDetails.Notes, Converter={StaticResource NotesConverter}}" 
+                                   LineBreakMode="TailTruncation"
+                                   FontSize="13"/>
+                        </VerticalStackLayout>
+
+
+                    </FlexLayout>
+                    <uranium:ExpanderView>
+                        <uranium:ExpanderView.Header>
+                            <Label Text="Payment advances" HorizontalTextAlignment="Center"/>
+                        </uranium:ExpanderView.Header>
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <CollectionView ItemsSource="{Binding SingleDebtDetails.PaymentAdvances}"
+                                EmptyView="No Payment Advances...">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="models:InstallmentPayments">
+                                        <FlexLayout >
+                                            <Label Text="{Binding AmountPaid}"/>
+                                            <Label Text="{Binding DatePaid}"/>
+                                            <Label Text="{Binding ReasonForOptionalPayment}"/>
+                                        </FlexLayout>
+
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                            <ImageButton Source="add_btn_d.png" 
+                                         Command="{Binding UpSertInstallmentPaymentPopUpCommand}"
+                                         HeightRequest="50"/>
+                        </VerticalStackLayout>
+                    </uranium:ExpanderView>
+
+                    <ImageButton Source="{AppThemeBinding Dark=delete_d.png, Light=delete_l.png}" HorizontalOptions="End"
+                         Command="{Binding DeleteDebtCommand}" CommandParameter="{Binding SingleDebtDetails}"
+                         HeightRequest="{OnPlatform WinUI=60}" Margin="0,5,0,0"
+                         ToolTipProperties.Text="Delete This Debt"/>
+
+
+
+                </VerticalStackLayout>
+            </Border>
             
-            <Border Margin="20">
+            <Border Margin="20" IsVisible="false">
                 <VerticalStackLayout Margin="10" WidthRequest="215">
                     <Label Text="Single Flow Info" FontSize="26"/>
                     <Label Text="{Binding SingleDebtDetails.PersonOrOrganization.Name}" FontSize="13"/>
@@ -209,113 +350,6 @@
     </VerticalStackLayout>
 
     <uranium:UraniumContentPage.Attachments>
-        <materialAttach:BackdropView Title="Filter Flows" x:Name="backDropView"
-                                     IconImageSource="{FontImageSource FontFamily=MaterialRegular, Glyph={x:Static materialIcons:MaterialRegular.Add_circle}, Color=White}"
-                                     BackgroundColor="Red">
-            <VerticalStackLayout>
-                <Label Text="Filter 1"/>
-                <Label Text="Filter 1"/>
-                <Label Text="Filter 1"/>
-            </VerticalStackLayout>
-        </materialAttach:BackdropView>
-
-        <materialAttach:BottomSheetView x:Name="bottomSheet" CloseOnTapOutside="False"
-                                        DisablePageWhenOpened="true" IsVisible="true"
-                                        x:DataType="viewModels:UpSertDebtVM">
-                        
-            <input:FormView Spacing="5" SubmitCommand="{Binding UpSertDebtCommand}">
-                <HorizontalStackLayout Spacing="7" HorizontalOptions="Center">
-                    <material:RadioButton Text="Lend" IsChecked="{Binding IsLent}" x:Name="IsLentRBtn"                                      
-                          CircleColor="{AppThemeBinding Light=darkslateblue}"
-                          TextColor="{AppThemeBinding Light=black, Dark=white}"/>
-
-                    <material:RadioButton Text="Borrow" x:Name="IsBorrowedRBtn"
-                          IsChecked="{Binding IsBorrow}"
-                          CircleColor="{AppThemeBinding Light=darkslateblue}"
-                          TextColor="{AppThemeBinding Light=black, Dark=white}"/>
-                </HorizontalStackLayout>
-
-                <Grid ColumnSpacing="5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-
-                    <material:TextField Grid.Column="0" Title="Amount" x:Name="AmountTextField"
-                        Text="{Binding SingleDebtDetails.Amount}" Focused="AmountTextField_Focused"
-                        Keyboard="Numeric">
-                        <validation:RequiredValidation Message=""/>
-                        <validation:MinValueValidation MinValue="0.1"/>
-                    </material:TextField>
-                    <Label Grid.Column="1" FontSize="18"
-           FontAttributes="Bold"
-           VerticalTextAlignment="Center"
-           Text="{Binding SingleDebtDetails.Currency}"/>
-                </Grid>
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-
-                    <material:TextField x:Name="PersonName" Text="{Binding SingleDebtDetails.PersonOrOrganization.Name}">
-                        <validation:RequiredValidation/>
-                        <material:TextField.Triggers>
-                            <DataTrigger TargetType="material:TextField"
-                             Binding="{Binding IsLent}" Value="true">
-                                <Setter Property="Title" Value="Lend To"/>
-                            </DataTrigger>
-                            <DataTrigger TargetType="material:TextField"
-                             Binding="{Binding IsLent}" Value="false">
-                                <Setter Property="Title" Value="Borrow From"/>
-                            </DataTrigger>
-                        </material:TextField.Triggers>
-                    </material:TextField>
-
-                    <ImageButton Grid.Column="1" Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}"/>
-                </Grid>
-                <material:AutoCompleteTextField ItemsSource="{Binding ListOfPersonsNames}" IsVisible="false"
-                                Text="{Binding SingleDebtDetails.PersonOrOrganization.Name}"
-                                AllowClear="True" >
-                </material:AutoCompleteTextField>
-                <material:TextField Title="Contact"
-                    Text="{Binding SingleDebtDetails.PersonOrOrganization.PhoneNumber}"
-                    x:Name="PersonNumber"/>
-
-                <material:EditorField Title="Notes*"
-                                      TextColor="{AppThemeBinding Light=black, Dark=white}"
-                      Text="{Binding SingleDebtDetails.Notes}">
-
-                </material:EditorField>
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <HorizontalStackLayout Grid.Column="0" Margin="6,0">
-                        <Label Text="Deadline" VerticalTextAlignment="Center"/>
-                        <Switch OnColor="DarkSlateBlue" ThumbColor="{AppThemeBinding Dark=white, Light=gray}"                             
-                        x:Name="DeadlineSwitch"
-                        IsToggled="{Binding HasDeadLine}"/>
-
-
-                    </HorizontalStackLayout>
-
-                    <material:DatePickerField Grid.Column="1" Title="Deadline" MinimumDate="01/01/2022"
-                              IsVisible="{Binding IsToggled, Source={x:Reference DeadlineSwitch}}"
-                              Date="{Binding SingleDebtDetails.Deadline, StringFormat='{0:MMMM dd, yyyy}'}"
-                              TextColor="{AppThemeBinding Dark=white, Light=black}" TitleColor="{AppThemeBinding Light=black}"/>
-                </Grid>
-
-                <Button Text="Save" WidthRequest="80" HorizontalOptions="Center" 
-                    input:FormView.IsSubmitButton="True"
-                    />
-                <VerticalStackLayout>
-
-                </VerticalStackLayout>
-            </input:FormView>
-        </materialAttach:BottomSheetView>
+        
     </uranium:UraniumContentPage.Attachments>
 </uranium:UraniumContentPage>

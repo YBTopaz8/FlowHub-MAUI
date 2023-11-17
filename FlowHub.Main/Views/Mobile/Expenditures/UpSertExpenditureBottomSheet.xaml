@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<materialAttach:BottomSheetView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlowHub.Main.Views.Mobile.Expenditures.UpSertExpenditureBottomSheet"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"  
+             xmlns:materialAttach="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material" 
+             xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"  
+             xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+             xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Expenditures"
+             x:DataType="viewModels:UpSertExpenditureVM"
+             x:Name="page" DisablePageWhenOpened="True"
+             CloseOnTapOutside="True" CornerRadius="25"
+             IsPresented="{Binding IsBottomSheetOpened}"
+             BorderColor="Transparent">
+    <materialAttach:BottomSheetView.Header>
+        <BoxView HeightRequest="0"/>
+    </materialAttach:BottomSheetView.Header>
+    <VerticalStackLayout BackgroundColor="{AppThemeBinding Dark=#1E242B, Light=#CBCBCB}">
+        
+        <input:FormView Spacing="5" Margin="10,0" SubmitCommand="{Binding UpSertExpenditureCommand}">
+
+            <Label HorizontalOptions="End" Margin="0,10,0,0" 
+                   FontAttributes="Italic" FontSize="13">
+                <Label.Text>
+                    <MultiBinding StringFormat="{} Resulting Balance : {0:n2} {1}">
+                        <Binding Path="ResultingBalance"/>
+                        <Binding Path="ActiveUser.UserCurrency"/>
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+            <Label HorizontalOptions="End" 
+                   FontAttributes="Italic" FontSize="13">
+                <Label.Text>
+                    <MultiBinding StringFormat="{} Flow Out's Amount : {0:n2} {1}">
+                        <Binding Path="SingleExpenditureDetails.AmountSpent"/>
+                        <Binding Path="ActiveUser.UserCurrency"/>
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+            <DatePicker MinimumDate="01/01/2022"
+                        MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
+                        Date="{Binding SingleExpenditureDetails.DateSpent}"
+                        TextColor="{AppThemeBinding Light=black, Dark=white}"/>
+
+            <Entry Placeholder="Price" x:Name="UnitPrice" Focused="UnitPrice_Focused"
+                   TextChanged="UnitPrice_TextChanged" 
+                   Text="{Binding SingleExpenditureDetails.UnitPrice}" Keyboard="Numeric">
+                
+            </Entry>
+            <Picker ItemsSource="{Binding ExpenditureCategory}" 
+                    SelectedItem="{Binding SingleExpenditureDetails.Category}"/>
+
+            <Editor Placeholder="Reason" Text="{Binding SingleExpenditureDetails.Reason}"
+                    IsTextPredictionEnabled="True">
+                
+            </Editor>
+
+            <HorizontalStackLayout HorizontalOptions="Center" Margin="0,5,0,5" Spacing="15">
+                <Button input:FormView.IsSubmitButton="True"
+                        Text="Save" FontSize="14" 
+                        BackgroundColor="{StaticResource SaveBtnColor}" TextColor="White" 
+                        FontAttributes="Bold" />
+
+                <Button x:Name="CancelBtn" Clicked="CancelBtn_Clicked"
+                        BackgroundColor="{StaticResource NegativeActionBtnDark}" TextColor="White"
+                        FontSize="14" Text="Cancel"/>
+            </HorizontalStackLayout>
+        </input:FormView>
+
+    </VerticalStackLayout>
+</materialAttach:BottomSheetView>

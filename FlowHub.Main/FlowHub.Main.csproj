@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net7.0-android33.0</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks>net8.0-android34.0</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net7.0-tizen</TargetFrameworks> -->
 		<OutputType>Exe</OutputType>
@@ -36,7 +36,7 @@
 		<GenerateTestArtifacts>True</GenerateTestArtifacts>
 		<AppInstallerUri>D:\Courses\snipPC</AppInstallerUri>
 		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">31.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">32.0</SupportedOSPlatformVersion>
 		<DefaultLanguage>en</DefaultLanguage>
 	</PropertyGroup>
 
@@ -66,9 +66,33 @@
 	  <ApplicationTitle>FlowHub</ApplicationTitle>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android34.0|AnyCPU'">
+	  <ApplicationTitle>FlowHub</ApplicationTitle>
+	  <ApplicationDisplayVersion>0.9.7</ApplicationDisplayVersion>
+	  <ApplicationVersion>1</ApplicationVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows10.0.19041.0|AnyCPU'">
+	  <ApplicationTitle>FlowHub</ApplicationTitle>
+	  <ApplicationDisplayVersion>0.9.7</ApplicationDisplayVersion>
+	  <ApplicationVersion>1</ApplicationVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android34.0|AnyCPU'">
+	  <ApplicationTitle>FlowHub</ApplicationTitle>
+	  <ApplicationDisplayVersion>0.9.7</ApplicationDisplayVersion>
+	  <ApplicationVersion>1</ApplicationVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows10.0.19041.0|AnyCPU'">
+	  <ApplicationTitle>FlowHub</ApplicationTitle>
+	  <ApplicationDisplayVersion>0.9.7</ApplicationDisplayVersion>
+	  <ApplicationVersion>1</ApplicationVersion>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiIcon Include="Resources\AppIcon\appicon1.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
@@ -82,6 +106,11 @@
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Platforms\Windows\CalendarUtils\CalendarStore.windows.cs" />
+	  <Compile Remove="Utilities\CalendarUtils\CalendarStore.net.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -129,14 +158,14 @@
 	<ItemGroup>
 		<PackageReference Include="akgul.Maui.DataGrid" Version="3.0.0" />
 		<PackageReference Include="CommunityToolkit.Diagnostics" Version="8.2.2" />
-		<PackageReference Include="CommunityToolkit.Maui" Version="6.1.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="HarfBuzzSharp" Version="7.3.0" />
 		<PackageReference Include="itext7" Version="8.0.2" />
 		<PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.2" />
 		<PackageReference Include="LiteDB.Async" Version="0.1.7" />
 		<PackageReference Include="LiveChartsCore.SkiaSharpView.Maui" Version="2.0.0-rc1.2" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="SkiaSharp" Version="2.88.6" />
 		<PackageReference Include="UraniumUI" Version="2.5.6" />
 		<PackageReference Include="UraniumUI.Blurs" Version="2.5.6" />
@@ -146,7 +175,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\Plugin.Maui.CalendarStoree\src\Plugin.Maui.CalendarStore\Plugin.Maui.CalendarStore.csproj" />
 	  <ProjectReference Include="..\FlowHub.DataAccess\FlowHub.DataAccess.csproj" />
 	  <ProjectReference Include="..\FlowHub.Models\FlowHub.Models.csproj" />
 	</ItemGroup>
@@ -179,13 +207,13 @@
 	  <MauiXaml Update="PopUpPages\ErrorPopUpAlert.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Utilities\BottomSheet\Drawers\BaseDrawer.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Utilities\BottomSheet\Drawers\ListDrawer.xaml">
+	  <MauiXaml Update="PopUpPages\UpSertInstallmentPayment.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Desktop\Debts\ManageDebtsPageD.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Desktop\Debts\UpSertDebtPopUp.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Desktop\ExitApp.xaml">
@@ -218,13 +246,13 @@
 	  <MauiXaml Update="Views\Mobile\Debts\ManageLendingsPageM.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Mobile\Debts\ViewDebtBottomSheet.xaml">
+	  <MauiXaml Update="Views\Mobile\Debts\SingleDebtDetailsPageM.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Mobile\Debts\UpSertDebtBottomSheet.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Mobile\Debts\DebtsOverviewPageM.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Mobile\Debts\UpSertDebtPageM.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Mobile\Expenditures\ManageExpendituresM.xaml">
@@ -237,6 +265,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Mobile\Expenditures\PlannedExpenditures\MonthlyPlannedExp\UpSertMonthlyPlannedExpPageM.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Mobile\Expenditures\UpSertExpenditureBottomSheet.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Mobile\Expenditures\UpSertExpenditurePageM.xaml">
@@ -278,11 +309,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="Platforms\Windows\Utilities\" />
 	  <Folder Include="Resources\Images\darkicons\" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <None Include="..\.editorconfig" Link=".editorconfig" />
+	  <None Include="Platforms\Windows\CalendarUtils\CalendarStore.windows.cs" />
+	  <None Include="Utilities\CalendarUtils\CalendarStore.net.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -327,8 +361,8 @@
 	  <Compile Update="Views\Mobile\Debts\ManageBorrowingsPageM.xaml.cs">
 	    <DependentUpon>ManageBorrowingsPageM.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Mobile\Debts\ViewDebtBottomSheet.xaml.cs">
-	    <DependentUpon>ViewDebtBottomSheet.xaml</DependentUpon>
+	  <Compile Update="Views\Mobile\Debts\SingleDebtDetailsPageM.xaml.cs">
+	    <DependentUpon>SingleDebtDetailsPageM.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\Mobile\Incomes\ManageIncomesM.xaml.cs">
 	    <DependentUpon>ManageIncomesM.xaml</DependentUpon>

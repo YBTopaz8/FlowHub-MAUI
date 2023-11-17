@@ -10,8 +10,7 @@ public class UserRepository : IUsersRepository
 
     private readonly IDataAccessRepo dataAccessRepo;
     private readonly IOnlineCredentialsRepository onlineDataAccessRepo;
-    private readonly IExpendituresRepository expenditureRepo;
-    private readonly IIncomeRepository incomeRepo;
+    
     private const string userDataCollectionName = "Users";
 
     public event Action OfflineUserDataChanged;

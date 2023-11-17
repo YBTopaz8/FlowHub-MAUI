@@ -34,7 +34,6 @@ global using FlowHub.Main.PDF_Classes;
 global using FlowHub.Main.Platforms.NavigationsMethods;
 
 global using FlowHub.Models;
-global using System.Diagnostics;
 
 global using CommunityToolkit.Mvvm.ComponentModel;
 global using CommunityToolkit.Mvvm.Input;
@@ -45,8 +44,12 @@ global using CommunityToolkit.Maui.Core.Extensions;
 
 global using System.Collections.ObjectModel;
 global using System.Globalization;
+global using System.Diagnostics;
+global using System.ComponentModel;
+
 
 global using UraniumUI.Pages;
+global using UraniumUI.Material.Attachments;
 
 namespace FlowHub.Main.Utilities;
 

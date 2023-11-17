@@ -1,5 +1,5 @@
-﻿using FlowHub.Main.Utilities.BottomSheet;
-using Org.BouncyCastle.Asn1.X509;
+﻿
+using Plugin.Maui.CalendarStore;
 
 namespace FlowHub.Main.ViewModels.Debts;
 
@@ -9,7 +9,8 @@ public partial class ManageDebtsVM : ObservableObject
     private readonly IUsersRepository usersRepo;
     private readonly UpSertDebtVM upSertDebtVM;
 
-    public ManageDebtsVM(IDebtRepository debtRepository, IUsersRepository usersRepository, UpSertDebtVM upSertDebtViewModel)
+    public ManageDebtsVM(IDebtRepository debtRepository, IUsersRepository usersRepository, 
+        UpSertDebtVM upSertDebtViewModel )
     {
         debtRepo = debtRepository;
         usersRepo = usersRepository;
@@ -26,7 +27,7 @@ public partial class ManageDebtsVM : ObservableObject
     ObservableCollection<DebtModel> borrowedPendingList;
     [ObservableProperty]
     ObservableCollection<DebtModel> lentPendingList;
-    
+
 
     [ObservableProperty]
     int totalDebts;
@@ -59,7 +60,7 @@ public partial class ManageDebtsVM : ObservableObject
     bool isShowCompletedChecked;
     [ObservableProperty]
     bool isShowPendingChecked;
-    
+
     [ObservableProperty]
     bool isShowBorrowedChecked;
     [ObservableProperty]
@@ -69,13 +70,17 @@ public partial class ManageDebtsVM : ObservableObject
     int totalPendingBorrowCount;
     [ObservableProperty]
     int totalPendingLentCount;
-    
+
     [ObservableProperty]
     int totalCompletedBorrowCount;
     [ObservableProperty]
     int totalCompletedLentCount;
 
-    
+    [ObservableProperty]
+    string titleText;
+
+    [ObservableProperty]
+    bool showSingleSebt;
     public void PageLoaded()
     {
         try
@@ -86,6 +91,11 @@ public partial class ManageDebtsVM : ObservableObject
                 IsLoaded = true;
                 ActiveUser = usersRepo.OfflineUser;
                 UserCurrency = ActiveUser.UserCurrency;
+                SingleDebtDetails = new DebtModel()
+                { 
+                    Amount = 0, 
+                    PersonOrOrganization = new()
+                };
             }
         }
         catch (Exception ex)
@@ -94,49 +104,31 @@ public partial class ManageDebtsVM : ObservableObject
         }
     }
 
-    [RelayCommand]
-    public async Task GoToAddDebtAsync()
-    {
-        var navParams = new Dictionary<string, object>()
-        {
-            {"SingleDebtDetails", new DebtModel()
-                {
-                  Amount = 0,
-                  PersonOrOrganization = new PersonOrOrganizationModel(),
-                  Currency = UserCurrency
-                } 
-            },
-            {"PageTitle", "Add Debt" }
-        };
-        await Shell.Current.GoToAsync(nameof(UpSertDebtPageM), true, navParams);
-    }
 
-    [RelayCommand]
-    public async Task GoToEditDebtAsync(DebtModel debt)
-    {
-        var navParams = new Dictionary<string, object>()
-        {
-            {"SingleDebtDetails", debt },
-            {"PageTitle", "Edit Debt" }
-        };
-        await Shell.Current.GoToAsync(nameof(UpSertDebtPageM), true, navParams);
-    }
-    public bool IsDeadlineSet
-    {
-        get => SingleDebtDetails.Deadline.HasValue;
-    }
 
-    ViewDebtBottomSheet debtBS;
     [RelayCommand]
     public async Task ViewDebtSheet(DebtModel debt)
     {
         SingleDebtDetails = debt;
 #if ANDROID
-        debtBS = new ViewDebtBottomSheet(this);
-        await Drawer.Open(debtBS); 
+        //debtBS = new ViewDebtBottomSheet(this);
+        // TODO await Drawer.Open(debtBS); 
 #endif
+    }
 
+    [RelayCommand]
+    public async Task ShowDebtDetails(DebtModel debt)
+    {
+        ShowSingleSebt = !ShowSingleSebt;
+        SingleDebtDetails = debt;
+        RefreshTitleText();
+    }
 
+    private void RefreshTitleText()
+    {
+        TitleText = SingleDebtDetails.DebtType == DebtType.Lent
+                    ? $"{SingleDebtDetails.PersonOrOrganization.Name} Owes You {SingleDebtDetails.Amount} {SingleDebtDetails.Currency}"
+                    : $"You Owe {SingleDebtDetails.PersonOrOrganization.Name}, {SingleDebtDetails.Amount} {SingleDebtDetails.Currency}";
     }
 
     [ObservableProperty]
@@ -158,7 +150,7 @@ public partial class ManageDebtsVM : ObservableObject
 
     private void RedoCountsAndAmountsCalculation(List<DebtModel> filteredAndSortedDebts)
     {
-        
+
         BorrowedCompletedList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
             .Where(x => x.DebtType == DebtType.Borrowed && x.IsPaidCompletely)
             .OrderBy(x => x.AddedDateTime));
@@ -187,11 +179,51 @@ public partial class ManageDebtsVM : ObservableObject
         TotalBorrowedCount = TotalPendingBorrowCount + TotalCompletedBorrowCount;
         TotalLentCount = TotalPendingLentCount + TotalCompletedLentCount;
 
-        
+
 
     }
 
-    
+    [RelayCommand]
+    public async Task ShowAddDebtPopUp()
+    {
+        if (ActiveUser is null)
+        {
+            Debug.WriteLine("Can't Open Add Debt PopUp because User is null");
+            await Shell.Current.DisplayAlert("Wait", "Cannot go", "Ok");
+        }
+        else
+        {
+
+            var newDebt = new DebtModel
+            {
+                Amount = 1,
+                PersonOrOrganization = new PersonOrOrganizationModel(),
+                Currency = ActiveUser.UserCurrency
+            };
+            upSertDebtVM.SingleDebtDetails = newDebt;
+            upSertDebtVM.IsLent = true;
+            await AddEditDebt();
+        }
+    }
+
+    [RelayCommand]
+    public async Task ShowEditDebtPopUp(DebtModel debt)
+    {
+        upSertDebtVM.SingleDebtDetails = debt;
+        upSertDebtVM.HasDeadLine = debt.Deadline is not null;
+        upSertDebtVM.IsLent = debt.DebtType == DebtType.Lent;
+        await AddEditDebt();
+    }
+    private async Task AddEditDebt()
+    {
+        
+        var result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new UpSertDebtPopUp(upSertDebtVM));
+        if (result.Result == PopupResult.OK)
+        {
+            Debug.WriteLine("Popup Closed OK");
+        }
+    }
+
     [RelayCommand]
     void SearchBar(string query)
     {
@@ -199,9 +231,8 @@ public partial class ManageDebtsVM : ObservableObject
         try
         {
             var ListOfDebts = debtRepo.OfflineDebtList
-            .Where(d =>
-                d.PersonOrOrganization?.Name?.Contains(query, StringComparison.OrdinalIgnoreCase) ?? false
-            )
+            .Where(d =>d.PersonOrOrganization?.Name?.Contains(query, StringComparison.OrdinalIgnoreCase) ?? false)
+            .Where(d=>!d.IsDeleted)
             .ToList();
 
             RedoCountsAndAmountsCalculation(ListOfDebts);
@@ -213,13 +244,9 @@ public partial class ManageDebtsVM : ObservableObject
         }
     }
 
-    [RelayCommand]
-    void UpSertDebt()
-    {
-        
+   
 
-    }
-
+   
     [RelayCommand]
     async Task DeleteDebtAsync(DebtModel debt)
     {
@@ -245,12 +272,24 @@ public partial class ManageDebtsVM : ObservableObject
                 var toast = Toast.Make(text, duration, fontSize);
                 await toast.Show(cancellationTokenSource.Token);
                 ApplyChanges();
-                await Drawer.Close(debtBS);
+                //await Drawer.Close(debtBS);
             }
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"Exception when deleting debt MESSAGE : {ex.Message}");
+        }
+    }
+
+    [RelayCommand]
+    async Task UpSertInstallmentPaymentPopUp()
+    {
+        upSertDebtVM.SingleDebtDetails = SingleDebtDetails;
+        upSertDebtVM.SingleInstallmentPayment = new() { AmountPaid = 0, DatePaid = DateTime.Now };
+        var result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new UpSertInstallmentPayment(upSertDebtVM));
+        {
+            RefreshTitleText();
+            Debug.WriteLine($"Installments Popup Closed {result.Result}");
         }
     }
 

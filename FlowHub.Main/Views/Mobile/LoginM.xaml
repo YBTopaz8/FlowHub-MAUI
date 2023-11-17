@@ -52,7 +52,6 @@
                         </Grid.Resources>
 
                         <Border Grid.Column="0" IsVisible="True" x:Name="LoginFocused"
-                                BackgroundColor="{AppThemeBinding Dark=#201F24, Light={StaticResource BackGroundLight}}"
                                 HorizontalOptions="Center" WidthRequest="100" Margin="0,10">
 
                             <Label Text="Login" TextColor="DarkSlateBlue" 
@@ -62,12 +61,13 @@
 
                         <Border IsVisible="false" Opacity="0" 
                                 x:Name="LoginUnFocused" BackgroundColor="Transparent"
+                                
                                 Grid.Column="0"  HorizontalOptions="Center" WidthRequest="100"
                                 ToolTipProperties.Text="Tap To Show Login Form">
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="LoginUnFocused_Tapped"/>
                             </Border.GestureRecognizers>
-                            <Label Text="Login" Opacity="0.7"
+                            <Label Text="Login" Opacity="0.3" TextColor="{AppThemeBinding Dark=white}"
                                    HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
 
                         </Border>
@@ -81,13 +81,12 @@
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="SignUpUnFocused_Tapped"/>
                             </Border.GestureRecognizers>
-                            <Label Text="Sign Up" Opacity="0.7"
+                            <Label Text="Sign Up" Opacity="0.3" TextColor="{AppThemeBinding Dark=white}"
                                    HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
                         </Border>
 
                         <Border IsVisible="false"  x:Name="SignUpFocused"
                                 Grid.Column="1" HorizontalOptions="Center" WidthRequest="120" Margin="0,10"
-                                BackgroundColor="{AppThemeBinding Dark=#201F24, Light={StaticResource BackGroundLight}}"
                                 >
                             <Label Text="Sign Up" TextColor="DarkSlateBlue"
                                    HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
@@ -201,12 +200,11 @@
                     <Label x:Name="WelcomeLabel" Text="{Binding Username ,StringFormat='Signed in as {0}'}" 
                        FontAttributes="Bold"
                        FontSize="Title" HorizontalOptions="Center"/>
-
+                    
                     <Button Text="Quick Login" TextColor="White" 
                         FontSize="20" FontAttributes="Bold"
                         HeightRequest="50"
                         x:Name="QuickLoginBtn" Clicked="QuickLoginBtn_Clicked" Margin="70,70,70,0" />
-
 
                 </VerticalStackLayout>
 

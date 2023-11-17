@@ -97,7 +97,8 @@
                     <dg:DataGridColumn.CellTemplate>
                         <DataTemplate x:DataType="models:ExpendituresModel">
                             <Label Text="{Binding ., StringFormat='{0:ddd, MMMM dd, yyyy}'}" VerticalTextAlignment="Center"
-                                   HorizontalOptions="FillAndExpand" Style="{StaticResource CellStyle}"
+                                   HorizontalOptions="FillAndExpand" BackgroundColor="{AppThemeBinding Dark=#201F24}"
+                                   TextColor="{AppThemeBinding Dark=white, Light=black}"
                                    HorizontalTextAlignment="Center"/>
                         </DataTemplate>
                     </dg:DataGridColumn.CellTemplate>
@@ -108,7 +109,8 @@
                         <DataTemplate x:DataType="models:ExpendituresModel">
                             <Label Text="{Binding .}" 
                                     VerticalTextAlignment="Center" HorizontalTextAlignment="Center" 
-                                   HorizontalOptions="FillAndExpand" Style="{StaticResource CellStyle}"
+                                   HorizontalOptions="FillAndExpand" BackgroundColor="{AppThemeBinding Dark=#201F24}"
+                                   TextColor="{AppThemeBinding Dark=white, Light=black}"
                                    LineBreakMode="WordWrap" />
                         </DataTemplate>
                     </dg:DataGridColumn.CellTemplate>
@@ -117,8 +119,10 @@
                 <dg:DataGridColumn Title="Category" PropertyName="Category">
                     <dg:DataGridColumn.CellTemplate>
                         <DataTemplate x:DataType="models:ExpendituresModel">
-                            <Label Text="{Binding .}" Style="{StaticResource CellStyle}"
+                            <Label Text="{Binding .}" 
                                     VerticalTextAlignment="Center" HorizontalTextAlignment="Center" 
+                                   BackgroundColor="{AppThemeBinding Dark=#201F24}"
+                                   TextColor="{AppThemeBinding Dark=white, Light=black}"
                                    HorizontalOptions="FillAndExpand"/>
                         </DataTemplate>
                     </dg:DataGridColumn.CellTemplate>
@@ -127,7 +131,8 @@
                 <dg:DataGridColumn Title="Amount Spent" SortingEnabled="False">
                     <dg:DataGridColumn.CellTemplate>
                         <DataTemplate x:DataType="models:ExpendituresModel">
-                            <Label Style="{StaticResource CellStyle}"
+                            <Label BackgroundColor="{AppThemeBinding Dark=#201F24}"
+                                   TextColor="{AppThemeBinding Dark=white, Light=black}"
                                     VerticalTextAlignment="Center" HorizontalTextAlignment="Center" 
                                 HorizontalOptions="FillAndExpand">
                                 <Label.Text>
@@ -144,8 +149,8 @@
                 <dg:DataGridColumn Title="Actions" Width="0.8*" SortingEnabled="False">
                     <dg:DataGridColumn.CellTemplate>
                         <DataTemplate x:DataType="models:ExpendituresModel">
-                            <ContentView HorizontalOptions="FillAndExpand" Style="{StaticResource CellStyle}"
-                                         >
+                            <ContentView HorizontalOptions="FillAndExpand" BackgroundColor="{AppThemeBinding Dark=#201F24}"
+                                    >
                                 <HorizontalStackLayout  HorizontalOptions="CenterAndExpand" >
                                     <ImageButton Source="{AppThemeBinding Light=edit_l.png, Dark=edit_d.png}" WidthRequest="50" HeightRequest="45"
                                                      Command="{Binding Source={x:Reference page}, 

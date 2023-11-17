@@ -2,23 +2,26 @@
 
 namespace FlowHub.Main.Views.Mobile.Debts;
 
-public partial class UpSertDebtPageM : UraniumContentPage
+public partial class UpSertDebtBottomSheet : BottomSheetView
 {
-    private readonly UpSertDebtVM viewModel;
-
-    public UpSertDebtPageM(UpSertDebtVM vm)
-    {
-        InitializeComponent();
-        BindingContext = vm;
+    readonly UpSertDebtVM viewModel;
+	public UpSertDebtBottomSheet(UpSertDebtVM vm)
+	{
+		InitializeComponent();
         viewModel = vm;
-    }
-    protected override void OnAppearing()
-    {
-        base.OnAppearing();
-        viewModel.PageLoaded();
+        this.BindingContext = vm;
+
         
+	}
+
+    private void AmountTextField_Focused(object sender, FocusEventArgs e)
+    {
+        if (AmountTextField.Text == "1")
+        {
+            AmountTextField.Text = "";
+        }
     }
-    private async void ImageButton_Clicked(object sender, EventArgs e)
+    private async void SelectUserFromContactsImgBtn_Clicked(object sender, EventArgs e)
     {
         try
         {
@@ -43,12 +46,12 @@ public partial class UpSertDebtPageM : UraniumContentPage
             Debug.WriteLine("Permission denied " + ex.Message);
         }
     }
-
-    private void TextField_Focused(object sender, FocusEventArgs e)
+    private void DeadlineSwitch_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        if (AmountTextField.Text == "0")
+
+        if (e.PropertyName == "IsToggled")
         {
-            AmountTextField.Text = "";
+            FlowHoldDeadline.Date = DateTime.Now;
         }
     }
 }

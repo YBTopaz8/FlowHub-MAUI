@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<uranium:UraniumContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FlowHub.Main.Views.Mobile.HomePageM"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels"
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              x:DataType="viewModels:HomePageVM">
@@ -15,11 +16,10 @@
             </Label.Text>
         </Label>
         <!-- Begin Section for Expenditure display-->
-        <Border Margin="10" Padding="5"
-                StrokeShape="RoundRectangle 10">
-            <Border.Shadow>
+        <Frame Margin="10" Padding="2">
+            <Frame.Shadow>
                 <Shadow Offset="10,25" Opacity="0.2"/>
-            </Border.Shadow>
+            </Frame.Shadow>
             <VerticalStackLayout Spacing="5">
                 <Label Text="Latest Flow Outs" FontSize="22" HorizontalOptions="Center"                        
                        Padding="10,0,0,0"/>
@@ -69,13 +69,13 @@
                 <Label Text="Loading..." IsVisible="{Binding IsSyncing}" HorizontalOptions="Center"/>
             </VerticalStackLayout>
 
-        </Border>
+        </Frame>
         <VerticalStackLayout HorizontalOptions="Center">
             <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}"
-                         Command="{Binding GoToAddExpenditurePageCommand}"/>
+                         Clicked="AddExpBtn_Clicked"/>
         </VerticalStackLayout>
 
         <!-- End Section for Expenditure display-->
 
     </VerticalStackLayout>
-</ContentPage>
+</uranium:UraniumContentPage>

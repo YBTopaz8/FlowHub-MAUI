@@ -1,24 +1,19 @@
-﻿using Plugin.Maui.CalendarStore;
+﻿
+using Plugin.Maui.CalendarStore;
 
 namespace FlowHub.Main.ViewModels.Debts;
 
 [QueryProperty(nameof(SingleDebtDetails), "SingleDebtDetails")]
-public partial class UpSertDebtVM : ObservableObject
+public partial class UpSertDebtVM(IDebtRepository debtRepository, IUsersRepository usersRepository, ICalendarStore calendarStore) : ObservableObject
 {
-    readonly IDebtRepository debtRepo;
-    readonly IUsersRepository userRepo;
-    private readonly ICalendarStore calendarStoreRepo;
-
-    public UpSertDebtVM(IDebtRepository debtRepository, IUsersRepository usersRepository, ICalendarStore calendarStore)
-    {
-        debtRepo = debtRepository;
-        userRepo = usersRepository;
-        calendarStoreRepo = calendarStore;
-        
-    }
-
+    readonly IDebtRepository debtRepo = debtRepository;
+    readonly IUsersRepository userRepo = usersRepository;
+    private readonly ICalendarStore calendarStoreRepo = calendarStore;
     [ObservableProperty]
     DebtModel singleDebtDetails;
+
+    [ObservableProperty]
+    InstallmentPayments singleInstallmentPayment;
 
     [ObservableProperty]
     string pageTitle;
@@ -26,7 +21,11 @@ public partial class UpSertDebtVM : ObservableObject
     bool hasDeadLine;
     [ObservableProperty]
     bool isBottomSheetOpened;
+    [ObservableProperty]
+    PopupResult thisPopUpResult;
 
+    [ObservableProperty]
+    bool closePopUp;
     bool isLent;
     bool isBorrow;
     public bool IsLent
@@ -127,6 +126,9 @@ public partial class UpSertDebtVM : ObservableObject
         {
             await AddDebtAsync(14, cts, duration);
         }
+
+        ThisPopUpResult = PopupResult.OK;
+        ClosePopUp = true;
     }
 
     [ObservableProperty]
@@ -141,13 +143,14 @@ public partial class UpSertDebtVM : ObservableObject
             SingleDebtDetails.Deadline = null;
             SingleDebtDetails.DatePaidCompletely = null;
         }
-        ////this saves the debt to db and online
-        //if (!await debtRepo.AddDebtAsync(SingleDebtDetails))
-        //{
-        //    await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Failed to Add Flow Hold"));
-        //    return;
-        //}
+        //this saves the debt to db and online
+        if (!await debtRepo.AddDebtAsync(SingleDebtDetails))
+        {
+            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Failed to Add Flow Hold"));
+            return;
+        }
 
+#if ANDROID
         if (HasDeadLine is true && SingleDebtDetails.Deadline is not null)
         {
             var calendarStatusRead = await CheckAndRequestReadCalendarPermission();
@@ -160,9 +163,10 @@ public partial class UpSertDebtVM : ObservableObject
             {
                 return;
             }
+
             var calendarsAccountsProfiles = await calendarStoreRepo.GetCalendars();
 
-                        
+
             if (calendarsAccountsProfiles is null || calendarsAccountsProfiles.Count() == 0)
             {
                 await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("No Accounts found on this Device"));
@@ -187,12 +191,14 @@ public partial class UpSertDebtVM : ObservableObject
             DateTimeOffset deadlineOffsetStart = new DateTimeOffset(SingleDebtDetails.Deadline.Value).AddHours(12);
             DateTimeOffset deadlineOffsetEnd = deadlineOffsetStart.AddMinutes(30);
 
-            var eventID= await calendarStoreRepo.CreateEventWithReminder(calendarProfileID, "FlowHold Due Reminder !",
+            var eventID = await calendarStoreRepo.CreateEventWithReminder(calendarProfileID, "FlowHold Due Reminder !",
                 $"{(SingleDebtDetails.DebtType == DebtType.Lent ? $"{SingleDebtDetails.PersonOrOrganization.Name} Owes You" : $"You Owe {SingleDebtDetails.PersonOrOrganization.Name}")} {SingleDebtDetails.Amount} {SingleDebtDetails.Currency} {Environment.NewLine}{SingleDebtDetails.PhoneAddress}",
                 "FlowHub App", deadlineOffsetStart, deadlineOffsetEnd, 30);
-            
+
             Debug.WriteLine("Event ID " + eventID);
         }
+
+#endif
         const string toastNotifMessage = "Flow Hold Added";
         var toast = Toast.Make(toastNotifMessage, duration, fontSize);
         await toast.Show(cts.Token);
@@ -215,6 +221,53 @@ public partial class UpSertDebtVM : ObservableObject
         IsBottomSheetOpened = false;
     }
 
+    [RelayCommand]
+    public void CancelBtn()
+    {
+        Debug.WriteLine("Action cancelled by user");
+        ThisPopUpResult = PopupResult.Cancel;
+        ClosePopUp = true;
+    }
+
+    [RelayCommand]
+    public async Task UpSertInstallmentPayment()
+    {
+        if (SingleInstallmentPayment.Id is null)
+        {
+            AddInstallmentPayment();
+            //ADD logic to update debt
+            ThisPopUpResult = PopupResult.OK; 
+            ClosePopUp = true;
+        }
+    }
+    [RelayCommand]
+    void CloseInstallmentsPopup()
+    {
+        ThisPopUpResult = PopupResult.Cancel;
+        ClosePopUp = true;
+    }
+    private async void AddInstallmentPayment()
+    {
+        SingleInstallmentPayment.Id = Guid.NewGuid().ToString();
+
+        if (SingleDebtDetails.PaymentAdvances is null )
+        {
+            SingleDebtDetails.PaymentAdvances = [SingleInstallmentPayment];
+        }
+        else
+        {
+            SingleDebtDetails.PaymentAdvances.Add(SingleInstallmentPayment);
+        }
+        SingleDebtDetails.Amount -= SingleInstallmentPayment.AmountPaid;
+    }
+    private async Task EditInstallmentPayment()
+    {
+
+    }
+    private async Task DeleteInstallmentPayment()
+    {
+
+    }
     [RelayCommand]
     async Task ContactDetailsPicker()
     {
@@ -244,7 +297,7 @@ public partial class UpSertDebtVM : ObservableObject
         }
     }
 
-    public async Task<PermissionStatus> CheckAndRequestReadCalendarPermission()
+    public static async Task<PermissionStatus> CheckAndRequestReadCalendarPermission()
     {
         var status = await Permissions.CheckStatusAsync<Permissions.CalendarRead>();
 
@@ -268,7 +321,7 @@ public partial class UpSertDebtVM : ObservableObject
     /// CheckAndRequestWriteCalendarPermission
     /// </summary>
     /// <returns></returns>
-    public async Task<PermissionStatus> CheckAndRequestWriteCalendarPermission()
+    public static async Task<PermissionStatus> CheckAndRequestWriteCalendarPermission()
     {
         var status = await Permissions.CheckStatusAsync<Permissions.CalendarWrite>();
 

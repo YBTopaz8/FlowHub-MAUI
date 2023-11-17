@@ -110,7 +110,7 @@
 
         <!-- Your FAB -->
         <Button             
-                Command="{Binding GoToAddDebtCommand}"
+                
                 WidthRequest="35" HeightRequest="35"
                 CornerRadius="26" Padding="0"
                 BackgroundColor="DarkSlateBlue" BorderColor="DarkSlateBlue"

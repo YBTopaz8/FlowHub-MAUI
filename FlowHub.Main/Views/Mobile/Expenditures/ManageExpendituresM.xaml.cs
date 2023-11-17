@@ -2,29 +2,20 @@
 
 namespace FlowHub.Main.Views.Mobile.Expenditures;
 
-public partial class ManageExpendituresM : ContentPage
+public partial class ManageExpendituresM : UraniumContentPage
 {
     private readonly ManageExpendituresVM viewModel;
-    
-    public ManageExpendituresM(ManageExpendituresVM vm)
+    private readonly UpSertExpenditureVM upSertExpVM;
+    private UpSertExpenditureBottomSheet UpSertExpbSheet;
+    public ManageExpendituresM(ManageExpendituresVM vm, UpSertExpenditureVM upSertExpVM)
     {
         InitializeComponent();
         viewModel = vm;
+        this.upSertExpVM = upSertExpVM;
         BindingContext = vm;
 
-        Microsoft.Maui.Handlers
-            .DatePickerHandler.Mapper
-            .AppendToMapping("MyCustomDatePicker", (handler, view) =>
-            {
-                if (view is DatePicker)
-                {
-#if ANDROID
-                    Android.Graphics.Drawables.GradientDrawable gd = new();
-                    gd.SetColor(global::Android.Graphics.Color.Transparent);
-                    handler.PlatformView.SetBackground(gd);
-#endif
-                }
-            });
+        UpSertExpbSheet = new(upSertExpVM);
+        Attachments.Add(UpSertExpbSheet);
     }
 
     protected override async void OnAppearing()
@@ -47,6 +38,36 @@ public partial class ManageExpendituresM : ContentPage
 
             await viewModel.PrintExpendituresBtn();
             PrintProgressBarIndic.IsVisible = false;
+        }
+    }
+
+    private void AddExpBtn_Clicked(object sender, EventArgs e)
+    {
+        upSertExpVM.SingleExpenditureDetails = new()
+        {
+            DateSpent = DateTime.Now,
+        };
+        upSertExpVM.PageLoaded();
+        UpSertExpbSheet.IsPresented = true;
+    }
+
+    private void EditExpIcon_Clicked(object sender, EventArgs e)
+    {
+        var imageBtn = sender as SwipeItem;
+        var singleExp = (ExpendituresModel)imageBtn.BindingContext;
+
+        upSertExpVM.SingleExpenditureDetails = singleExp; 
+        upSertExpVM.PageLoaded();
+        UpSertExpbSheet.IsPresented = true;
+
+    }
+
+    protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
+    {
+        base.OnNavigatedFrom(args);
+        if (UpSertExpbSheet.IsPresented)
+        {
+            UpSertExpbSheet.IsPresented = false;
         }
     }
 }

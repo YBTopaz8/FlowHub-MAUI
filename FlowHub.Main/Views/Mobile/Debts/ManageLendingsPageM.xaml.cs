@@ -2,14 +2,20 @@
 
 namespace FlowHub.Main.Views.Mobile.Debts;
 
-public partial class ManageLendingsPageM : UraniumUI.Pages.UraniumContentPage
+public partial class ManageLendingsPageM : UraniumContentPage
 {
     readonly ManageDebtsVM viewModel;
-    public ManageLendingsPageM(ManageDebtsVM vm)
+    readonly UpSertDebtVM UpSertVM;
+    private UpSertDebtBottomSheet UpSertDebtbSheet;
+    public ManageLendingsPageM(ManageDebtsVM vm, UpSertDebtVM upSertDebtVM)
     {
         InitializeComponent();
         viewModel = vm;
         BindingContext = vm;
+        UpSertVM = upSertDebtVM;
+
+        UpSertDebtbSheet = new(upSertDebtVM);
+        this.Attachments.Add(UpSertDebtbSheet);
     }
     protected override void OnAppearing()
     {
@@ -93,5 +99,27 @@ public partial class ManageLendingsPageM : UraniumUI.Pages.UraniumContentPage
         CompletedLentExpander.IsExpanded = false;
         PendingLentExpander.IsExpanded = false;
     }
+    private void AddNewFlowHoldBtn_Clicked(object sender, EventArgs e)
+    {
+        UpSertVM.SingleDebtDetails = new DebtModel()
+        {
+            Amount = 1,
+            PersonOrOrganization = new PersonOrOrganizationModel(),
+            Currency = viewModel.UserCurrency,
+        };
 
+        UpSertVM.PageLoaded();
+        UpSertDebtbSheet.IsPresented = true;
+
+    }
+    private void EditDebtBtn_Clicked(object sender, EventArgs e)
+    {
+        var ss = (SwipeItem) sender ;
+        var selectedDebtItem= (DebtModel)ss.BindingContext;
+        
+        UpSertVM.SingleDebtDetails = selectedDebtItem;
+        UpSertVM.PageLoaded();
+
+        UpSertDebtbSheet.IsPresented = true;
+    }
 }

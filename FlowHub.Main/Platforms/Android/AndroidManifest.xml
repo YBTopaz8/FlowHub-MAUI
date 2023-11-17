@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-	<application android:allowBackup="true" android:icon="@mipmap/appicon" android:supportsRtl="true"></application>
+	<application android:allowBackup="true" android:icon="@mipmap/appicon1" android:supportsRtl="true"></application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -13,5 +13,5 @@
 			<data android:scheme="tel" />
 		</intent>
 	</queries>
-	<uses-sdk android:minSdkVersion="31" android:targetSdkVersion="33" />
+	<uses-sdk android:minSdkVersion="32" android:targetSdkVersion="34" />
 </manifest>

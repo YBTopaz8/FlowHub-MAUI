@@ -6,6 +6,7 @@ public partial class ManageExpendituresPageD : ContentPage
 {
     readonly ManageExpendituresVM viewModel;
 
+
     public ManageExpendituresPageD(ManageExpendituresVM vm)
     {
         InitializeComponent();
@@ -20,10 +21,6 @@ public partial class ManageExpendituresPageD : ContentPage
        
         await viewModel.PageloadedAsync();
 
-        var newHeaderLabelStyle = new Style(typeof(Label));
-        newHeaderLabelStyle.Setters.Add(new Setter { Property = Label.TextColorProperty, Value = Colors.White });
-
-        ExpDG.HeaderLabelStyle = newHeaderLabelStyle;
     }
 
     private async void ExportToPDFImageButton_Clicked(object sender, EventArgs e)
@@ -34,12 +31,12 @@ public partial class ManageExpendituresPageD : ContentPage
         }
         else
         {
-            PrintProgressBarIndic.IsVisible = true;
-            PrintProgressBarIndic.Progress = 0;
-            await PrintProgressBarIndic.ProgressTo(1, 1000, easing: Easing.Linear);
+            //PrintProgressBarIndic.IsVisible = true;
+            //PrintProgressBarIndic.Progress = 0;
+            //await PrintProgressBarIndic.ProgressTo(1, 1000, easing: Easing.Linear);
 
-            await viewModel.PrintExpendituresBtn();
-            PrintProgressBarIndic.IsVisible = false;
+            //await viewModel.PrintExpendituresBtn();
+            //PrintProgressBarIndic.IsVisible = false;
         }
     }
 }

@@ -12,40 +12,13 @@ public partial class UpSertExpendituresPopUp : Popup
         BindingContext = vm;
         viewModel.PageLoaded();
 
-#if ANDROID
-        Size = new Size(230, 390);
-        //#if ANDROID
-        //        var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
-        //        var orientation = mainDisplayInfo.Orientation;
-        //        var width = mainDisplayInfo.Width;
-        //        var height = mainDisplayInfo.Height;
-        //        var density = mainDisplayInfo.Density;
-        //        var smallestWidth = Math.Min(width, height) / density;
-        //        var popupWidth = smallestWidth * 0.9;
-
-        //        double popupHeight = 0;
-        //        if (smallestWidth < 415)
-        //        {
-        //            if ((smallestWidth * 0.13) > 401)
-        //            {
-        //                popupHeight = 350;
-        //            }
-        //            else
-        //            {
-        //                popupHeight = (double)(smallestWidth * 0.92);
-        //            }
-
-        //        }
-        //        //else if(smallestWidth)
-
-        //        Size = new Size(popupWidth, popupHeight);
-#elif WINDOWS
         Size = new Size(400, 420);
-#endif
+
         viewModel.PropertyChanged += ViewModel_PropertyChanged;
+
     }
 
-    private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(viewModel.ClosePopUp) && viewModel.ClosePopUp)
         {

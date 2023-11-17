@@ -132,6 +132,7 @@ public class ExpendituresRepository : IExpendituresRepository
     public async Task SynchronizeExpendituresAsync()
     {
         await GetAllExpendituresAsync();
+        
         if (!Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
         {
             IsSyncing = false;

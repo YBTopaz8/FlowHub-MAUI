@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<ContentPage x:Class="FlowHub.Main.Views.Mobile.Expenditures.ManageExpendituresM"
+<uranium:UraniumContentPage x:Class="FlowHub.Main.Views.Mobile.Expenditures.ManageExpendituresM"
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Expenditures"
@@ -14,7 +15,7 @@
         <ToolbarItem IconImageSource="filter_d" Command="{Binding ShowFilterPopUpPageCommand}" />
     </ContentPage.ToolbarItems>-->
     <AbsoluteLayout>
-
+        
         <toolkit:DockLayout Margin="5,0" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
             <Label toolkit:DockLayout.DockPosition="Top" FontSize="21" FontAttributes="Bold" HorizontalOptions="Center" >
                 <Label.Text>
@@ -42,7 +43,7 @@
                     VerticalOptions="Center" Command="{Binding GoToSpecificStatsPageCommand}"/>
             </Grid>
 
-            <HorizontalStackLayout toolkit:DockLayout.DockPosition="Top" HorizontalOptions="Center" x:Name="SyncIndicator">
+           <HorizontalStackLayout toolkit:DockLayout.DockPosition="Top" HorizontalOptions="Center" x:Name="SyncIndicator">
                 <Label Text="Syncing..." IsVisible="{Binding IsBusy}" Margin="0,0,0,0" FontSize="13" />
                 <ActivityIndicator IsRunning="{Binding IsBusy}" HeightRequest="20" IsVisible="{Binding IsBusy}"/>
             </HorizontalStackLayout>
@@ -61,7 +62,7 @@
                 </Label.Text>
             </Label>
 
-            <CollectionView x:Name="ColView" IsVisible="true" ItemsSource="{Binding GroupedExpenditures}" 
+           <CollectionView x:Name="ColView" IsVisible="true" ItemsSource="{Binding GroupedExpenditures}" 
                         IsGrouped="True" HorizontalOptions="Center"
                         EmptyView="No Flow Outs Available...">
 
@@ -90,31 +91,31 @@
                 </CollectionView.GroupFooterTemplate>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:ExpendituresModel">
-                        <!--set to fill and expand for it to take the whole width of the screen-->
+                       <!--set to fill and expand for it to take the whole width of the screen-->
                         <SwipeView HorizontalOptions="FillAndExpand" Margin="0,2" BackgroundColor="Transparent">
-                            <SwipeView.LeftItems>
+                            <SwipeView.RightItems>
                                 <SwipeItems>
                                     <SwipeItem 
-                                        Command="{Binding Source={x:Reference Page}, Path=BindingContext.ShowEditExpenditurePopUpCommand}"  
-                                        CommandParameter="{Binding .}" IconImageSource="{AppThemeBinding Dark= edit_d, Light= edit_l}"
+                                        Clicked="EditExpIcon_Clicked" IconImageSource="{AppThemeBinding Dark= edit_d, Light= edit_l}"
                                         BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=#D8D8D8}"/>
                                 </SwipeItems>
-                            </SwipeView.LeftItems>
+                            </SwipeView.RightItems>
 
-                            <SwipeView.RightItems>
+                            <SwipeView.LeftItems>
                                 <SwipeItems>
                                     <SwipeItem 
                                         Command="{Binding Source={x:Reference Page}, Path=BindingContext.DeleteExpenditureBtnCommand}"  
                                         CommandParameter="{Binding .}" IconImageSource="{AppThemeBinding Dark= delete_d, Light = delete_l}" 
                                         BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=#D8D8D8}"/>
                                 </SwipeItems>
-                            </SwipeView.RightItems>
-                            <Border HorizontalOptions="FillAndExpand" 
-                                    StrokeThickness="0">
-                                <Border.GestureRecognizers>
+                            </SwipeView.LeftItems>
+                            <Frame HorizontalOptions="FillAndExpand" BorderColor="Transparent"
+                                    Padding="0">
+                                <!--StrokeThickness="0">-->
+                                <Frame.GestureRecognizers>
                                     <TapGestureRecognizer NumberOfTapsRequired="2" Command="{Binding Source={x:Reference Page}, Path=BindingContext.CopyToClipboardCommand}"
                                                             CommandParameter="{Binding .}"/>
-                                </Border.GestureRecognizers>
+                                </Frame.GestureRecognizers>
                                 <VerticalStackLayout >
                                     <FlexLayout JustifyContent="SpaceBetween" Direction="Row" Margin="6,2">
                                         <VerticalStackLayout>
@@ -138,7 +139,7 @@
                                     <Rectangle Fill="#404040" HeightRequest="0.8"/>
                                 </VerticalStackLayout>
 
-                            </Border>
+                            </Frame>
                         </SwipeView>
 
                     </DataTemplate>
@@ -147,25 +148,22 @@
 
 
         </toolkit:DockLayout>
+        <!--Command="{Binding ShowAddExpenditurePopUpCommand}"-->
         <Button
-                Command="{Binding ShowAddExpenditurePopUpCommand}"                
-                WidthRequest="55"
-                HeightRequest="55"
-                CornerRadius="26"
-                Padding="0"
-                BackgroundColor="DarkSlateBlue"
-                BorderColor="DarkSlateBlue"
-                Text="+"
-                TextColor="White"
+                x:Name="AddExpBtn"
+                Clicked="AddExpBtn_Clicked"               
+                WidthRequest="55" HeightRequest="55"
+                CornerRadius="26" Padding="0"
+                BackgroundColor="DarkSlateBlue" BorderColor="DarkSlateBlue"
+                Text="+" TextColor="White"
                 FontSize="40"
                 AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize"
                 AbsoluteLayout.LayoutFlags="PositionProportional"
                 Margin="0,0,15,30"
-                ToolTipProperties.Text="Add New Flow Out"
-            >
+                ToolTipProperties.Text="Add New Flow Out">
             <Button.Shadow>
                 <Shadow Offset="5,15" Opacity="0.6"/>
             </Button.Shadow>
         </Button>
     </AbsoluteLayout>
-</ContentPage>
+</uranium:UraniumContentPage>

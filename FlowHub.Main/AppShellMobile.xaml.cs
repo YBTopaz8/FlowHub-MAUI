@@ -27,6 +27,6 @@ public partial class AppShellMobile : Shell
         Routing.RegisterRoute(nameof(DebtsOverviewPageM), typeof(DebtsOverviewPageM));
         Routing.RegisterRoute(nameof(ManageBorrowingsPageM), typeof(ManageBorrowingsPageM));
         Routing.RegisterRoute(nameof(ManageLendingsPageM), typeof(ManageLendingsPageM));
-        Routing.RegisterRoute(nameof(UpSertDebtPageM), typeof(UpSertDebtPageM));
+        Routing.RegisterRoute(nameof(SingleDebtDetailsPageM), typeof(SingleDebtDetailsPageM));
     }
 }
