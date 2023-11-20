@@ -155,7 +155,7 @@ public partial class ManageExpendituresVM : ObservableObject
             var newExpenditure = new ExpendituresModel() { DateSpent = DateTime.Now };
             
             upSertExpenditureVM.SingleExpenditureDetails = newExpenditure;
-
+            upSertExpenditureVM.ClosePopUp = false;
             await AddEditExpediture();
         }
     }
@@ -164,6 +164,7 @@ public partial class ManageExpendituresVM : ObservableObject
     public async Task ShowEditExpenditurePopUp(ExpendituresModel expenditure)
     {
         upSertExpenditureVM.SingleExpenditureDetails = expenditure;
+        upSertExpenditureVM.ClosePopUp = false;
         await AddEditExpediture();
     }
     private async Task AddEditExpediture()
