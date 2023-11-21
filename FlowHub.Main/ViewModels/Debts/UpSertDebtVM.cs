@@ -28,6 +28,9 @@ public partial class UpSertDebtVM(IDebtRepository debtRepository, IUsersReposito
     bool closePopUp;
     bool isLent;
     bool isBorrow;
+
+    [ObservableProperty]
+    bool isUpSertInstallmentBSheetPresent;
     public bool IsLent
     {
         get => isLent;
@@ -60,10 +63,13 @@ public partial class UpSertDebtVM(IDebtRepository debtRepository, IUsersReposito
         }
     }
 
+
     [ObservableProperty]
     List<PersonOrOrganizationModel> listOfPersons;
     [ObservableProperty]
     List<string> listOfPersonsNames;
+
+    public double selectedInstallmentInitialAmount;
     public void PageLoaded()
     {
         DebtType = SingleDebtDetails.DebtType;
@@ -232,25 +238,48 @@ public partial class UpSertDebtVM(IDebtRepository debtRepository, IUsersReposito
     [RelayCommand]
     public async Task UpSertInstallmentPayment()
     {
-        if (SingleInstallmentPayment.Id is null)
+
+        bool ProcessInstallmentPayment()
         {
-            AddInstallmentPayment();
-            //ADD logic to update debt
-            ThisPopUpResult = PopupResult.OK; 
-            ClosePopUp = true;
+            if (SingleInstallmentPayment.Id is null)
+            {
+                return AddInstallmentPayment();
+            }
+            else
+            {
+                return EditInstallmentPayment();
+            }
         }
+
+        if (ProcessInstallmentPayment())
+        {
+            await debtRepo.UpdateDebtAsync(SingleDebtDetails);
+        }
+        else
+        {
+            Debug.WriteLine("Did not update debt");
+        }
+        ThisPopUpResult = PopupResult.OK;
+        ClosePopUp = true;
+        IsUpSertInstallmentBSheetPresent = false;
     }
     [RelayCommand]
     void CloseInstallmentsPopup()
     {
         ThisPopUpResult = PopupResult.Cancel;
         ClosePopUp = true;
+        IsUpSertInstallmentBSheetPresent = false;
+        
     }
-    private async void AddInstallmentPayment()
+    private bool AddInstallmentPayment()
     {
+        if (SingleInstallmentPayment.AmountPaid < 1)
+        {
+            return false;
+        }
         SingleInstallmentPayment.Id = Guid.NewGuid().ToString();
 
-        if (SingleDebtDetails.PaymentAdvances is null )
+        if (SingleDebtDetails.PaymentAdvances is null)
         {
             SingleDebtDetails.PaymentAdvances = [SingleInstallmentPayment];
         }
@@ -259,13 +288,53 @@ public partial class UpSertDebtVM(IDebtRepository debtRepository, IUsersReposito
             SingleDebtDetails.PaymentAdvances.Add(SingleInstallmentPayment);
         }
         SingleDebtDetails.Amount -= SingleInstallmentPayment.AmountPaid;
+        return true;
     }
-    private async Task EditInstallmentPayment()
-    {
 
-    }
-    private async Task DeleteInstallmentPayment()
+
+    private bool EditInstallmentPayment()
     {
+                
+        if (SingleInstallmentPayment.AmountPaid < 0)
+        {
+            return false;
+        }
+
+        int index = SingleDebtDetails.PaymentAdvances
+            .Select((item, idx) => new { Item = item, Index = idx })
+            .FirstOrDefault(x => x.Item.Id == SingleInstallmentPayment.Id)?.Index ?? -1;
+
+        if (index != -1)
+        {
+            // Replace the found item
+            SingleDebtDetails.PaymentAdvances[index] = SingleInstallmentPayment;
+
+            double amountDifference = selectedInstallmentInitialAmount - SingleInstallmentPayment.AmountPaid;
+            if ((SingleInstallmentPayment.AmountPaid < selectedInstallmentInitialAmount))
+            {
+                SingleDebtDetails.Amount += (double)amountDifference;
+            }
+            else
+            {
+                SingleDebtDetails.Amount -= (double)-amountDifference;
+            }
+
+            return true;
+
+        }
+        else
+        {
+            throw new Exception("No Installment found");
+        }
+    }
+    [RelayCommand]
+    public async Task DeleteInstallmentPayment(InstallmentPayments installment)
+    {
+        SingleDebtDetails.PaymentAdvances.Remove(installment);
+        SingleDebtDetails.Amount += installment.AmountPaid;
+        await debtRepo.UpdateDebtAsync(SingleDebtDetails);
+
+        IsUpSertInstallmentBSheetPresent = false;
 
     }
     [RelayCommand]

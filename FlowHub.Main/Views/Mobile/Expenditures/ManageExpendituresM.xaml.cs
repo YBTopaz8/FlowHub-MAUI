@@ -16,12 +16,19 @@ public partial class ManageExpendituresM : UraniumContentPage
 
         UpSertExpbSheet = new(upSertExpVM);
         Attachments.Add(UpSertExpbSheet);
+        
     }
 
     protected override async void OnAppearing()
     {
+        if (UpSertExpbSheet.IsPresented)
+        {
+            UpSertExpbSheet.IsPresented = false;
+        }
         base.OnAppearing();
+        
         await viewModel.PageloadedAsync();
+        
     }
 
     private async void ExportToPDFImageButton_Clicked(object sender, EventArgs e)
@@ -62,12 +69,4 @@ public partial class ManageExpendituresM : UraniumContentPage
 
     }
 
-    protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
-    {
-        base.OnNavigatedFrom(args);
-        if (UpSertExpbSheet.IsPresented)
-        {
-            UpSertExpbSheet.IsPresented = false;
-        }
-    }
 }

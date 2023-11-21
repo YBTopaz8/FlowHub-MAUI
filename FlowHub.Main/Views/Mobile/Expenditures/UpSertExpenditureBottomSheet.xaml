@@ -10,7 +10,7 @@
              xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Expenditures"
              x:DataType="viewModels:UpSertExpenditureVM"
-             x:Name="page" DisablePageWhenOpened="True"
+             x:Name="page" 
              CloseOnTapOutside="True" CornerRadius="25"
              IsPresented="{Binding IsBottomSheetOpened}"
              BorderColor="Transparent">

@@ -144,7 +144,9 @@ public class IncomeRepository : IIncomeRepository
             }
             IsSyncing = true;
             IsBatchUpdate = true;
-
+            OfflineIncomesList = new List<IncomeModel>(OnlineIncomesList);
+            OnlineIncomesList.Clear();
+            return; 
             Dictionary<string, IncomeModel> OfflineIncomeDict = OfflineIncomesList.ToDictionary(x => x.Id, x => x);
             Dictionary<string, IncomeModel> OnlineIncomeDict = OnlineIncomesList.ToDictionary(x => x.Id, x => x);
 

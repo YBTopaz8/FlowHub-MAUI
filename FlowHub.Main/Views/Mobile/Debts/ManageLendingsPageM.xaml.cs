@@ -19,6 +19,10 @@ public partial class ManageLendingsPageM : UraniumContentPage
     }
     protected override void OnAppearing()
     {
+        if (UpSertDebtbSheet.IsPresented)
+        {
+            UpSertDebtbSheet.IsPresented = false;
+        }
         base.OnAppearing();
         viewModel.PageLoaded();
     }

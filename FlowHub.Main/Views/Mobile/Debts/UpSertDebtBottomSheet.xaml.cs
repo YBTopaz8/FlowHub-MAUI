@@ -10,8 +10,7 @@ public partial class UpSertDebtBottomSheet : BottomSheetView
 		InitializeComponent();
         viewModel = vm;
         this.BindingContext = vm;
-
-        
+   
 	}
 
     private void AmountTextField_Focused(object sender, FocusEventArgs e)

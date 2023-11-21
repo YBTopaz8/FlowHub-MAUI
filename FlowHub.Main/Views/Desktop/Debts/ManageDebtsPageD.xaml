@@ -140,21 +140,16 @@
                                 </ResourceDictionary>
                             </VerticalStackLayout.Resources>
                             <Label Text="Flow Direction :"/>
-                            <Label Text="Flow Due: ">
-                                <Label.Triggers>
-                                    <DataTrigger TargetType="Label"
-                                     Binding="{Binding IsDeadlineSet}" Value="false">
-                                        <Setter Property="IsVisible" Value="False"/>
-                                    </DataTrigger>
-                                </Label.Triggers>
-                            </Label>
+                            <Label Text="Flow Due: "/>
+
+
                             <Label Text="Flow Completion : " />
                             <Label Text="Contact : "/>
                             <Label Text="Notes : "/>
 
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout Spacing="8">
+                        <VerticalStackLayout Margin="3,0" Spacing="10">
                             <VerticalStackLayout.Resources>
                                 <ResourceDictionary>
                                     <Style TargetType="Label">
@@ -165,7 +160,6 @@
                                     </Style>
                                 </ResourceDictionary>
                             </VerticalStackLayout.Resources>
-
 
                             <Label>
                                 <Label.Triggers>
@@ -182,25 +176,18 @@
                                 </Label.Triggers>
                             </Label>
 
-                            <Label Text="{Binding SingleDebtDetails.Deadline, StringFormat='{0:ddd, MMM dd, yyyy}'}" >
-                                <Label.Triggers>
-                                    <DataTrigger TargetType="Label"
-                                     Binding="{Binding SingleDebtDetails.Deadline.HasValue}" Value="False">
-                                        <Setter Property="Text" Value="No Deadline Set"/>
-                                    </DataTrigger>
-                                </Label.Triggers>
-                            </Label>
+                            <Label Text="{Binding SingleDebtDetails.Deadline, StringFormat='{0:ddd, MMM dd, yyyy}'}" />
 
                             <Label>
                                 <Label.Triggers>
                                     <DataTrigger TargetType="Label"
-                            Binding="{Binding SingleDebtDetails.IsPaidCompletely}" Value="True">
+                                            Binding="{Binding SingleDebtDetails.IsPaidCompletely}" Value="True">
                                         <Setter Property="Text" Value="Completed"/>
                                     </DataTrigger>
 
                                     <DataTrigger TargetType="Label"
-                             Binding="{Binding SingleDebtDetails.IsPaidCompletely}" 
-                             Value="False">
+                                            Binding="{Binding SingleDebtDetails.IsPaidCompletely}" 
+                                            Value="False">
                                         <Setter Property="Text" Value="Pending"/>
                                     </DataTrigger>
                                 </Label.Triggers>
@@ -217,20 +204,83 @@
                         <uranium:ExpanderView.Header>
                             <Label Text="Payment advances" HorizontalTextAlignment="Center"/>
                         </uranium:ExpanderView.Header>
-                        <VerticalStackLayout HorizontalOptions="Center">
-                            <CollectionView ItemsSource="{Binding SingleDebtDetails.PaymentAdvances}"
-                                EmptyView="No Payment Advances...">
-                                <CollectionView.ItemTemplate>
-                                    <DataTemplate x:DataType="models:InstallmentPayments">
-                                        <FlexLayout >
-                                            <Label Text="{Binding AmountPaid}"/>
-                                            <Label Text="{Binding DatePaid}"/>
-                                            <Label Text="{Binding ReasonForOptionalPayment}"/>
-                                        </FlexLayout>
+                        <VerticalStackLayout HorizontalOptions="Center" >
+                           
+                            <dg:DataGrid ItemsSource="{Binding SingleDebtDetails.PaymentAdvances}" HorizontalOptions="Center" WidthRequest="450"
+                                         BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#D8D8D8}" HeaderBackground="{AppThemeBinding Dark=#0E131A, Light=#D8D8D8}"
+                                         FooterBackground="{AppThemeBinding Dark=#0E131A, Light=#D8D8D8}"
+                                         BorderColor="Transparent"
+                                         >
+                                <dg:DataGrid.RowsBackgroundColorPalette>
+                                    <dg:PaletteCollection Capacity="2"/>
+                                </dg:DataGrid.RowsBackgroundColorPalette>
+                                <dg:DataGrid.HeaderLabelStyle>
+                                    <Style TargetType="Label">
+                                        <Setter Property="TextColor" Value="White"/>
+                                        <Setter Property="VerticalTextAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalTextAlignment" Value="Center"/>
+                                    </Style>
+                                </dg:DataGrid.HeaderLabelStyle>
+                                <dg:DataGrid.NoDataView>
+                                    <Label Text="No Payment Advances..." BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#D8D8D8}"
+                                           HorizontalTextAlignment="Center"
+                                           HorizontalOptions="Center"/>
+                                </dg:DataGrid.NoDataView>
+                                <dg:DataGrid.Columns>
+                                    <dg:DataGridColumn Title="Amount Paid" PropertyName="AmountPaid">
+                                        <dg:DataGridColumn.CellTemplate>
+                                            <DataTemplate x:DataType="models:InstallmentPayments">
+                                                <Label Text="{Binding .}" VerticalTextAlignment="Center"
+                                                     HorizontalOptions="FillAndExpand"  BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#D8D8D8}"
+                                                     HorizontalTextAlignment="Center"/>
+                                            </DataTemplate>
+                                        </dg:DataGridColumn.CellTemplate>
+                                    </dg:DataGridColumn>
 
-                                    </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                            </CollectionView>
+                                    <dg:DataGridColumn Title="Date Paid" PropertyName="DatePaid">
+                                        <dg:DataGridColumn.CellTemplate>
+                                            <DataTemplate x:DataType="models:InstallmentPayments">
+                                                <Label Text="{Binding ., StringFormat='{0:ddd, MMMM dd, yyyy}'}" VerticalTextAlignment="Center"
+                                                     HorizontalOptions="FillAndExpand" BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#D8D8D8}"
+                                                     TextColor="{AppThemeBinding Dark=white, Light=black}"
+                                                     HorizontalTextAlignment="Center"/>
+                                            </DataTemplate>
+                                        </dg:DataGridColumn.CellTemplate>
+                                    </dg:DataGridColumn>
+
+                                    <dg:DataGridColumn Title="Additional Notes" PropertyName="ReasonForOptionalPayment">
+                                        <dg:DataGridColumn.CellTemplate>
+                                            <DataTemplate x:DataType="models:InstallmentPayments">
+                                                <Label Text="{Binding .}" BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#D8D8D8}"
+                                                       VerticalTextAlignment="Center"
+                                                     HorizontalTextAlignment="Center"/>
+                                            </DataTemplate>
+                                        </dg:DataGridColumn.CellTemplate>
+                                    </dg:DataGridColumn>
+
+
+                                    <dg:DataGridColumn Title="Actions" Width="0.8*" SortingEnabled="False">
+                                        <dg:DataGridColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <ContentView HorizontalOptions="FillAndExpand" BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#D8D8D8}">
+                                                    <HorizontalStackLayout  HorizontalOptions="CenterAndExpand" >
+                                                        <ImageButton Source="{AppThemeBinding Light=edit_l.png, Dark=edit_d.png}" WidthRequest="50" HeightRequest="45"
+                                                            Command="{Binding Source={x:Reference Page}, 
+                                                                Path=BindingContext.UpSertInstallmentPaymentPopUpCommand}"  
+                                                            CommandParameter="{Binding .}"/>
+                                                        <ImageButton Source="{AppThemeBinding Light=delete_l.png, Dark=delete_d.png}" WidthRequest="50" HeightRequest="45"
+                                                            Command="{Binding Source={x:Reference Page}, 
+                                                                Path=BindingContext.DeleteInstallmentCommand}"  
+                                                            CommandParameter="{Binding .}"/>
+                                                    </HorizontalStackLayout>
+                                                </ContentView>
+                                            </DataTemplate>
+                                        </dg:DataGridColumn.CellTemplate>
+                                    </dg:DataGridColumn>
+                                </dg:DataGrid.Columns>
+                                
+                            </dg:DataGrid>
+                           
                             <ImageButton Source="add_btn_d.png" 
                                          Command="{Binding UpSertInstallmentPaymentPopUpCommand}"
                                          HeightRequest="50"/>

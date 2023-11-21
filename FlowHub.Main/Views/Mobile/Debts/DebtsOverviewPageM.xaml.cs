@@ -19,6 +19,10 @@ public partial class DebtsOverviewPageM : UraniumContentPage
     }
     protected override void OnAppearing()
     {
+        if (UpSertDebtbSheet.IsPresented)
+        {
+            UpSertDebtbSheet.IsPresented = false;
+        }
         base.OnAppearing();
         viewModel.PageLoaded();
         UpSertDebtbSheet.IsPresented = false;
@@ -53,13 +57,5 @@ public partial class DebtsOverviewPageM : UraniumContentPage
         
     }
 
-    protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
-    {
-        base.OnNavigatedFrom(args);
-        if (UpSertDebtbSheet.IsPresented)
-        {
-            UpSertDebtbSheet.IsPresented = false;
-        }
-    }
 
 }

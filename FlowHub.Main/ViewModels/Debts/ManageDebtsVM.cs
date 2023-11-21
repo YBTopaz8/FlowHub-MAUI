@@ -105,26 +105,22 @@ public partial class ManageDebtsVM : ObservableObject
     }
 
 
-
-    [RelayCommand]
-    public async Task ViewDebtSheet(DebtModel debt)
-    {
-        SingleDebtDetails = debt;
-#if ANDROID
-        //debtBS = new ViewDebtBottomSheet(this);
-        // TODO await Drawer.Open(debtBS); 
-#endif
-    }
-
     [RelayCommand]
     public async Task ShowDebtDetails(DebtModel debt)
     {
-        ShowSingleSebt = !ShowSingleSebt;
+#if ANDROID
+        SingleDebtDetails = debt;
+
+        await Shell.Current.GoToAsync(nameof(SingleDebtDetailsPageM), true);
+#elif WINDOWS
+        ShowSingleSebt = true;
         SingleDebtDetails = debt;
         RefreshTitleText();
+#endif
+
     }
 
-    private void RefreshTitleText()
+    public void RefreshTitleText()
     {
         TitleText = SingleDebtDetails.DebtType == DebtType.Lent
                     ? $"{SingleDebtDetails.PersonOrOrganization.Name} Owes You {SingleDebtDetails.Amount} {SingleDebtDetails.Currency}"
@@ -226,8 +222,7 @@ public partial class ManageDebtsVM : ObservableObject
 
     [RelayCommand]
     void SearchBar(string query)
-    {
-        
+    {        
         try
         {
             var ListOfDebts = debtRepo.OfflineDebtList
@@ -282,14 +277,30 @@ public partial class ManageDebtsVM : ObservableObject
     }
 
     [RelayCommand]
-    async Task UpSertInstallmentPaymentPopUp()
+    async Task UpSertInstallmentPaymentPopUp(InstallmentPayments selectedInstallment = null)
     {
         upSertDebtVM.SingleDebtDetails = SingleDebtDetails;
-        upSertDebtVM.SingleInstallmentPayment = new() { AmountPaid = 0, DatePaid = DateTime.Now };
+        upSertDebtVM.SingleInstallmentPayment = selectedInstallment is null ? new() { AmountPaid = 0, DatePaid = DateTime.Now } : selectedInstallment;
+        upSertDebtVM.selectedInstallmentInitialAmount = selectedInstallment is null ? 0 : selectedInstallment.AmountPaid;
+        
         var result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new UpSertInstallmentPayment(upSertDebtVM));
         {
             RefreshTitleText();
             Debug.WriteLine($"Installments Popup Closed {result.Result}");
+        }
+    }
+    [RelayCommand]
+    async Task DeleteInstallment(InstallmentPayments selectedInstallment)
+    {
+        var deletedResult = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Confirm Delete?"));
+        if (deletedResult)
+        {
+            upSertDebtVM.SingleDebtDetails = SingleDebtDetails;
+            upSertDebtVM.SingleInstallmentPayment = selectedInstallment;
+
+            await upSertDebtVM.DeleteInstallmentPayment(selectedInstallment);
+            RefreshTitleText();           
+
         }
     }
 
