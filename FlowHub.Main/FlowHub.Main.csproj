@@ -256,6 +256,9 @@
 	  <MauiXaml Update="Views\Mobile\Debts\DebtsOverviewPageM.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Mobile\Debts\UpSertInstallmentBSheet.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Mobile\Expenditures\ManageExpendituresM.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

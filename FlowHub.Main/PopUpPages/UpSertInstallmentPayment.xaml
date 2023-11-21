@@ -26,8 +26,7 @@
 
                 <material:TextField Title="Amount" Text="{Binding SingleInstallmentPayment.AmountPaid}"
                                     Focused="TextField_Focused" x:Name="AmountPaid">
-                    <validation:RequiredValidation/>
-                    <validation:MinValueValidation MinValue="1"/>
+                    
                 </material:TextField>
                 <material:TextField Text="{Binding SingleInstallmentPayment.ReasonForOptionalPayment}"
                     Title="Notes (Optional)"/>

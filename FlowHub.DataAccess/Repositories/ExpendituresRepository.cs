@@ -154,6 +154,10 @@ public class ExpendituresRepository : IExpendituresRepository
             IsSyncing = true;
             IsBatchUpdate = true;
 
+            OfflineExpendituresList = new List<ExpendituresModel>(OnlineExpendituresList);
+            
+            OnlineExpendituresList.Clear();
+            return;
             Dictionary<string, ExpendituresModel> OnlineExpendituresDict = OnlineExpendituresList.ToDictionary(x => x.Id, x => x);
             Dictionary<string, ExpendituresModel> OfflineExpendituresDict = OfflineExpendituresList.ToDictionary(x => x.Id, x => x);
 

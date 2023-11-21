@@ -153,6 +153,10 @@ public class DebtRepository : IDebtRepository
             IsSyncing = true;
             IsBatchUpdate = true;
 
+            OfflineDebtList = new List<DebtModel>(OnlineDebtList);
+            OnlineDebtList.Clear();
+            return;
+
             Dictionary<string, DebtModel> OnlineDebtDict = OnlineDebtList.ToDictionary(x => x.Id, x => x);
             Dictionary<string, DebtModel> OfflineDebtDict = OfflineDebtList.ToDictionary(x => x.Id, x => x);
 

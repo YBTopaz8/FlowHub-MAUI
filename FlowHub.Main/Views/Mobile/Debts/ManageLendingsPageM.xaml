@@ -77,7 +77,7 @@
                                       Margin="6,2" Padding="5" >
                                         <Frame.GestureRecognizers>
                                             <TapGestureRecognizer NumberOfTapsRequired="2"
-                                          Command="{Binding Source={x:Reference Page}, Path=BindingContext.ViewDebtSheetCommand}"
+                                          Command="{Binding Source={x:Reference Page}, Path=BindingContext.ShowDebtDetailsCommand}"
                                           CommandParameter="{Binding .}"/>
                                         </Frame.GestureRecognizers>
 
@@ -225,4 +225,5 @@
         </Button>
     </AbsoluteLayout>
 
+    
 </uranium:UraniumContentPage>
