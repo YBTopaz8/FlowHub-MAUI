@@ -78,21 +78,22 @@ public partial class UserSettingsVM : ObservableObject
                         .ToList();
         var BorrowedCompletedList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
             .Where(x => x.DebtType == DebtType.Borrowed && x.IsPaidCompletely)
-            .OrderBy(x => x.AddedDateTime));
+            .OrderBy(x => x.AddedDateTime)); //total of all debts that were paid back to user completely
 
         var LentCompletedList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
             .Where(x => x.DebtType == DebtType.Lent && x.IsPaidCompletely)
-            .OrderBy(x => x.AddedDateTime));
+            .OrderBy(x => x.AddedDateTime));//total of all debts that were paid back FROM user completely
 
-         var BorrowedPendingList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
+        var BorrowedPendingList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
             .Where(x => x.DebtType == DebtType.Borrowed && !x.IsPaidCompletely)
-            .OrderBy(x => x.AddedDateTime));
+            .OrderBy(x => x.AddedDateTime));//total of all debts that are still waiting to be paid back to user 
+
         var LentPendingList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
             .Where(x => x.DebtType == DebtType.Lent && !x.IsPaidCompletely)
-            .OrderBy(x => x.AddedDateTime));
+            .OrderBy(x => x.AddedDateTime)); //total of all debts that are still waiting to be paid back BY user 
 
 
-        
+
         TotalBorrowedCompletedAmount = BorrowedCompletedList.Sum(x => x.Amount);
         TotalBorrowedPendingAmount = BorrowedPendingList.Sum(x => x.Amount);
         TotalLentCompletedAmount = LentCompletedList.Sum(x => x.Amount);
