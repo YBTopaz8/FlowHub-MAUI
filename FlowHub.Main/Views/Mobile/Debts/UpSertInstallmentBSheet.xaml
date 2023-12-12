@@ -10,8 +10,7 @@
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Debts"
              x:DataType="viewModels:UpSertDebtVM"
              x:Name="page" DisablePageWhenOpened="True"
-             CloseOnTapOutside="True" 
-             BackgroundColor="Transparent" CornerRadius="25"
+             CloseOnTapOutside="True" BackgroundColor="Transparent" 
              IsPresented="{Binding IsUpSertInstallmentBSheetPresent}">
     <materialAttach:BottomSheetView.Header>
         <BoxView HeightRequest="0"/>

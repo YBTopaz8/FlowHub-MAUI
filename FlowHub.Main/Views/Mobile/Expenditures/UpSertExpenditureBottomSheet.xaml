@@ -11,9 +11,9 @@
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Expenditures"
              x:DataType="viewModels:UpSertExpenditureVM"
              x:Name="page" 
-             CloseOnTapOutside="True" CornerRadius="25"
+             CloseOnTapOutside="True" BackgroundColor="Transparent"
              IsPresented="{Binding IsBottomSheetOpened}"
-             BorderColor="Transparent">
+             >
     <materialAttach:BottomSheetView.Header>
         <BoxView HeightRequest="0"/>
     </materialAttach:BottomSheetView.Header>
@@ -39,23 +39,34 @@
                     </MultiBinding>
                 </Label.Text>
             </Label>
-            <DatePicker MinimumDate="01/01/2022"
-                        MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
-                        Date="{Binding SingleExpenditureDetails.DateSpent}"
-                        TextColor="{AppThemeBinding Light=black, Dark=white}"/>
+            <material:DatePickerField Title="Date Spent" MinimumDate="01/01/2022" 
+                            MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
+                            Date="{Binding SingleExpenditureDetails.DateSpent}"
+                            TextColor="{AppThemeBinding Light=black, Dark=white}">
+                <material:DatePickerField.Validations>
+                    <validation:RequiredValidation/>
+                </material:DatePickerField.Validations>
+            </material:DatePickerField>
 
-            <Entry Placeholder="Price" x:Name="UnitPrice" Focused="UnitPrice_Focused"
-                   TextChanged="UnitPrice_TextChanged" 
-                   Text="{Binding SingleExpenditureDetails.UnitPrice}" Keyboard="Numeric">
-                
-            </Entry>
-            <Picker ItemsSource="{Binding ExpenditureCategory}" 
-                    SelectedItem="{Binding SingleExpenditureDetails.Category}"/>
+            <material:TextField Grid.Column="0" Title="Price"
+                                    x:Name="UnitPrice" Focused="UnitPrice_Focused"
+                                    TextChanged="UnitPrice_TextChanged"
+                                    AccentColor="#CBCBCB"
+                                    Text="{Binding SingleExpenditureDetails.UnitPrice}" Keyboard="Numeric" >
 
-            <Editor Placeholder="Reason" Text="{Binding SingleExpenditureDetails.Reason}"
-                    IsTextPredictionEnabled="True">
-                
-            </Editor>
+            </material:TextField>
+
+            <material:PickerField Title="Category" ItemsSource="{Binding ExpenditureCategory}"
+                                      TextColor="{AppThemeBinding Light=black, Dark=white}"
+                                      SelectedItem="{Binding SingleExpenditureDetails.Category}"/>
+
+            <material:EditorField Title="Reason" Text="{Binding SingleExpenditureDetails.Reason}" 
+                                      IsTextPredictionEnabled="True" TitleColor="{AppThemeBinding Light=black}"
+                                      TextColor="{AppThemeBinding Light=black, Dark=white}">
+                <material:EditorField.Validations>
+                    <validation:RequiredValidation/>
+                </material:EditorField.Validations>
+            </material:EditorField>
 
             <HorizontalStackLayout HorizontalOptions="Center" Margin="0,5,0,5" Spacing="15">
                 <Button input:FormView.IsSubmitButton="True"

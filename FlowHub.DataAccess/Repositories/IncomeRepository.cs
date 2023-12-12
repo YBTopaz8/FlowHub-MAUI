@@ -122,7 +122,7 @@ public class IncomeRepository : IIncomeRepository
     {
         await GetAllIncomesAsync();
         
-        if (!Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
+        if (Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
         {
             IsSyncing = false;
             IsBatchUpdate = false;

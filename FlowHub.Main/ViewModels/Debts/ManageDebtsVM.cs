@@ -174,9 +174,6 @@ public partial class ManageDebtsVM : ObservableObject
 
         TotalBorrowedCount = TotalPendingBorrowCount + TotalCompletedBorrowCount;
         TotalLentCount = TotalPendingLentCount + TotalCompletedLentCount;
-
-
-
     }
 
     [RelayCommand]

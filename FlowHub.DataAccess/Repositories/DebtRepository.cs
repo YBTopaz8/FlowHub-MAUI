@@ -131,7 +131,7 @@ public class DebtRepository : IDebtRepository
     {
         await GetAllDebtAsync();
         
-        if(!Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
+        if(Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
         {
             IsBatchUpdate = false;
             OfflineDebtListChanged?.Invoke();

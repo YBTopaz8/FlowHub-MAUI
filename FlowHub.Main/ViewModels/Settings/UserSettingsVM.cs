@@ -4,13 +4,15 @@ public partial class UserSettingsVM : ObservableObject
 {
     private readonly IUsersRepository userService;
     private readonly IExpendituresRepository expService;
+    private readonly IDebtRepository debtService;
     private readonly CountryAndCurrencyCodes countryAndCurrency = new();
 
     LoginNavs NavFunctions = new();
-    public UserSettingsVM(IUsersRepository usersRepository, IExpendituresRepository expendituresRepository)
+    public UserSettingsVM(IUsersRepository usersRepository, IExpendituresRepository expendituresRepository, IDebtRepository debtRepository)
     {
         userService = usersRepository;
         expService = expendituresRepository;
+        debtService = debtRepository;
     }
     [ObservableProperty]
     public List<string> countryNamesList = new();
@@ -29,6 +31,14 @@ public partial class UserSettingsVM : ObservableObject
     public double totalIncomeAmount;
     [ObservableProperty]
     public double totalExpendituresAmount;
+    [ObservableProperty]
+    public double totalBorrowedCompletedAmount;
+    [ObservableProperty]
+    public double totalBorrowedPendingAmount;
+    [ObservableProperty]
+    public double totalLentCompletedAmount;
+    [ObservableProperty]
+    public double totalLentPendingAmount;
     [ObservableProperty]
     public string selectCountryCurrency;
 
@@ -50,11 +60,44 @@ public partial class UserSettingsVM : ObservableObject
         UserCountry = ActiveUser.UserCountry;
         UserEmail = ActiveUser.Email;
         UserName = ActiveUser.Username;
-        Taxes = ActiveUser.Taxes is not null ? new ObservableCollection<TaxModel>(ActiveUser.Taxes) : new ObservableCollection<TaxModel>();
-        TotalExpendituresAmount = expService.OfflineExpendituresList.Select(x => x.AmountSpent).Sum();
-        TotalIncomeAmount = ActiveUser.TotalIncomeAmount;
+        Taxes = ActiveUser.Taxes is not null ? new ObservableCollection<TaxModel>(ActiveUser.Taxes) : [];
+        
         IsNotInEditingMode = true;
         SelectCountryCurrency = ActiveUser.UserCurrency;
+        GetTotals();
+    }
+
+    private void GetTotals()
+    {
+        TotalExpendituresAmount = expService.OfflineExpendituresList.Select(x => x.AmountSpent).Sum();
+        TotalIncomeAmount = ActiveUser.TotalIncomeAmount;
+
+        var filteredAndSortedDebts = debtService.OfflineDebtList
+                        .Where(x => !x.IsDeleted)
+                        .Distinct()
+                        .ToList();
+        var BorrowedCompletedList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
+            .Where(x => x.DebtType == DebtType.Borrowed && x.IsPaidCompletely)
+            .OrderBy(x => x.AddedDateTime));
+
+        var LentCompletedList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
+            .Where(x => x.DebtType == DebtType.Lent && x.IsPaidCompletely)
+            .OrderBy(x => x.AddedDateTime));
+
+         var BorrowedPendingList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
+            .Where(x => x.DebtType == DebtType.Borrowed && !x.IsPaidCompletely)
+            .OrderBy(x => x.AddedDateTime));
+        var LentPendingList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
+            .Where(x => x.DebtType == DebtType.Lent && !x.IsPaidCompletely)
+            .OrderBy(x => x.AddedDateTime));
+
+
+        
+        TotalBorrowedCompletedAmount = BorrowedCompletedList.Sum(x => x.Amount);
+        TotalBorrowedPendingAmount = BorrowedPendingList.Sum(x => x.Amount);
+        TotalLentCompletedAmount = LentCompletedList.Sum(x => x.Amount);
+        TotalLentPendingAmount = LentPendingList.Sum(x => x.Amount);
+
     }
 
     public void GetCountryNamesList()

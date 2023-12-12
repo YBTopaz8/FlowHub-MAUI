@@ -138,42 +138,50 @@ public partial class StatisticsPageVM : ObservableObject
     [RelayCommand]
     void PopulateDataGridWithSelectedMonthData()
     {
-        if (SelectedYearValue == 0)
+        try
         {
-            SelectedYearValue = DateTime.Now.Year;
+            if (SelectedYearValue == 0)
+            {
+                SelectedYearValue = DateTime.Now.Year;
+            }
+            SelectedMonthName ??= DateTime.Now.ToString("MMMM");
+
+            DateTime targetDate = new(SelectedYearValue, DateTime.ParseExact(SelectedMonthName, "MMMM", CultureInfo.CurrentCulture).Month, 1);
+            SelectedMonthValue = targetDate.Month;
+
+            ExpendituresForSelectedMonth = GroupedExpenditures
+            .Where(g => g.Date.Month == targetDate.Month && g.Date.Year == SelectedYearValue)
+            .SelectMany(g => g)
+            .ToObservableCollection();
+
+            OriginalExpForSelectedMonth = ExpendituresForSelectedMonth;
+            TotalNumberOfExpenditures = ExpendituresForSelectedMonth.Count;
+            TotalMonthlyAmount = ExpendituresForSelectedMonth.Sum(e => e.AmountSpent);
+            AverageDailyAmountInAMonth = TotalMonthlyAmount / DateTime.DaysInMonth(targetDate.Year, targetDate.Month);
+            BiggestAmountInAMonth = ExpendituresForSelectedMonth.Max(e => e.AmountSpent);
+            SmallestAmountInAMonth = ExpendituresForSelectedMonth.Min(e => e.AmountSpent);
+
+            var expWithBiggestAmount = ExpendituresForSelectedMonth
+            .Aggregate((maxExp, nextExp) => nextExp.AmountSpent > maxExp.AmountSpent ? nextExp : maxExp);
+
+            if (expWithBiggestAmount != null)
+            {
+                BiggestExpenditureTooltipText = $"  {expWithBiggestAmount.Reason} \n{expWithBiggestAmount.DateSpent:d}";
+            }
+            var expWithSmallestAmount = ExpendituresForSelectedMonth
+            .Aggregate((minExp, nextExp) => nextExp.AmountSpent < minExp.AmountSpent ? nextExp : minExp);
+
+            if (expWithSmallestAmount != null)
+            {
+                SmallestExpenditureTooltipText = $"  {expWithSmallestAmount.Reason} \n{expWithSmallestAmount.DateSpent:d}";
+            }
+            DisplaySpecificMonthCategoriesPieChart();
         }
-        SelectedMonthName ??= DateTime.Now.ToString("MMMM");
-
-        DateTime targetDate = new(SelectedYearValue, DateTime.ParseExact(SelectedMonthName, "MMMM", CultureInfo.CurrentCulture).Month, 1);
-        SelectedMonthValue = targetDate.Month;
-
-        ExpendituresForSelectedMonth = GroupedExpenditures
-        .Where(g => g.Date.Month == targetDate.Month && g.Date.Year == SelectedYearValue)
-        .SelectMany(g => g)
-        .ToObservableCollection();
-
-        OriginalExpForSelectedMonth = ExpendituresForSelectedMonth;
-        TotalNumberOfExpenditures = ExpendituresForSelectedMonth.Count;
-        TotalMonthlyAmount = ExpendituresForSelectedMonth.Sum(e => e.AmountSpent);
-        AverageDailyAmountInAMonth = TotalMonthlyAmount / DateTime.DaysInMonth(targetDate.Year, targetDate.Month);
-        BiggestAmountInAMonth = ExpendituresForSelectedMonth.Max(e => e.AmountSpent);
-        SmallestAmountInAMonth = ExpendituresForSelectedMonth.Min(e => e.AmountSpent);
-
-        var expWithBiggestAmount = ExpendituresForSelectedMonth
-        .Aggregate((maxExp, nextExp) => nextExp.AmountSpent > maxExp.AmountSpent ? nextExp : maxExp);
-
-        if (expWithBiggestAmount != null)
+        catch (Exception ex)
         {
-            BiggestExpenditureTooltipText = $"  {expWithBiggestAmount.Reason} \n{expWithBiggestAmount.DateSpent:d}";
+            Debug.WriteLine(ex.Message);
         }
-        var expWithSmallestAmount = ExpendituresForSelectedMonth
-        .Aggregate((minExp, nextExp) => nextExp.AmountSpent < minExp.AmountSpent ? nextExp : minExp);
-
-        if (expWithSmallestAmount != null)
-        {
-            SmallestExpenditureTooltipText = $"  {expWithSmallestAmount.Reason} \n{expWithSmallestAmount.DateSpent:d}";
-        }
-        DisplaySpecificMonthCategoriesPieChart();
+        
     }
 
     private void DisplayAllMonthsExpensesChart()

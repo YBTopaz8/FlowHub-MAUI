@@ -65,8 +65,7 @@
                          Command="{Binding GoToSpecificStatsPageCommand}"/>
         </VerticalStackLayout>
 
-   
-        <dg:DataGrid ItemsSource="{Binding ExpendituresList}" BackgroundColor="Black"   
+        <dg:DataGrid ItemsSource="{Binding ExpendituresList}" BackgroundColor="Black" 
                      WidthRequest="1000" HeaderBackground="{AppThemeBinding Light=#CBCBCB,Dark=#C2C2C2}"
                      ActiveRowColor="{AppThemeBinding Light=darkslateblue, Dark=darkslateblue}" 
                      BorderColor="{AppThemeBinding Dark=#303030, Light=DarkSlateBlue}" HorizontalOptions="CenterAndExpand" 

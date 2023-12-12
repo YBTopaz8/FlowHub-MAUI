@@ -54,9 +54,9 @@
 
             <Border Margin="0,5" BackgroundColor="Transparent"
                         StrokeThickness="0.7">
-                <toolkit:DockLayout Margin="10,10" >
-                    <Label Text="Finances" FontAttributes="Bold" FontSize="22" />
-                    <HorizontalStackLayout Spacing="80" HorizontalOptions="CenterAndExpand">
+                <toolkit:DockLayout Margin="0" >
+                    <Label Text="Finances" FontAttributes="Bold" FontSize="22" Margin="10"/>
+                    <HorizontalStackLayout Spacing="60" HorizontalOptions="CenterAndExpand">
                         <VerticalStackLayout HorizontalOptions="Start" BackgroundColor="Transparent">
                             <Label FontAttributes="Bold" FontSize="20" >
                                 <Label.Text>
@@ -85,19 +85,60 @@
                             <VerticalStackLayout.GestureRecognizers>
                                 <TapGestureRecognizer NumberOfTapsRequired="2" Command="{Binding DeleteIdsCollectionCommand}"/>
                             </VerticalStackLayout.GestureRecognizers>
-                            <Label FontAttributes="Bold" FontSize="20">
+                            <Label FontAttributes="Bold" FontSize="20" HorizontalTextAlignment="Center">
                                 <Label.Text>
-                                    <MultiBinding StringFormat="{} XXX {0}">
+                                    <MultiBinding StringFormat="{}{0} {1}">
+                                        <Binding Path="TotalLentPendingAmount"/>
                                         <Binding Path="UserCurrency"/>
                                     </MultiBinding>
                                 </Label.Text>
                             </Label>
-                            <Label Text="Total Debts" FontSize="13" HorizontalTextAlignment="Center"/>
+                            <Label Text="Total Pending Flow Holds Out" FontSize="13" HorizontalTextAlignment="Center"/>
+                        </VerticalStackLayout>
+                        
+                        <VerticalStackLayout BackgroundColor="Transparent">
+                            
+                            <Label FontAttributes="Bold" FontSize="20" HorizontalTextAlignment="Center">
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{}{0} {1}">
+                                        <Binding Path="TotalLentCompletedAmount"/>
+                                        <Binding Path="UserCurrency"/>
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                            <Label Text="Total Completed Flow Holds Out" FontSize="13" HorizontalTextAlignment="Center"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout BackgroundColor="Transparent">
+                            <Label FontAttributes="Bold" FontSize="20" HorizontalTextAlignment="Center">
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{}{0} {1}">
+                                        <Binding Path="TotalBorrowedPendingAmount"/>
+                                        <Binding Path="UserCurrency"/>
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                            <Label Text="Total Pending Flow Holds In" FontSize="13" HorizontalTextAlignment="Center"/>
+                        </VerticalStackLayout>
+                        
+                        <VerticalStackLayout BackgroundColor="Transparent">
+                            
+                            <Label FontAttributes="Bold" FontSize="20" HorizontalTextAlignment="Center">
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{}{0} {1}">
+                                        <Binding Path="TotalBorrowedCompletedAmount"/>
+                                        <Binding Path="UserCurrency"/>
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                            <Label Text="Total Completed Flow Holds In" FontSize="13" HorizontalTextAlignment="Center"/>
                         </VerticalStackLayout>
 
                     </HorizontalStackLayout>
 
-                    <Label HorizontalOptions="Center" Margin="0,10,0,5" FontSize="25" FontAttributes="Bold">
+                    <Label HorizontalOptions="Center" Margin="0,10,0,5" 
+                           FontSize="25" FontAttributes="Bold" 
+                           WidthRequest="550">
                         <Label.Text>
                             <MultiBinding StringFormat="{} Current Balance : {0:n2} {1}">
                                 <Binding Path="PocketMoney"/>

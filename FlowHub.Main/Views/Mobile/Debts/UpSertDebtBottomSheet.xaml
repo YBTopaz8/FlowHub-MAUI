@@ -11,7 +11,7 @@
              x:DataType="viewModels:UpSertDebtVM"
              x:Name="page" DisablePageWhenOpened="True"
              CloseOnTapOutside="True" 
-             BackgroundColor="Transparent" CornerRadius="25"
+             BackgroundColor="Transparent" 
              IsPresented="{Binding IsBottomSheetOpened}"
              >
     <materialAttach:BottomSheetView.Header>
