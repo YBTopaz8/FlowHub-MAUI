@@ -29,7 +29,7 @@ public partial class HomePageM : UraniumContentPage
         UpSertExpbSheet = new(UpSertExpVm);
         Attachments.Add(UpSertExpbSheet);
     }
-    bool _isInitialized;
+    
     protected override async void OnAppearing()
     {
         if (UpSertExpbSheet.IsPresented)
@@ -38,10 +38,10 @@ public partial class HomePageM : UraniumContentPage
         }
         base.OnAppearing();     
         viewModel.GetUserData();
-        if (!_isInitialized)
+        if (!viewModel._isInitialized)
         {
             await viewModel.DisplayInfo();
-            _isInitialized = true;
+            viewModel._isInitialized = true;
         }
     }
 

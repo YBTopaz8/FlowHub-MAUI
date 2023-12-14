@@ -76,7 +76,7 @@ public class ExpendituresRepository : IExpendituresRepository
         {
             return;
         }
-        if (OnlineExpendituresList is not null)
+        if (OnlineExpendituresList is not null && OnlineExpendituresList.Count > 0)
         {
             return;
         }
@@ -338,5 +338,14 @@ public class ExpendituresRepository : IExpendituresRepository
         await db.DropCollectionAsync(expendituresDataCollectionName);
         db.Dispose();
         Debug.WriteLine("Expenditures Collection dropped!");
+    }
+
+    public async Task LogOutUserAsync()
+    {
+        await DropExpendituresCollection();
+        OnlineExpendituresList.Clear(); 
+        
+        OfflineExpendituresList.Clear();
+        OfflineExpendituresListChanged?.Invoke();
     }
 }

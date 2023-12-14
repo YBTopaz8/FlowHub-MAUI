@@ -7,15 +7,14 @@ public partial class LoginVM : ObservableObject
     private readonly CountryAndCurrencyCodes countryAndCurrency = new();
 
     readonly LoginNavs NavFunctions = new();
-    public LoginVM(ISettingsServiceRepository sessionServiceRepository, IUsersRepository userRepository, IExpendituresRepository expRepository,
-                    IIncomeRepository incomeRepository, IDebtRepository debtRepository, IDataAccessRepo dataAccessRepo)
+    public LoginVM(ISettingsServiceRepository sessionServiceRepository, IUsersRepository userRepository)
     {
         settingsRepo = sessionServiceRepository;
         userRepo = userRepository;
     }
 
     [ObservableProperty]
-    public List<string> countryNamesList = new();
+    public List<string> countryNamesList = [];
 
     [ObservableProperty]
     public string username;
@@ -202,6 +201,7 @@ public partial class LoginVM : ObservableObject
 
     public async Task QuickLogin()
     {
+        
         if (File.Exists(LoginDetectFile))
         {
             IsQuickLoginVisible = false;

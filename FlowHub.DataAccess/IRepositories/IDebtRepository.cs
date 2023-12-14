@@ -8,5 +8,7 @@ public interface IDebtRepository
     Task<bool> UpdateDebtAsync(DebtModel debt);
     Task<bool> DeleteDebtAsync(DebtModel debt);
     Task SynchronizeDebtsAsync();
+
+    Task LogOutUserAsync();
     Task DropDebtCollection();
 }

@@ -238,4 +238,12 @@ public class UserRepository : IUsersRepository
         _ = await db.DropCollectionAsync(userDataCollectionName);
         db.Dispose();
     }
+
+    public async Task LogOutUserAsync()
+    {
+        OnlineUser = null;
+        OfflineUser = null;
+        //OfflineUserDataChanged?.Invoke();
+        await DropCollection();
+    }
 }

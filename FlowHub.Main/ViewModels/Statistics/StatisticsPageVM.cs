@@ -87,31 +87,38 @@ public partial class StatisticsPageVM : ObservableObject
     {
         if (!IsLoaded)
         {
-            if (GroupedExpenditures is null)
+            try
             {
-                // Update expList
-                var expList = expendituresService.OfflineExpendituresList
-                    .Where(x => !x.IsDeleted)
-                    .OrderByDescending(x => x.DateSpent).ToList();
+                if (GroupedExpenditures is null)
+                {
+                    // Update expList
+                    var expList = expendituresService.OfflineExpendituresList
+                        .Where(x => !x.IsDeleted)
+                        .OrderByDescending(x => x.DateSpent).ToList();
 
-                // Update groupedData
-                var groupedData = expList.GroupBy(e => e.DateSpent.Date)
-                    .Select(g => new DateGroup(g.Key, g.ToList()))
-                    .ToList();
+                    // Update groupedData
+                    var groupedData = expList.GroupBy(e => e.DateSpent.Date)
+                        .Select(g => new DateGroup(g.Key, g.ToList()))
+                        .ToList();
 
-                // Update GroupedExpenditures
-                GroupedExpenditures = new ObservableCollection<DateGroup>(groupedData);
-                OnPropertyChanged(nameof(GroupedExpenditures));
+                    // Update GroupedExpenditures
+                    GroupedExpenditures = new ObservableCollection<DateGroup>(groupedData);
+                    OnPropertyChanged(nameof(GroupedExpenditures));
+                }
+                CalculateMonthNames();
+                CalculateYearNames();
+                SelectedMonthName = DateTime.Now.ToString("MMMM");
+                SelectedYearValue = DateTime.Now.Year;//.ToString();
+                Currency = GroupedExpenditures.First().Currency;
+
+                PopulateDataGridWithSelectedMonthData();
+                DisplayAllMonthsExpensesChart();
+                IsLoaded = true;
             }
-            CalculateMonthNames();
-            CalculateYearNames();
-            SelectedMonthName = DateTime.Now.ToString("MMMM");
-            SelectedYearValue = DateTime.Now.Year;//.ToString();
-            Currency = GroupedExpenditures.First().Currency;
-
-            PopulateDataGridWithSelectedMonthData();
-            DisplayAllMonthsExpensesChart();
-            IsLoaded = true;
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
         }
     }
 

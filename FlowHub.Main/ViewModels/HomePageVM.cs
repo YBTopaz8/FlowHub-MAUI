@@ -46,6 +46,7 @@ public partial class HomePageVM : ObservableObject
     [ObservableProperty]
     private UsersModel activeUser = new();
 
+    public bool _isInitialized;
 
     void UpdateIsSyncing()
     {
@@ -53,10 +54,7 @@ public partial class HomePageVM : ObservableObject
     }
     public async Task DisplayInfo()
     {
-        
-        await SyncAndNotifyAsync();
-        
-
+       await SyncAndNotifyAsync();
     }
     public void GetUserData()
     {
@@ -65,7 +63,6 @@ public partial class HomePageVM : ObservableObject
             PocketMoney = userRepo.OfflineUser.PocketMoney;
             Username = userRepo.OfflineUser.Username;
             UserCurrency = userRepo.OfflineUser.UserCurrency;
-
         }
     }
     private void OnExpendituresChanged()
