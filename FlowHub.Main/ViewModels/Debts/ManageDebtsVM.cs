@@ -17,8 +17,8 @@ public partial class ManageDebtsVM : ObservableObject
         upSertDebtVM = upSertDebtViewModel;
         debtRepo.OfflineDebtListChanged += HandleDebtsListUpdated;
     }
-    //[ObservableProperty]
-    //ObservableCollection<DebtModel> debtsList;
+    [ObservableProperty]
+    ObservableCollection<DebtModel> debtsList;
     [ObservableProperty]
     ObservableCollection<DebtModel> borrowedCompletedList;
     [ObservableProperty]
@@ -134,9 +134,10 @@ public partial class ManageDebtsVM : ObservableObject
         var filteredAndSortedDebts = debtRepo.OfflineDebtList
                         .Where(x => !x.IsDeleted)
                         .OrderByDescending(x => x.UpdateDateTime)
+                        .OrderBy(x => x.IsPaidCompletely)
                         .Distinct()
                         .ToList();
-
+        DebtsList = filteredAndSortedDebts.ToObservableCollection();
         ListOfPeopleNames = filteredAndSortedDebts
             .Select(x => x.PersonOrOrganization.Name)
             .Distinct()
@@ -302,89 +303,103 @@ public partial class ManageDebtsVM : ObservableObject
     }
 
     [RelayCommand]
-    async Task ToggleDebtCompletionStatus(DebtModel debt)
+    async Task ToggleDebtCompletionStatus(object s)
     {
-        CancellationTokenSource cancellationTokenSource = new();
-        const ToastDuration duration = ToastDuration.Short;
-        const double fontSize = 14;
-        string text;
-        try
+        if (s.GetType() == typeof(DebtModel))
         {
-            string message = debt.IsPaidCompletely ? "Mark as Pending" : "Mark as Completed";
-            var response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert(message));
-            if (response)
+            var debt = (DebtModel)s;
+            CancellationTokenSource cancellationTokenSource = new();
+            const ToastDuration duration = ToastDuration.Short;
+            const double fontSize = 14;
+            string text;
+            try
             {
-                bool completedSwapper = !debt.IsPaidCompletely;
-                
-                if (debt.IsPaidCompletely) // to mark as pending
+                string message = debt.IsPaidCompletely ? "Mark as Completed" : "Mark as Pending" ;
+                var response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert(message));
+                if (response)
                 {
-                    debt.IsPaidCompletely = completedSwapper; // to unpaid completely
-                    debt.DatePaidCompletely = null;
-                    if (debt.Deadline.HasValue)
+                    bool completedSwapper = !debt.IsPaidCompletely;
+
+                    if (!debt.IsPaidCompletely) // to mark as pending
                     {
-                        var diff = DateTime.Now.Date - debt.Deadline.Value.Date;
-                        if (diff.TotalDays == 1)
+#if ANDROID
+                        debt.IsPaidCompletely = completedSwapper; // to unpaid completely  
+#endif
+                        debt.DatePaidCompletely = null;
+                        if (debt.Deadline.HasValue)
                         {
-                            debt.DisplayText = $"Due in {-diff.TotalDays} day";
-                        }
-                        if (diff.TotalDays > 1)
-                        {
-                            debt.DisplayText = $"Due past {diff.TotalDays} days!";
-                        }
-                        else if (diff.TotalDays < 0)
-                        {
-                            debt.DisplayText = $"Due in {-diff.TotalDays} days";
+                            var diff = DateTime.Now.Date - debt.Deadline.Value.Date;
+                            if (diff.TotalDays == 1)
+                            {
+                                debt.DisplayText = $"Due in {-diff.TotalDays} day";
+                            }
+                            if (diff.TotalDays > 1)
+                            {
+                                debt.DisplayText = $"Due past {diff.TotalDays} days!";
+                            }
+                            else if (diff.TotalDays < 0)
+                            {
+                                debt.DisplayText = $"Due in {-diff.TotalDays} days";
+                            }
+                            else
+                            {
+                                debt.DisplayText = "Due today";
+                            }
+
                         }
                         else
                         {
-                            debt.DisplayText = "Due today";
+                            debt.DisplayText = "Pending No Deadline Set";
                         }
-                        
+                        text = "Flow Hold Marked as Pending";
                     }
                     else
                     {
-                        debt.DisplayText = "Pending No Deadline Set";
+#if ANDROID
+                        debt.IsPaidCompletely = completedSwapper; 
+#endif
+                        debt.DatePaidCompletely = DateTime.Now;
+
+                        if (debt.Deadline.HasValue)
+                        {
+                            var DatePaidDiff = DateTime.Now.Date - debt.DatePaidCompletely?.Date;
+                            if (DatePaidDiff.Value.TotalDays == 1)
+                            {
+                                debt.DisplayText = "Paid 1 day ago";
+                            }
+                            else if (DatePaidDiff.Value.TotalDays == 0)
+                            {
+                                debt.DisplayText = "Paid today";
+                            }
+                            else
+                            {
+                                debt.DisplayText = $"Paid {DatePaidDiff.Value.TotalDays} days ago";
+                            }
+                        }
+                        else
+                        {
+                            debt.DisplayText = "Paid Today";
+                        }
+                        text = "Flow Hold Marked as Completed";
                     }
-                    text = "Flow Hold Marked as Pending";
+                    await debtRepo.UpdateDebtAsync(debt);
+
+                    var toast = Toast.Make(text, duration, fontSize);
+                    await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
+                    ApplyChanges();
                 }
                 else
                 {
-                    debt.IsPaidCompletely = completedSwapper;
-                    debt.DatePaidCompletely = DateTime.Now;
-
-                    if (debt.Deadline.HasValue)
-                    {
-                        var DatePaidDiff = DateTime.Now.Date - debt.DatePaidCompletely?.Date;
-                        if (DatePaidDiff.Value.TotalDays == 1)
-                        {
-                            debt.DisplayText = "Paid 1 day ago";
-                        }
-                        else if (DatePaidDiff.Value.TotalDays == 0)
-                        {
-                            debt.DisplayText = "Paid today";
-                        }
-                        else
-                        {
-                            debt.DisplayText = $"Paid {DatePaidDiff.Value.TotalDays} days ago";
-                        }
-                    }
-                    else
-                    {
-                        debt.DisplayText = "Paid Today";
-                    }
-                    text = "Flow Hold Marked as Completed";
+                    debt.IsPaidCompletely = !debt.IsPaidCompletely;
+                    
                 }
-                await debtRepo.UpdateDebtAsync(debt);
-
-                var toast = Toast.Make(text, duration, fontSize);
-                await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
-                ApplyChanges();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception when Marking as completed debt MESSAGE : {ex.Message}");
             }
         }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception when Marking as completed debt MESSAGE : {ex.Message}");
-        }
+        
     }
 
     [RelayCommand]

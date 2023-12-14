@@ -63,12 +63,12 @@ public partial class DebtModel : ObservableObject
             OnPropertyChanged(nameof(IsPaidCompletely));            
         }
     }
-    public event PropertyChangedEventHandler? PropertyChanged;
+    //public event PropertyChangedEventHandler? PropertyChanged;
 
-    private void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
+    //private void OnPropertyChanged(string propertyName)
+    //{
+    //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    //}
 }
 public enum DebtType
 {

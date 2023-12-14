@@ -38,86 +38,102 @@
                    x:Name="DebtsSearchBar"/>
         
         <HorizontalStackLayout HorizontalOptions="Center">
-            <material:DataGrid ItemsSource="{Binding LentPendingList}" HorizontalOptions="Center" 
-                Margin="20,0,20,0" MinimumWidthRequest="800" HeightRequest="600"
-                BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#D8D8D8}"
-                LineSeparatorColor="Black">
+            <ScrollView MaximumHeightRequest="600">
+                <material:DataGrid ItemsSource="{Binding DebtsList}" HorizontalOptions="Center" 
+            Margin="20,0,20,0" MinimumWidthRequest="800"
+            BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#D8D8D8}"
+            LineSeparatorColor="Black">
 
-                <material:DataGrid.Resources>
-                    <ResourceDictionary>
-                        <MenuFlyout x:Key="labelContextMenu">                            
-                            <MenuFlyoutItem Text="{Binding .}"/>
-                            <MenuFlyoutItem Text="test2"/>
-                        </MenuFlyout>
-                    </ResourceDictionary>
-                </material:DataGrid.Resources>
-                <material:DataGrid.Columns>
-                    
-                    <material:DataGridColumn Title="Date Added">
-                        <material:DataGridColumn.CellItemTemplate>
-                            <DataTemplate x:DataType="models:DebtModel">
-                                <Label Text="{Binding AddedDateTime, StringFormat='{0:ddd, MMM dd, yyyy}'}" 
-                                       Margin="10"
-                                       FlyoutBase.ContextFlyout="{StaticResource labelContextMenu}">                                    
-                                </Label>
-                            </DataTemplate>
-                        </material:DataGridColumn.CellItemTemplate>
-                    </material:DataGridColumn>
+                    <material:DataGrid.Resources>
+                        <ResourceDictionary>
+                            <MenuFlyout x:Key="labelContextMenu">
+                                <MenuFlyoutItem Text="{Binding .}"/>
+                                <MenuFlyoutItem Text="test2"/>
+                            </MenuFlyout>
+                        </ResourceDictionary>
+                    </material:DataGrid.Resources>
+                    <material:DataGrid.Columns>
 
-                    <material:DataGridColumn Title="Amount (CAD)">
-                        <material:DataGridColumn.CellItemTemplate>
-                            <DataTemplate x:DataType="models:DebtModel">
-                                <Label Text="{Binding Amount, StringFormat='{0:n2}'}" HorizontalTextAlignment="Center" Margin="10"/>
-                            </DataTemplate>
-                        </material:DataGridColumn.CellItemTemplate>
-                    </material:DataGridColumn>
+                        <material:DataGridColumn Title="Date Added">
+                            <material:DataGridColumn.CellItemTemplate>
+                                <DataTemplate x:DataType="models:DebtModel">
+                                    <Label Text="{Binding AddedDateTime, StringFormat='{0:ddd, MMM dd, yyyy}'}" 
+                                   Margin="10"
+                                   FlyoutBase.ContextFlyout="{StaticResource labelContextMenu}">
+                                    </Label>
+                                </DataTemplate>
+                            </material:DataGridColumn.CellItemTemplate>
+                        </material:DataGridColumn>
 
-                    <material:DataGridColumn Title="Person's Name">
-                        <material:DataGridColumn.CellItemTemplate>
-                            <DataTemplate x:DataType="models:DebtModel">
-                                <Label Text="{Binding PersonOrOrganization.Name}" Margin="10"
-                                ToolTipProperties.Text="{Binding Notes}"/>
-                            </DataTemplate>
-                        </material:DataGridColumn.CellItemTemplate>
-                    </material:DataGridColumn>
+                        <material:DataGridColumn Title="Amount (CAD)">
+                            <material:DataGridColumn.CellItemTemplate>
+                                <DataTemplate x:DataType="models:DebtModel">
+                                    <Label Text="{Binding Amount, StringFormat='{0:n2}'}" HorizontalTextAlignment="Center" Margin="10"/>
+                                </DataTemplate>
+                            </material:DataGridColumn.CellItemTemplate>
+                        </material:DataGridColumn>
 
-                    <material:DataGridColumn Title="Contact">
-                        <material:DataGridColumn.CellItemTemplate>
-                            <DataTemplate x:DataType="models:DebtModel">
-                                <Label Text="{Binding PersonOrOrganization.PhoneNumber}" Margin="10"/>
-                            </DataTemplate>
-                        </material:DataGridColumn.CellItemTemplate>
-                    </material:DataGridColumn>
+                        <material:DataGridColumn Title="Person's Name">
+                            <material:DataGridColumn.CellItemTemplate>
+                                <DataTemplate x:DataType="models:DebtModel">
+                                    <Label Text="{Binding PersonOrOrganization.Name}" Margin="10"
+                            ToolTipProperties.Text="{Binding Notes}"/>
+                                </DataTemplate>
+                            </material:DataGridColumn.CellItemTemplate>
+                        </material:DataGridColumn>
+
+                        <material:DataGridColumn Title="Contact">
+                            <material:DataGridColumn.CellItemTemplate>
+                                <DataTemplate x:DataType="models:DebtModel">
+                                    <Label Text="{Binding PersonOrOrganization.PhoneNumber}" Margin="10"/>
+                                </DataTemplate>
+                            </material:DataGridColumn.CellItemTemplate>
+                        </material:DataGridColumn>
 
 
-                    <material:DataGridColumn Title="Info">
-                        <material:DataGridColumn.CellItemTemplate>
-                            <DataTemplate x:DataType="models:DebtModel">
-                                <Label Text="{Binding DisplayText}" Margin="10"/>
-                            </DataTemplate>
-                        </material:DataGridColumn.CellItemTemplate>
-                    </material:DataGridColumn>
+                        <material:DataGridColumn Title="Info">
+                            <material:DataGridColumn.CellItemTemplate>
+                                <DataTemplate x:DataType="models:DebtModel">
+                                    <Label Text="{Binding DisplayText}" Margin="10"/>
+                                </DataTemplate>
+                            </material:DataGridColumn.CellItemTemplate>
+                        </material:DataGridColumn>
 
-                    <material:DataGridColumn Title="Action">
-                        <material:DataGridColumn.CellItemTemplate>
-                            <DataTemplate>
-                                <HorizontalStackLayout>
-                                    <Button Text="Edit"
-                                        Command="{Binding Source={x:Reference Page}, Path=BindingContext.ShowEditDebtPopUpCommand}"
-                                        CommandParameter="{Binding .}"/>
-                                    <Button Text="View"
-                                        Command="{Binding Source={x:Reference Page}, Path=BindingContext.ShowDebtDetailsCommand}"
-                                        CommandParameter="{Binding .}"/>
-                                </HorizontalStackLayout>
-                                
-                            </DataTemplate>
-                        </material:DataGridColumn.CellItemTemplate>
-                    </material:DataGridColumn>
+                        <material:DataGridColumn Title="Is Paid Completely">
+                            <material:DataGridColumn.CellItemTemplate>
+                                <DataTemplate x:DataType="models:DebtModel">
+                                    
+                                    <material:CheckBox IsChecked="{Binding IsPaidCompletely, Mode=TwoWay}" 
+                                                       CommandParameter="{Binding .}"
+                                                       CheckChangedCommand="{Binding Source={x:Reference Page}, Path=BindingContext.ToggleDebtCompletionStatusCommand}"
 
-                </material:DataGrid.Columns>
+                                                       CheckChanged="CheckBox_CheckChanged"
+                                                       
+                                                       Margin="10" HorizontalOptions="Center"/>
+                                </DataTemplate>
+                            </material:DataGridColumn.CellItemTemplate>
+                        </material:DataGridColumn>
 
-            </material:DataGrid>
+                        <material:DataGridColumn Title="Action">
+                            <material:DataGridColumn.CellItemTemplate>
+                                <DataTemplate>
+                                    <HorizontalStackLayout>
+                                        <Button Text="Edit"
+                                            Command="{Binding Source={x:Reference Page}, Path=BindingContext.ShowEditDebtPopUpCommand}"
+                                            CommandParameter="{Binding .}"/>
+                                        <Button Text="View"
+                                            Command="{Binding Source={x:Reference Page}, Path=BindingContext.ShowDebtDetailsCommand}"
+                                            CommandParameter="{Binding .}"/>
+                                    </HorizontalStackLayout>
 
+                                </DataTemplate>
+                            </material:DataGridColumn.CellItemTemplate>
+                        </material:DataGridColumn>
+
+                    </material:DataGrid.Columns>
+
+                </material:DataGrid>
+            </ScrollView>
             <Button Text="Add" x:Name="AddNewFlowHoldBtn" Command="{Binding ShowAddDebtPopUpCommand}"/>
 
             <Border WidthRequest="500" IsVisible="{Binding ShowSingleSebt}">
