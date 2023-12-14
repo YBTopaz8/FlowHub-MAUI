@@ -1,19 +1,12 @@
 ﻿namespace FlowHub.Main.ViewModels.Settings;
 
-public partial class UserSettingsVM : ObservableObject
+public partial class UserSettingsVM(IUsersRepository usersRepository, IExpendituresRepository expendituresRepository,
+    IIncomeRepository incomeRepository, IDebtRepository debtRepository,
+    HomePageVM homePageVM) : ObservableObject
 {
-    private readonly IUsersRepository userService;
-    private readonly IExpendituresRepository expService;
-    private readonly IDebtRepository debtService;
     private readonly CountryAndCurrencyCodes countryAndCurrency = new();
 
     LoginNavs NavFunctions = new();
-    public UserSettingsVM(IUsersRepository usersRepository, IExpendituresRepository expendituresRepository, IDebtRepository debtRepository)
-    {
-        userService = usersRepository;
-        expService = expendituresRepository;
-        debtService = debtRepository;
-    }
     [ObservableProperty]
     public List<string> countryNamesList = new();
 
@@ -54,7 +47,7 @@ public partial class UserSettingsVM : ObservableObject
     [RelayCommand]
     public void PageLoaded()
     {
-        ActiveUser = userService.OfflineUser;
+        ActiveUser = usersRepository.OfflineUser;
         PocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
         UserCountry = ActiveUser.UserCountry;
@@ -69,10 +62,10 @@ public partial class UserSettingsVM : ObservableObject
 
     private void GetTotals()
     {
-        TotalExpendituresAmount = expService.OfflineExpendituresList.Select(x => x.AmountSpent).Sum();
+        TotalExpendituresAmount = expendituresRepository.OfflineExpendituresList.Select(x => x.AmountSpent).Sum();
         TotalIncomeAmount = ActiveUser.TotalIncomeAmount;
 
-        var filteredAndSortedDebts = debtService.OfflineDebtList
+        var filteredAndSortedDebts = debtRepository.OfflineDebtList
                         .Where(x => !x.IsDeleted)
                         .Distinct()
                         .ToList();
@@ -93,7 +86,7 @@ public partial class UserSettingsVM : ObservableObject
             .OrderBy(x => x.AddedDateTime)); //total of all debts that are still waiting to be paid back BY user 
 
 
-
+        
         TotalBorrowedCompletedAmount = BorrowedCompletedList.Sum(x => x.Amount);
         TotalBorrowedPendingAmount = BorrowedPendingList.Sum(x => x.Amount);
         TotalLentCompletedAmount = LentCompletedList.Sum(x => x.Amount);
@@ -115,7 +108,11 @@ public partial class UserSettingsVM : ObservableObject
             string LoginDetectFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "QuickLogin.text");
             File.Delete(LoginDetectFile);
 
-            await userService.DropCollection();
+            await usersRepository.LogOutUserAsync();
+            await expendituresRepository.LogOutUserAsync();
+            await incomeRepository.LogOutUserAsync();
+            await debtRepository.LogOutUserAsync();
+            homePageVM._isInitialized = false;
 
             await NavFunctions.GoToLoginInPage();
         }
@@ -153,10 +150,10 @@ public partial class UserSettingsVM : ObservableObject
                 ActiveUser.Taxes = Taxes.ToList();
             }
 
-            await expService.GetAllExpendituresAsync();
-            if (await userService.UpdateUserAsync(ActiveUser))
+            await expendituresRepository.GetAllExpendituresAsync();
+            if (await usersRepository.UpdateUserAsync(ActiveUser))
             {
-                userService.OfflineUser = ActiveUser;
+                usersRepository.OfflineUser = ActiveUser;
 
                 CancellationTokenSource cancellationTokenSource = new();
                 const ToastDuration duration = ToastDuration.Short;

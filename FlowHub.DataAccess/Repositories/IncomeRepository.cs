@@ -44,7 +44,6 @@ public class IncomeRepository : IIncomeRepository
         try
         {
             await OpenDB();
-            usersRepo.OfflineUser ??= usersRepo.OnlineUser;
             string userId = usersRepo.OfflineUser is null? usersRepo.OnlineUser.Id : usersRepo.OfflineUser.Id ;
             string userCurrency = usersRepo.OfflineUser.UserCurrency;
             if (usersRepo.OfflineUser.UserIDOnline != string.Empty)
@@ -75,7 +74,7 @@ public class IncomeRepository : IIncomeRepository
         {
             return;
         }
-        if (OnlineIncomesList is not null)
+        if (OnlineIncomesList is not null && OnlineIncomesList.Count > 0)
         {
             return;
         }
@@ -122,7 +121,7 @@ public class IncomeRepository : IIncomeRepository
     {
         await GetAllIncomesAsync();
         
-        if (Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
+        if (!Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
         {
             IsSyncing = false;
             IsBatchUpdate = false;
@@ -328,5 +327,15 @@ public class IncomeRepository : IIncomeRepository
         await db.DropCollectionAsync(incomesDataCollectionName);
         db.Dispose();
         Debug.WriteLine("Incomes Collection dropped!");
+    }
+
+    public async Task LogOutUserAsync()
+    {
+        OnlineIncomesList.Clear();
+        OfflineIncomesList.Clear();
+        OfflineIncomesListChanged?.Invoke();
+
+        await DropIncomesCollection();
+
     }
 }

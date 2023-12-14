@@ -1,4 +1,4 @@
-﻿using ZstdSharp.Unsafe;
+﻿
 
 namespace FlowHub.DataAccess.Repositories;
 
@@ -78,7 +78,7 @@ public class DebtRepository : IDebtRepository
             {
                 return;
             }
-            if (OnlineDebtList is not null)
+            if (OnlineDebtList is not null && OnlineDebtList.Count > 0)
             {
                 return;
             }
@@ -349,5 +349,14 @@ public class DebtRepository : IDebtRepository
         await db.DropCollectionAsync(DebtsCollectionName);
         db.Dispose();
         Debug.WriteLine("debts Collection dropped!");
+    }
+
+    public async Task LogOutUserAsync()
+    {
+        OnlineDebtList.Clear();
+        OfflineDebtList.Clear();
+        OfflineDebtListChanged?.Invoke();
+
+        await DropDebtCollection();
     }
 }

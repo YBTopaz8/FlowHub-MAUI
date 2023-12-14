@@ -18,5 +18,6 @@ public interface IUsersRepository
     Task<bool> DeleteUserAsync(UsersModel user);
     Task<bool> CheckIfAnyUserExists();
 
+    Task LogOutUserAsync();
     Task DropCollection();
 }

@@ -24,15 +24,15 @@ public partial class HomePageD : ContentPage
 
     }
 
-    bool _isInitialized;
+    
     protected override async void OnAppearing()
-    {
+    {        
         base.OnAppearing();
         viewModel.GetUserData();
-        if (!_isInitialized)
+        if (!viewModel._isInitialized)
         {
             await viewModel.DisplayInfo();
-            _isInitialized = true;
+            viewModel._isInitialized = true;
         }
     }
     void RunAppStartAction()
