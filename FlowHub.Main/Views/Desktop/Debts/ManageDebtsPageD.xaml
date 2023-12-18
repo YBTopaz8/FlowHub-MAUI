@@ -40,14 +40,13 @@
         <HorizontalStackLayout HorizontalOptions="Center">
             <ScrollView MaximumHeightRequest="600">
                 <material:DataGrid ItemsSource="{Binding DebtsList}" HorizontalOptions="Center" 
-            Margin="20,0,20,0" MinimumWidthRequest="800"
-            BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#D8D8D8}"
-            LineSeparatorColor="Black">
+                    Margin="20,0,20,0" MinimumWidthRequest="800"
+                    BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#D8D8D8}"
+                    LineSeparatorColor="Black">
 
                     <material:DataGrid.Resources>
                         <ResourceDictionary>
-                            <MenuFlyout x:Key="labelContextMenu">
-                                <MenuFlyoutItem Text="{Binding .}"/>
+                            <MenuFlyout x:Key="labelContextMenu">                                
                                 <MenuFlyoutItem Text="test2"/>
                             </MenuFlyout>
                         </ResourceDictionary>

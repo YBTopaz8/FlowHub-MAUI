@@ -11,7 +11,7 @@
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:converters="clr-namespace:FlowHub.Main.Utilities"
              Title="My Profile"
-             BackgroundColor="{AppThemeBinding Dark=#1C1B1F, Light={StaticResource BackGroundLight}}"
+             BackgroundColor="{AppThemeBinding Dark=#1C1B1F, Light={StaticResource White}}"
              x:Name="Page">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -20,7 +20,7 @@
     </ContentPage.Resources>
     <toolkit:DockLayout>
         <VerticalStackLayout toolkit:DockLayout.DockPosition="Left" Margin="35,35,45,0" Spacing="20"
-                             BackgroundColor="{AppThemeBinding Dark=transparent}">
+                             BackgroundColor="{AppThemeBinding Dark=transparent, Light=transparent}">
             <Button Command="{Binding ThemeTogglerCommand}" Text="Switch To Light" 
                     BackgroundColor="{AppThemeBinding Dark=White,Light=black}" TextColor="{AppThemeBinding Dark=black, Light=white}"
                     ToolTipProperties.Text="Click to Switch to Light Theme">

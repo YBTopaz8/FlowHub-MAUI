@@ -43,35 +43,41 @@ public partial class ManageIncomesVM : ObservableObject
 
     UsersModel ActiveUser = new();
 
+    //Search variables section
+    [ObservableProperty]
+    DateTime? searchStartDate = null;
+    [ObservableProperty]
+    DateTime? searchEndDate = null;
+    [ObservableProperty]
+    double? searchMinPrice;
+    [ObservableProperty]
+    double? searchMaxPrice;
+    [ObservableProperty]
+    string searchText;
+
+    bool IsLoaded;
     [RelayCommand]
     public void PageLoaded()
-    {
-        var user = userService.OfflineUser;
-        ActiveUser = user;
-        UserPocketMoney = ActiveUser.PocketMoney;
-        UserCurrency = ActiveUser.UserCurrency;
-        FilterGetAllIncomes();
-        //FilterGetIncOfCurrentMonth();
-        //await FilterGetAllIncomes();
-    }
-    bool IsLoaded;
-    public void FilterGetAllIncomes()
     {
         try
         {
             if (!IsLoaded)
             {
-                IsBusy = true;
-                IncTitle = "All Flow Ins";
                 ApplyChanges();
-
+                IsBusy = true;
                 IsLoaded = true;
+                IncTitle = "All Flow Ins";
+                ActiveUser = userService.OfflineUser;
+                UserPocketMoney = ActiveUser.PocketMoney;
+                UserCurrency = ActiveUser.UserCurrency;
             }
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception MESSAGE: {ex.Message}");
+            Debug.WriteLine($"Exception When loading all Incomes; Message : {ex.Message}");
         }
+        //FilterGetIncOfCurrentMonth();
+        //await FilterGetAllIncomes();
     }
 
     private async void HandleIncomesListUpdated()
@@ -88,15 +94,22 @@ public partial class ManageIncomesVM : ObservableObject
 
     private void ApplyChanges()
     {
+
         var IncList = incomeService.OfflineIncomesList
                     .Where(x => !x.IsDeleted)
-                    .OrderByDescending(x => x.DateReceived)
-                    .ToList();
+                    .OrderByDescending(x => x.DateReceived);
+        //ApplyFilters(IncList);       
+
         IncomesList = new ObservableCollection<IncomeModel>(IncList);
         OnPropertyChanged(nameof(IncomesList));
 
+        RedoCountsAndAmountsCalculations(IncList);
+    }
+
+    void RedoCountsAndAmountsCalculations(IEnumerable<IncomeModel> IncList)
+    {
         TotalAmount = IncList.AsParallel().Sum(x => x.AmountReceived);
-        TotalIncomes = IncList.Count;
+        TotalIncomes = IncList.Count();
     }
 
     [RelayCommand]
@@ -117,16 +130,15 @@ public partial class ManageIncomesVM : ObservableObject
         }
     }
 
-    private async Task AddEditIncome(IncomeModel newIncome, string pageTitle, bool isAdd)
+    [RelayCommand]
+    async Task ShowEditIncomePopUp(IncomeModel income)
+    {
+        await AddEditIncome(income, "Edit Flow In", false);
+    }
+    async Task AddEditIncome(IncomeModel newIncome, string pageTitle, bool isAdd)
     {
         var newUpserIncomeVM = new UpSertIncomeVM(incomeService, userService, newIncome, pageTitle, isAdd, ActiveUser);
         await Shell.Current.ShowPopupAsync(new UpSertIncomePopUp(newUpserIncomeVM));
-    }
-
-    [RelayCommand]
-    public async Task ShowEditIncomePopUp(IncomeModel income)
-    {
-        await AddEditIncome(income, "Edit Flow In", false);
     }
 
     [RelayCommand]
@@ -157,6 +169,107 @@ public partial class ManageIncomesVM : ObservableObject
                 await toast.Show(cancellationTokenSource.Token);
             }
         }
+    }
+
+    [RelayCommand]
+    void SearchIncomes()
+    {
+        try
+        {
+            var orderIncCollection = incomeService.OfflineIncomesList
+                .Where(inc => !inc.IsDeleted)
+                .OrderByDescending(inc => inc.DateReceived);
+            IEnumerable<IncomeModel> filteredCollectionOfInc = ApplyFilters(orderIncCollection);
+
+            IncomesList = new ObservableCollection<IncomeModel>(filteredCollectionOfInc);
+            RedoCountsAndAmountsCalculations(filteredCollectionOfInc);
+        }
+        catch (Exception ex)
+        {
+
+            Debug.WriteLine($"Search Flow IN Exception : {ex.Message}");
+        }
+    }
+
+    [RelayCommand]
+    void ClearFilters()
+    {
+        SearchText = string.Empty;
+        SearchText = string.Empty;
+        SearchStartDate = null;
+        SearchEndDate = null;
+        SearchMinPrice = null;
+        SearchMaxPrice = null;
+        ApplyChanges();
+
+    }
+    private IEnumerable<IncomeModel> ApplyFilters(IEnumerable<IncomeModel> incomeCollection)
+    {
+        IEnumerable<IncomeModel> filterIncCollection = incomeCollection;
+        try
+        {
+            filterIncCollection = FilterByText(filterIncCollection);
+            filterIncCollection = FilterByDateRange(filterIncCollection);
+            filterIncCollection = FilterByAmountRange(filterIncCollection);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Filter Flow In Exception : {ex.Message}");
+        }
+
+        return filterIncCollection;
+    }
+
+    IEnumerable<IncomeModel> FilterByAmountRange(IEnumerable<IncomeModel> incomesCollection)
+    {
+        if (SearchMinPrice.HasValue && SearchMinPrice > 0)
+        {
+            incomesCollection = incomesCollection
+                .Where(exp => exp.AmountReceived >= SearchMinPrice.Value);
+        }
+        if (SearchMaxPrice.HasValue && SearchMaxPrice > 0)
+        {
+            incomesCollection = incomesCollection
+                .Where(exp => exp.AmountReceived <= SearchMaxPrice.Value);
+        }
+
+        return incomesCollection;
+    }
+
+    IEnumerable<IncomeModel> FilterByDateRange(IEnumerable<IncomeModel> incomesCollection)
+    {
+
+        // If both start and end dates are null, return the original list
+        if (SearchStartDate == null && SearchEndDate == null)
+        {
+            return incomesCollection;
+        }
+
+        // Filter by start date if it's not null
+        if (SearchStartDate != null)
+        {
+            incomesCollection = incomesCollection.Where(exp => exp.DateReceived >= SearchStartDate.Value);
+        }
+
+        // Filter by end date if it's not null
+        if (SearchEndDate != null)
+        {
+            incomesCollection = incomesCollection.Where(exp => exp.DateReceived <= SearchEndDate.Value);
+        }
+
+        return incomesCollection;
+    }
+
+    IEnumerable<IncomeModel> FilterByText(IEnumerable<IncomeModel> incomesCollection)
+    {
+        if (string.IsNullOrEmpty(SearchText))
+        {
+            return incomesCollection.Where(inc => !inc.IsDeleted);
+        }
+
+        return incomesCollection
+            .Where(inc => inc.Reason?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ?? false)
+            .Where(inc => !inc.IsDeleted);
     }
 
     [RelayCommand]

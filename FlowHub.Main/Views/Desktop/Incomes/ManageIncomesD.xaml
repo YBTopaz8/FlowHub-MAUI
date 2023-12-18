@@ -4,6 +4,7 @@
              x:Class="FlowHub.Main.Views.Desktop.Incomes.ManageIncomesD"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"    
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              xmlns:utilities="clr-namespace:FlowHub.Main.Utilities"
              xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
@@ -11,7 +12,7 @@
              x:DataType="viewModel:ManageIncomesVM"
              Title="ManageIncomesD"
              x:Name="page">
-    <toolkit:DockLayout>
+    <toolkit:DockLayout BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}">
         <Label FontSize="21" HorizontalOptions="Center"
                Margin="8" toolkit:DockLayout.DockPosition="Top">
             <Label.GestureRecognizers>
@@ -25,7 +26,58 @@
             </Label.Text>
         </Label>
 
-        <VerticalStackLayout HorizontalOptions="Start" toolkit:DockLayout.DockPosition="Right">
+        <uranium:ExpanderView toolkit:DockLayout.DockPosition="Left" HorizontalOptions="Center"
+                              VerticalOptions="Start" WidthRequest="350">
+            <uranium:ExpanderView.Resources>
+                <ResourceDictionary>
+                    <Style TargetType="Layout" Class="ExpanderView.Header" ApplyToDerivedTypes="True">
+                        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}"/>
+                    </Style>
+                    <Style TargetType="ContentView" Class="ExpanderView.Content">
+                        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}"/>
+                    </Style>
+
+                    <Style TargetType="Path" Class="ExpanderView.Arrow">
+                        <Setter Property="Fill" Value="DarkSlateBlue" />
+                    </Style>
+                </ResourceDictionary>
+            </uranium:ExpanderView.Resources>
+            <uranium:ExpanderView.Header>
+                <Label Text="Filters" FontSize="21" Margin="10"
+                       HorizontalTextAlignment="Center" FontAttributes="Bold"
+                       HorizontalOptions="Center" BackgroundColor="Transparent"/>                
+            </uranium:ExpanderView.Header>
+
+            <VerticalStackLayout Margin="20,0,0,0" Spacing="8" BackgroundColor="Transparent">
+
+                <material:TextField Text="{Binding SearchText}" Title="Enter Description..." 
+                                    ClearButtonVisibility="WhileEditing" Margin="10,0,10,0"/>
+                
+                <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                    <material:DatePickerField Title="Select Start Date"
+                                   Date="{Binding SearchStartDate}"/>
+                    <material:DatePickerField Title="Select End Date"
+                                   Date="{Binding SearchEndDate}"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Spacing="5" HorizontalOptions="Center" >
+                    <material:TextField Text="{Binding SearchMinPrice}" Title="Set Min Price"/>
+                    <Label Text="-" VerticalOptions="Center" FontSize="30"/>
+                    <material:TextField Text="{Binding SearchMaxPrice}" Title="Set Max Price"/>
+
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="10" Margin="10">
+                    <Button Text="Clear Filter" BackgroundColor="Red" Command="{Binding ClearFiltersCommand}"/>
+                    <Button Text="Search" Command="{Binding SearchIncomesCommand}"/>
+                </HorizontalStackLayout>
+
+
+            </VerticalStackLayout>
+            
+        </uranium:ExpanderView>
+        <VerticalStackLayout HorizontalOptions="Start" toolkit:DockLayout.DockPosition="Right"
+                             BackgroundColor="Transparent">
             <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" HeightRequest="60"
                          BackgroundColor="Transparent"
                          Command="{Binding ShowAddIncomePopUpCommand}"
@@ -38,7 +90,7 @@
         </VerticalStackLayout>
 
         <dg:DataGrid ItemsSource="{Binding IncomesList}" BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},Dark=#201F24}"
-                     WidthRequest="1000" HeaderBackground="DarkSlateBlue"
+                     WidthRequest="1300" HeaderBackground="DarkSlateBlue"
                      RowHeight="50" HeaderHeight="40" 
                      BorderColor="{AppThemeBinding Light=darkslateblue, Dark=transparent}" HorizontalOptions="CenterAndExpand"
                      x:Name="IncDG">

@@ -372,7 +372,11 @@
     <Style TargetType="ContentPage">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}"/>
     </Style>
+    <Style TargetType="toolkit:DockLayout">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}"/>
+    </Style>
 
+    
     <Style TargetType="Shell" ApplyToDerivedTypes="True">
         <Setter Property="Shell.BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}" /> <!--change color of shell bar up-->
         <Setter Property="Shell.ForegroundColor" Value="{OnPlatform WinUI={StaticResource Primary}, Default={StaticResource White}}" />

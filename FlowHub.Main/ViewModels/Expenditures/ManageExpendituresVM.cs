@@ -104,6 +104,18 @@ public partial class ManageExpendituresVM : ObservableObject
 
     }
 
+    private async void HandleExpendituresListUpdated()
+    {
+        try
+        {
+            ApplyChanges();
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error Exp", ex.Message, "OK");
+        }
+    }
+
     [ObservableProperty]
     public int startAction;
     //[RelayCommand]
@@ -116,7 +128,7 @@ public partial class ManageExpendituresVM : ObservableObject
             .Where(x => !x.IsDeleted)
             .OrderByDescending(x => x.DateSpent);
             //.ToList();
-        ApplyFilters(expList);
+        //ApplyFilters(expList); wasn't useful
 #if ANDROID
         // Update groupedData
         var groupedData = expList.GroupBy(e => e.DateSpent.Date)
@@ -136,18 +148,7 @@ public partial class ManageExpendituresVM : ObservableObject
         RedoCountsAndAmountsCalculations(expList);
         
     }
-    private async void HandleExpendituresListUpdated()
-    {
-        try
-        {
-            ApplyChanges();
-        }
-        catch (Exception ex)
-        {
-            await Shell.Current.DisplayAlert("Error Exp", ex.Message, "OK");
-        }
-    }
-    private void RedoCountsAndAmountsCalculations(IEnumerable<ExpendituresModel> expList)
+    void RedoCountsAndAmountsCalculations(IEnumerable<ExpendituresModel> expList)
     {
         // Update TotalAmount
         TotalAmount = expList.AsParallel().Sum(x => x.AmountSpent);
@@ -262,7 +263,7 @@ public partial class ManageExpendituresVM : ObservableObject
         ApplyChanges();
     }
 
-    private IEnumerable<ExpendituresModel> ApplyFilters(IEnumerable<ExpendituresModel> expendituresCollection)
+    IEnumerable<ExpendituresModel> ApplyFilters(IEnumerable<ExpendituresModel> expendituresCollection)
     {
         IEnumerable<ExpendituresModel> filteredExpCollection = expendituresCollection;
         try
@@ -357,8 +358,6 @@ public partial class ManageExpendituresVM : ObservableObject
         {
             SelectedExpCatsFilters?.Remove(category);
         }
-       // FilteredExpenditureCategories.Remove(expenditureCategory);
-        //ApplyFilters(ExpendituresCollection);
     }
 
     [RelayCommand]

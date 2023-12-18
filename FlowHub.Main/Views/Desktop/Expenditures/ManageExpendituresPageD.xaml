@@ -13,7 +13,7 @@
              x:DataType="viewModels:ManageExpendituresVM"
              x:Name="page"
              Title="Manage Expenditures">
-    <toolkit:DockLayout VerticalOptions="Start">
+    <toolkit:DockLayout>
         
         <Label FontSize="21" HorizontalOptions="Center" 
                    Margin="8"
@@ -53,6 +53,22 @@
         <uranium:ExpanderView toolkit:DockLayout.DockPosition="Left" HorizontalOptions="Center" 
                               BackgroundColor="Transparent" VerticalOptions="Start" 
                               WidthRequest="350">
+
+            <uranium:ExpanderView.Resources>
+                <ResourceDictionary>
+                    <Style TargetType="Layout" Class="ExpanderView.Header" ApplyToDerivedTypes="True">
+                        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}"/>
+                    </Style>
+                    <Style TargetType="ContentView" Class="ExpanderView.Content">
+                        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}"/>
+                    </Style>
+
+                    <Style TargetType="Path" Class="ExpanderView.Arrow">
+                        <Setter Property="Fill" Value="DarkSlateBlue" />
+                    </Style>
+                </ResourceDictionary>
+            </uranium:ExpanderView.Resources>
+
             <uranium:ExpanderView.Header>
                 <Label Text="Filters" FontSize="21" Margin="10"
                        HorizontalTextAlignment="Center" FontAttributes="Bold"
@@ -105,7 +121,7 @@
         
        
         <VerticalStackLayout HorizontalOptions="Start" toolkit:DockLayout.DockPosition="Right"
-                             VerticalOptions="Start"
+                             VerticalOptions="Start" 
                              BackgroundColor="Transparent" HeightRequest="200">
             <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" HeightRequest="60" 
                     BackgroundColor="Transparent"
