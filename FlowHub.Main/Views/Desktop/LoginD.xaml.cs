@@ -119,6 +119,6 @@ public partial class LoginD : ContentPage
 
     private void LoginOnlineBtn_Clicked(object sender, EventArgs e)
     {
-        viewModel.IsLoginOnlineButtonClicked = true;
+        //viewModel.IsLoginOnlineButtonClicked = true;
     }
 }

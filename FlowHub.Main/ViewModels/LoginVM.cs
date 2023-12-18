@@ -164,7 +164,7 @@ public partial class LoginVM : ObservableObject
         ErrorMessageVisible = false;
         IsBusy = true;
         UsersModel User = new();
-
+        IsLoginOnlineButtonClicked = true;
         if (IsLoginOnlineButtonClicked)
         {
             User = await userRepo.GetUserOnlineAsync(CurrentUser);
