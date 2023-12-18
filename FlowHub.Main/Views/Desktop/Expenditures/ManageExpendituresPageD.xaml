@@ -5,7 +5,8 @@
              xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
-             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"             
+             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Expenditures"
              xmlns:utilities="clr-namespace:FlowHub.Main.Utilities"
@@ -13,6 +14,7 @@
              x:Name="page"
              Title="Manage Expenditures">
     <toolkit:DockLayout VerticalOptions="Start">
+        
         <Label FontSize="21" HorizontalOptions="Center" 
                    Margin="8"
                    toolkit:DockLayout.DockPosition="Top">
@@ -23,6 +25,8 @@
                 </MultiBinding>
             </Label.Text>
         </Label>
+
+        
         <HorizontalStackLayout toolkit:DockLayout.DockPosition="Top" Spacing="2"
                                HorizontalOptions="Center" x:Name="SyncIndicator">
             <Label Text="Syncing..." IsVisible="{Binding IsBusy}" Margin="0,0,0,0" FontSize="13" />
@@ -46,8 +50,63 @@
             </Label>
         </HorizontalStackLayout>
 
-        <VerticalStackLayout HorizontalOptions="Start" toolkit:DockLayout.DockPosition="Right" 
-                             BackgroundColor="Transparent">
+        <uranium:ExpanderView toolkit:DockLayout.DockPosition="Left" HorizontalOptions="Center" 
+                              BackgroundColor="Transparent" VerticalOptions="Start" 
+                              WidthRequest="350">
+            <uranium:ExpanderView.Header>
+                <Label Text="Filters" FontSize="21" Margin="10"
+                       HorizontalTextAlignment="Center" FontAttributes="Bold"
+                       HorizontalOptions="Center" BackgroundColor="Transparent"/>
+            </uranium:ExpanderView.Header>
+
+            <VerticalStackLayout Margin="20,0,0,0" Spacing="8" BackgroundColor="Transparent">
+
+                <material:TextField Text="{Binding SearchText}" Title="Enter Description..." 
+                                    ClearButtonVisibility="WhileEditing" Margin="10,0,10,0"/>
+
+                <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                    <material:DatePickerField Title="Select Start Date"
+                                   Date="{Binding SearchStartDate}"/>
+                    <material:DatePickerField Title="Select End Date"
+                                   Date="{Binding SearchEndDate}"/>
+                </HorizontalStackLayout>
+
+                <material:PickerField ItemsSource="{Binding ListOfExpenditureCategories, Mode=TwoWay}" Title="Select Category"
+                               SelectedValueChangedCommand="{Binding ExpenditureCategoryFilterChangedCommand}" Margin="10,0,10,0"
+                               >
+                </material:PickerField>
+                <CollectionView ItemsSource="{Binding SelectedExpCatsFilters}"
+                        EmptyView="No Category Selected...">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:ExpenditureCategory">
+                            <material:Chip Text="{Binding .}" 
+                                DestroyCommand="{Binding Source={x:Reference page}, Path=BindingContext.ExpenditureCategoryChipDestroyedCommand}"
+                            />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <HorizontalStackLayout Spacing="5" HorizontalOptions="Center" >
+                    <material:TextField Text="{Binding SearchMinPrice}" Title="Set Min Price"/>
+                    <Label Text="-" VerticalOptions="Center" FontSize="30"/>
+                    <material:TextField Text="{Binding SearchMaxPrice}" Title="Set Max Price"/>
+
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="10" Margin="10">
+                    <Button Text="Clear Filter" BackgroundColor="Red" Command="{Binding ClearFiltersCommand}"/>
+                    <Button Text="Search" Command="{Binding SearchExpendituresCommand}"/>
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+        </uranium:ExpanderView>
+        
+       
+        <VerticalStackLayout HorizontalOptions="Start" toolkit:DockLayout.DockPosition="Right"
+                             VerticalOptions="Start"
+                             BackgroundColor="Transparent" HeightRequest="200">
             <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" HeightRequest="60" 
                     BackgroundColor="Transparent"
                     Command="{Binding ShowAddExpenditurePopUpCommand}"
@@ -65,8 +124,8 @@
                          Command="{Binding GoToSpecificStatsPageCommand}"/>
         </VerticalStackLayout>
 
-        <dg:DataGrid ItemsSource="{Binding ExpendituresList}" BackgroundColor="Black" 
-                     WidthRequest="1000" HeaderBackground="{AppThemeBinding Light=#CBCBCB,Dark=#C2C2C2}"
+        <dg:DataGrid ItemsSource="{Binding ExpendituresCollection}" BackgroundColor="Black" 
+                     WidthRequest="1300" HeaderBackground="{AppThemeBinding Light=#CBCBCB,Dark=#C2C2C2}"
                      ActiveRowColor="{AppThemeBinding Light=darkslateblue, Dark=darkslateblue}" 
                      BorderColor="{AppThemeBinding Dark=#303030, Light=DarkSlateBlue}" HorizontalOptions="CenterAndExpand" 
                      x:Name="ExpDG" >

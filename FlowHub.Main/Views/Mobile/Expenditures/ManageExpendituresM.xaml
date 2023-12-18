@@ -50,9 +50,9 @@
 
             <Label toolkit:DockLayout.DockPosition="Top" Text="{Binding ExpTitle}" FontSize="20" Margin="5" FontAttributes="Bold" HorizontalOptions="Center"/>
 
-            <Label FontSize="17" Margin="3" toolkit:DockLayout.DockPosition="Bottom"
-               FontAttributes="Bold"
-               HorizontalOptions="Center" VerticalOptions="End">
+            <Label FontSize="17" Margin="3" 
+                   toolkit:DockLayout.DockPosition="Bottom" FontAttributes="Bold" 
+                   HorizontalOptions="Center" VerticalOptions="End">
                 <Label.Text>
                     <MultiBinding StringFormat="{} {2} Flow Out(s) worth {0:n2} {1}">
                         <Binding Path="TotalAmount"/>

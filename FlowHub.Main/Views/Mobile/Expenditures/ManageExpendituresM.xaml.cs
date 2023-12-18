@@ -19,7 +19,7 @@ public partial class ManageExpendituresM : UraniumContentPage
         
     }
 
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         if (UpSertExpbSheet.IsPresented)
         {
@@ -27,13 +27,13 @@ public partial class ManageExpendituresM : UraniumContentPage
         }
         base.OnAppearing();
         
-        await viewModel.PageloadedAsync();
+        viewModel.Pageloaded();
         
     }
 
     private async void ExportToPDFImageButton_Clicked(object sender, EventArgs e)
     {
-        if (viewModel.ExpendituresList?.Count < 1)
+        if (viewModel.ExpendituresCollection?.Count < 1)
         {
             await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Cannot Save an Empty List to PDF"));
         }

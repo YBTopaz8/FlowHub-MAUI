@@ -14,7 +14,9 @@ public partial class ManageExpendituresVM : ObservableObject
         expendituresService = expendituresRepository;
         userRepo = usersRepository;
         this.upSertExpenditureVM = upSertExpenditureVM;
-        ExpendituresCat = ExpenditureCategoryDescriptions.Descriptions;
+
+        ListOfExpenditureCategories = Enum.GetValues(typeof(ExpenditureCategory)).Cast<ExpenditureCategory>().ToList();
+        //ExpendituresCat = ExpenditureCategoryDescriptions.Descriptions;
         expendituresService.OfflineExpendituresListChanged += HandleExpendituresListUpdated;
         userRepo.OfflineUserDataChanged += HandleUserDataChanged;
     }
@@ -25,7 +27,9 @@ public partial class ManageExpendituresVM : ObservableObject
     }
 
     [ObservableProperty]
-    ObservableCollection<ExpendituresModel> expendituresList;
+    List<ExpenditureCategory> listOfExpenditureCategories;
+    [ObservableProperty]
+    ObservableCollection<ExpendituresModel> expendituresCollection;
 
     [ObservableProperty]
     ObservableCollection<DateGroup> groupedExpenditures;
@@ -48,7 +52,8 @@ public partial class ManageExpendituresVM : ObservableObject
     [ObservableProperty]
     string expTitle;
 
-    UsersModel ActiveUser = new();
+    [ObservableProperty]
+    UsersModel activeUser;
 
     [ObservableProperty]
     bool activ;
@@ -58,47 +63,79 @@ public partial class ManageExpendituresVM : ObservableObject
     [ObservableProperty]
     bool isSyncing;
 
+    //Search variables section
     [ObservableProperty]
-    List<string> expendituresCat;
-
-    public async Task PageloadedAsync()
-    {
-        UsersModel user = userRepo.OfflineUser;
-        ActiveUser = user;
-
-        UserPocketMoney = ActiveUser.PocketMoney;
-        UserCurrency = ActiveUser.UserCurrency;
-        GetAllExp();
-
-    }
+    List<ExpenditureCategory> expendituresCatsFilters = [];
+    [ObservableProperty]
+    ObservableCollection<ExpenditureCategory> selectedExpCatsFilters = [];
+    [ObservableProperty]
+    DateTime? searchStartDate = null;
+    [ObservableProperty]
+    DateTime? searchEndDate = null;
+    [ObservableProperty]
+    double? searchMinPrice;
+    [ObservableProperty]
+    double? searchMaxPrice;
+    [ObservableProperty]
+    string searchText;
 
     bool IsLoaded;
-
-    [ObservableProperty]
-    public int startAction;
-    [RelayCommand]
-    //Function to show very single expenditure from DB
-
-    public void GetAllExp()
+    public void Pageloaded()
     {
         try
         {
             if (!IsLoaded)
-            {
-                ExpTitle = "All Flow Outs";
+            {                
                 ApplyChanges();
-
-                IsBusy = false;
-
+                
+                ExpTitle = "All Flow Outs";
                 IsLoaded = true;
+                IsBusy = false;
+                ActiveUser = userRepo.OfflineUser;
+                UserPocketMoney = ActiveUser.PocketMoney;
+                UserCurrency = ActiveUser.UserCurrency;
+                
             }
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception when loading all exp MESSAGE: {ex.Message}");
+            Debug.WriteLine($"Exception When loading all expenditures; Message : {ex.Message}");
         }
+
     }
 
+    [ObservableProperty]
+    public int startAction;
+    //[RelayCommand]
+    //Function to show very single expenditure from DB
+
+    public void ApplyChanges()
+    {
+        // Update expList
+        var expList = expendituresService.OfflineExpendituresList
+            .Where(x => !x.IsDeleted)
+            .OrderByDescending(x => x.DateSpent);
+            //.ToList();
+        ApplyFilters(expList);
+#if ANDROID
+        // Update groupedData
+        var groupedData = expList.GroupBy(e => e.DateSpent.Date)
+            .Select(g => new DateGroup(g.Key, [.. g]))
+            .ToList();
+
+        // Update GroupedExpenditures
+        GroupedExpenditures = new ObservableCollection<DateGroup>(groupedData);
+        OnPropertyChanged(nameof(GroupedExpenditures));
+#endif
+
+#if WINDOWS
+        // Update ExpendituresList
+        ExpendituresCollection = new ObservableCollection<ExpendituresModel>(expList);
+#endif
+
+        RedoCountsAndAmountsCalculations(expList);
+        
+    }
     private async void HandleExpendituresListUpdated()
     {
         try
@@ -107,39 +144,19 @@ public partial class ManageExpendituresVM : ObservableObject
         }
         catch (Exception ex)
         {
-           await Shell.Current.DisplayAlert("Error Exp", ex.Message, "OK");
+            await Shell.Current.DisplayAlert("Error Exp", ex.Message, "OK");
         }
     }
-
-    private void ApplyChanges()
+    private void RedoCountsAndAmountsCalculations(IEnumerable<ExpendituresModel> expList)
     {
-        // Update expList
-        var expList = expendituresService.OfflineExpendituresList
-            .Where(x => !x.IsDeleted)
-            .OrderByDescending(x => x.DateSpent).ToList();
-
-        // Update groupedData
-        var groupedData = expList.GroupBy(e => e.DateSpent.Date)
-            .Select(g => new DateGroup(g.Key, g.ToList()))
-            .ToList();
-
-        // Update GroupedExpenditures
-        GroupedExpenditures = new ObservableCollection<DateGroup>(groupedData);
-        OnPropertyChanged(nameof(GroupedExpenditures));
-
-#if WINDOWS
-        // Update ExpendituresList
-        ExpendituresList = new ObservableCollection<ExpendituresModel>(expList);
-#endif
-
         // Update TotalAmount
         TotalAmount = expList.AsParallel().Sum(x => x.AmountSpent);
 
         // Update TotalExpenditures
-        TotalExpenditures = expList.Count;
+        TotalExpenditures = expList.Count();
 
         // Update ShowStatisticBtn
-        ShowStatisticBtn = expList.Count >= 3;
+        ShowStatisticBtn = expList.Count() >= 3;
     }
 
     [RelayCommand]
@@ -178,23 +195,6 @@ public partial class ManageExpendituresVM : ObservableObject
     }
 
     [RelayCommand]
-    public async Task GoToSpecificStatsPage()
-    {
-        if (GroupedExpenditures is null)
-        {
-            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("No Data to visualize"));
-            return;
-        }
-
-        var navParam = new Dictionary<string, object>
-        {
-            { "GroupedExpList", GroupedExpenditures }
-        };
-
-        await ManageExpendituresNavs.FromManageExpToSingleMonthStats(navParam);
-    }
-
-    [RelayCommand]
     public async Task DeleteExpenditureBtn(ExpendituresModel expenditure)
     {
         CancellationTokenSource cancellationTokenSource = new();
@@ -228,14 +228,163 @@ public partial class ManageExpendituresVM : ObservableObject
         }
     }
 
+    [RelayCommand]
+    void SearchExpenditures()
+    {
+        try
+        {
+            var orderedExpCollection = expendituresService.OfflineExpendituresList
+            .Where(x => !x.IsDeleted)
+            .OrderByDescending(x => x.DateSpent);
+
+            IEnumerable<ExpendituresModel> filteredCollectionOfExp = ApplyFilters(orderedExpCollection);
+            
+#if WINDOWS
+            ExpendituresCollection = new ObservableCollection<ExpendituresModel>(filteredCollectionOfExp);
+#endif
+            RedoCountsAndAmountsCalculations(filteredCollectionOfExp);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Search Flow Out Exception : {ex.Message}");
+        }
+    }
+
+    [RelayCommand]
+    void ClearFilters()
+    {
+        SearchText = string.Empty;
+        SearchStartDate = null;
+        SearchEndDate = null;
+        SearchMinPrice = null;
+        SearchMaxPrice = null;
+        SelectedExpCatsFilters.Clear();
+        ApplyChanges();
+    }
+
+    private IEnumerable<ExpendituresModel> ApplyFilters(IEnumerable<ExpendituresModel> expendituresCollection)
+    {
+        IEnumerable<ExpendituresModel> filteredExpCollection = expendituresCollection;
+        try
+        {
+            filteredExpCollection = FilterByText(filteredExpCollection);
+            filteredExpCollection = FilterByCategory(filteredExpCollection);
+            filteredExpCollection = FilterByDateRange(filteredExpCollection);
+            filteredExpCollection = FilterByAmountRange(filteredExpCollection);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Filter Flow Out Exception : {ex.Message}");
+        }
+        return filteredExpCollection;
+    }
+
+    private IEnumerable<ExpendituresModel> FilterByCategory(IEnumerable<ExpendituresModel> expendituresCollection)
+    {
+        if (SelectedExpCatsFilters is not null && SelectedExpCatsFilters.Count != 0)
+        {
+            expendituresCollection = expendituresCollection
+                .Where(exp => SelectedExpCatsFilters.Contains(exp.Category));        
+        }
+
+        return expendituresCollection;
+    }
+
+    IEnumerable<ExpendituresModel> FilterByDateRange(IEnumerable<ExpendituresModel> expendituresCollection)
+    {
+        // If both start and end dates are null, return the original list
+        if (SearchStartDate == null && SearchEndDate == null)
+        {
+            return expendituresCollection;
+        }
+
+        // Filter by start date if it's not null
+        if (SearchStartDate != null)
+        {
+            expendituresCollection = expendituresCollection.Where(exp => exp.DateSpent >= SearchStartDate.Value);
+        }
+
+        // Filter by end date if it's not null
+        if (SearchEndDate != null)
+        {
+            expendituresCollection = expendituresCollection.Where(exp => exp.DateSpent <= SearchEndDate.Value);
+        }
+
+        return expendituresCollection;
+    }
+
+    IEnumerable<ExpendituresModel> FilterByAmountRange(IEnumerable<ExpendituresModel> expendituresCollection)
+    {
+        if (SearchMinPrice.HasValue && SearchMinPrice > 0)
+        {
+            expendituresCollection = expendituresCollection
+                .Where(exp => exp.AmountSpent >= SearchMinPrice.Value);
+        }
+        if (SearchMaxPrice.HasValue && SearchMaxPrice > 0)
+        {
+            expendituresCollection = expendituresCollection
+                .Where(exp => exp.AmountSpent <= SearchMaxPrice.Value);
+        }
+
+        return expendituresCollection;
+    }
+    private IEnumerable<ExpendituresModel> FilterByText(IEnumerable<ExpendituresModel> expendituresCollection)
+    {
+        // If SearchText is null or empty, return the collection without filtering by text
+        if (string.IsNullOrEmpty(SearchText))
+        {
+            return expendituresCollection.Where(exp => !exp.IsDeleted);
+        }
+
+        return expendituresCollection.
+                Where(exp => exp.Reason?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ?? false)
+                .Where(exp => !exp.IsDeleted);
+    }
+
+    [RelayCommand]
+    void ExpenditureCategoryFilterChanged(object sender)
+    {
+        if (sender is ExpenditureCategory selectedCategory && !SelectedExpCatsFilters.Contains(selectedCategory))
+        {
+            SelectedExpCatsFilters?.Add(selectedCategory);
+        }
+
+    }
+    [RelayCommand]
+    void ExpenditureCategoryChipDestroyed(object sender)
+    {
+        if (sender is UraniumUI.Material.Controls.Chip chip && chip.BindingContext is ExpenditureCategory category)
+        {
+            SelectedExpCatsFilters?.Remove(category);
+        }
+       // FilteredExpenditureCategories.Remove(expenditureCategory);
+        //ApplyFilters(ExpendituresCollection);
+    }
+
+    [RelayCommand]
+    public async Task GoToSpecificStatsPage()
+    {
+        if (GroupedExpenditures is null)
+        {
+            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("No Data to visualize"));
+            return;
+        }
+
+        var navParam = new Dictionary<string, object>
+        {
+            { "GroupedExpList", GroupedExpenditures }
+        };
+
+        await ManageExpendituresNavs.FromManageExpToSingleMonthStats(navParam);
+    }
     public async Task PrintExpendituresBtn()
     {
         Activ = true;
 #if ANDROID
-        ExpendituresList = GroupedExpenditures.SelectMany(x => x).ToObservableCollection();
+        ExpendituresCollection = GroupedExpenditures.SelectMany(x => x).ToObservableCollection();
 #endif
 
-        if (ExpendituresList?.Count < 1 || ExpendituresList is null)
+        if (ExpendituresCollection?.Count < 1 || ExpendituresCollection is null)
         {
             await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Cannot save an Empty list to PDF"));
             return;
@@ -251,7 +400,7 @@ public partial class ManageExpendituresVM : ObservableObject
             await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("No Internet !\nPlease Connect to the Internet in order to save in other currencies"));
             return;
         }
-        await PrintExpenditures.SaveExpenditureToPDF(ExpendituresList, ActiveUser.UserCurrency, dialogueResponse, ActiveUser.Username);
+        await PrintExpenditures.SaveExpenditureToPDF(ExpendituresCollection, ActiveUser.UserCurrency, dialogueResponse, ActiveUser.Username);
     }
 
     [RelayCommand]
@@ -271,6 +420,8 @@ public partial class ManageExpendituresVM : ObservableObject
     {
         await expendituresService.DropExpendituresCollection();
     }
+
+    
 }
 
 public class DateGroup : List<ExpendituresModel>

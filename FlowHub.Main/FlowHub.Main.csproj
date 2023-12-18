@@ -158,7 +158,7 @@
 	<ItemGroup>
 		<PackageReference Include="akgul.Maui.DataGrid" Version="3.0.0" />
 		<PackageReference Include="CommunityToolkit.Diagnostics" Version="8.2.2" />
-		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="HarfBuzzSharp" Version="7.3.0" />
 		<PackageReference Include="itext7" Version="8.0.2" />

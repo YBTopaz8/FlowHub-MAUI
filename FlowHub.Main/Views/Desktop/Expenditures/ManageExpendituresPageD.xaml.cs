@@ -15,17 +15,16 @@ public partial class ManageExpendituresPageD : ContentPage
 
     }
 
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
-       
-        await viewModel.PageloadedAsync();
+        viewModel.Pageloaded();
 
     }
 
     private async void ExportToPDFImageButton_Clicked(object sender, EventArgs e)
     {
-        if (viewModel.ExpendituresList?.Count < 1)
+        if (viewModel.ExpendituresCollection?.Count < 1)
         {
             await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Cannot Save an Empty List to PDF"));
         }
@@ -38,5 +37,37 @@ public partial class ManageExpendituresPageD : ContentPage
             //await viewModel.PrintExpendituresBtn();
             //PrintProgressBarIndic.IsVisible = false;
         }
+    }
+
+    private CancellationTokenSource _cts = new();
+    private async void ExpenditureSearchBar_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        /*
+        _cts.Cancel();
+        _cts.Dispose();
+        _cts = new CancellationTokenSource();
+        var cancellationToken = _cts.Token;
+        try
+        {
+            await Task.Delay(350, cancellationToken);
+            if (!cancellationToken.IsCancellationRequested)
+            {
+                SearchBar searchBar = sender as SearchBar;
+                if (searchBar.Text.Length >= 1)
+                {
+                    viewModel.SearchExpendituresCommand.Execute(searchBar.Text);
+                }
+                else
+                {
+                    viewModel.ApplyChanges();
+                }
+
+            }
+        }
+        catch (TaskCanceledException ex)
+        {
+
+            Debug.WriteLine(ex.Message);
+        }*/
     }
 }
