@@ -118,7 +118,6 @@
 
             </VerticalStackLayout>
         </uranium:ExpanderView>
-        
        
         <VerticalStackLayout HorizontalOptions="Start" toolkit:DockLayout.DockPosition="Right"
                              VerticalOptions="Start" 
@@ -219,7 +218,7 @@
                         </DataTemplate>
                     </dg:DataGridColumn.CellTemplate>
                 </dg:DataGridColumn>
-
+                 
                 <dg:DataGridColumn Title="Actions" Width="0.8*" SortingEnabled="False">
                     <dg:DataGridColumn.CellTemplate>
                         <DataTemplate x:DataType="models:ExpendituresModel">

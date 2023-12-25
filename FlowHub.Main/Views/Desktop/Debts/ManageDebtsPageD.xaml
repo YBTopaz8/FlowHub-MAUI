@@ -98,25 +98,28 @@
                             </material:DataGridColumn.CellItemTemplate>
                         </material:DataGridColumn>
 
-                        <material:DataGridColumn Title="Is Paid Completely">
+                        <material:DataGridColumn Title="Completion Status">
                             <material:DataGridColumn.CellItemTemplate>
                                 <DataTemplate x:DataType="models:DebtModel">
-                                    
-                                    <material:CheckBox IsChecked="{Binding IsPaidCompletely, Mode=TwoWay}" 
+                                    <utilities:CustomSwitch IsToggled="{Binding IsPaidCompletely, Mode=TwoWay}"
+                                                            OnToggledCommandParameter="{Binding .}"
+                                                            OnToggledCommand="{Binding Source={x:Reference Page}, Path=BindingContext.ToggleDebtCompletionStatusCommand}"
+                                                            Margin="10" HorizontalOptions="Center"/>
+
+                                    <!--<material:CheckBox IsChecked="{Binding IsPaidCompletely, Mode=TwoWay}" 
                                                        CommandParameter="{Binding .}"
                                                        CheckChangedCommand="{Binding Source={x:Reference Page}, Path=BindingContext.ToggleDebtCompletionStatusCommand}"
-
-                                                       CheckChanged="CheckBox_CheckChanged"
-                                                       
-                                                       Margin="10" HorizontalOptions="Center"/>
+                                                      
+                                                       Margin="10" HorizontalOptions="Center"/>-->
                                 </DataTemplate>
                             </material:DataGridColumn.CellItemTemplate>
                         </material:DataGridColumn>
+                   
 
                         <material:DataGridColumn Title="Action">
                             <material:DataGridColumn.CellItemTemplate>
                                 <DataTemplate>
-                                    <HorizontalStackLayout>
+                                    <HorizontalStackLayout Margin="8,0,8,0" Spacing="5">
                                         <Button Text="Edit"
                                             Command="{Binding Source={x:Reference Page}, Path=BindingContext.ShowEditDebtPopUpCommand}"
                                             CommandParameter="{Binding .}"/>

@@ -22,6 +22,14 @@ public partial class HomePageD : ContentPage
         viewModel = vm;
         BindingContext = vm;
 
+//#if WINDOWS
+//        Microsoft.Maui.Handlers.SwitchHandler.Mapper.AppendToMapping("CustomLabel", 
+//  (handler, View) =>
+//        {            
+//            handler.PlatformView.OffContent = "Not Completed";
+//            handler.PlatformView.OnContent = "Completed";            
+//        });
+//#endif
     }
 
     

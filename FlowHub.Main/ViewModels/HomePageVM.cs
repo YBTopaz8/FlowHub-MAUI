@@ -25,10 +25,10 @@ public partial class HomePageVM : ObservableObject
     }
 
     [ObservableProperty]
-    ObservableCollection<ExpendituresModel> latestExpenditures = new();
+    ObservableCollection<ExpendituresModel> latestExpenditures = [];
 
     [ObservableProperty]
-    ObservableCollection<IncomeModel> latestIncomes = new();
+    ObservableCollection<IncomeModel> latestIncomes = [];
 
     [ObservableProperty]
     public int totalExp;
@@ -125,6 +125,7 @@ public partial class HomePageVM : ObservableObject
             }
         }
     }
+
 
     [ObservableProperty]
     string selectedCalendarItem;

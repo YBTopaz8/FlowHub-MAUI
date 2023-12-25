@@ -1,5 +1,3 @@
-using UraniumUI.Material.Controls;
-using UraniumUI.Pages;
 using CheckBox = UraniumUI.Material.Controls.CheckBox;
 
 namespace FlowHub.Main.Views.Desktop.Debts;
@@ -14,6 +12,8 @@ public partial class ManageDebtsPageD : UraniumContentPage
         viewModel = vm;
         UpSertVM = upSertDebt;
         BindingContext = vm;
+
+
     }
     protected override void OnAppearing()
     {
@@ -94,9 +94,4 @@ public partial class ManageDebtsPageD : UraniumContentPage
 
     }
 
-    private void CheckBox_CheckChanged(object sender, EventArgs e)
-    {
-        var s = (CheckBox)sender;
-        
-    }
 }

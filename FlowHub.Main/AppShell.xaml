@@ -40,18 +40,18 @@
                           Route="ManageIncomesD"/>
         </Tab>
 
-        <Tab Title="Flow Insights" Icon="{AppThemeBinding Dark=graph_d.png, Light=graph_l.png}" >
-            <ShellContent Title="Flow Insights" Icon="{AppThemeBinding Dark=graph_d.png, Light=graph_l.png}" 
-                          ContentTemplate="{DataTemplate viewsStatistics:StatisticsPageD}"
-                          Route="Statistics"/>
-        </Tab>
-
         <Tab Title="Flow Holds" Icon="{AppThemeBinding Dark=time_to_pay_d.png, Light=time_to_pay_l.png}">
             <ShellContent Title="Flow Holds" Icon="{AppThemeBinding Dark=time_to_pay_d.png, Light=time_to_pay_l.png}"
                           ContentTemplate="{DataTemplate viewsHolds:ManageDebtsPageD}"
                           Route="ManageDebts"/>
 
         </Tab>
+        <Tab Title="Flow Insights" Icon="{AppThemeBinding Dark=graph_d.png, Light=graph_l.png}" >
+            <ShellContent Title="Flow Insights" Icon="{AppThemeBinding Dark=graph_d.png, Light=graph_l.png}" 
+                          ContentTemplate="{DataTemplate viewsStatistics:StatisticsPageD}"
+                          Route="Statistics"/>
+        </Tab>
+
         <Tab Title="Settings" Route="UserSettings"
              Icon="{AppThemeBinding Dark=settings_d.png, Light=settings_l.png}">
             <ShellContent  Title="User Settings" 

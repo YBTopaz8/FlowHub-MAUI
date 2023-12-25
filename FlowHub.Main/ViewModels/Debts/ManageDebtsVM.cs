@@ -305,6 +305,10 @@ public partial class ManageDebtsVM : ObservableObject
     [RelayCommand]
     async Task ToggleDebtCompletionStatus(object s)
     {
+        if (s is null)
+        {
+            return;
+        }
         if (s.GetType() == typeof(DebtModel))
         {
             var debt = (DebtModel)s;

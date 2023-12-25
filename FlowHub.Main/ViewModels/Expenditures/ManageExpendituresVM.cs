@@ -420,7 +420,11 @@ public partial class ManageExpendituresVM : ObservableObject
         await expendituresService.DropExpendituresCollection();
     }
 
-    
+    [RelayCommand]
+    void IsCompleted(object sender)
+    {
+
+    }
 }
 
 public class DateGroup : List<ExpendituresModel>

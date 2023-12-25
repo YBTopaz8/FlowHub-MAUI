@@ -41,7 +41,7 @@ public static class MauiProgram
 #if ANDROID
             handlers.AddHandler(typeof(Shell), typeof(MyShellRenderer));
 #endif
-            
+            handlers.AddHandler<CustomSwitch, CustomSwitchHandler>();
             handlers.AddInputKitHandlers();
             handlers.AddUraniumUIHandlers();
         });
