@@ -388,7 +388,7 @@ public partial class StatisticsPageVM : ObservableObject
 
     public ObservableCollection<ISeries> LineSeries { get; set; }
 
-    [RelayCommand]
+    //[RelayCommand]
     //public void PageLoaded()
     //{
     //	Series2 = new ()
@@ -493,6 +493,7 @@ public partial class StatisticsPageVM : ObservableObject
 
     //}
 
+    /*
     void GetNov()
     {
         var listOfExp = expendituresService.OfflineExpendituresList;
@@ -538,7 +539,7 @@ public partial class StatisticsPageVM : ObservableObject
         LineSeries.Clear();
         LineSeries.Add(LinesSeriesToPlot);
     }
-
+    */
     public class TestClass
     {
         public string Name { get; set; }

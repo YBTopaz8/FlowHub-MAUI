@@ -16,7 +16,7 @@ public static class PrintExpenditures
 {
     public static async Task SaveExpenditureToPDF(ObservableCollection<ExpendituresModel> expList, string userCurrency, string printDisplayCurrency, string userName)
     {
-        ConvertedRate ObjectWithRate = new() { result = 1, date = DateTime.UtcNow };
+        ConvertedRate ObjectWithRate = new();// { result = 1, date = DateTime.UtcNow };
 
         if (!userCurrency.Equals(printDisplayCurrency))
         {
@@ -28,7 +28,7 @@ public static class PrintExpenditures
 
         const string PdfTitle = "Flow Outs Report";
 
-        await Task.Run(() => CreatePdfDoc(expList, PathFile, userCurrency, printDisplayCurrency, ObjectWithRate.result, ObjectWithRate.date, PdfTitle, userName));
+        await Task.Run(() => CreatePdfDoc(expList, PathFile, userCurrency, printDisplayCurrency, ObjectWithRate.conversion_rate, ObjectWithRate.TimeLastUpdateUtc, PdfTitle, userName));
     }
 
     private static string EnsureDirectoryAndReturnPath(string currency)
@@ -42,7 +42,7 @@ public static class PrintExpenditures
         return $"{path}/{fileName}";
     }
 
-    static void CreatePdfDoc(ObservableCollection<ExpendituresModel> expList, string PathFile, string userCurrency, string printDisplayCurrency, double rate, DateTime dateOfRateUpdate, string pdfTitle, string username)
+    static void CreatePdfDoc(ObservableCollection<ExpendituresModel> expList, string PathFile, string userCurrency, string printDisplayCurrency, double rate, string dateOfRateUpdate, string pdfTitle, string username)
     {
         Color HeaderTextColor = WebColors.GetRGBColor("darkslateblue");
 

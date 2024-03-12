@@ -156,22 +156,25 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="akgul.Maui.DataGrid" Version="3.0.0" />
+		<PackageReference Include="akgul.Maui.DataGrid" Version="4.0.1" />
 		<PackageReference Include="CommunityToolkit.Diagnostics" Version="8.2.2" />
-		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-		<PackageReference Include="HarfBuzzSharp" Version="7.3.0" />
-		<PackageReference Include="itext7" Version="8.0.2" />
-		<PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.2" />
+		<PackageReference Include="HarfBuzzSharp" Version="7.3.0.1" />
+		<PackageReference Include="itext7" Version="8.0.3" />
+		<PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.3" />
 		<PackageReference Include="LiteDB.Async" Version="0.1.7" />
-		<PackageReference Include="LiveChartsCore.SkiaSharpView.Maui" Version="2.0.0-rc1.2" />
+		<PackageReference Include="LiveChartsCore.SkiaSharpView.Maui" Version="2.0.0-rc2" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-		<PackageReference Include="SkiaSharp" Version="2.88.6" />
-		<PackageReference Include="UraniumUI" Version="2.7.3" />
-		<PackageReference Include="UraniumUI.Blurs" Version="2.7.3" />
-		<PackageReference Include="UraniumUI.Icons.FontAwesome" Version="2.7.3" />
-		<PackageReference Include="UraniumUI.Icons.MaterialIcons" Version="2.7.3" />
-		<PackageReference Include="UraniumUI.Material" Version="2.7.3" />
+		<PackageReference Include="SkiaSharp" Version="2.88.7" />
+		<PackageReference Include="UraniumUI" Version="2.8.0" />
+		<PackageReference Include="UraniumUI.Blurs" Version="2.8.0" />
+		<PackageReference Include="UraniumUI.Icons.FontAwesome" Version="2.8.0" />
+		<PackageReference Include="UraniumUI.Icons.MaterialIcons" Version="2.8.0" />
+		<PackageReference Include="UraniumUI.Material" Version="2.8.0" />
+
+    <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.6" />
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.6" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -383,6 +386,14 @@
 	    <Generator>ResXFileCodeGenerator</Generator>
 	    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.Maui.Controls" Version="8.0.7" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="8.0.7" />
 	</ItemGroup>
 
 </Project>

@@ -14,7 +14,7 @@ public class PrintDetailsMonthlyExpenditure
 {
     public async Task SaveListDetailMonthlyPlanned(List<ExpendituresModel> expList, string userCurrency, string printDisplayCurrency, string userName, string monthYear)
     {
-        ConvertedRate ObjectWithRate = new() { result = 1, date = DateTime.UtcNow };
+        ConvertedRate ObjectWithRate = new();
 
         if (!userCurrency.Equals(printDisplayCurrency))
         {
@@ -29,11 +29,11 @@ public class PrintDetailsMonthlyExpenditure
 
         string pdfTitle = $"List Of Estimated Expenditures For {monthYear}";
 
-        await Task.Run(() => CreatePDFDoc(expList, PathFile, userCurrency, printDisplayCurrency, ObjectWithRate.result, ObjectWithRate.date, pdfTitle, userName));
+        await Task.Run(() => CreatePDFDoc(expList, PathFile, userCurrency, printDisplayCurrency, ObjectWithRate.conversion_rate, ObjectWithRate.TimeLastUpdateUtc, pdfTitle, userName));
     }
     public async Task SaveListDetailMonthlyPlanned(List<List<ExpendituresModel>> expLists, string userCurrency, string printDisplayCurrency, string userName, List<string> ListOfTitles)
     {
-        ConvertedRate ObjectWithRate = new() { result = 1, date = DateTime.UtcNow };
+        ConvertedRate ObjectWithRate = new();// { result = 1, date = DateTime.UtcNow };
 
         if (!userCurrency.Equals(printDisplayCurrency))
         {
@@ -46,10 +46,10 @@ public class PrintDetailsMonthlyExpenditure
         const string fileName = "Report_Multiple_MonthlyPlanned.pdf";
         string PathFile = $"{path}/{fileName}";
 
-        await Task.Run(() => CreatePDFDocOfMultipleLists(expLists, PathFile, ListOfTitles, userName, userCurrency, printDisplayCurrency, ObjectWithRate.result, ObjectWithRate.date));
+        await Task.Run(() => CreatePDFDocOfMultipleLists(expLists, PathFile, ListOfTitles, userName, userCurrency, printDisplayCurrency, ObjectWithRate.conversion_rate, ObjectWithRate.TimeLastUpdateUtc));
     }
 
-    static async Task CreatePDFDoc(List<ExpendituresModel> expList, string pathFile, string userCurrency, string printDisplayCurrency, double rate, DateTime dateOfRateUpdate, string pdfTitle, string username)
+    static async Task CreatePDFDoc(List<ExpendituresModel> expList, string pathFile, string userCurrency, string printDisplayCurrency, double rate, string  dateOfRateUpdate, string pdfTitle, string username)
     {
         Color HeaderColor = WebColors.GetRGBColor("DarkSlateBlue");
 
@@ -148,7 +148,7 @@ public class PrintDetailsMonthlyExpenditure
         await SharePdfFile(pdfTitle, pathFile);
     }
 
-    async Task CreatePDFDocOfMultipleLists(List<List<ExpendituresModel>> expLists, string pathFile, List<string> ListOfTitles, string username, string userCurrency, string printDisplayCurrency, double rate, DateTime dateOfRateUpdate)
+    async Task CreatePDFDocOfMultipleLists(List<List<ExpendituresModel>> expLists, string pathFile, List<string> ListOfTitles, string username, string userCurrency, string printDisplayCurrency, double rate, string dateOfRateUpdate)
     {
         Color HeaderColor = WebColors.GetRGBColor("DarkSlateBlue");
 

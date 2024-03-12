@@ -296,19 +296,20 @@ public class DebtRepository : IDebtRepository
         try
         {
             await OpenDB();
-            
-            if (await AllDebts.UpdateAsync(debt))
+            OfflineDebtList.Remove(debt);
+            if (!IsBatchUpdate)
             {
-                OfflineDebtList.Remove(debt);
+                OfflineDebtListChanged?.Invoke();
+            }
+            if (!IsSyncing && Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+                await DeleteDebtOnlineAsync(debt);
+            }
+            if (await AllDebts.DeleteAsync(debt.Id))
+            {
+                
                 Debug.WriteLine("Debt deleted locally");
-                if (!IsBatchUpdate)
-                {
-                    OfflineDebtListChanged?.Invoke();
-                }
-                if (!IsSyncing && Connectivity.NetworkAccess == NetworkAccess.Internet)
-                {
-                    await DeleteDebtOnlineAsync(debt);
-                }
+                
                 db.Dispose();
                 return true;
             }

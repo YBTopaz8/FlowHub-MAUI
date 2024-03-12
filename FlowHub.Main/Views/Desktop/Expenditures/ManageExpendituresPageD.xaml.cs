@@ -11,7 +11,7 @@ public partial class ManageExpendituresPageD : ContentPage
     {
         InitializeComponent();
         viewModel = vm;
-        BindingContext = vm;
+        this.BindingContext = vm;
 
     }
 
@@ -31,12 +31,12 @@ public partial class ManageExpendituresPageD : ContentPage
         }
         else
         {
-            //PrintProgressBarIndic.IsVisible = true;
-            //PrintProgressBarIndic.Progress = 0;
-            //await PrintProgressBarIndic.ProgressTo(1, 1000, easing: Easing.Linear);
+            PrintProgressBarIndic.IsVisible = true;
+            PrintProgressBarIndic.Progress = 0;
+            await PrintProgressBarIndic.ProgressTo(1, 1000, easing: Easing.Linear);
 
-            //await viewModel.PrintExpendituresBtn();
-            //PrintProgressBarIndic.IsVisible = false;
+            await viewModel.PrintExpendituresBtn();
+            PrintProgressBarIndic.IsVisible = false;
         }
     }
 }

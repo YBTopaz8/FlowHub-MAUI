@@ -66,6 +66,7 @@ public partial class SingleMonthStatsPageVM : ObservableObject
         SingleExpenditure = ListOfExpenditures.MaxBy(exp => exp.AmountSpent);
         Currency = SingleExpenditure.Currency;
 
+        /*
         if (TotalFlowOuts <= 15)
         {
             IsPieChartVisible = true;
@@ -78,8 +79,11 @@ public partial class SingleMonthStatsPageVM : ObservableObject
             IsLineChartVisible = true;
             LoadLineChart();
         }
+        */
     }
 
+
+    /*
     private void LoadLineChart()
     {
         LineSeries = new();
@@ -102,6 +106,9 @@ public partial class SingleMonthStatsPageVM : ObservableObject
 
         LineSeries.Add(LineSeriesToPlot);
     }
+    */
+
+    /*
     private void LoadPieChart()
     {
         PieSeries = new List<ISeries>();
@@ -124,7 +131,7 @@ public partial class SingleMonthStatsPageVM : ObservableObject
             });
         }
     }
-
+    */
     public void ChangeSelectedExp(int SelectedExpIndex)
     {
         SingleExpenditure = ListOfExpenditures[SelectedExpIndex];

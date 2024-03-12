@@ -40,9 +40,9 @@
         <HorizontalStackLayout HorizontalOptions="Center">
             <ScrollView MaximumHeightRequest="600">
                 <material:DataGrid ItemsSource="{Binding DebtsList}" HorizontalOptions="Center" 
-            Margin="20,0,20,0" MinimumWidthRequest="800"
-            BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#D8D8D8}"
-            LineSeparatorColor="Black">
+                        Margin="20,0,20,0" MinimumWidthRequest="800"
+                        BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#D8D8D8}"
+                        LineSeparatorColor="Black">
 
                     <material:DataGrid.Resources>
                         <ResourceDictionary>
@@ -222,7 +222,7 @@
                         </uranium:ExpanderView.Header>
                         <VerticalStackLayout HorizontalOptions="Center" >
                            
-                            <dg:DataGrid ItemsSource="{Binding SingleDebtDetails.PaymentAdvances}" HorizontalOptions="Center" WidthRequest="450"
+                            <!--<dg:DataGrid ItemsSource="{Binding SingleDebtDetails.PaymentAdvances}" HorizontalOptions="Center" WidthRequest="450"
                                          BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#D8D8D8}" HeaderBackground="{AppThemeBinding Dark=#0E131A, Light=#D8D8D8}"
                                          FooterBackground="{AppThemeBinding Dark=#0E131A, Light=#D8D8D8}"
                                          BorderColor="Transparent"
@@ -295,7 +295,7 @@
                                     </dg:DataGridColumn>
                                 </dg:DataGrid.Columns>
                                 
-                            </dg:DataGrid>
+                            </dg:DataGrid>-->
                            
                             <ImageButton Source="add_btn_d.png" 
                                          Command="{Binding UpSertInstallmentPaymentPopUpCommand}"

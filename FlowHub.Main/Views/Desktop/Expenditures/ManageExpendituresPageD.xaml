@@ -12,6 +12,7 @@
              x:DataType="viewModels:ManageExpendituresVM"
              x:Name="page"
              Title="Manage Expenditures">
+    
     <toolkit:DockLayout VerticalOptions="Start">
         <Label FontSize="21" HorizontalOptions="Center" 
                    Margin="8"
@@ -65,7 +66,68 @@
                          Command="{Binding GoToSpecificStatsPageCommand}"/>
         </VerticalStackLayout>
 
-        <dg:DataGrid ItemsSource="{Binding ExpendituresList}" BackgroundColor="Black" 
+        <ScrollView>
+            <material:DataGrid ItemsSource="{Binding ExpendituresList}" HorizontalOptions="Center" 
+                            Margin="20,0,20,0" 
+                            BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#D8D8D8}"
+                            LineSeparatorColor="Black">
+
+                <material:DataGrid.Columns>
+                    <material:DataGridColumn Title="Date Spent">
+                        <material:DataGridColumn.CellItemTemplate>
+                            <DataTemplate x:DataType="models:ExpendituresModel">
+                                <Label Text="{Binding DateSpent, StringFormat='{0:ddd, MMM dd, yyyy}'}" Margin="10"
+                                       HorizontalTextAlignment="Center" BackgroundColor="{AppThemeBinding Dark=#201F24}"
+                                        HorizontalOptions="FillAndExpand" 
+                                        TextColor="{AppThemeBinding Dark=white, Light=black}"/>
+                            </DataTemplate>
+                        </material:DataGridColumn.CellItemTemplate>
+                    </material:DataGridColumn>
+                
+                
+                <material:DataGridColumn Title="Description">
+                    <material:DataGridColumn.CellItemTemplate>
+                        <DataTemplate x:DataType="models:ExpendituresModel">
+                            <Label Text="{Binding Reason}" VerticalTextAlignment="Center" 
+                                   HorizontalTextAlignment="Center" BackgroundColor="{AppThemeBinding Dark=#201F24}"
+                                   HorizontalOptions="FillAndExpand" 
+                                   TextColor="{AppThemeBinding Dark=white, Light=black}"
+                                   LineBreakMode="WordWrap" />
+                        </DataTemplate>
+                    </material:DataGridColumn.CellItemTemplate>
+                </material:DataGridColumn>
+
+                <material:DataGridColumn Title="Category" >
+                    <material:DataGridColumn.CellItemTemplate>
+                        <DataTemplate x:DataType="models:ExpendituresModel">
+                            <Label Text="{Binding Category}" VerticalTextAlignment="Center" 
+                                   HorizontalTextAlignment="Center" BackgroundColor="{AppThemeBinding Dark=#201F24}"
+                                   TextColor="{AppThemeBinding Dark=white, Light=black}" HorizontalOptions="FillAndExpand"/>
+                        </DataTemplate>
+                    </material:DataGridColumn.CellItemTemplate>
+                </material:DataGridColumn>
+
+                <material:DataGridColumn Title="Amount Spent" >
+                    <material:DataGridColumn.CellItemTemplate>
+                        <DataTemplate x:DataType="models:ExpendituresModel">
+                            <Label BackgroundColor="{AppThemeBinding Dark=#201F24}" TextColor="{AppThemeBinding Dark=white, Light=black}"
+                                   VerticalTextAlignment="Center" HorizontalTextAlignment="Center" 
+                                   HorizontalOptions="FillAndExpand">
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{} {0:n2} {1}">
+                                        <Binding Path="AmountSpent"/>
+                                        <Binding Path="Currency"/>
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                        </DataTemplate>
+                    </material:DataGridColumn.CellItemTemplate>
+                </material:DataGridColumn>
+                </material:DataGrid.Columns>
+            </material:DataGrid>
+
+        </ScrollView>
+        <!--<dg:DataGrid ItemsSource="{Binding ExpendituresList}" BackgroundColor="Black" 
                      WidthRequest="1000" HeaderBackground="{AppThemeBinding Light=#CBCBCB,Dark=#C2C2C2}"
                      ActiveRowColor="{AppThemeBinding Light=darkslateblue, Dark=darkslateblue}" 
                      BorderColor="{AppThemeBinding Dark=#303030, Light=DarkSlateBlue}" HorizontalOptions="CenterAndExpand" 
@@ -88,7 +150,7 @@
                                         Source="search_property.png"/>
                     <Label Text="No Flow Out Available..." FontSize="21" HorizontalOptions="Center" Margin="30"/>
                 </VerticalStackLayout>
-            </dg:DataGrid.NoDataView> <!--Equivalent of emptyview-->
+            </dg:DataGrid.NoDataView> --><!--Equivalent of emptyview--><!--
             
             <dg:DataGrid.Columns>
                 
@@ -167,7 +229,7 @@
                     </dg:DataGridColumn.CellTemplate>
                 </dg:DataGridColumn>
             </dg:DataGrid.Columns>
-        </dg:DataGrid>
+        </dg:DataGrid>-->
         
     </toolkit:DockLayout>
 </ContentPage>

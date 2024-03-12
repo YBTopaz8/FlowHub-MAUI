@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net7.0;net7.0-android33.0</TargetFrameworks>
@@ -29,7 +29,7 @@
 	<ItemGroup>
 	  <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.2.2" />
 	  <PackageReference Include="LiteDB.Async" Version="0.1.7" />
-	  <PackageReference Include="MongoDB.Driver" Version="2.23.0" />
+	  <PackageReference Include="MongoDB.Driver" Version="2.24.0" />
 	</ItemGroup>
 
 	<ItemGroup>
