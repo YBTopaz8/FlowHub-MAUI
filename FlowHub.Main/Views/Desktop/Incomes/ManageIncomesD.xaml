@@ -31,8 +31,8 @@
                          BackgroundColor="Transparent"
                          Command="{Binding ShowAddIncomePopUpCommand}"
                          ToolTipProperties.Text="Add New Flow In"/>
-            <ImageButton Source="{AppThemeBinding Dark=save_to_pdf_d.png, Light=save_to_pdf_l.png}" HeightRequest="60"
-                         />
+            <ImageButton Source="{AppThemeBinding Dark=save_to_pdf_d.png, Light=save_to_pdf_l.png}" 
+                         HeightRequest="60"/>
             <ProgressBar IsVisible="false" x:Name="PrintProgressBarIndic" ProgressColor="DarkSlateBlue" WidthRequest="50"/>
            
 
