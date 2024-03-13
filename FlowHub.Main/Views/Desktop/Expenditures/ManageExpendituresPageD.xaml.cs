@@ -11,7 +11,6 @@ public partial class ManageExpendituresPageD : ContentPage
     {
         InitializeComponent();
         viewModel = vm;
-        this.BindingContext = vm;
 
     }
 
@@ -21,6 +20,11 @@ public partial class ManageExpendituresPageD : ContentPage
        
         await viewModel.PageloadedAsync();
 
+    }
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+        this.BindingContext = viewModel;
     }
 
     private async void ExportToPDFImageButton_Clicked(object sender, EventArgs e)

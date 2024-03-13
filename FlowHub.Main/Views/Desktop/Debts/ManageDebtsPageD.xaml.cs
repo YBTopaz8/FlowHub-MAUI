@@ -13,7 +13,7 @@ public partial class ManageDebtsPageD : UraniumContentPage
         InitializeComponent();
         viewModel = vm;
         UpSertVM = upSertDebt;
-        BindingContext = vm;
+        
     }
     protected override void OnAppearing()
     {
@@ -42,6 +42,11 @@ public partial class ManageDebtsPageD : UraniumContentPage
 
     }
 
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+        this.BindingContext = viewModel;
+    }
     private void ShareImageBtn_Clicked(object sender, EventArgs e)
     {
         var imageButton = sender as ImageButton;

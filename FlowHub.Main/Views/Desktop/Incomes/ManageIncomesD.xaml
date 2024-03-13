@@ -11,6 +11,7 @@
              x:DataType="viewModel:ManageIncomesVM"
              Title="ManageIncomesD"
              x:Name="page">
+    
     <toolkit:DockLayout>
         <Label FontSize="21" HorizontalOptions="Center"
                Margin="8" toolkit:DockLayout.DockPosition="Top">

@@ -7,7 +7,7 @@ public partial class StatisticsPageD : ContentPage
     {
         InitializeComponent();
         viewModel = vm;
-        BindingContext = vm;
+
     }
 
     protected override void OnAppearing()
@@ -25,7 +25,11 @@ public partial class StatisticsPageD : ContentPage
 
         //  myPieChart.LegendTextPaint = new SolidColorPaint(SKColors.White);
     }
-
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+        this.BindingContext = viewModel;
+    }
     protected override void OnDisappearing()
     {
         base.OnDisappearing();

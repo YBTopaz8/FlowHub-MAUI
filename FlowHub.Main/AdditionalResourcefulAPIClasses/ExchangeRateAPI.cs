@@ -6,10 +6,9 @@ public class ExchangeRateAPI
 {
     public ConvertedRate GetConvertedRate(string UserCurrency, string DestinationCurrency)
     {
-        //string url_str = $"https://api.exchangerate.host/latest?places=5&&base={CurrencySymbol}"; string to get base
+        
         try
-        {
-            //string url_str = $"https://api.exchangerate.host/convert?from={UserCurrency}&to={DestinationCurrency}";
+        {            
             string url_str = $@"https://v6.exchangerate-api.com/v6/f0bfc8e59756851a938ce5cc/pair/{UserCurrency}/{DestinationCurrency}";
             using var webClient = new HttpClient();
             var json = webClient.GetStringAsync(url_str).Result;

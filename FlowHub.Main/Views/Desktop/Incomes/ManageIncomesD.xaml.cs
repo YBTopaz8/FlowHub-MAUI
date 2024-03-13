@@ -7,12 +7,18 @@ public partial class ManageIncomesD : ContentPage
     {
         InitializeComponent();
         viewModel = vm;
-        BindingContext = vm;
+        //this.BindingContext = vm;
         viewModel.PageLoaded();
     }
     protected override void OnAppearing()
     {
         base.OnAppearing();
+    }
+
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+        this.BindingContext = viewModel;
     }
     private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {

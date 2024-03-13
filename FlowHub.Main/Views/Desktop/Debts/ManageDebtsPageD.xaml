@@ -15,7 +15,6 @@
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Debts"
              x:DataType="viewModels:ManageDebtsVM"
              xmlns:converters="clr-namespace:FlowHub.Main.Utilities"
-             
              x:Name="Page">
     <ContentPage.Resources>
         <ResourceDictionary>

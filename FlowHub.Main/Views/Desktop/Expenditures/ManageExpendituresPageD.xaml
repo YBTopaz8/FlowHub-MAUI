@@ -71,26 +71,38 @@
                             Margin="20,0,20,0" 
                             BackgroundColor="{AppThemeBinding Dark=#0E131A, Light=#D8D8D8}"
                             LineSeparatorColor="Black">
+              
+                <material:DataGrid.Columns >
 
-                <material:DataGrid.Columns>
                     <material:DataGridColumn Title="Date Spent">
                         <material:DataGridColumn.CellItemTemplate>
                             <DataTemplate x:DataType="models:ExpendituresModel">
-                                <Label Text="{Binding DateSpent, StringFormat='{0:ddd, MMM dd, yyyy}'}" Margin="10"
-                                       HorizontalTextAlignment="Center" BackgroundColor="{AppThemeBinding Dark=#201F24}"
-                                        HorizontalOptions="FillAndExpand" 
+                                <Label Text="{Binding DateSpent, StringFormat='{0:ddd, MMM dd, yyyy}'}" VerticalTextAlignment="Center" 
+                                       HorizontalTextAlignment="Center" 
+                                        HorizontalOptions="FillAndExpand" Margin="5"
                                         TextColor="{AppThemeBinding Dark=white, Light=black}"/>
                             </DataTemplate>
                         </material:DataGridColumn.CellItemTemplate>
                     </material:DataGridColumn>
                 
                 
+                <material:DataGridColumn Title="Date Spent">
+                    <material:DataGridColumn.CellItemTemplate>
+                        <DataTemplate x:DataType="models:ExpendituresModel">
+                            <Label Text="{Binding DateSpent, StringFormat='{0:ddd, MMM dd, yyyy}'}" VerticalTextAlignment="Center" 
+                                   HorizontalTextAlignment="Center" 
+                                   HorizontalOptions="FillAndExpand" Margin="15"
+                                   TextColor="{AppThemeBinding Dark=white, Light=black}"
+                                   LineBreakMode="WordWrap" />
+                        </DataTemplate>
+                    </material:DataGridColumn.CellItemTemplate>
+                </material:DataGridColumn>
+                
                 <material:DataGridColumn Title="Description">
                     <material:DataGridColumn.CellItemTemplate>
                         <DataTemplate x:DataType="models:ExpendituresModel">
-                            <Label Text="{Binding Reason}" VerticalTextAlignment="Center" 
-                                   HorizontalTextAlignment="Center" BackgroundColor="{AppThemeBinding Dark=#201F24}"
-                                   HorizontalOptions="FillAndExpand" 
+                                <Label Text="{Binding Reason}" VerticalTextAlignment="Center" Margin="5"
+                                   HorizontalTextAlignment="Center" HorizontalOptions="FillAndExpand" 
                                    TextColor="{AppThemeBinding Dark=white, Light=black}"
                                    LineBreakMode="WordWrap" />
                         </DataTemplate>
@@ -100,8 +112,8 @@
                 <material:DataGridColumn Title="Category" >
                     <material:DataGridColumn.CellItemTemplate>
                         <DataTemplate x:DataType="models:ExpendituresModel">
-                            <Label Text="{Binding Category}" VerticalTextAlignment="Center" 
-                                   HorizontalTextAlignment="Center" BackgroundColor="{AppThemeBinding Dark=#201F24}"
+                                <Label Text="{Binding Category}" VerticalTextAlignment="Center" 
+                                       Margin="5" HorizontalTextAlignment="Center" 
                                    TextColor="{AppThemeBinding Dark=white, Light=black}" HorizontalOptions="FillAndExpand"/>
                         </DataTemplate>
                     </material:DataGridColumn.CellItemTemplate>
@@ -110,8 +122,8 @@
                 <material:DataGridColumn Title="Amount Spent" >
                     <material:DataGridColumn.CellItemTemplate>
                         <DataTemplate x:DataType="models:ExpendituresModel">
-                            <Label BackgroundColor="{AppThemeBinding Dark=#201F24}" TextColor="{AppThemeBinding Dark=white, Light=black}"
-                                   VerticalTextAlignment="Center" HorizontalTextAlignment="Center" 
+                            <Label TextColor="{AppThemeBinding Dark=white, Light=black}"
+                                   VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Margin="5"
                                    HorizontalOptions="FillAndExpand">
                                 <Label.Text>
                                     <MultiBinding StringFormat="{} {0:n2} {1}">
@@ -123,6 +135,26 @@
                         </DataTemplate>
                     </material:DataGridColumn.CellItemTemplate>
                 </material:DataGridColumn>
+
+                    <material:DataGridColumn Title="Actions">
+                        <material:DataGridColumn.CellItemTemplate>
+                            <DataTemplate>
+                                <HorizontalStackLayout Spacing="5" Margin="5,2">
+                                    <Button Text="Edit"
+                                        Command="{Binding Source={x:Reference page}, 
+                                        Path=BindingContext.ShowEditExpenditurePopUpCommand}"  
+                                        CommandParameter="{Binding .}"
+                                        ToolTipProperties.Text="Edit Flow Out"/>
+                                    <Button Text="Delete"
+                                        Command="{Binding Source={x:Reference page}, 
+                                        Path=BindingContext.DeleteExpenditureBtnCommand}"  
+                                        CommandParameter="{Binding .}"  
+                                        ToolTipProperties.Text="Delete Flow Out"/>
+                                </HorizontalStackLayout>
+                                
+                            </DataTemplate>
+                        </material:DataGridColumn.CellItemTemplate>
+                    </material:DataGridColumn>
                 </material:DataGrid.Columns>
             </material:DataGrid>
 

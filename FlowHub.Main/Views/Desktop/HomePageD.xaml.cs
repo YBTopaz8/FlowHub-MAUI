@@ -20,11 +20,14 @@ public partial class HomePageD : ContentPage
     {
         InitializeComponent();
         viewModel = vm;
-        BindingContext = vm;
-
     }
 
-    
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+        this.BindingContext = viewModel;
+    }
+
     protected override async void OnAppearing()
     {        
         base.OnAppearing();

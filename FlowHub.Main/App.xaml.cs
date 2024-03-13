@@ -35,8 +35,8 @@ public partial class App : Application
     {
         var window = base.CreateWindow(activationState);
 
-        window.MinimumHeight = 730;
-        window.MinimumWidth = 1280;
+        window.MinimumHeight = 600;
+        window.MinimumWidth = 800;
         window.Title = "FlowHub";
         return window;
     }

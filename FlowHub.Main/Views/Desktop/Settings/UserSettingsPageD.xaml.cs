@@ -7,7 +7,7 @@ public partial class UserSettingsPageD : ContentPage
     {
         InitializeComponent();
         viewModel = vm;
-        BindingContext = viewModel;
+        
         viewModel.SetThemeConfig();
     }
     protected override void OnAppearing()
@@ -17,7 +17,11 @@ public partial class UserSettingsPageD : ContentPage
         viewModel.GetCountryNamesList();
         CountryPicker.SelectedItem = viewModel.ActiveUser.UserCountry;
     }
-
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+        this.BindingContext = viewModel;
+    }
     private void CountryPicker_SelectedValueChanged(object sender, object e)
     {
         var pickedCountry = CountryPicker.SelectedItem;
