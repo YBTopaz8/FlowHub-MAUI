@@ -10,8 +10,7 @@ public partial class DebtsOverviewPageM : UraniumContentPage
         InitializeComponent();
 
         viewModel = vm;
-        UpSertVM = upSertDebt;
-        BindingContext = vm;
+        UpSertVM = upSertDebt;        
 
         UpSertDebtbSheet = new(upSertDebt);
         this.Attachments.Add(UpSertDebtbSheet);
@@ -28,7 +27,11 @@ public partial class DebtsOverviewPageM : UraniumContentPage
         UpSertDebtbSheet.IsPresented = false;
     }
 
-
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+        this.BindingContext = viewModel;
+    }
     private async void LentBrdr_Tapped(object sender, TappedEventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(ManageLendingsPageM), true);

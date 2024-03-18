@@ -11,7 +11,6 @@ public partial class ManageExpendituresPageD : ContentPage
     {
         InitializeComponent();
         viewModel = vm;
-
     }
 
     protected override async void OnAppearing()

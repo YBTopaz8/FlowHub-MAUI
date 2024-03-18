@@ -137,10 +137,9 @@
         <ImageButton
             x:Name="EditFlowHoldBtn"
             Clicked="EditFlowHoldBtn_Clicked"
-            Source="edit_d"
-            WidthRequest="50" HeightRequest="50"
-            CornerRadius="22"
-            Padding="6"
+            Source="edit_d" 
+            WidthRequest="55" HeightRequest="55"
+            CornerRadius="25" Padding="10"
             BackgroundColor="DarkSlateBlue" BorderColor="Transparent"
             AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize"
             AbsoluteLayout.LayoutFlags="PositionProportional"

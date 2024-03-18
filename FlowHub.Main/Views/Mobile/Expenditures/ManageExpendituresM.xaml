@@ -63,7 +63,7 @@
             </Label>
 
            <CollectionView x:Name="ColView" IsVisible="true" ItemsSource="{Binding GroupedExpenditures}" 
-                        IsGrouped="True" HorizontalOptions="Center"
+                        IsGrouped="True"
                         EmptyView="No Flow Outs Available...">
 
                 <CollectionView.GroupHeaderTemplate>
@@ -91,8 +91,9 @@
                 </CollectionView.GroupFooterTemplate>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:ExpendituresModel">
-                       <!--set to fill and expand for it to take the whole width of the screen-->
-                        <SwipeView HorizontalOptions="FillAndExpand" Margin="0,2" BackgroundColor="Transparent">
+                       <!-- I JUST HAVE TO MAKE SURE NO VIEW ABOVE IS CENTERED OR SOMETHING
+                        NOPE -> set to fill and expand for it to take the whole width of the screen-->
+                        <SwipeView Margin="0,2" BackgroundColor="Transparent">
                             <SwipeView.RightItems>
                                 <SwipeItems>
                                     <SwipeItem 
@@ -109,13 +110,11 @@
                                         BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=#D8D8D8}"/>
                                 </SwipeItems>
                             </SwipeView.LeftItems>
-                            <Frame HorizontalOptions="FillAndExpand" BorderColor="Transparent"
-                                    Padding="0">
-                                <!--StrokeThickness="0">-->
-                                <Frame.GestureRecognizers>
+                            <Border Padding="0" StrokeThickness="0">
+                                <Border.GestureRecognizers>
                                     <TapGestureRecognizer NumberOfTapsRequired="2" Command="{Binding Source={x:Reference Page}, Path=BindingContext.CopyToClipboardCommand}"
                                                             CommandParameter="{Binding .}"/>
-                                </Frame.GestureRecognizers>
+                                </Border.GestureRecognizers>
                                 <VerticalStackLayout >
                                     <FlexLayout JustifyContent="SpaceBetween" Direction="Row" Margin="6,2">
                                         <VerticalStackLayout>
@@ -139,7 +138,7 @@
                                     <Rectangle Fill="#404040" HeightRequest="0.8"/>
                                 </VerticalStackLayout>
 
-                            </Frame>
+                            </Border>
                         </SwipeView>
 
                     </DataTemplate>

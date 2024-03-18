@@ -35,7 +35,7 @@
                 </Label.Text>
             </Label>
             <uranium:ExpanderView toolkit:DockLayout.DockPosition="Top" 
-                                  x:Name="PendingLentExpander">                
+                                  x:Name="PendingLentExpander" Margin="10,15">
                 <uranium:ExpanderView.Header>
                     <Label Text="Pending Lendings" 
                            FontSize="18">
@@ -46,7 +46,7 @@
                 </uranium:ExpanderView.Header>
                 <VerticalStackLayout>
                     <CollectionView ItemsSource="{Binding LentPendingList}"
-                                MaximumHeightRequest="500">
+                                VerticalOptions="Fill">
                         <CollectionView.EmptyView>
                             <VerticalStackLayout>
                                 <Image Source="search_d"/>
@@ -71,15 +71,15 @@
                                         Clicked="EditDebtBtn_Clicked"      
                                         IconImageSource="{AppThemeBinding Dark= edit_d, Light= edit_l}"
                                         BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
-                                    </SwipeView.RightItems>
+                                </SwipeView.RightItems>
 
-                                    <Frame HorizontalOptions="Center" 
+                                    <Border HorizontalOptions="Center" 
                                       Margin="6,2" Padding="5" >
-                                        <Frame.GestureRecognizers>
+                                        <Border.GestureRecognizers>
                                             <TapGestureRecognizer NumberOfTapsRequired="2"
                                           Command="{Binding Source={x:Reference Page}, Path=BindingContext.ShowDebtDetailsCommand}"
                                           CommandParameter="{Binding .}"/>
-                                        </Frame.GestureRecognizers>
+                                        </Border.GestureRecognizers>
 
                                         <VerticalStackLayout Spacing="5">
                                             <Label HorizontalOptions="Center" TextColor="{AppThemeBinding Dark=White,Light=Black}"
@@ -103,7 +103,7 @@
                                             </FlexLayout>
                                         </VerticalStackLayout>
 
-                                    </Frame>
+                                    </Border>
                                 </SwipeView>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
@@ -123,7 +123,7 @@
             </uranium:ExpanderView>
             
             <uranium:ExpanderView toolkit:DockLayout.DockPosition="Top"
-                                  x:Name="CompletedLentExpander">
+                                  x:Name="CompletedLentExpander" Margin="10,15">
                 <uranium:ExpanderView.Header>
                     <Label Text="Completed Lendings" 
                            FontSize="18">
@@ -133,7 +133,7 @@
                     </Label>
                 </uranium:ExpanderView.Header>
                 <VerticalStackLayout>
-                    <CollectionView ItemsSource="{Binding LentCompletedList}" >
+                    <CollectionView ItemsSource="{Binding LentCompletedList}" VerticalOptions="Fill" >
                         <CollectionView.EmptyView>
                             <VerticalStackLayout MinimumHeightRequest="50">
                                 <Image Source="search_d"/>
@@ -160,13 +160,13 @@
                                BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
                                     </SwipeView.RightItems>
 
-                                    <Frame HorizontalOptions="Center"
+                                    <Border HorizontalOptions="Center"
                                     Margin="6,2" Padding="5">
-                                        <Frame.GestureRecognizers>
+                                        <Border.GestureRecognizers>
                                             <TapGestureRecognizer NumberOfTapsRequired="2"
                                       Command="{Binding Source={x:Reference Page}, Path=BindingContext.ViewDebtSheetCommand}"
                                       CommandParameter="{Binding .}"/>
-                                        </Frame.GestureRecognizers>
+                                        </Border.GestureRecognizers>
 
                                         <VerticalStackLayout Spacing="5">
                                             <Label HorizontalOptions="Center" TextColor="{AppThemeBinding Dark=White,Light=Black}"
@@ -189,7 +189,7 @@
                                                        TextColor="{AppThemeBinding Dark={StaticResource WildBlueYonder}, Light={StaticResource Primary}}"/>
                                             </FlexLayout>
                                         </VerticalStackLayout>
-                                    </Frame>
+                                    </Border>
                                 </SwipeView>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>

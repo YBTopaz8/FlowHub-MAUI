@@ -13,6 +13,8 @@ public partial class UpSertDebtBottomSheet : BottomSheetView
    
 	}
 
+   
+
     private void AmountTextField_Focused(object sender, FocusEventArgs e)
     {
         if (AmountTextField.Text == "1")

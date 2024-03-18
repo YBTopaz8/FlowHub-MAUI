@@ -11,7 +11,6 @@ public partial class ManageLendingsPageM : UraniumContentPage
     {
         InitializeComponent();
         viewModel = vm;
-        BindingContext = vm;
         UpSertVM = upSertDebtVM;
 
         UpSertDebtbSheet = new(upSertDebtVM);
@@ -25,6 +24,11 @@ public partial class ManageLendingsPageM : UraniumContentPage
         }
         base.OnAppearing();
         viewModel.PageLoaded();
+    }
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+        this.BindingContext = viewModel;
     }
 
     DateTime lastKeyStroke = DateTime.Now;

@@ -14,8 +14,10 @@ public partial class SingleDebtDetailsPageM : UraniumContentPage
 
         UpSertVM = upSertDebtVm;
 
-        UpSertDebtbSheet = new(upSertDebtVm);
-        UpSertDebtbSheet.BindingContext = upSertDebtVm;
+        UpSertDebtbSheet = new(upSertDebtVm)
+        {
+            BindingContext = upSertDebtVm
+        };
 
         UpSertInstallmentBSheet = new(upSertDebtVm);
         UpSertInstallmentBSheet.BindingContext = upSertDebtVm;
@@ -33,6 +35,9 @@ public partial class SingleDebtDetailsPageM : UraniumContentPage
     private void EditFlowHoldBtn_Clicked(object sender, EventArgs e)
     {
         UpSertVM.SingleDebtDetails = viewModel.SingleDebtDetails;
+        UpSertVM.IsLent = viewModel.SingleDebtDetails.DebtType.Equals(DebtType.Lent);
+        UpSertVM.IsBorrow = viewModel.SingleDebtDetails.DebtType.Equals(DebtType.Borrowed);
+
         UpSertVM.PageLoaded();
 
         UpSertDebtbSheet.IsPresented = true;

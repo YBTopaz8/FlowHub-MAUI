@@ -390,11 +390,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Update="Microsoft.Maui.Controls" Version="8.0.7" />
+	  <PackageReference Update="Microsoft.Maui.Controls" Version="8.0.10" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="8.0.7" />
+	  <PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="8.0.10" />
 	</ItemGroup>
 
 </Project>

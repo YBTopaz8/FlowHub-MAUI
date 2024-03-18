@@ -57,8 +57,7 @@
                             <material:DataGridColumn.CellItemTemplate>
                                 <DataTemplate x:DataType="models:DebtModel">
                                     <Label Text="{Binding AddedDateTime, StringFormat='{0:ddd, MMM dd, yyyy}'}" 
-                                   Margin="10"
-                                   FlyoutBase.ContextFlyout="{StaticResource labelContextMenu}">
+                                           Margin="10" FlyoutBase.ContextFlyout="{StaticResource labelContextMenu}">
                                     </Label>
                                 </DataTemplate>
                             </material:DataGridColumn.CellItemTemplate>
@@ -93,7 +92,7 @@
                         <material:DataGridColumn Title="Info">
                             <material:DataGridColumn.CellItemTemplate>
                                 <DataTemplate x:DataType="models:DebtModel">
-                                    <Label Text="{Binding DisplayText}" Margin="10"/>
+                                    <Label Text="{Binding DisplayText}" Margin="10" HorizontalTextAlignment="Center"/>
                                 </DataTemplate>
                             </material:DataGridColumn.CellItemTemplate>
                         </material:DataGridColumn>
