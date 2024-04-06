@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Controls.Platform;
-using System.Runtime.CompilerServices;
-
-namespace FlowHub.Main.Views.Mobile.Expenditures;
+﻿namespace FlowHub.Main.Views.Mobile.Expenditures;
 
 public partial class ManageExpendituresM : UraniumContentPage
 {
@@ -70,8 +67,4 @@ public partial class ManageExpendituresM : UraniumContentPage
         
     }
 
-}
-public class CustomSwitchRenderer: Microsoft.Maui.Controls.Switch
-{
-   
 }

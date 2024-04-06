@@ -16,10 +16,12 @@
             </Label.Text>
         </Label>
         <!-- Begin Section for Expenditure display-->
-        <Frame Margin="10" Padding="2">
-            <Frame.Shadow>
+        <Border Margin="10" Padding="2"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8">
+            <Border.Shadow>
                 <Shadow Offset="10,25" Opacity="0.2"/>
-            </Frame.Shadow>
+            </Border.Shadow>
             <VerticalStackLayout Spacing="5">
                 <Label Text="Latest Flow Outs" FontSize="22" HorizontalOptions="Center"                        
                        Padding="10,0,0,0"/>
@@ -69,7 +71,7 @@
                 <Label Text="Loading..." IsVisible="{Binding IsSyncing}" HorizontalOptions="Center"/>
             </VerticalStackLayout>
 
-        </Frame>
+        </Border>
         <VerticalStackLayout HorizontalOptions="Center">
             <ImageButton Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}"
                          Clicked="AddExpBtn_Clicked"/>

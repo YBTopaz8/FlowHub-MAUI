@@ -14,7 +14,12 @@
              xmlns:utilities="clr-namespace:FlowHub.Main.Utilities"
              Title="Lendings"
              BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}">
-    
+    <uranium:UraniumContentPage.ToolbarItems>
+        <ToolbarItem Text="1"  Order="Secondary"/>
+        <ToolbarItem Text="2" Order="Secondary"/>
+        <ToolbarItem Text="3" Order="Secondary"/>
+        <ToolbarItem Text="4" Order="Secondary"/>
+    </uranium:UraniumContentPage.ToolbarItems>
     <AbsoluteLayout >
         <toolkit:DockLayout AbsoluteLayout.LayoutBounds="0,0,1,1" 
                     AbsoluteLayout.LayoutFlags="All" Margin="8,3">
@@ -34,15 +39,17 @@
                     </MultiBinding>
                 </Label.Text>
             </Label>
-            <uranium:ExpanderView toolkit:DockLayout.DockPosition="Top" 
-                                  x:Name="PendingLentExpander" Margin="10,15">
-                <uranium:ExpanderView.Header>
-                    <Label Text="Pending Lendings" 
-                           FontSize="18">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="PendingLentExpHeader_Tapped"/>
-                        </Label.GestureRecognizers>
-                    </Label>
+            <uranium:ExpanderView toolkit:DockLayout.DockPosition="Top"
+                                  x:Name="PendingLentExpander" Margin="5,15">
+                <uranium:ExpanderView.Header >
+                    <Border Padding="5" Margin="5,0">
+                        <Label Text="Pending Lendings" FontSize="18">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="PendingLentExpHeader_Tapped"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Border>
+                    
                 </uranium:ExpanderView.Header>
                 <VerticalStackLayout>
                     <CollectionView ItemsSource="{Binding LentPendingList}"
@@ -123,14 +130,16 @@
             </uranium:ExpanderView>
             
             <uranium:ExpanderView toolkit:DockLayout.DockPosition="Top"
-                                  x:Name="CompletedLentExpander" Margin="10,15">
+                                  x:Name="CompletedLentExpander" Margin="5,15">
                 <uranium:ExpanderView.Header>
+                    <Border Padding="5" Margin="5,0">
                     <Label Text="Completed Lendings" 
                            FontSize="18">
                         <Label.GestureRecognizers>
                             <TapGestureRecognizer Tapped="CompletedLentExpHeader_Tapped"/>
-                        </Label.GestureRecognizers>
-                    </Label>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Border>
                 </uranium:ExpanderView.Header>
                 <VerticalStackLayout>
                     <CollectionView ItemsSource="{Binding LentCompletedList}" VerticalOptions="Fill" >

@@ -7,6 +7,8 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:models="clr-namespace:FlowHub.Models;assembly=FlowHub.Models"
              xmlns:viewModels="clr-namespace:FlowHub.Main.ViewModels.Expenditures"
+             xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"  
+             xmlns:materialAttach="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material" 
              x:DataType="viewModels:ManageExpendituresVM"             
              x:Name="Page"
              BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark={StaticResource BackGroundDark}}"
@@ -40,8 +42,9 @@
                 </VerticalStackLayout>
 
                 <ImageButton x:Name="pie_chart" Grid.Column="1" Source="{AppThemeBinding Dark=pie_chart, Light=pie_chart_l}" 
-                    HorizontalOptions="End" IsVisible="{Binding ShowStatisticBtn}"
+                    HorizontalOptions="End" IsVisible="False"
                     VerticalOptions="Center" Command="{Binding GoToSpecificStatsPageCommand}"/>
+                <!--IsVisible="{Binding ShowStatisticBtn}"-->
             </Grid>
 
            <HorizontalStackLayout toolkit:DockLayout.DockPosition="Top" HorizontalOptions="Center" x:Name="SyncIndicator">
@@ -166,4 +169,16 @@
             </Button.Shadow>
         </Button>
     </AbsoluteLayout>
+
+    <uranium:UraniumContentPage.Attachments>
+        <materialAttach:BackdropView Title="Filter" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark={StaticResource BackGroundDark}}">
+            <VerticalStackLayout BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark={StaticResource BackGroundDark}}"
+                                 Spacing="5"
+                                 Padding="5">
+                <material:CheckBox Text="Include Disabled Items" Type="Filled" TextColor="White"/>
+                <material:CheckBox Text="Include Deleted Items" Type="Filled" TextColor="White"/>
+                <material:CheckBox Text="Show all categories" Type="Filled" TextColor="White"/>
+            </VerticalStackLayout>
+        </materialAttach:BackdropView>
+    </uranium:UraniumContentPage.Attachments>
 </uranium:UraniumContentPage>

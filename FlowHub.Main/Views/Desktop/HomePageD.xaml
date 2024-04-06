@@ -41,14 +41,10 @@
             </Grid.ColumnDefinitions>
 
             <!-- Begin Section for Expenditure display-->
-            <Border Grid.Column="0"
-                    Grid.Row="0"
-                Margin="1"
-                Padding="5"
-                WidthRequest="450"                
-                Stroke="DarkSlateBlue"
-                StrokeThickness="2"
-                StrokeShape="RoundRectangle 10">
+            <Border Grid.Column="0" Grid.Row="0"
+                Margin="1" Padding="5"
+                WidthRequest="450" Stroke="DarkSlateBlue"
+                StrokeThickness="2" StrokeShape="RoundRectangle 10">
                 <Border.Shadow>
                     <Shadow Offset="10,25" Opacity="0.2"/>
                 </Border.Shadow>
