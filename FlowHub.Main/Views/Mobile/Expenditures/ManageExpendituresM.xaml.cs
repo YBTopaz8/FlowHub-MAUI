@@ -1,4 +1,5 @@
 ﻿using Microsoft.Maui.Controls.Platform;
+using System.Runtime.CompilerServices;
 
 namespace FlowHub.Main.Views.Mobile.Expenditures;
 
@@ -66,7 +67,11 @@ public partial class ManageExpendituresM : UraniumContentPage
         upSertExpVM.SingleExpenditureDetails = singleExp; 
         upSertExpVM.PageLoaded();
         UpSertExpbSheet.IsPresented = true;
-
+        
     }
 
+}
+public class CustomSwitchRenderer: Microsoft.Maui.Controls.Switch
+{
+   
 }

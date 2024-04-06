@@ -1,5 +1,5 @@
+
 using UraniumUI.Material.Controls;
-using UraniumUI.Pages;
 using CheckBox = UraniumUI.Material.Controls.CheckBox;
 
 namespace FlowHub.Main.Views.Desktop.Debts;
@@ -24,11 +24,15 @@ public partial class ManageDebtsPageD : UraniumContentPage
     DateTime lastKeyStroke = DateTime.Now;
     private async void DebtsSearchBar_TextChanged(object sender, TextChangedEventArgs e)
     {
+        DebtsLoadingIndic.IsRunning = true;
+        DebtsLoadingIndic.IsVisible = true;
         lastKeyStroke = DateTime.Now;
         var thisKeyStroke = lastKeyStroke;
         await Task.Delay(350);
         if (thisKeyStroke == lastKeyStroke)
         {
+            
+
             SearchBar searchBar = (SearchBar)sender;
             if (searchBar.Text.Length >= 2)
             {
@@ -38,14 +42,20 @@ public partial class ManageDebtsPageD : UraniumContentPage
             {
                 viewModel.ApplyChanges();
             }
-        }
 
+            DebtsLoadingIndic.IsRunning = false;
+            DebtsLoadingIndic.IsVisible = false;
+
+            
+        }
+        
     }
 
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);
         this.BindingContext = viewModel;
+        filterRBGV.SelectedIndex = 0;
     }
     private void ShareImageBtn_Clicked(object sender, EventArgs e)
     {
@@ -94,14 +104,10 @@ public partial class ManageDebtsPageD : UraniumContentPage
         return memoryStream;
     }
 
-    private void PendingLentExpHeader_Tapped(object sender, TappedEventArgs e)
-    {
-
-    }
-
-    private void CheckBox_CheckChanged(object sender, EventArgs e)
-    {
-        var s = (CheckBox)sender;
-        
+    private void filterRBGV_SelectedItemChanged(object sender, EventArgs e)
+    {        
+        var RBGV = sender as RadioButtonGroupView;
+        viewModel.ApplyFilterCommand.Execute(RBGV.SelectedItem);        
     }
 }
+

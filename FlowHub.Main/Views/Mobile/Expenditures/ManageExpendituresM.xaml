@@ -17,7 +17,8 @@
     <AbsoluteLayout>
         
         <toolkit:DockLayout Margin="5,0" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
-            <Label toolkit:DockLayout.DockPosition="Top" FontSize="21" FontAttributes="Bold" HorizontalOptions="Center" >
+            <Label toolkit:DockLayout.DockPosition="Top" FontSize="21" 
+                   FontAttributes="Bold" HorizontalOptions="Center" x:Name="CurrBalance">
                 <Label.Text>
                     <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
                         <Binding Path="UserPocketMoney"/>

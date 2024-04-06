@@ -26,16 +26,35 @@
                 <GradientStop Color="#E4F7E5" Offset="0.0"/>
                 <GradientStop Color="DarkSlateBlue" Offset="1.0"/>
             </LinearGradientBrush>
+
+            <Style TargetType="material:RadioButton">
+                <Setter Property="Color" Value="DarkSlateBlue"/>
+
+            </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
     <VerticalStackLayout BackgroundColor="{AppThemeBinding Light=white}">
-        <SearchBar BackgroundColor="#0E131A" Margin="15" WidthRequest="180"
+        
+        <SearchBar BackgroundColor="#0E131A" Margin="10" WidthRequest="180"
                    HorizontalOptions="Center" Placeholder="Search..."
-                   TextColor="white"
-                   PlaceholderColor="White"
+                   TextColor="white" PlaceholderColor="White"
                    TextChanged="DebtsSearchBar_TextChanged"
                    x:Name="DebtsSearchBar"/>
-        
+        <ActivityIndicator Color="DarkSlateBlue" x:Name="DebtsLoadingIndic" 
+                           IsRunning="False" IsVisible="False" 
+                           Margin="5"/>
+        <material:RadioButtonGroupView Orientation="Horizontal" HorizontalOptions="Center"
+                                       Margin="6" 
+                                       SelectedItemChanged="filterRBGV_SelectedItemChanged"
+                                       x:Name="filterRBGV">
+            <material:RadioButton Text="All" 
+                                  Color="DarkSlateBlue" 
+                                  Value="All"/>
+            <material:RadioButton Text="Completed"
+                                  Value="Completed"/>
+            <material:RadioButton Text="Pending" 
+                                  Value="Pending"/>
+        </material:RadioButtonGroupView>
         <HorizontalStackLayout HorizontalOptions="Center">
             <ScrollView MaximumHeightRequest="600">
                 <material:DataGrid ItemsSource="{Binding DebtsList}" HorizontalOptions="Center" 
@@ -103,10 +122,7 @@
                                     
                                     <material:CheckBox IsChecked="{Binding IsPaidCompletely, Mode=TwoWay}" 
                                                        CommandParameter="{Binding .}"
-                                                       CheckChangedCommand="{Binding Source={x:Reference Page}, Path=BindingContext.ToggleDebtCompletionStatusCommand}"
-
-                                                       CheckChanged="CheckBox_CheckChanged"
-                                                       
+                                                       CheckChangedCommand="{Binding Source={x:Reference Page}, Path=BindingContext.ToggleDebtCompletionStatusCommand}"                                                       
                                                        Margin="10" HorizontalOptions="Center"/>
                                 </DataTemplate>
                             </material:DataGridColumn.CellItemTemplate>
@@ -115,7 +131,7 @@
                         <material:DataGridColumn Title="Action">
                             <material:DataGridColumn.CellItemTemplate>
                                 <DataTemplate>
-                                    <HorizontalStackLayout>
+                                    <HorizontalStackLayout Spacing="5" Margin="10,0">
                                         <Button Text="Edit"
                                             Command="{Binding Source={x:Reference Page}, Path=BindingContext.ShowEditDebtPopUpCommand}"
                                             CommandParameter="{Binding .}"/>

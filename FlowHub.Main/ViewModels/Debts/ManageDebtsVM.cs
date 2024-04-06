@@ -81,6 +81,8 @@ public partial class ManageDebtsVM : ObservableObject
 
     [ObservableProperty]
     bool showSingleSebt;
+
+
     public void PageLoaded()
     {
         try
@@ -128,40 +130,59 @@ public partial class ManageDebtsVM : ObservableObject
     }
 
     [ObservableProperty]
-    List<string> listOfPeopleNames;
-    public void ApplyChanges()
+    IEnumerable<string> listOfPeopleNames;
+    public void ApplyChanges(string filterOption=null)
     {
-        var filteredAndSortedDebts = debtRepo.OfflineDebtList
-                        .Where(x => !x.IsDeleted)
-                        .OrderByDescending(x => x.UpdateDateTime)
-                        .OrderBy(x => x.IsPaidCompletely)
-                        .Distinct()
-                        .ToList();
-        DebtsList = filteredAndSortedDebts.ToObservableCollection();
-        ListOfPeopleNames = filteredAndSortedDebts
-            .Select(x => x.PersonOrOrganization.Name)
-            .Distinct()
+        IEnumerable<DebtModel> filteredDebts = [];
+        if (filterOption == "Completed")
+        {
+            filteredDebts = debtRepo.OfflineDebtList
+                .Where(x => !x.IsDeleted && x.IsPaidCompletely);
+        }
+        else if (filterOption == "Pending")
+        {
+            filteredDebts = debtRepo.OfflineDebtList
+                .Where(x => !x.IsDeleted && !x.IsPaidCompletely);
+        }
+        else
+        {
+            filteredDebts = debtRepo.OfflineDebtList
+                .Where(x => !x.IsDeleted);
+        }
+
+        var sortedDebts = filteredDebts            
+            .OrderByDescending(x => x.IsPaidCompletely)
+            .ThenBy(x => x.UpdateDateTime)
+            .ToHashSet()
             .ToList();
-        RedoCountsAndAmountsCalculation(filteredAndSortedDebts);
+
+        DebtsList = sortedDebts.ToObservableCollection();
+        RedoCountsAndAmountsCalculation(filteredDebts);
     }
 
-    private void RedoCountsAndAmountsCalculation(List<DebtModel> filteredAndSortedDebts)
+    private void RedoCountsAndAmountsCalculation(IEnumerable<DebtModel> filteredDebts)
     {
 
-        BorrowedCompletedList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
-            .Where(x => x.DebtType == DebtType.Borrowed && x.IsPaidCompletely)
-            .OrderBy(x => x.AddedDateTime));
+        var borrowedCompleted = filteredDebts
+        .Where(x => x.DebtType == DebtType.Borrowed && x.IsPaidCompletely)
+        .OrderBy(x => x.AddedDateTime);
 
-        LentCompletedList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
+        var lentCompleted = filteredDebts
             .Where(x => x.DebtType == DebtType.Lent && x.IsPaidCompletely)
-            .OrderBy(x => x.AddedDateTime));
+            .OrderBy(x => x.AddedDateTime);
 
-        BorrowedPendingList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
+        var borrowedPending = filteredDebts
             .Where(x => x.DebtType == DebtType.Borrowed && !x.IsPaidCompletely)
-            .OrderBy(x => x.AddedDateTime));
-        LentPendingList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
+            .OrderBy(x => x.AddedDateTime);
+
+        var lentPending = filteredDebts
             .Where(x => x.DebtType == DebtType.Lent && !x.IsPaidCompletely)
-            .OrderBy(x => x.AddedDateTime));
+            .OrderBy(x => x.AddedDateTime);
+
+        BorrowedCompletedList = new ObservableCollection<DebtModel>(borrowedCompleted);
+        LentCompletedList = new ObservableCollection<DebtModel>(lentCompleted);
+        BorrowedPendingList = new ObservableCollection<DebtModel>(borrowedPending);
+        LentPendingList = new ObservableCollection<DebtModel>(lentPending);
 
         TotalPendingBorrowCount = BorrowedPendingList.Count;
         TotalCompletedBorrowCount = BorrowedCompletedList.Count;
@@ -228,6 +249,8 @@ public partial class ManageDebtsVM : ObservableObject
             .Where(d=>!d.IsDeleted)
             .ToList();
 
+            DebtsList.Clear();
+            DebtsList = ListOfDebts.ToObservableCollection();
             RedoCountsAndAmountsCalculation(ListOfDebts);
             
         }
@@ -238,7 +261,6 @@ public partial class ManageDebtsVM : ObservableObject
     }
 
    
-
    
     [RelayCommand]
     async Task DeleteDebtAsync(DebtModel debt)
@@ -401,6 +423,13 @@ public partial class ManageDebtsVM : ObservableObject
         }
         
     }
+
+    [RelayCommand]
+    void ApplyFilter(string filterOption)
+    {
+        ApplyChanges(filterOption);
+    }
+
 
     [RelayCommand]
     void OpenPhoneDialer()

@@ -206,18 +206,28 @@ public class UserRepository : IUsersRepository
         FilterDefinition<UsersModel> filterUserCredentials = Builders<UsersModel>.Filter.Eq(nameof(user.Email), user.Email) &
                                     Builders<UsersModel>.Filter.Eq(nameof(user.Password), user.Password);
 
-        var OnlineUser = await OnlineUserCollection.Find(filterUserCredentials).FirstOrDefaultAsync();
-        if (OnlineUser.DateTimeOfPocketMoneyUpdate > OfflineUser.DateTimeOfPocketMoneyUpdate)
+        try
         {
-            _ = await UpdateUserAsync(OnlineUser);
-            OfflineUser = OnlineUser;
-            return true;
+            var OnlineUser = await OnlineUserCollection.Find(filterUserCredentials).FirstOrDefaultAsync();
+            if (OnlineUser.DateTimeOfPocketMoneyUpdate > OfflineUser.DateTimeOfPocketMoneyUpdate)
+            {
+                _ = await UpdateUserAsync(OnlineUser);
+                OfflineUser = OnlineUser;
+                return true;
+            }
+            else
+            {
+                await UpdateUserOnlineAsync(OfflineUser);
+                return true;
+            }
         }
-        else
+        catch (Exception ex)
         {
-            await UpdateUserOnlineAsync(OfflineUser);
-            return true;
+            await Shell.Current.DisplayAlert("Error Syncing User", ex.Message, "Ok");
+            Debug.WriteLine(ex.Message);
+            return false;
         }
+        
     }
 
     public void EnsureOnlineConnection()

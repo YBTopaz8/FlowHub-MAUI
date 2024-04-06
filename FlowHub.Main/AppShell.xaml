@@ -14,7 +14,7 @@
         CurrentItem ="{x:Reference login}">
 
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems"  
-                Route="FileTab">
+                Route="FileTab" >
 
         <Tab Title="Home" Shell.TabBarIsVisible="True" Icon="{AppThemeBinding Dark=home_d.png, Light=home_l.png}"
              Route="Home">
