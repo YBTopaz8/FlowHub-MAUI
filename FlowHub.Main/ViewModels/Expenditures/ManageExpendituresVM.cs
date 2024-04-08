@@ -1,19 +1,23 @@
 ﻿
 //This is the view model for the page that shows ALL expenditures
 
+using CommunityToolkit.Maui.Storage;
+
 namespace FlowHub.Main.ViewModels.Expenditures;
 public partial class ManageExpendituresVM : ObservableObject
 {
     readonly IExpendituresRepository expendituresService;
     readonly IUsersRepository userRepo;
     private readonly UpSertExpenditureVM upSertExpenditureVM;
+    private readonly IFolderPicker folderPickerService;
 
     public ManageExpendituresVM(IExpendituresRepository expendituresRepository, IUsersRepository usersRepository,
-        UpSertExpenditureVM upSertExpenditureVM)
+        UpSertExpenditureVM upSertExpenditureVM, IFolderPicker folderPickerService)
     {
         expendituresService = expendituresRepository;
         userRepo = usersRepository;
         this.upSertExpenditureVM = upSertExpenditureVM;
+        this.folderPickerService = folderPickerService;
         ExpendituresCat = ExpenditureCategoryDescriptions.Descriptions;
         expendituresService.OfflineExpendituresListChanged += HandleExpendituresListUpdated;
         userRepo.OfflineUserDataChanged += HandleUserDataChanged;
@@ -230,6 +234,12 @@ public partial class ManageExpendituresVM : ObservableObject
 
     public async Task PrintExpendituresBtn()
     {
+        //CancellationToken cts = new();
+        //var result = await folderPickerService.PickAsync(cts);
+        //result.EnsureSuccess();
+
+        //Debug.WriteLine(result.Folder.Path);
+
         Activ = true;
 #if ANDROID
         ExpendituresList = GroupedExpenditures.SelectMany(x => x).ToObservableCollection();
@@ -252,6 +262,7 @@ public partial class ManageExpendituresVM : ObservableObject
             return;
         }
         await PrintExpenditures.SaveExpenditureToPDF(ExpendituresList, ActiveUser.UserCurrency, dialogueResponse, ActiveUser.Username);
+
     }
 
     [RelayCommand]
@@ -266,9 +277,27 @@ public partial class ManageExpendituresVM : ObservableObject
         await toast.Show(cancellationTokenSource.Token); //toast a notification about exp being copied to clipboard
     }
 
+    [ObservableProperty]
+    int selectedTheme;
+    [ObservableProperty]
+    bool isLightTheme;
+
+    public void SetThemeConfig()
+    {
+        SelectedTheme = AppThemesSettings.ThemeSettings.Theme;
+        IsLightTheme = SelectedTheme == 0;
+    }
+    [RelayCommand]
+    public void ThemeToggler()
+    {
+        SelectedTheme = AppThemesSettings.ThemeSettings.SwitchTheme();
+        IsLightTheme = !IsLightTheme;
+    }
+
     [RelayCommand]
     public async Task DropCollection()
     {
+        
         await expendituresService.DropExpendituresCollection();
     }
 }

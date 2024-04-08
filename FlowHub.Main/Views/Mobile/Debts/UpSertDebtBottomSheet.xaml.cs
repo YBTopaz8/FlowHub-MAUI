@@ -1,15 +1,18 @@
 
 
+using static Android.Icu.Text.CaseMap;
+
 namespace FlowHub.Main.Views.Mobile.Debts;
 
 public partial class UpSertDebtBottomSheet : BottomSheetView
 {
     readonly UpSertDebtVM viewModel;
-	public UpSertDebtBottomSheet(UpSertDebtVM vm)
-	{
-		InitializeComponent();
+    public UpSertDebtBottomSheet(UpSertDebtVM vm)
+    {
+        InitializeComponent();
         viewModel = vm;
         this.BindingContext = vm;
+        
    
 	}
 

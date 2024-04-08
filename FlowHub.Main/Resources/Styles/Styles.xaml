@@ -18,7 +18,7 @@
     </Style>
 
     <Style TargetType="Border">
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light=white}"/>
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource BackGroundDark}, Light={StaticResource BackGroundLight}}"/>
         <Setter Property="Stroke" Value="{StaticResource Primary}" />
         <Setter Property="StrokeShape" Value="RoundRectangle 10"/>
         <Setter Property="StrokeThickness" Value="2"/>
@@ -26,7 +26,7 @@
 
     
     <Style TargetType="VerticalStackLayout">
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=white, Dark={StaticResource BackGroundDark}}"/>        
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}"/>        
     </Style>
     <Style TargetType="AbsoluteLayout">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}"/>
@@ -418,6 +418,10 @@
     </Style>
 
     <Style TargetType="uranium:UraniumContentPage">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}"/>
+    </Style>
+
+    <Style TargetType="Grid">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}"/>
     </Style>
 </ResourceDictionary>

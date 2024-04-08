@@ -23,7 +23,17 @@ public static class PrintExpenditures
         }
 
         string path;
-        path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+        //path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+        path = "/storage/emulated/0/Download/FlowHub";
+        Debug.WriteLine(path);
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+            Debug.WriteLine("None existent");
+        }
+
+//TODO ADD CODE TO CHECK IF THERE IS STORAGE PERMISSION
+
         string fileName = $"FlowOutsReport_{userCurrency}_{DateTime.Now:ddd, dd MMMM yyyy}.pdf";
         string PathFile = $"{path}/{fileName}";
 

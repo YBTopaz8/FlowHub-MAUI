@@ -14,7 +14,7 @@
     <toolkit:DockLayout>
         <VerticalStackLayout toolkit:DockLayout.DockPosition="Bottom">
 
-            <Label Text="FlowHub - v0.8.5 " HorizontalOptions="Center" Margin="2" FontSize="23"/>
+            <Label Text="FlowHub - v0.9.7 " HorizontalOptions="Center" Margin="2" FontSize="23"/>
 
             <Label Text="By Yvan Brunel" HorizontalTextAlignment="Center" 
                 HeightRequest="30"

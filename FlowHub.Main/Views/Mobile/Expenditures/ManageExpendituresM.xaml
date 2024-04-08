@@ -13,9 +13,10 @@
              x:Name="Page"
              BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark={StaticResource BackGroundDark}}"
              >
-    <!--<ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="filter_d" Command="{Binding ShowFilterPopUpPageCommand}" />
-    </ContentPage.ToolbarItems>-->
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Switch Mode" Command="{Binding ThemeTogglerCommand}"/>
+
+    </ContentPage.ToolbarItems>
     <AbsoluteLayout>
         
         <toolkit:DockLayout Margin="5,0" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
@@ -96,6 +97,7 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:ExpendituresModel">
                        <!-- I JUST HAVE TO MAKE SURE NO VIEW ABOVE IS CENTERED OR SOMETHING
+                        also, set dock to top or center to see
                         NOPE -> set to fill and expand for it to take the whole width of the screen-->
                         <SwipeView Margin="0,2" BackgroundColor="Transparent">
                             <SwipeView.RightItems>
@@ -120,7 +122,7 @@
                                                             CommandParameter="{Binding .}"/>
                                 </Border.GestureRecognizers>
                                 <VerticalStackLayout >
-                                    <FlexLayout JustifyContent="SpaceBetween" Direction="Row" Margin="6,2">
+                                    <FlexLayout JustifyContent="SpaceBetween" Direction="Row" Margin="6,2" >
                                         <VerticalStackLayout>
                                             <Label Text="{Binding Reason}" FontAttributes="Bold" FontSize="15"
                                                TextColor="{ AppThemeBinding Dark={StaticResource WildBlueYonder}, Light=Darkslateblue}"/>

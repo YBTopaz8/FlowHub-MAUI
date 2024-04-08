@@ -19,9 +19,11 @@ public partial class SingleDebtDetailsPageM : UraniumContentPage
             BindingContext = upSertDebtVm
         };
 
-        UpSertInstallmentBSheet = new(upSertDebtVm);
-        UpSertInstallmentBSheet.BindingContext = upSertDebtVm;
-        
+        UpSertInstallmentBSheet = new(upSertDebtVm)
+        {
+            BindingContext = upSertDebtVm
+        };
+
         this.Attachments.Add(UpSertDebtbSheet);
         this.Attachments.Add(UpSertInstallmentBSheet);
     }
@@ -60,6 +62,7 @@ public partial class SingleDebtDetailsPageM : UraniumContentPage
         }
         UpSertVM.SingleInstallmentPayment = selectedInstallment is null ? new() { AmountPaid = 0, DatePaid = DateTime.Now } : selectedInstallment;
         UpSertVM.selectedInstallmentInitialAmount = selectedInstallment is null ? 0 : selectedInstallment.AmountPaid;
+        UpSertInstallmentBSheet.ShowDeleteBtn = true;
         UpSertVM.IsUpSertInstallmentBSheetPresent= true;
 
 
@@ -68,7 +71,8 @@ public partial class SingleDebtDetailsPageM : UraniumContentPage
     private void AddInstallmentBtn_Clicked(object sender, EventArgs e)
     {
         UpSertVM.SingleDebtDetails = viewModel.SingleDebtDetails;
-        UpSertVM.SingleInstallmentPayment = new InstallmentPayments() { AmountPaid =0 , DatePaid = DateTime.Now };
+        UpSertVM.SingleInstallmentPayment = new InstallmentPayments() { AmountPaid = 0 , DatePaid = DateTime.Now };
+        UpSertInstallmentBSheet.ShowDeleteBtn = false;
         UpSertVM.IsUpSertInstallmentBSheetPresent = true;
     }
 }

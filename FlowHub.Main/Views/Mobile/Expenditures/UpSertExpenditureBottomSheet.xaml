@@ -18,7 +18,7 @@
     <materialAttach:BottomSheetView.Header>
         <BoxView HeightRequest="0"/>
     </materialAttach:BottomSheetView.Header>
-    <Border BackgroundColor="{AppThemeBinding Dark=#1E242B, Light=#CBCBCB}" Stroke="{AppThemeBinding Dark=#1E242B, Light=#CBCBCB}"
+    <Border BackgroundColor="{AppThemeBinding Dark={StaticResource Secondary}, Light=#CBCBCB}" Stroke="{AppThemeBinding Dark=#1E242B, Light=#CBCBCB}"
             StrokeThickness="1">
         <Border.StrokeShape>
             <RoundRectangle CornerRadius="15,15,4,4"/>

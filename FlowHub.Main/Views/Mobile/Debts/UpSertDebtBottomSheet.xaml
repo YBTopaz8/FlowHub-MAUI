@@ -17,7 +17,7 @@
     <materialAttach:BottomSheetView.Header>
         <BoxView HeightRequest="0"/>
     </materialAttach:BottomSheetView.Header>
-    <VerticalStackLayout BackgroundColor="{AppThemeBinding Dark=#1E242B, Light=#CBCBCB}">
+    <VerticalStackLayout >
         <input:FormView Spacing="5" SubmitCommand="{Binding UpSertDebtCommand}" Padding="0,10" Margin="10,0">
             <HorizontalStackLayout Spacing="7" HorizontalOptions="Center">
                 <material:RadioButton Text="Lend" IsChecked="{Binding IsLent}" x:Name="IsLentRBtn"                                      
@@ -30,45 +30,51 @@
                     TextColor="{AppThemeBinding Light=Black, Dark=gray}"/>
             </HorizontalStackLayout>
 
-            <Grid ColumnSpacing="5">
+            <Grid ColumnSpacing="5" BackgroundColor="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Entry Grid.Column="0" IsVisible="true" Placeholder="Amount" x:Name="AmountTextField"
+                <material:TextField Grid.Column="0" IsVisible="true" Title="Amount" x:Name="AmountTextField"
                     Text="{Binding SingleDebtDetails.Amount}" Focused="AmountTextField_Focused"
+                                    InputBackgroundColor="Red" BackgroundColor="Transparent"
+                                    
                     Keyboard="Numeric">
-                </Entry>
+                </material:TextField>
                 <Label Grid.Column="1" FontSize="18"
                    FontAttributes="Bold"
                    VerticalTextAlignment="Center"
                    Text="{Binding SingleDebtDetails.Currency}"/>
             </Grid>
 
-            <Grid>
+            <Grid BackgroundColor="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Entry x:Name="PersonName" Placeholder="Person's Name" Text="{Binding SingleDebtDetails.PersonOrOrganization.Name}"/>
+                <material:TextField x:Name="PersonName" Title="Person's Name" 
+                       Text="{Binding SingleDebtDetails.PersonOrOrganization.Name}"/>
 
                 <ImageButton Grid.Column="1" Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}"
                      Clicked="SelectUserFromContactsImgBtn_Clicked"/>
             </Grid>
 
-            <Editor Placeholder="Notes (required)"
+            <Editor Placeholder="Notes (required)" PlaceholderColor="{AppThemeBinding Light=black}"
                 TextColor="{AppThemeBinding Light=black, Dark=white}"
                 Text="{Binding SingleDebtDetails.Notes}">
             </Editor>
 
-            <Entry Placeholder="Contact"
+            <material:TextField Title="Contact"
+                Text="{Binding SingleDebtDetails.PersonOrOrganization.PhoneNumber}"
+                x:Name="PersonNumber"/>
+            <!--<Entry Placeholder="Contact"
                 Text="{Binding SingleDebtDetails.PersonOrOrganization.PhoneNumber}"
                 x:Name="PersonNumber">
-            </Entry>
+            </Entry>-->
 
-            <Grid>
+            <Grid BackgroundColor="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -82,44 +88,19 @@
 
                 </HorizontalStackLayout>
 
-                <DatePicker Grid.Column="1" MinimumDate="01/01/2022" 
+                <material:DatePickerField Grid.Column="1" MinimumDate="01/01/2022" Title="Deadline" 
                               IsVisible="{Binding IsToggled, Source={x:Reference DeadlineSwitch}}"
                               Date="{Binding SingleDebtDetails.Deadline, StringFormat='{0:MMMM dd, yyyy}'}"
                               x:Name="FlowHoldDeadline" TextColor="{AppThemeBinding Dark=gray, Light=black}" />
+                <!--<DatePicker Grid.Column="1" MinimumDate="01/01/2022" 
+                              IsVisible="{Binding IsToggled, Source={x:Reference DeadlineSwitch}}"
+                              Date="{Binding SingleDebtDetails.Deadline, StringFormat='{0:MMMM dd, yyyy}'}"
+                              x:Name="FlowHoldDeadline" TextColor="{AppThemeBinding Dark=gray, Light=black}" />-->
             </Grid>
 
             <Button Text="Save" WidthRequest="80" HorizontalOptions="Center" 
                     input:FormView.IsSubmitButton="True"/>
         </input:FormView>
     </VerticalStackLayout>
-   <!-- <Frame BackgroundColor="{AppThemeBinding Dark=#0E131A,Light=white}">
-        StrokeThickness="0" StrokeShape="RoundRectangle 12" >
 
-        <input:FormView Margin="8,5,8,5" Spacing="5" SubmitCommand="{Binding UpSertDebtCommand}" >
-           
-
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <HorizontalStackLayout Grid.Column="0" Margin="6,0">
-                    <Label Text="Deadline" VerticalTextAlignment="Center"/>
-                    <Switch OnColor="DarkSlateBlue" ThumbColor="{AppThemeBinding Dark=white, Light=gray}"                             
-                        x:Name="DeadlineSwitch" PropertyChanged="DeadlineSwitch_PropertyChanged"
-                        IsToggled="{Binding HasDeadLine}"/>
-
-
-                </HorizontalStackLayout>
-
-                <DatePicker Grid.Column="1" MinimumDate="01/01/2022"
-                              IsVisible="{Binding IsToggled, Source={x:Reference DeadlineSwitch}}"
-                              Date="{Binding SingleDebtDetails.Deadline, StringFormat='{0:MMMM dd, yyyy}'}"
-                              x:Name="FlowHoldDeadline" TextColor="{AppThemeBinding Dark=white, Light=black}" />
-            </Grid>
-
-            <Button Text="Save" WidthRequest="80" HorizontalOptions="Center" 
-                    input:FormView.IsSubmitButton="True"/>
-        </input:FormView>
-    </Frame>-->
 </materialAttach:BottomSheetView>

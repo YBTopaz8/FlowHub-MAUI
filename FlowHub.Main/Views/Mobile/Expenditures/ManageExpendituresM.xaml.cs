@@ -14,7 +14,7 @@ public partial class ManageExpendituresM : UraniumContentPage
 
         UpSertExpbSheet = new(upSertExpVM);
         Attachments.Add(UpSertExpbSheet);
-        
+
     }
 
     protected override async void OnAppearing()

@@ -1,5 +1,6 @@
 ﻿
 using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Storage;
 using InputKit.Handlers;
 using Plugin.Maui.CalendarStore;
 using SkiaSharp.Views.Maui.Controls.Hosting;
@@ -45,7 +46,7 @@ public static class MauiProgram
             handlers.AddInputKitHandlers();
             handlers.AddUraniumUIHandlers();
         });
-
+        builder.Services.AddSingleton<IFolderPicker>(FolderPicker.Default);
         /*----------------------- REGISTERING Repositories ------------------------------------------------------------------------*/
         builder.Services.AddSingleton(CalendarStore.Default);
         builder.Services.AddSingleton<IExpendituresRepository, ExpendituresRepository>();

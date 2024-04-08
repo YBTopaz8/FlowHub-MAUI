@@ -15,6 +15,8 @@ public partial class ManageLendingsPageM : UraniumContentPage
 
         UpSertDebtbSheet = new(upSertDebtVM);
         this.Attachments.Add(UpSertDebtbSheet);
+
+
     }
     protected override void OnAppearing()
     {

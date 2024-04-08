@@ -32,8 +32,9 @@
 
             <FlexLayout JustifyContent="SpaceBetween">
                 <Button Text="Delete" BackgroundColor="Red" Command="{Binding DeleteInstallmentPaymentCommand}"
+                        x:Name="DeleteInstallmentBtn"
                         CommandParameter="{Binding SingleInstallmentPayment}"/>
-                <HorizontalStackLayout Spacing="5">
+                <HorizontalStackLayout Spacing="5" HorizontalOptions="Center">
                     <Button Text="Save" WidthRequest="80" HorizontalOptions="Center" BackgroundColor="DarkSlateBlue"
                     input:FormView.IsSubmitButton="True"/>
                     <Button Text="Cancel" Command="{Binding CloseInstallmentsPopupCommand}"/>

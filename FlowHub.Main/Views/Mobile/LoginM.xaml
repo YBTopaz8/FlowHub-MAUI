@@ -12,8 +12,21 @@
              >
     <ScrollView>
         <VerticalStackLayout Spacing="5">
-
-            <VerticalStackLayout BackgroundColor="{AppThemeBinding Dark=#201F24, Light=white}" >
+            <Button HorizontalOptions="End" Margin="5,10,10,0"
+    Command="{Binding ThemeTogglerCommand}" Text="Light" 
+        BackgroundColor="{AppThemeBinding Dark=white,Light=black}" TextColor="{AppThemeBinding Dark=black, Light=white}"
+        ToolTipProperties.Text="Click to Switch to Light Theme">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button" Binding="{Binding IsLightTheme}" Value="true">
+                        <Setter Property="Text" Value="Dark"/>
+                        <Setter Property="ToolTipProperties.Text" Value="Click to Switch to Dark Theme"/>
+                    </DataTrigger>
+                </Button.Triggers>
+                <Button.Shadow>
+                    <Shadow Offset="4,15" Opacity="0.3" Brush="{AppThemeBinding Dark=white,Light=black}"/>
+                </Button.Shadow>
+            </Button>
+            <VerticalStackLayout>
 
                 <Image Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}" Grid.Row="0" 
                            Margin="5"
