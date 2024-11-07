@@ -1,7 +1,5 @@
 
 
-using static Android.Icu.Text.CaseMap;
-
 namespace FlowHub.Main.Views.Mobile.Debts;
 
 public partial class UpSertDebtBottomSheet : BottomSheetView
