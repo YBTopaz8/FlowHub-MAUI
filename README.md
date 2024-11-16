@@ -1,6 +1,8 @@
 Time Spent So Far... [![wakatime](https://wakatime.com/badge/user/20225675-04f6-42d1-8535-b25921cfc585/project/9869e113-a517-4e62-84dc-be741016f769.svg)](https://wakatime.com/badge/user/20225675-04f6-42d1-8535-b25921cfc585/project/9869e113-a517-4e62-84dc-be741016f769)
 # FlowHub (An Expense Tracker) Cross Platform MAUI App.
 
+# Work Will resume on this project in the coming weeks. A complete redesign done better!
+
 An Application used to manage Savings, Expenditures, Incomes, Debts, Financial plannings etc.
 
 Ideal for anyone who likes to keep track of their Financial Flow.
