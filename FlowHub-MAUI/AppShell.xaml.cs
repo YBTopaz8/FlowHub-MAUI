@@ -2,9 +2,10 @@
 {
     public partial class AppShell : Shell
     {
-        public AppShell()
+        public AppShell(HomePageVM vm)
         {
             InitializeComponent();
+            Routing.RegisterRoute(nameof(HomeD), typeof(HomeD));
         }
     }
 }

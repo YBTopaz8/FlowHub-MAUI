@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlowHub_MAUI.AppShellMobile"
+       xmlns:viewsM="clr-namespace:FlowHub_MAUI.Views.Mobile"
+                    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialSymbols;assembly=UraniumUI.Icons.MaterialSymbols"
+       Shell.TabBarUnselectedColor="Gray"
+       Shell.TabBarForegroundColor="DarkSlateBlue"
+       Shell.TabBarBackgroundColor="Black"
+       
+          
+       Shell.TabBarTitleColor="DarkSlateBlue"
+       Shell.ForegroundColor="Transparent"
+Shell.NavBarIsVisible="False"
+ Shell.TabBarIsVisible="False"
+       Shell.FlyoutBehavior="Disabled">
+
+
+
+    <TabBar x:Name="shelltabbar">
+        <Tab Title="Home" x:Name="homeTab">
+            <ShellContent ContentTemplate="{DataTemplate viewsM:HomeM}"/>
+        </Tab>
+        
+    </TabBar>
+</Shell>

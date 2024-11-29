@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35521.163 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowHub-MAUI", "FlowHub-MAUI.csproj", "{BD5E9009-A735-4E78-9DF6-3044E6F9FC0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parse", "..\..\Parse-SDK-dotNETMAUI\Parse\Parse.csproj", "{6CA274DF-CABC-4C85-8699-90AD0DA87E3D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD5E9009-A735-4E78-9DF6-3044E6F9FC0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD5E9009-A735-4E78-9DF6-3044E6F9FC0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD5E9009-A735-4E78-9DF6-3044E6F9FC0B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{BD5E9009-A735-4E78-9DF6-3044E6F9FC0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD5E9009-A735-4E78-9DF6-3044E6F9FC0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD5E9009-A735-4E78-9DF6-3044E6F9FC0B}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{6CA274DF-CABC-4C85-8699-90AD0DA87E3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CA274DF-CABC-4C85-8699-90AD0DA87E3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CA274DF-CABC-4C85-8699-90AD0DA87E3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CA274DF-CABC-4C85-8699-90AD0DA87E3D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
