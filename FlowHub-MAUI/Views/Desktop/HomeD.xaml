@@ -2,11 +2,84 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FlowHub_MAUI.Views.Desktop.HomeD"
-             Title="HomeD">
+             x:DataType="vm:HomePageVM"
+             xmlns:vm="clr-namespace:FlowHub_MAUI.ViewModel"
+             x:Name="myPage"
+             xmlns:models="clr-namespace:FlowHub_MAUI.Utilities.Models"
+             xmlns:syncf="http://schemas.syncfusion.com/maui/toolkit"  
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"   
+             xmlns:converters="clr-namespace:FlowHub_MAUI.Utilities.TypeConverters"
+             BackgroundColor="#191719"
+             xmlns:sys="clr-namespace:System;assembly=netstandard">
+
+
+    <ContentPage.Resources>
+
+        <ResourceDictionary>
+            <converters:DurationConverterFromMsToTimeSpan x:Key="DurationConverter"/>
+
+            <converters:BoolToInverseConverter x:Key="BoolToInverse"/>
+            <converters:BytesToMegabytesConverter x:Key="FileSizeConverter"/>
+        </ResourceDictionary>
+
+    </ContentPage.Resources>
+
     <VerticalStackLayout>
         <Label 
-            Text="Welcome to .NET MAUI!"
+            Text="Quick Add Flow"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+        <Border>
+            <VerticalStackLayout>
+                <Button Text="Enable Live Queries" Command="{Binding SetupLiveQueriesCommand}"/>
+                <Entry Placeholder="Description" Text="{Binding SelectedFlow.Description}"/>
+                <Entry Placeholder="Amount" Keyboard="Numeric" Text="{Binding SelectedFlow.Amount}"/>
+                
+                <DatePicker Date="{Binding SelectedFlow.DateCreated}"/>
+                <Picker Title="Payment Method" ItemsSource="{Binding FlowCategory}"
+                        SelectedItem="{Binding SelectedFlow.Category}"/>
+
+                <Editor Text="{Binding SingleFlowComment.Comment}"/>
+                <Button Text="Add Flow" Command="{Binding AddFlowCommand}"/>
+                                
+            </VerticalStackLayout>
+        </Border>
+        <Grid>
+            <CollectionView ItemsSource="{Binding AllFlows}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:FlowsModelView">
+                        <Border>
+
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Description}"/>
+                                <Label Text="{Binding Category}"/>
+                                <Label Text="{Binding Amount}"/>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+        <Entry Text="{Binding SingleFlowComment.Comment}"/>
+        <Button Text="Send Comm" Clicked="Button_Clicked"/>
+        <Grid>
+            <CollectionView ItemsSource="{Binding AllComments}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:FlowCommentsView">
+                        <Border>
+
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Comment}"/>
+                                <Label Text="{Binding UserIDCommenting}"/>
+                                
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+        
+        
     </VerticalStackLayout>
 </ContentPage>

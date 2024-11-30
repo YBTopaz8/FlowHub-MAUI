@@ -33,6 +33,7 @@
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
+            builder.Services.AddSingleton<FlowHubWindow>();
             builder.Services.AddSingleton(FolderPicker.Default);
             //builder.Services.AddSingleton(FilePicker.Default);
             builder.Services.AddSingleton(FileSaver.Default);
@@ -48,15 +49,16 @@
             builder.Services.AddSingleton<HomePageVM>();
 
 
-
             /* Registering the Desktop Views */
             builder.Services.AddSingleton<HomeD>();
+            builder.Services.AddSingleton<SettingsD>();
 
 
 
             /* Registering the Mobile Views */
 
             builder.Services.AddSingleton<HomeM>();
+            builder.Services.AddSingleton<SettingsM>();
             builder.Services.AddSingleton<IDataBaseService,DataBaseService>();
             builder.Services.AddSingleton<IFlowsService, FlowService>();
             

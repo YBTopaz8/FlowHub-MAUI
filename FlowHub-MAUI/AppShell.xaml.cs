@@ -6,6 +6,7 @@
         {
             InitializeComponent();
             Routing.RegisterRoute(nameof(HomeD), typeof(HomeD));
+            Routing.RegisterRoute(nameof(SettingsD), typeof(SettingsD));
         }
     }
 }

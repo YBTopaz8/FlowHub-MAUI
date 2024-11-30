@@ -6,6 +6,7 @@ public partial class AppShellMobile : Shell
 	{
 		InitializeComponent();
         Routing.RegisterRoute(nameof(HomeM), typeof(HomeM));
+        Routing.RegisterRoute(nameof(SettingsM), typeof(SettingsM));
     }
-    public HomePageVM Vm { get; }
+    public HomePageVM? Vm { get; }
 }

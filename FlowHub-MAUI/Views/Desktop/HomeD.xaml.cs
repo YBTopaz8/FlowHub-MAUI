@@ -10,4 +10,9 @@ public partial class HomeD : ContentPage
     }
 
     public HomePageVM ViewModel { get; }
+
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+        ViewModel.AddCommentUI();
+    }
 }

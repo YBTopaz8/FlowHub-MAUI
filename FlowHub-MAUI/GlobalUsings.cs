@@ -8,7 +8,9 @@ global using UraniumUI.Icons.FontAwesome;
 global using FontAw = UraniumUI.Icons.FontAwesome;
 global using Realms;
 
+global using System.Collections.ObjectModel;
 
+global using CommunityToolkit.Mvvm.Input;
 
 global using Syncfusion.Maui.Toolkit.Hosting;
 global using DevExpress.Maui;

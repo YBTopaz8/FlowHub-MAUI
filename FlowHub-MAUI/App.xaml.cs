@@ -14,8 +14,18 @@ namespace FlowHub_MAUI
 
             AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
             FlowHubWindow = flowHubWindow;
-        }
+            var vm = IPlatformApplication.Current!.Services.GetService<HomePageVM>()!;
+#if WINDOWS
+            PCShell = new(vm);
+            FlowHubWindow.Page = PCShell;
 
+#elif ANDROID
+            MobileShell = new();
+            FlowHubWindow.Page = MobileShell;
+#endif
+        }
+        AppShell PCShell { get; set; }
+        AppShellMobile MobileShell { get; set; }
         private void CurrentDomain_FirstChanceException(object? sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e)
         {
             Debug.WriteLine($"********** UNHANDLED EXCEPTION! Details: {e.Exception} | {e.Exception.InnerException?.Message} | {e.Exception.Source} " +
@@ -32,10 +42,10 @@ namespace FlowHub_MAUI
 
             var vm = IPlatformApplication.Current!.Services.GetService<HomePageVM>()!;
 #if WINDOWS
-        FlowHubWindow.Page = new AppShell(vm);
+        FlowHubWindow.Page = PCShell;
 
 #elif ANDROID
-            FlowHubWindow.Page = new AppShellMobile();
+            FlowHubWindow.Page = MobileShell;
 #endif
 
             //win = base.CreateWindow(activationState);
@@ -74,20 +84,20 @@ namespace FlowHub_MAUI
                     ApplicationID = APIKeys.ApplicationId,
                     ServerURI = APIKeys.ServerUri,
                     Key = APIKeys.DotNetKEY,
+   
                 }
                 );
-
                 HostManifestData manifest = new HostManifestData()
                 {
                     Version = "1.0.0",
-                    Identifier = "com.yvanbrunel.dimmer",
-                    Name = "Dimmer",
+                    Identifier = "com.yvanbrunel.flowhub",
+                    Name = "Flowhub",
                 };
 
                 client.Publicize();
 
 
-                Console.WriteLine("ParseClient initialized successfully.");
+                Debug.WriteLine("ParseClient initialized successfully.");
                 return true;
             }
             catch (Exception ex)

@@ -5,11 +5,19 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:FlowHub_MAUI"
     Shell.FlyoutBehavior="Disabled"
-    Title="FlowHub_MAUI">
+    Title="FlowHub"
+    xmlns:vm="clr-namespace:FlowHub_MAUI.ViewModel"
+    x:DataType="vm:HomePageVM"
+    xmlns:viewD="clr-namespace:FlowHub_MAUI.Views.Desktop"
+    >
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
 
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" x:Name="shelltabbar">
+        <Tab Title="Home" x:Name="homeTab">
+            <ShellContent ContentTemplate="{DataTemplate viewD:HomeD}"/>
+        </Tab>
+        <Tab Title="Settings" x:Name="settingTab">
+            <ShellContent ContentTemplate="{DataTemplate viewD:SettingsD}"/>
+        </Tab>
+    </FlyoutItem>
 </Shell>

@@ -65,6 +65,7 @@
     <PackageReference Include="UraniumUI.Icons.MaterialSymbols" Version="2.9.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\parse-live-query-dotnetMAUI\ParseLiveQuery\ParseLiveQuery.csproj" />
     <ProjectReference Include="..\..\Parse-SDK-dotNETMAUI\Parse\Parse.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -82,7 +83,13 @@
     <MauiXaml Update="Views\Desktop\HomeD.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+    <MauiXaml Update="Views\Desktop\SettingsD.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
     <MauiXaml Update="Views\Mobile\HomeM.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Mobile\SettingsM.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
   </ItemGroup>

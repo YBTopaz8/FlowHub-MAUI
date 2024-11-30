@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlowHub_MAUI.Views.Mobile.SettingsM"
+                          x:DataType="vm:HomePageVM"
+            xmlns:vm="clr-namespace:FlowHub_MAUI.ViewModel"
+            x:Name="myPage"
+            xmlns:syncf="http://schemas.syncfusion.com/maui/toolkit"  
+            xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"   
+            xmlns:converters="clr-namespace:FlowHub_MAUI.Utilities.TypeConverters"
+            BackgroundColor="#191719"
+            xmlns:sys="clr-namespace:System;assembly=netstandard"
+             Shell.TabBarIsVisible="True"
+             Title="SettingsD">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BoolToInverseConverter x:Key="BoolToInverse"/>
+            <converters:BytesToMegabytesConverter x:Key="FileSizeConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <VerticalStackLayout Margin="10,0">
+
+        <Label Text="Login Place"/>
+        <Border StrokeShape="RoundRectangle 20">
+
+            <VerticalStackLayout>
+                <Entry Placeholder="Enter UserName" Text="{Binding Username}"/>
+                <Entry Placeholder="Enter Password" IsPassword="True" Text="{Binding Userpassword}"/>
+                <Button Text="Login" Command="{Binding LoginUserCommand}" />
+            </VerticalStackLayout>
+
+        </Border>
+
+        <Label Text="Sign Up Place"/>
+        <Border StrokeShape="RoundRectangle 20">
+            <VerticalStackLayout>
+                <Entry Placeholder="Enter UserName" Text="{Binding Username}"/>
+                <Entry Placeholder="Enter Email" Text="{Binding Useremail}"/>
+                <Entry Placeholder="Enter Password" IsPassword="True" Text="{Binding Userpassword}"/>
+                <Button Text="Sign Up" Command="{Binding SignUpUserCommand}"/>
+            </VerticalStackLayout>
+        </Border>
+
+    </VerticalStackLayout>
+
+</ContentPage>

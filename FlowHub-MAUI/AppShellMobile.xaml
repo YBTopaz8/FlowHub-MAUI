@@ -22,5 +22,9 @@ Shell.NavBarIsVisible="False"
             <ShellContent ContentTemplate="{DataTemplate viewsM:HomeM}"/>
         </Tab>
         
+        <Tab Title="Home" x:Name="settingsTab">
+            <ShellContent ContentTemplate="{DataTemplate viewsM:SettingsM}"/>
+        </Tab>
+        
     </TabBar>
 </Shell>

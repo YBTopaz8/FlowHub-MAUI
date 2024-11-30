@@ -20,7 +20,7 @@ public class BoolToYesNoConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        var val = (bool)value;
+        var val = (bool)value!;
         if (val)
         {
             return "Yes";
