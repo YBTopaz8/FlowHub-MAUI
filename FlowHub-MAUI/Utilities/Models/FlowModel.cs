@@ -69,7 +69,6 @@ public partial class FlowsModel : RealmObject
         DeadLine = model.DeadLine;
         ReceiptImageUrl = model.ReceiptImageUrl;
         FlowModelCommentLinkID = model.FlowModelCommentLinkID;
-
         Tags = model.Tags.Select(x=>x).ToList();
         IsDebt = model.IsDebt;
         IsFlowIn= model.IsFlowIn;

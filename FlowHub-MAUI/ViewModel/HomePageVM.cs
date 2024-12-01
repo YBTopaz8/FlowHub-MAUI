@@ -55,7 +55,7 @@ public partial class HomePageVM : ObservableObject
 
     }
 
-    public ParseLiveQueryClient LiveClient { get; set; }
+    public ParseLiveQueryClient? LiveClient { get; set; }
 
     [RelayCommand]
     void SetupLiveQueries()
@@ -118,8 +118,9 @@ public partial class HomePageVM : ObservableObject
     {
         if (newValue is not null)
         {
-            if (CurrentUserOnline.IsAuthenticated)
+            if (newValue.IsAuthenticated)
             {
+                
                 //best to use this and away a little for parse client to validate auth
                 IsAuthenticated = true;
                 CurrentUserLocal.UserIDOnline = CurrentUserOnline.ObjectId;
@@ -130,6 +131,7 @@ public partial class HomePageVM : ObservableObject
                 CurrentUserLocal.UserName = CurrentUserLocal.UserName;
 
                 FlowsService.UpdateUser(CurrentUserLocal);
+                _ = Shell.Current.DisplayAlert("Login", "Login Successful", "OK");
             }
             else
             {
@@ -174,6 +176,7 @@ public partial class HomePageVM : ObservableObject
 
         AllFlows!.Add(SelectedFlow!);
         SelectedFlow = new();
+        Shell.Current.DisplayAlert("Add", "Flow Added Normal", "OK");
     }
 
     [RelayCommand]
@@ -181,6 +184,8 @@ public partial class HomePageVM : ObservableObject
     {
         FlowsService.UpdateFlow(SelectedFlow!);
         SelectedFlow = new();
+
+        Shell.Current.DisplayAlert("Update", "Flow Updated Normal", "OK");
     }
     [RelayCommand]
     public void DeleteFlow()
@@ -193,12 +198,30 @@ public partial class HomePageVM : ObservableObject
         AddFlow();
         SingleFlowComment = new();
     }
+    [RelayCommand]
+    public void QuickLogin()
+    {
+        _ =  LoginUser();
+        return;
 
-    
+    }
+    [RelayCommand]
+    public void UpdateCommentUI()
+    {
+        FlowService.MapToParseObject(SingleFlowComment, nameof(FlowCommentsView)).SaveAsync();
+        SingleFlowComment = new();
+    }
+    [RelayCommand]
+    public void DeleteCommentUI()
+    {
+        SingleFlowComment.IsDeleted = true;
+        FlowService.MapToParseObject(SingleFlowComment, nameof(FlowCommentsView)).SaveAsync();
+        SingleFlowComment = new();
+
+    }
+    [RelayCommand]
     public void AddCommentUI()
     {
-        _ = LoginUser();
-        return;
         SingleFlowComment.UserIDCommenting = CurrentUserLocal!.UserIDOnline;
         SingleFlowComment.Comment = SingleFlowComment.Comment + " Sent from "+ DeviceInfo.Idiom;
         var comm = FlowService.MapToParseObject(SingleFlowComment, nameof(FlowCommentsView));
@@ -251,42 +274,45 @@ public partial class HomePageVM : ObservableObject
 
             var sub = LiveClient.Subscribe(query);
 
-            sub
-                .HandleSubscribe(query =>
-                {
-                    Debug.WriteLine($"Successfully subscribed to query: {query.GetClassName()}");
-                })
-                .HandleUnsubscribe(query =>
-                {
-                    Debug.WriteLine($"Unsubscribed from query: {query}");
-                })
-                .HandleEvents((query, objEvent, obj) =>
-                {
-                    var obb = FlowService.MapToModelFromParseObject<FlowCommentsView>((ParseObject)obj);
-                    Debug.WriteLine($"Event {objEvent} occurred for object: {obj.ObjectId}");
-                    switch (objEvent)
-                    {
-                        case Subscription.Event.Create:
-                            //FlowModelAndCommentLink? itemmm = MapToModelFromParseObject<FlowModelAndCommentLink>((ParseObject)item); //duration is off
+            //sub.OnSubscribe(query =>
+            //{
+            //    Debug.WriteLine($"Subscribed to query: {query.GetClassName()}");
+            //});
+            //sub.OnEvents((query, objEvent, obj) =>
+            //{
+            //    if (objEvent == Subscription.Event.Create)
+            //    {
+            //        Debug.WriteLine("CREATED");
+            //    }
+            //    else if (objEvent == Subscription.Event.Update)
+            //    {
+            //        Debug.WriteLine("UPDATED");
+            //    }
+            //    else if (objEvent == Subscription.Event.Delete)
+            //    {
+            //        Debug.WriteLine("DELETED");
+            //    }
+            //});
 
-                            AllComments!.Add(obb); // Add new object
-                            break;
-                        case Subscription.Event.Update:
-                            
-                            break;
-                        case Subscription.Event.Delete:
-                            AllComments!.Remove(obb);
-                            Debug.WriteLine($"Object deleted: {obj.ObjectId}");
-                            break;
-                    }
-                })
-                .HandleError((query, exception) =>
-                {
-                    Debug.WriteLine($"Error encountered: {exception.Message}");
-                });
+            sub.HandleSubscribe(query =>
+            {
+                Debug.WriteLine($"Subscribed to query: {query.GetClassName()}");
+            })
+ .HandleEvents((query, objEvent, obj) =>
+ {
+     Debug.WriteLine($"Event {objEvent} occurred for object: {obj.ObjectId}");
+ })
+ .HandleError((query, exception) =>
+ {
+     Debug.WriteLine($"Error in query for class {query.GetClassName()}: {exception.Message}");
+ })
+ .HandleUnsubscribe(query =>
+ {
+     Debug.WriteLine($"Unsubscribed from query: {query.GetClassName()}");
+ });
 
             // Connect asynchronously
-            await Task.Run(() => LiveClient.ConnectIfNeeded());
+          await Task.Run(()=>  LiveClient.ConnectIfNeeded());
         }
         catch (IOException ex)
         {
