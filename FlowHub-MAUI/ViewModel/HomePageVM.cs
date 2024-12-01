@@ -1,5 +1,6 @@
 ﻿using Parse.Abstractions.Internal;
 using Parse.LiveQuery;
+using System.Diagnostics;
 
 namespace FlowHub_MAUI.ViewModel;
 
@@ -96,29 +97,39 @@ public partial class HomePageVM : ObservableObject
         CurrentUserLocal.UserPassword = Userpassword;
 
         ParseUser signUpUser = new ParseUser();
-        signUpUser.Username = CurrentUserLocal.UserName;
-        signUpUser.Password = CurrentUserLocal.UserPassword;
+        //signUpUser.Username = CurrentUserLocal.UserName;
+        signUpUser.Username = "YBTopaz8";
+        signUpUser.Password = "Yvan";
+        //signUpUser.Password = CurrentUserLocal.UserPassword;
         if (await FlowsService.LogUserIn(signUpUser, signUpUser.Password!))
         {
             //Debug.WriteLine("Login OK");
             CurrentUserOnline = ParseClient.Instance.GetCurrentUser();
-            CurrentUserLocal.UserIDOnline = CurrentUserOnline.ObjectId;
-            CurrentUserLocal.LocalDeviceId = CurrentUserOnline.ObjectId;
-            CurrentUserLocal.UserPassword = Userpassword;
             
-            FlowsService.UpdateUser(CurrentUserLocal);
         }
     }
-
+    partial void OnCurrentUserOnlineChanged(ParseUser? oldValue, ParseUser? newValue)
+    {
+        Debug.WriteLine($"Old {oldValue?.IsAuthenticated} New {newValue?.IsAuthenticated}");
+    }
 
 
     partial void OnCurrentUserOnlineChanging(ParseUser? oldValue, ParseUser? newValue)
     {
         if (newValue is not null)
         {
-            if (newValue.IsAuthenticated)
+            if (CurrentUserOnline.IsAuthenticated)
             {
+                //best to use this and away a little for parse client to validate auth
                 IsAuthenticated = true;
+                CurrentUserLocal.UserIDOnline = CurrentUserOnline.ObjectId;
+                CurrentUserLocal.LocalDeviceId = CurrentUserOnline.ObjectId;
+                CurrentUserLocal.UserPassword = Userpassword;
+                CurrentUserLocal.IsAuthenticated = CurrentUserOnline.IsAuthenticated;
+                CurrentUserLocal.UserEmail = CurrentUserLocal.UserEmail;
+                CurrentUserLocal.UserName = CurrentUserLocal.UserName;
+
+                FlowsService.UpdateUser(CurrentUserLocal);
             }
             else
             {
@@ -186,7 +197,8 @@ public partial class HomePageVM : ObservableObject
     
     public void AddCommentUI()
     {
-        
+        _ = LoginUser();
+        return;
         SingleFlowComment.UserIDCommenting = CurrentUserLocal!.UserIDOnline;
         SingleFlowComment.Comment = SingleFlowComment.Comment + " Sent from "+ DeviceInfo.Idiom;
         var comm = FlowService.MapToParseObject(SingleFlowComment, nameof(FlowCommentsView));
