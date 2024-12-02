@@ -30,22 +30,26 @@
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
         <Border>
-            <VerticalStackLayout>
+            <VerticalStackLayout Spacing="10">
                 <Button Text="Enable Live Queries" Command="{Binding SetupLiveQueriesCommand}"/>
-                <Entry Placeholder="Description" Text="{Binding SelectedFlow.Description}"/>
-                <Entry Placeholder="Amount" Keyboard="Numeric" Text="{Binding SelectedFlow.Amount}"/>
+                <!--<Entry Placeholder="Description" Text="{Binding SelectedFlow.Description}"/>-->
+                <!--<Entry Placeholder="Amount" Keyboard="Numeric" Text="{Binding SelectedFlow.Amount}"/>-->
                 
-                <DatePicker Date="{Binding SelectedFlow.DateCreated}"/>
-                <Picker Title="Payment Method" ItemsSource="{Binding FlowCategory}"
-                        SelectedItem="{Binding SelectedFlow.Category}"/>
+                <!--<DatePicker Date="{Binding SelectedFlow.DateCreated}"/>-->
+                <!--<Picker Title="Payment Method" ItemsSource="{Binding FlowCategory}"
+                        SelectedItem="{Binding SelectedFlow.Category}"/>-->
 
-                <Editor Text="{Binding SingleFlowComment.Comment}"/>
-                <Button Text="Add Flow" Command="{Binding AddFlowCommand}"/>
+                
+                
+                <Button Text="Sign Up Directly" Command="{Binding QuickSignUpCommand}"/>
+                
+                <Button Text="Login Directly" Command="{Binding QuickLoginCommand}"/>
+                <!--<Button Text="Add Flow" Command="{Binding AddFlowCommand}"/>-->
                                 
             </VerticalStackLayout>
         </Border>
-        <Grid>
-            <CollectionView ItemsSource="{Binding AllFlows}">
+        <Grid HeightRequest="100" BackgroundColor="#1F1F1F">
+            <CollectionView ItemsSource="{Binding AllFlows}" Header="Flows">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:FlowsModelView">
                         <Border>
@@ -62,24 +66,27 @@
         </Grid>
 
         <Entry Text="{Binding SingleFlowComment.Comment}"/>
-        <Button Text="Send Comm" Clicked="Button_Clicked"/>
-        <Grid>
-            <CollectionView ItemsSource="{Binding AllComments}">
+        <Button Text="Send Live Comment" Clicked="Button_Clicked"/>
+        <Grid HeightRequest="180" BackgroundColor="Gray">
+            <CollectionView ItemsSource="{Binding AllComments}" Header="Flow Comments">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:FlowCommentsView">
                         <Border>
-
-                            <VerticalStackLayout>
-                                <Label Text="{Binding Comment}"/>
-                                <Label Text="{Binding UserIDCommenting}"/>
-                                
+                            <VerticalStackLayout IsVisible="{Binding IsDeleted, Converter={x:StaticResource BoolToInverse}}">
+                                <Label Text="{Binding IsDeleted}"/>
+                                <Label Text="{Binding IsDeleted}"/>
                             </VerticalStackLayout>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </Grid>
-        
-        
+        <Entry Text="{Binding SingleFlowComment.Comment}"/>
+        <Button Text="Add Flow" Command="{Binding AddFlowCommand}"/>
+        <HorizontalStackLayout>
+            <Button Text="Edit" Command="{Binding UpdateCommentUICommand}"/>
+            <Button Text="Delete" Command="{Binding DeleteCommentUICommand}"/>
+        </HorizontalStackLayout>
+
     </VerticalStackLayout>
 </ContentPage>
