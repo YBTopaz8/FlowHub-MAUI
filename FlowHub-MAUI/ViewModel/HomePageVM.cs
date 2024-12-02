@@ -70,9 +70,6 @@ public partial class HomePageVM : ObservableObject, IParseLiveQueryClientCallbac
     {
         ParseUser signUpUser = new ParseUser();
         //signUpUser.Username = CurrentUserLocal.UserName;
-        signUpUser.Email = "me@me.com";
-        signUpUser.Username = "YBTopaz8";
-        signUpUser.Password = "Yvan";
         ParseClient.Instance.SignUpAsync(signUpUser);
     }
     [RelayCommand]
