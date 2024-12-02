@@ -14,5 +14,6 @@ public partial class HomeD : ContentPage
     private void Button_Clicked(object sender, EventArgs e)
     {
         ViewModel.AddCommentUI();
+        
     }
 }
