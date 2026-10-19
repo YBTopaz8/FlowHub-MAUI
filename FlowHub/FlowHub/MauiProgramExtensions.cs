@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿
+using Microsoft.Extensions.Logging;
 
 namespace FlowHub
 {
@@ -8,6 +9,7 @@ namespace FlowHub
         {
             builder
                 .UseMauiApp<App>()
+                //.UseMaterialComponents()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

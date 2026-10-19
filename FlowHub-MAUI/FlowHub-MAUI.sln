@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowHub.Droid", "..\FlowHub
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowHub.WinUI", "..\FlowHub\FlowHub.WinUI\FlowHub.WinUI.csproj", "{A482E11C-2C04-443F-B64C-806C8CD44F66}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Material.Components.Maui", "..\..\Material.Components.Maui\Material.Components.Maui\Material.Components.Maui.csproj", "{C094B11C-048D-A02D-549E-495C8D2EDAF8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{A482E11C-2C04-443F-B64C-806C8CD44F66}.Debug|Any CPU.Build.0 = Debug|x64
 		{A482E11C-2C04-443F-B64C-806C8CD44F66}.Release|Any CPU.ActiveCfg = Release|x64
 		{A482E11C-2C04-443F-B64C-806C8CD44F66}.Release|Any CPU.Build.0 = Release|x64
+		{C094B11C-048D-A02D-549E-495C8D2EDAF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C094B11C-048D-A02D-549E-495C8D2EDAF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C094B11C-048D-A02D-549E-495C8D2EDAF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C094B11C-048D-A02D-549E-495C8D2EDAF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

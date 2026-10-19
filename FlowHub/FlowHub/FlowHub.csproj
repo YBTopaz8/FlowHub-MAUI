@@ -34,4 +34,8 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\Material.Components.Maui\Material.Components.Maui\Material.Components.Maui.csproj" />
+	</ItemGroup>
+
 </Project>
