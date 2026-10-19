@@ -3,7 +3,31 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.11.12306.390 stable
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowHub", "..\FlowHub\FlowHub\FlowHub.csproj", "{B87C721B-88CD-4FF7-882B-AA39941ED9FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowHub.Droid", "..\FlowHub\FlowHub.Droid\FlowHub.Droid.csproj", "{92062F65-EC4D-4A26-8CE2-C9162C69F7AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowHub.WinUI", "..\FlowHub\FlowHub.WinUI\FlowHub.WinUI.csproj", "{A482E11C-2C04-443F-B64C-806C8CD44F66}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B87C721B-88CD-4FF7-882B-AA39941ED9FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B87C721B-88CD-4FF7-882B-AA39941ED9FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B87C721B-88CD-4FF7-882B-AA39941ED9FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B87C721B-88CD-4FF7-882B-AA39941ED9FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92062F65-EC4D-4A26-8CE2-C9162C69F7AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92062F65-EC4D-4A26-8CE2-C9162C69F7AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92062F65-EC4D-4A26-8CE2-C9162C69F7AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92062F65-EC4D-4A26-8CE2-C9162C69F7AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A482E11C-2C04-443F-B64C-806C8CD44F66}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{A482E11C-2C04-443F-B64C-806C8CD44F66}.Debug|Any CPU.Build.0 = Debug|x64
+		{A482E11C-2C04-443F-B64C-806C8CD44F66}.Release|Any CPU.ActiveCfg = Release|x64
+		{A482E11C-2C04-443F-B64C-806C8CD44F66}.Release|Any CPU.Build.0 = Release|x64
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
