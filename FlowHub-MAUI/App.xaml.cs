@@ -69,35 +69,35 @@ namespace FlowHub_MAUI
                     return false;
                 }
 
-                // Validate API Keys
-                if (string.IsNullOrEmpty(APIKeys.ApplicationId) ||
-                    string.IsNullOrEmpty(APIKeys.ServerUri) ||
-                    string.IsNullOrEmpty(APIKeys.DotNetKEY))
-                {
-                    Console.WriteLine("Invalid API Keys: Unable to initialize ParseClient.");
-                    return false;
-                }
+                //// Validate API Keys
+                //if (string.IsNullOrEmpty(APIKeys.ApplicationId) ||
+                //    string.IsNullOrEmpty(APIKeys.ServerUri) ||
+                //    string.IsNullOrEmpty(APIKeys.DotNetKEY))
+                //{
+                //    Console.WriteLine("Invalid API Keys: Unable to initialize ParseClient.");
+                //    return false;
+                //}
 
-                // Create ParseClient
-                ParseClient client = new ParseClient(new ServerConnectionData
-                {
-                    ApplicationID = APIKeys.ApplicationId,
-                    ServerURI = APIKeys.ServerUri,
-                    Key = APIKeys.DotNetKEY,
+                //// Create ParseClient
+                //ParseClient client = new ParseClient(new ServerConnectionData
+                //{
+                //    ApplicationID = APIKeys.ApplicationId,
+                //    ServerURI = APIKeys.ServerUri,
+                //    Key = APIKeys.DotNetKEY,
    
-                }
-                );
-                HostManifestData manifest = new HostManifestData()
-                {
-                    Version = "1.0.0",
-                    Identifier = "com.yvanbrunel.flowhub",
-                    Name = "Flowhub",
-                };
+                //}
+                //);
+                //HostManifestData manifest = new HostManifestData()
+                //{
+                //    Version = "1.0.0",
+                //    Identifier = "com.yvanbrunel.flowhub",
+                //    Name = "Flowhub",
+                //};
 
-                client.Publicize();
+                //client.Publicize();
 
 
-                Debug.WriteLine("ParseClient initialized successfully.");
+                //Debug.WriteLine("ParseClient initialized successfully.");
                 return true;
             }
             catch (Exception ex)

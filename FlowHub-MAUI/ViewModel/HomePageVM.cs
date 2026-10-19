@@ -1,10 +1,10 @@
-﻿using Parse.Abstractions.Internal;
+﻿
 using Parse.LiveQuery;
 using System.Diagnostics;
 
 namespace FlowHub_MAUI.ViewModel;
 
-public partial class HomePageVM : ObservableObject, IParseLiveQueryClientCallbacks
+public partial class HomePageVM : ObservableObject
 {
     [ObservableProperty]
     bool isAuthenticated;
@@ -70,7 +70,7 @@ public partial class HomePageVM : ObservableObject, IParseLiveQueryClientCallbac
     {
         ParseUser signUpUser = new ParseUser();
         //signUpUser.Username = CurrentUserLocal.UserName;
-        ParseClient.Instance.SignUpAsync(signUpUser);
+        ParseClient.Instance.SignUpWithAsync(signUpUser);
     }
     [RelayCommand]
     void SetupLiveQueries()
@@ -290,42 +290,8 @@ public partial class HomePageVM : ObservableObject, IParseLiveQueryClientCallbac
 
     private async void SetupLiveQuery()
     {
-        try
-        {            
-            var query = ParseClient.Instance.GetQuery("FlowCommentsView")
-                //.WhereEqualTo("IsDeleted", false);
-            var sub = LiveClient.Subscribe(query);
-            LiveClient.RegisterListener(this);
+      
 
-            
-            sub.HandleSubscribe(query =>
-            {
-                Debug.WriteLine($"Subscribed to query: {query.GetClassName()}");
-            })
- .HandleEvents((query, objEvent, obj) =>
- {
-     Debug.WriteLine($"Event {objEvent} occurred for object: {obj.ObjectId}");
- })
- .HandleError((query, exception) =>
- {
-     Debug.WriteLine($"Error in query for class {query.GetClassName()}: {exception.Message}");
- })
- .HandleUnsubscribe(query =>
- {
-     Debug.WriteLine($"Unsubscribed from query: {query.GetClassName()}");
- });
-
-            // Connect asynchronously
-          await Task.Run(()=>  LiveClient.ConnectIfNeeded());
-        }
-        catch (IOException ex)
-        {
-            Console.WriteLine($"Connection error: {ex.Message}");
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"SetupLiveQuery encountered an error: {ex.Message}");
-        }
     }
 
     public void OnLiveQueryClientConnected(ParseLiveQueryClient client)

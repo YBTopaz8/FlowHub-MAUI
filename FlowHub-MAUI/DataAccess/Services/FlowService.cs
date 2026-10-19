@@ -100,7 +100,7 @@ public class FlowService : IFlowsService
     {
         try
         {
-            _ = ParseClient.Instance.SignUpAsync(user);
+            _ = ParseClient.Instance.SignUpWithAsync(user);
             // notify to verify email
             await Shell.Current.DisplayAlert("Last Step!", "Please Verify Your Email!", "Ok");
             _ = ParseClient.Instance.LogOutAsync();
@@ -120,7 +120,7 @@ public class FlowService : IFlowsService
     public async Task<bool> LogUserIn(ParseUser user, string password)
     {
 
-        CurrentUserOnline = await ParseClient.Instance.LogInAsync(user.Username, password);
+        CurrentUserOnline = await ParseClient.Instance.LogInWithAsync(user.Username, password);
         //var isVerified =(bool)CurrentUserOnline["emailVerified"] == true;
         //if (isVerified)
         //{

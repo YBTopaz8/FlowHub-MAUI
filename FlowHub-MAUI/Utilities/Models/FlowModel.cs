@@ -175,7 +175,7 @@ public partial class FlowsModelView : ObservableObject
         {
             if (ParseClient.Instance is not null)
             {
-                var currentUser = ParseClient.Instance.GetCurrentUser();
+                var currentUser = ParseClient.Instance.CurrentUser;
                 if (currentUser is not null)
                 {
                     ACL = new();
