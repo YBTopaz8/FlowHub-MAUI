@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:md="clr-namespace:Material.Components.Maui;assembly=Material.Components.Maui"
+             xmlns:mds="clr-namespace:Material.Components.Maui.Styles;assembly=Material.Components.Maui"
              x:Class="FlowHub.MainPage">
 
     <ScrollView>
@@ -12,7 +14,59 @@
                 HeightRequest="185"
                 Aspect="AspectFit"
                 SemanticProperties.Description="dot net bot in a submarine number ten" />
+            <md:Button Text="Test" Clicked="Button_Clicked" LongPressed="Button_LongPressed" Pressed="Button_Pressed"/>
+            <md:ExtendedFAB Text="ss" >
+                <md:ExtendedFAB.ContextMenu>
+                        <md:ContextMenu>
+                            <md:MenuItem Text="item 1" />
+                            <md:MenuItem Text="item 2" />
+                            <md:MenuItem Text="item 3" />
+                        </md:ContextMenu>
+                </md:ExtendedFAB.ContextMenu>
+            </md:ExtendedFAB>
 
+            <md:TextField Text="ss" SupportingText="ssss" TrailingIconData="">
+              
+            </md:TextField>
+            <md:ComboBox >
+                <md:ComboBox.Items>
+                    <md:MenuItem Text=" ss"/>
+                    <md:MenuItem Text=" 2ss"/>
+                    <md:MenuItem Text=" 22ss"/>
+                </md:ComboBox.Items>
+            </md:ComboBox>
+            <md:ProgressIndicator IndicatorType="Circular" Percent="40" />
+            <md:SegmentedButton >
+                <md:SegmentedItem Text="test 1"/>
+                <md:SegmentedItem Text="test 2"/>
+            </md:SegmentedButton>
+            <md:Tabs >
+                <md:TabItem  Text="test 1"/>
+                <md:TabItem  Text="test 2"/>
+
+
+            </md:Tabs>
+           
+            
+            <md:FAB BackgroundColor="Aqua"/>
+            <md:Card BackgroundColor="Bisque" Elevation="Level5" >
+               
+                <md:Card.Content>
+                    <md:Switch ThumbColor="Red"/>
+                </md:Card.Content>
+            </md:Card>
+            <md:CheckBox />
+            <md:Chip Text="osdcf"/>
+            <md:Chip Text="osdcf"/>
+            <md:Chip Text="osdcf"/>
+            <md:Chip Text="osdcf" />
+            
+            <md:RadioButton >
+                <md:RadioButton.Items>
+                    <md:RadioItem Text="test 1"/>
+                    <md:RadioItem Text="test 2"/>
+                </md:RadioButton.Items>
+            </md:RadioButton>
             <Label
                 Text="Hello, World!"
                 Style="{StaticResource Headline}"
@@ -29,7 +83,9 @@
                 Text="Click me" 
                 SemanticProperties.Hint="Counts the number of times you click"
                 Clicked="OnCounterClicked"
-                HorizontalOptions="Fill" />
+                HorizontalOptions="Fill" >
+                
+            </Button>
         </VerticalStackLayout>
     </ScrollView>
 

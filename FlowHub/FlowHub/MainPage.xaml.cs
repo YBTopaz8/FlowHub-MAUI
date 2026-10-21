@@ -20,6 +20,21 @@
 
             SemanticScreenReader.Announce(CounterBtn.Text);
         }
+
+        private void Button_Clicked(object sender, TouchEventArgs e)
+        {
+
+        }
+
+        private void Button_LongPressed(object sender, TouchEventArgs e)
+        {
+
+        }
+
+        private void Button_Pressed(object sender, TouchEventArgs e)
+        {
+
+        }
     }
 
 }

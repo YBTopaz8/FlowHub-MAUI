@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.11.12306.390 stable
+VisualStudioVersion = 18.11.12306.390
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowHub", "..\FlowHub\FlowHub\FlowHub.csproj", "{B87C721B-88CD-4FF7-882B-AA39941ED9FA}"
 EndProject
@@ -10,6 +10,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowHub.WinUI", "..\FlowHub\FlowHub.WinUI\FlowHub.WinUI.csproj", "{A482E11C-2C04-443F-B64C-806C8CD44F66}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Material.Components.Maui", "..\..\Material.Components.Maui\Material.Components.Maui\Material.Components.Maui.csproj", "{C094B11C-048D-A02D-549E-495C8D2EDAF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaterialColorUtilities", "..\..\YBTopaz8\MaterialColorUtilities\MaterialColorUtilities\MaterialColorUtilities.csproj", "{8EC54872-7651-5FC0-092C-05181D9C987C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaterialColorUtilities.SourceGenerators", "..\..\YBTopaz8\MaterialColorUtilities\MaterialColorUtilities.SourceGenerators\MaterialColorUtilities.SourceGenerators.csproj", "{F253898E-E827-39AD-3315-C4381E797261}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +27,7 @@ Global
 		{B87C721B-88CD-4FF7-882B-AA39941ED9FA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{92062F65-EC4D-4A26-8CE2-C9162C69F7AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{92062F65-EC4D-4A26-8CE2-C9162C69F7AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92062F65-EC4D-4A26-8CE2-C9162C69F7AD}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{92062F65-EC4D-4A26-8CE2-C9162C69F7AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92062F65-EC4D-4A26-8CE2-C9162C69F7AD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A482E11C-2C04-443F-B64C-806C8CD44F66}.Debug|Any CPU.ActiveCfg = Debug|x64
@@ -33,6 +38,14 @@ Global
 		{C094B11C-048D-A02D-549E-495C8D2EDAF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C094B11C-048D-A02D-549E-495C8D2EDAF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C094B11C-048D-A02D-549E-495C8D2EDAF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EC54872-7651-5FC0-092C-05181D9C987C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EC54872-7651-5FC0-092C-05181D9C987C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EC54872-7651-5FC0-092C-05181D9C987C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EC54872-7651-5FC0-092C-05181D9C987C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F253898E-E827-39AD-3315-C4381E797261}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F253898E-E827-39AD-3315-C4381E797261}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F253898E-E827-39AD-3315-C4381E797261}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F253898E-E827-39AD-3315-C4381E797261}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,6 +7,7 @@
 		<RootNamespace>FlowHub</RootNamespace>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<LangVersion>preview</LangVersion>
 		<UseMaui>true</UseMaui>
 
 		<!-- Enable XAML source generation for faster build times and improved performance.
@@ -17,7 +18,20 @@
 		       <MauiXaml Update="MyPage.xaml" Inflator="Runtime" /> (force runtime inflation) -->
 		<MauiXamlInflator>SourceGen</MauiXamlInflator>
 	</PropertyGroup>
+	<!-- When debugging locally (Emulators or USB phones), build everything so it always works -->
+	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+		<RuntimeIdentifiers>android-arm;android-arm64;android-x86;android-x64</RuntimeIdentifiers>
+	</PropertyGroup>
 
+	<!-- When Publishing (dotnet publish -c Release), ONLY build ARM64 to keep the APK tiny -->
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<RuntimeIdentifiers>android-arm64</RuntimeIdentifiers>
+	</PropertyGroup>
+	<Target Name="_OwnaudioClearNonAndroidRid" BeforeTargets="Build">
+		<PropertyGroup>
+			<RuntimeIdentifier Condition="'$(RuntimeIdentifier)' != '' AND !$(RuntimeIdentifier.StartsWith('android-'))"></RuntimeIdentifier>
+		</PropertyGroup>
+	</Target>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
